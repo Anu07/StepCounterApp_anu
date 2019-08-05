@@ -1,0 +1,116 @@
+<resources>
+    <string name="app_name">Hayatech App</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_tools">Tools</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_send">Send</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_mobile">Mobile Number</string>
+    <string name="hint_pwd">Password</string>
+    <string name="tnc_privpolicy">I agree to the <a href="http://www.google.com">Terms of Service</a> and <a
+            href="http://www.google.com">Privacy Policy</a>.
+    </string>
+    <string name="deptarray"/>
+    <string name="sign_up">RESET PASSWORD</string>
+    <string name="signInText">Already have an account? Sign In</string>
+    <string name="select_Deptt">Please select your department from the drop down</string>
+    <string name="gulf_telecom">Gulf Telecom</string>
+    <string name="bmi_calculator">BMI Calculator</string>
+    <string name="ear_tokens">Get Moving and Track your Progress!</string>
+    <string name="hint_email_usrname">Email</string>
+    <string name="sign_in">SIGN IN</string>
+    <string name="forgt_pwd">Forgot Password?</string>
+    <string name="registd_email">Please enter your registered email ID</string>
+    <string name="hint_usrname">Username</string>
+    <string name="hint_firstname">Firstname</string>
+    <string name="hint_lastname">Lastname</string>
+    <string name="hint_dob">Date of Birth</string>
+    <string name="save_continue"><![CDATA[Save & Continue]]></string>
+    <string name="transition_name">forgot</string>
+    <string name="basic_info">Basic Info</string>
+    <string name="email_error">Invalid email entered</string>
+    <string name="pwd_error">Password field can\'t be blank</string>
+    <string name="lbl_set_profile_photo">Set profile photo</string>
+    <string name="lbl_take_camera_picture">Camera</string>
+    <string name="lbl_choose_from_gallery">Choose from Gallery</string>
+    <string name="lst_name_error">Last name can\'t be left blank</string>
+    <string name="dob_error">Date of birth can\'t be left blank.</string>
+    <string name="first_name_error">First name can\'t be left blank.</string>
+    <string name="usn_error">Username can\'t be left blank.</string>
+    <string name="weight">Weight</string>
+    <string name="height">Height</string>
+    <string name="calc">Calculate</string>
+    <string name="msg">Normal BMI ranges between 19 to 25</string>
+    <string name="earn_rewards">Earn Rewards</string>
+    <string name="earn_rewards_msg">Select any of the categories that interest you!</string>
+    <string name="welcome">Welcome Mariam!</string>
+    <string name="sync_ur_fitness">Sync your fitness Variable</string>
+    <string name="sync_msg">Please select your preferred fitness wearable</string>
+    <string-array name="departmentArray">
+        <item>Department 1</item>
+        <item>Department 2</item>
+        <item>Department 3</item>
+        <item>Department 4</item>
+    </string-array>
+
+    <string-array name="markArray">
+        <item>20</item>
+        <item>30</item>
+        <item>40</item>
+        <item>50</item>
+        <item>60</item>
+        <item>70</item>
+        <item>80</item>
+        <item>90</item>
+        <item>100</item>
+    </string-array>
+
+    <string-array name="periodArray">
+        <item>Today</item>
+      <!--  <item>Weekly</item>
+        <item>Mothly</item>-->
+    </string-array>
+    <string name="confirm">confirm</string>
+    <string name="cancel">cancel</string>
+
+    <string name="permission_storage_close_title">Storage permission is not available</string>
+    <string name="permission_storage_close_content">Please find it in cellphone setting- permission, and allow
+        FitpoloDemo use the storage permission
+    </string>
+    <string name="permission_open">OK</string>
+    <string name="permission_storage_need_title">Please turn on storage permissions</string>
+    <string name="permission_storage_need_content">Fitpolo needs to record the data log and bracelet firmware update
+        package , to feedback question and update firmware If this permission is not on, APP cannot be used normally.
+    </string>
+    <string name="location_need_title">Turn on GPS service</string>
+    <string name="location_need_content">After that, APP could search and connect with the wearable</string>
+    <string name="permission_location_close_title">GPS persission is not available</string>
+    <string name="permission_location_close_content">Please find it in cellphone setting- permission, and allow
+        FitpoloDemo use the GPS permission
+    </string>
+    <string name="permission_location_need_title">Turn on GPS permission</string>
+    <string name="permission_location_need_content">After that, APP could search and connect with the bracelet</string>
+    <string name="get_started">Get started</string>
+    <string name="synchronizing">Synchronizing</string>
+    <string name="few_mom_sync">It will take few moments to sync.</string>
+    <string name="sync_txt_msg">We are gathering the required information.</string>
+    <string name="title_activity_nav_sample">NavSample</string>
+    <string name="hayatech_ttl">hayatech</string>
+    <string name="device_cnnctd">Device Connected</string>
+    <string name="device_syncd">Device Synchronized</string>
+    <string name="msg_dash">You are only 5 Tokens away from an item on your wish list! Keep walking!</string>
+    <string name="totltokens">Total Reward Tokens</string>
+    <string name="leaderboard">LEADERBOARD</string>
+</resources>

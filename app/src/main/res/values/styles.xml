@@ -1,0 +1,101 @@
+<resources>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/gradientColorStart</item>
+        <item name="colorPrimaryDark">@color/gradientColorEnd</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="colorAccent">@color/gray_text</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:windowBackground">@color/white</item>
+    </style>
+    <!-- Base application theme. -->
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+    <style name="headerTextStyle">
+        <item name="android:textSize">@dimen/_28sdp</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:layout_marginBottom">@dimen/_10sdp</item>
+        <item name="android:layout_marginTop">@dimen/_30sdp</item>
+        <item name="android:layout_marginLeft">@dimen/_12sdp</item>
+        <item name="android:layout_marginRight">@dimen/_12sdp</item>
+    </style>
+    <style name="textLayoutStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:padding">@dimen/_2sdp</item>
+        <item name="android:layout_marginRight">@dimen/_10sdp</item>
+        <item name="android:layout_marginLeft">@dimen/_10sdp</item>
+        <item name="android:layout_marginTop">@dimen/_10sdp</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <style name="secondaryTextLayoutStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:padding">@dimen/_6sdp</item>
+        <item name="android:layout_marginRight">@dimen/_30sdp</item>
+        <item name="android:layout_marginLeft">@dimen/_30sdp</item>
+        <item name="android:layout_marginTop">@dimen/_10sdp</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <style name="chckBoxStyle">
+        <item name="android:layout_margin">@dimen/_15sdp</item>
+        <item name="android:textSize">@dimen/_12sdp</item>
+        <item name="android:paddingLeft">@dimen/_5sdp</item>
+        <item name="android:textAlignment">textStart</item>
+    </style>
+    <style name="BttnStyle" parent="android:Widget.Button">
+        <item name="android:layout_marginTop">@dimen/_30sdp</item>
+        <item name="android:layout_marginRight">@dimen/_12sdp</item>
+        <item name="android:layout_marginLeft">@dimen/_12sdp</item>
+        <item name="android:layout_marginBottom">@dimen/_30sdp</item>
+        <item name="android:background">@drawable/button_background</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">@dimen/_15sdp</item>
+    </style>
+    <style name="textviewRegularStyle" parent="android:TextAppearance">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/_16sdp</item>
+        <item name="android:layout_marginLeft">@dimen/_10sdp</item>
+        <item name="android:layout_marginRight">@dimen/_10sdp</item>
+    </style>
+    <style name="subHeaderStyle">
+        <item name="android:textSize">@dimen/_16sdp</item>
+        <item name="android:textColor">@color/gray_text</item>
+        <item name="android:layout_marginTop">@dimen/_30sdp</item>
+        <item name="android:layout_marginLeft">@dimen/_12sdp</item>
+        <item name="android:layout_marginRight">@dimen/_12sdp</item>
+    </style>
+    <style name="HeaderStyleMarginLess">
+        <item name="android:textSize">@dimen/_30sdp</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:layout_marginTop">@dimen/_30sdp</item>
+    </style>
+    <style name="TextAppearance.App.TextInputLayout"
+           parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="android:textColor">@color/cardview_dark_background</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="LoginTextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="boxStrokeColor">#fff</item>
+        <item name="boxStrokeWidth">2dp</item>
+    </style>
+
+
+    <style name="pullBottomfromTop" parent="@android:style/Theme.Dialog">
+        <item name="android:windowAnimationStyle">@style/dilog_slide_top_to_down</item>
+    </style>
+    <style name="dilog_slide_top_to_down">
+        <item name="android:windowEnterAnimation">@anim/slide_up</item>
+        <item name="android:windowExitAnimation">@anim/slide_down</item>
+    </style>
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+</resources>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
+          package="com.sd.src.stepcounterapp">
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+
+    <application
+            android:name=".AppApplication"
+            android:allowBackup="true"
+            android:icon="@mipmap/app_icon"
+            android:label="@string/app_name"
+            android:supportsRtl="true"
+            android:usesCleartextTraffic="true"
+            android:theme="@style/AppTheme"
+            tools:ignore="GoogleAppIndexingWarning">
+        <activity
+                android:name=".activities.SplashActivity"
+                android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".activities.LandingActivity"
+                  android:windowSoftInputMode="stateHidden"
+                  android:screenOrientation="portrait"/>
+        <activity
+                android:name=".activities.OnboardingActivity"
+                android:screenOrientation="portrait"/>
+        <activity
+                android:name=".activities.ForgotPasswordActivity"
+                android:screenOrientation="portrait"/>
+        <activity
+                android:name=".activities.DeviceConnctdActivity"
+                android:screenOrientation="portrait"/>
+        <activity
+                android:name=".activities.BasicInfoActivity"
+                android:windowSoftInputMode="stateVisible|adjustPan"
+                android:screenOrientation="portrait"/>
+        <activity
+                android:name=".activities.BmiCalculatorActivity"
+                android:screenOrientation="portrait"/>
+        <activity
+                android:name=".activities.SyncDeviceActivity"
+                android:screenOrientation="portrait"/>
+        <activity
+                android:name=".activities.RewardsCategorySelectionActivity"
+                android:screenOrientation="portrait"/>
+        <activity
+                android:name=".activities.SignInActivity"
+                android:screenOrientation="portrait"/>
+        <activity
+                android:name=".activities.CorporateInfoActivity"
+                android:screenOrientation="portrait"/>
+        <activity
+                android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+                android:theme="@style/Base.Theme.AppCompat"/>
+        <activity
+                android:name=".activities.DeviceSynchronizingActivity"
+                android:screenOrientation="portrait"/>
+        <activity
+                android:name=".activities.DeviceListActivity"
+                android:screenOrientation="portrait"/>
+        <activity
+                android:name=".activities.GuideActivity"
+                android:screenOrientation="portrait"/>
+
+        <service android:name=".service.MokoService"/>
+        <service
+                android:name=".service.FitpoloNotificationCollectorService"
+                android:label="@string/app_name"
+                android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService"/>
+            </intent-filter>
+        </service>
+        <service android:name=".service.FitpoloNotificationCollectorMonitorService"/>
+        <service android:name=".service.DfuService"/>
+    </application>
+
+</manifest>

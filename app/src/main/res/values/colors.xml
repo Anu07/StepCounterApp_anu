@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="colorBlack">#000000</color>
+    <color name="gradientColorStart">#8DC540</color>
+    <color name="gradientColorEnd">#58C7DB</color>
+    <color name="gardientBorderColor">#6EB1A5</color>
+    <color name="gray">#323232</color>
+    <color name="gray_text">#A8A8A8</color>
+    <color name="border_color">#D4D4D4</color>
+    <color name="white">#ffffff</color>
+    <color name="arrow_color">#33C0DA</color>
+    <color name="darkGray">#FF424242</color>
+    <color name="transparent">#00FFFFFF</color>
+    <color name="lightGray">#B5706F6F</color>
+    <color name="transparentWhite">#00FFFFFF</color>
+    <color name="bmi_end">#FF5454</color>
+    <color name="bmi_start">#8DC540</color>
+    <color name="blue_txt">#58C7DB</color>
+    <color name="gray_backGround">#F6F6F6</color>
+    <color name="green_txt">#8DC540</color>
+    <color name="gradientTransColorStart">#908DC540</color>
+    <color name="gradientTransColorEnd">#9058C7DB</color>
+    <color name="textcolor">#323232</color>
+    <color name="divider_color">#707070</color>
+
+</resources>

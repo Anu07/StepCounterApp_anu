@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "301330736718",
+    "firebase_url": "https://hayatech-23371.firebaseio.com",
+    "project_id": "hayatech-23371",
+    "storage_bucket": "hayatech-23371.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:301330736718:android:4b405256c0dd342b",
+        "android_client_info": {
+          "package_name": "com.sd.src.stepcounterapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "301330736718-rrfif7dl5n19c227qj30n3v1ug39qp16.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABhZJG2TFH7F6uHTN06u8QZUvae-SUsZA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "301330736718-rrfif7dl5n19c227qj30n3v1ug39qp16.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

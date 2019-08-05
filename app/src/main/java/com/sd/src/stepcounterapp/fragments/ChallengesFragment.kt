@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +17,8 @@ import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.adapter.ChallengeAdapter
 import com.sd.src.stepcounterapp.adapter.ChallengeTrendingAdapter
 import com.sd.src.stepcounterapp.adapter.SlidingImageAdapter
+import com.sd.src.stepcounterapp.dialog.ChallengesDialog
+import com.sd.src.stepcounterapp.dialog.StopChallengeDialog
 import com.sd.src.stepcounterapp.model.challenge.ChallengeResponse
 import com.sd.src.stepcounterapp.model.challenge.Data
 import com.sd.src.stepcounterapp.model.challenge.Tranding
@@ -30,10 +31,10 @@ import kotlin.collections.ArrayList
 
 
 class ChallengesFragment : Fragment(), ChallengeAdapter.ItemClickListener {
-
-
     override fun onItemClick(pos: Int, item: Data) {
-        Log.i("test","test")
+        val dialog =
+            ChallengesDialog(mContext, item, R.style.pullBottomfromTop, R.layout.dialog_challenges)
+        dialog.show()
     }
 
     private lateinit var mTrendChallengeCategory: MutableList<Tranding>
@@ -53,11 +54,8 @@ class ChallengesFragment : Fragment(), ChallengeAdapter.ItemClickListener {
         lateinit var instance: ChallengesFragment
 
 
-
-
         @SuppressLint("StaticFieldLeak")
         lateinit var mContext: Context
-
 
 
         private val IMAGES = arrayOf(R.drawable.slider_img, R.drawable.slider_img, R.drawable.slider_img)
@@ -73,7 +71,7 @@ class ChallengesFragment : Fragment(), ChallengeAdapter.ItemClickListener {
         super.onActivityCreated(savedInstanceState)
         mViewModel = ViewModelProviders.of(activity!!).get(ChallengeViewModel::class.java)
 
-        mViewModel.getchallenges(BasicRequest(SharedPreferencesManager.getUserId(mContext),""))
+        mViewModel.getchallenges(BasicRequest(SharedPreferencesManager.getUserId(mContext), ""))
 
 
         mViewModel.getChallengeObject().observe(this,
@@ -89,6 +87,11 @@ class ChallengesFragment : Fragment(), ChallengeAdapter.ItemClickListener {
                     }
                 }
             })
+
+        llStartChallenges.setOnClickListener {
+            StopChallengeDialog(mContext, R.style.pullBottomfromTop, R.layout.dialog_stop_challenges)
+                .show()
+        }
 
     }
 
@@ -133,18 +136,17 @@ class ChallengesFragment : Fragment(), ChallengeAdapter.ItemClickListener {
     }
 
 
-
     private fun setChallengeAdapter() {
-        var gridLayoutManager = GridLayoutManager(mContext, 1, GridLayoutManager.HORIZONTAL, false);
+        var gridLayoutManager = GridLayoutManager(mContext, 1, GridLayoutManager.HORIZONTAL, false)
         challengesList.layoutManager = gridLayoutManager
-        mChallengesAdapter = ChallengeAdapter(mContext,mChallengeCategory, this)
+        mChallengesAdapter = ChallengeAdapter(mContext, mChallengeCategory, this)
         challengesList.adapter = mChallengesAdapter
     }
 
     private fun setTrendingChallengeAdapter() {
-        var gridLayoutManager = GridLayoutManager(mContext, 2, RecyclerView.VERTICAL, false);
+        var gridLayoutManager = GridLayoutManager(mContext, 2, RecyclerView.VERTICAL, false)
         trendchallengesList.layoutManager = gridLayoutManager
-        mTrendingChallengesAdapter = ChallengeTrendingAdapter(mContext,mTrendChallengeCategory)
+        mTrendingChallengesAdapter = ChallengeTrendingAdapter(mContext, mTrendChallengeCategory)
         trendchallengesList.adapter = mTrendingChallengesAdapter
     }
 

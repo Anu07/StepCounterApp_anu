@@ -113,4 +113,17 @@
     <string name="msg_dash">You are only 5 Tokens away from an item on your wish list! Keep walking!</string>
     <string name="totltokens">Total Reward Tokens</string>
     <string name="leaderboard">LEADERBOARD</string>
+
+
+
+    <string name="start">START</string>
+    <string name="challenges">challenges</string>
+    <string name="marketplace">marketplace</string>
+    <string name="surveys">surveys</string>
+    <string name="wallet">wallet</string>
+    <string name="hayatech">hayatech</string>
+    <string name="start_challenge">START CHALLENGE</string>
+    <string name="do_you_want_to_stop_the_challenge_you_will_lose_the_progress">Do you want to stop the challenge? You
+        will lose the progress
+    </string>
 </resources>

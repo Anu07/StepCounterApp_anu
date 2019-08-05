@@ -74,7 +74,7 @@ class LandingActivity : BaseActivity<BaseViewModel>(), View.OnClickListener {
         mAdapter.addFragment(ChallengesFragment.newInstance(this@LandingActivity))
         mAdapter.addFragment(MarketPlaceFragment.newInstance(this@LandingActivity))
         mAdapter.addFragment(SurveysFragment.newInstance(this@LandingActivity))
-        mAdapter.addFragment(ProfileFragment.newInstance(this@LandingActivity))
+        mAdapter.addFragment(WalletFragment.newInstance(this@LandingActivity))
 
         vpLanding.setPagingEnabled(false)
         vpLanding.adapter = mAdapter

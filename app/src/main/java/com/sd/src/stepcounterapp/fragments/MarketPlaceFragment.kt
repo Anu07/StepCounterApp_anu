@@ -66,20 +66,15 @@ class MarketPlaceFragment : Fragment(), MarketPlaceClickInterface, MarketPlaceCa
     ) {
         if (!mItem.wishlist) {
             showPopupProgressSpinner(true)
-
             mViewModel.addWishList(AddWishRequest(SharedPreferencesManager.getUserId(context!!), mItem._id))
         } else {
             showPopupProgressSpinner(true)
-
             mViewModel.removeWishList(AddWishRequest(SharedPreferencesManager.getUserId(context!!), mItem._id))
         }
-
     }
 
     override fun onItemClick(position: Int) {
         txtCategoryName.text = mDataCategory[position].name.toString()
-
-
     }
 
     override fun onSeeAllClick(position: Int) {
@@ -100,7 +95,6 @@ class MarketPlaceFragment : Fragment(), MarketPlaceClickInterface, MarketPlaceCa
         }
 
     }
-
 
     companion object {
         @SuppressLint("StaticFieldLeak")
@@ -143,7 +137,7 @@ class MarketPlaceFragment : Fragment(), MarketPlaceClickInterface, MarketPlaceCa
                         rvProduct.adapter = mCategoryAdapter
                         txtCategoryName.text = mDataCategory[0].name
                     }
-                }else {
+                } else {
                     rvProduct.visibility = View.GONE
                     noRec.visibility = View.VISIBLE
                 }
@@ -159,7 +153,7 @@ class MarketPlaceFragment : Fragment(), MarketPlaceClickInterface, MarketPlaceCa
                         mPopularityAdapter = MarketPlacePopularityAdapter(mDataPopularity, mContext, this)
                         rvPopularity.adapter = mPopularityAdapter
                     }
-                }else {
+                } else {
                     rvPopularity.visibility = View.GONE
                     noRecP.visibility = View.VISIBLE
                 }
@@ -261,8 +255,6 @@ class MarketPlaceFragment : Fragment(), MarketPlaceClickInterface, MarketPlaceCa
         /*wishlist.setOnClickListener {
             mViewModel.addWishList(AddWishRequest(SharedPreferencesManager.getUserId(mContext),))
         }*/
-
-
     }
 
     private fun performSearch() {
@@ -281,8 +273,6 @@ class MarketPlaceFragment : Fragment(), MarketPlaceClickInterface, MarketPlaceCa
                 )
             )
         }
-
-
     }
 
     private fun setCategoryAdapter() {

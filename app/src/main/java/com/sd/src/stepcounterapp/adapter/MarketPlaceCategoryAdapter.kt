@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.interfaces.MarketPlaceClickInterface
 import com.sd.src.stepcounterapp.model.marketplace.MarketResponse
-import com.sd.src.stepcounterapp.model.marketplace.PopularProducts
 import com.sd.src.stepcounterapp.network.RetrofitClient
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_market_place_category.view.*
@@ -38,34 +37,33 @@ class MarketPlaceCategoryAdapter(
         var mItem = mCategoryData[position].products
 
 //        Toast.makeText(mContext, mCategoryData[position].name, Toast.LENGTH_SHORT).show()
-        if (mItem!=null) {
+        if (mItem != null) {
             Picasso.get().load(RetrofitClient.IMG_URL + "" + mItem[0].image).error(R.drawable.placeholder)
                 .into(holder.imgProductFirst)
-            holder.txtCategoryName.text =mItem[0].name
+            holder.txtCategoryName.text = mItem[0].name
             holder.txtProductNameFirst.text = mItem[0].name
             holder.txtShortDescFirst.text = mItem[0].shortDesc
             holder.txtTokenFirst.text = mItem[0].token.toString()
 
+            Log.i("flag cat", "" + mItem[0].wishlist)
 
-            Log.i("flag cat",""+mItem[0].wishlist)
-
-            if(position <= 1 && mItem[position].wishlist ){
+            if (position <= 1 && mItem[position].wishlist) {
                 holder.wishListView.setImageResource(R.drawable.wishlist_fill)
-            }else{
+            } else {
                 holder.wishListView.setImageResource(R.drawable.featured)
             }
 
             holder.wishListView.setOnClickListener {
-                wisListener.onWish(position,mItem[position])
+                wisListener.onWish(position, mItem[position])
             }
 
-            if(mItem.size==2){
+            if (mItem.size == 2) {
                 Picasso.get().load(RetrofitClient.IMG_URL + "" + mItem[1].image).error(R.drawable.placeholder)
                     .into(holder.imgProductSecond)
                 holder.txtProductNameSecond.text = mItem[1].name
                 holder.txtShortDescSecond.text = mItem[1].shortDesc
                 holder.txtTokenSecond.text = mItem[1].token.toString()
-                Log.i("flag cat",""+mItem[1].wishlist)
+                Log.i("flag cat", "" + mItem[1].wishlist)
 
                 holder.txtSeeAll.setOnClickListener {
                     itemClick.onSeeAllClick(position)
@@ -96,9 +94,11 @@ class MarketPlaceCategoryAdapter(
 
     }
 
-    interface twoItemListener{
-        fun onWish( position: Int,
-                    mItem: MarketResponse.Products)
+    interface twoItemListener {
+        fun onWish(
+            position: Int,
+            mItem: MarketResponse.Products
+        )
     }
 
 

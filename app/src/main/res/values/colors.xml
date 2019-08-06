@@ -25,5 +25,6 @@
     <color name="gradientTransColorEnd">#9058C7DB</color>
     <color name="textcolor">#323232</color>
     <color name="divider_color">#707070</color>
+    <color name="colorbg">#F6F6F6</color>
 
 </resources>

@@ -1,24 +1,23 @@
 package com.sd.src.stepcounterapp.model.syncDevice;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import java.util.List;
 /**
  * Awesome Pojo Generator
  * */
 public class FetchDeviceDataResponse{
   @SerializedName("data")
   @Expose
-  private List<Data> data;
+  private Data data;
   @SerializedName("message")
   @Expose
   private String message;
   @SerializedName("status")
   @Expose
   private Integer status;
-  public void setData(List<Data> data){
+  public void setData(Data data){
    this.data=data;
   }
-  public List<Data> getData(){
+  public Data getData(){
    return data;
   }
   public void setMessage(String message){

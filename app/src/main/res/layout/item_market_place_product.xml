@@ -61,6 +61,4 @@
                 app:appfont="montserrat_semibold.ttf"/>
 
     </LinearLayout>
-
-
 </androidx.cardview.widget.CardView>

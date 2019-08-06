@@ -126,4 +126,8 @@
     <string name="do_you_want_to_stop_the_challenge_you_will_lose_the_progress">Do you want to stop the challenge? You
         will lose the progress
     </string>
+
+
+
+    <string name="redeem_now">Redeem Now</string>
 </resources>

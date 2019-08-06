@@ -15,6 +15,7 @@ import com.sd.src.stepcounterapp.model.rewards.RewardsCategoriesResponse
 import com.sd.src.stepcounterapp.model.syncDevice.FetchDeviceDataRequest
 import com.sd.src.stepcounterapp.model.syncDevice.FetchDeviceDataResponse
 import com.sd.src.stepcounterapp.model.syncDevice.SyncRequest
+import com.sd.src.stepcounterapp.model.wallet.TokenModel
 import com.sd.src.stepcounterapp.model.wishList.AddWishRequest
 import com.sd.src.stepcounterapp.model.wishList.GetWishListRequest
 import com.sd.src.stepcounterapp.model.wishList.WishListResponse
@@ -111,6 +112,13 @@ interface ApiInterface {
     fun getChallenges(
         @Body body: BasicRequest
     ): Call<ChallengeResponse>
+
+
+    @FormUrlEncoded
+    @POST("api/steps_to_token")
+    fun steps_to_token(
+        @Field("userId") userId: String
+    ): Call<TokenModel>
 
 
 

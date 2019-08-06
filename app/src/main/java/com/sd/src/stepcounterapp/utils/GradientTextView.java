@@ -1,11 +1,15 @@
 package com.sd.src.stepcounterapp.utils;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.LinearGradient;
 import android.graphics.Shader;
 import android.graphics.Typeface;
+import android.provider.Settings;
 import android.util.AttributeSet;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.ContextCompat;
 import com.sd.src.stepcounterapp.R;
@@ -22,6 +26,7 @@ public class GradientTextView extends AppCompatTextView {
 	public GradientTextView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		init(attrs);
+
 	}
 	
 	public GradientTextView(Context context, AttributeSet attrs, int defStyleAttr) {

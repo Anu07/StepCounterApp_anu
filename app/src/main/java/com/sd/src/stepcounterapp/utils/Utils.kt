@@ -43,9 +43,7 @@ object Utils {
 
     fun isNotificationListenerEnabled(context: Context): Boolean {
         val packageNames = NotificationManagerCompat.getEnabledListenerPackages(context)
-        return if (packageNames.contains(context.packageName)) {
-            true
-        } else false
+        return packageNames.contains(context.packageName)
     }
 
     fun openNotificationListenSettings(context: Context) {
@@ -70,9 +68,7 @@ object Utils {
         val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         val gps = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
         val network = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
-        return if (gps || network) {
-            true
-        } else false
+        return gps && network
     }
 
 

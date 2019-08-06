@@ -1,5 +1,12 @@
 package com.sd.src.stepcounterapp;
 
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.location.LocationManager;
+import android.provider.Settings;
+import androidx.appcompat.app.AlertDialog;
+
 /**
  * @Date 2017/5/17
  * @Author wenzheng.liu
@@ -23,4 +30,9 @@ public class AppConstants {
     public static final int REQUEST_CODE_LOCATION_SETTINGS = 122;
 
     public static final int REQUEST_CODE_ENABLE_BT = 1001;
+    
+    
+    
+    
+    
 }

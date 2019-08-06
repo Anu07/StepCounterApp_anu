@@ -53,11 +53,11 @@ class SurveysFragment : Fragment() {
         mViewModel.getSurveyList().observe(this,
             Observer<SurveyModel> { mData ->
                 if (mData != null) {
-                    if (mData.data.size > 0) {
-                        this.mData.addAll(mData.data)
-                        rvProduct.visibility = View.VISIBLE
-                        noRec.visibility = View.GONE
-                    }
+//                    if (mData.data.size > 0) {
+//                        this.mData.addAll(mData.data)
+//                        rvProduct.visibility = View.VISIBLE
+//                        noRec.visibility = View.GONE
+//                    }
                 } else {
                     rvProduct.visibility = View.GONE
                     noRec.visibility = View.VISIBLE

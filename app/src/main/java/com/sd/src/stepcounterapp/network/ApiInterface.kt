@@ -12,6 +12,7 @@ import com.sd.src.stepcounterapp.model.marketplace.MarketResponse
 import com.sd.src.stepcounterapp.model.marketplace.PopularProducts
 import com.sd.src.stepcounterapp.model.rewards.AddRewardsRequestObject
 import com.sd.src.stepcounterapp.model.rewards.RewardsCategoriesResponse
+import com.sd.src.stepcounterapp.model.survey.SurveyModel
 import com.sd.src.stepcounterapp.model.syncDevice.FetchDeviceDataRequest
 import com.sd.src.stepcounterapp.model.syncDevice.FetchDeviceDataResponse
 import com.sd.src.stepcounterapp.model.syncDevice.SyncRequest
@@ -120,6 +121,6 @@ interface ApiInterface {
         @Field("userId") userId: String
     ): Call<TokenModel>
 
-
-
+    @GET("api/survey")
+    fun getsurvey(): Call<SurveyModel>
 }

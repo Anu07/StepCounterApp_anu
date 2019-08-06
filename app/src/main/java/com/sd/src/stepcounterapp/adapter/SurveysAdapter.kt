@@ -6,14 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.sd.src.stepcounterapp.R
+import com.sd.src.stepcounterapp.model.survey.SurveyModel
 
 class SurveysAdapter(
     internal var context: Context,
-    internal var mValues: ArrayList<String>
-) :
+     mValues: ArrayList<SurveyModel.DataBean>) :
     RecyclerView.Adapter<SurveysAdapter.ViewHolder>() {
 
-    private var mData: ArrayList<String> = mValues
+    private var mData: ArrayList<SurveyModel.DataBean> = mValues
     var mContext: Context = context
 
     override
@@ -28,7 +28,7 @@ class SurveysAdapter(
     }
 
     override fun getItemCount(): Int {
-        return 10
+        return mData.size
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)

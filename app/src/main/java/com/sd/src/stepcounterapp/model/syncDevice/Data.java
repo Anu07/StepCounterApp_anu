@@ -12,9 +12,15 @@ public class Data{
   @SerializedName("companyRank")
   @Expose
   private Integer companyRank;
+  @SerializedName("totalUserToken")
+  @Expose
+  private Integer totalUserToken;
   @SerializedName("todayToken")
   @Expose
   private Integer todayToken;
+  @SerializedName("totalUserDistance")
+  @Expose
+  private Integer totalUserDistance;
   public void setActivity(List<Activity> activity){
    this.activity=activity;
   }
@@ -27,10 +33,22 @@ public class Data{
   public Integer getCompanyRank(){
    return companyRank;
   }
+  public void setTotalUserToken(Integer totalUserToken){
+   this.totalUserToken=totalUserToken;
+  }
+  public Integer getTotalUserToken(){
+   return totalUserToken;
+  }
   public void setTodayToken(Integer todayToken){
    this.todayToken=todayToken;
   }
   public Integer getTodayToken(){
    return todayToken;
+  }
+  public void setTotalUserDistance(Integer totalUserDistance){
+   this.totalUserDistance=totalUserDistance;
+  }
+  public Integer getTotalUserDistance(){
+   return totalUserDistance;
   }
 }

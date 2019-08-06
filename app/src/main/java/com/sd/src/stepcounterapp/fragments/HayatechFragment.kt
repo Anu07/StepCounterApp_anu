@@ -16,14 +16,12 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.LimitLine
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.XAxis.XAxisPosition
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
-import com.github.mikephil.charting.formatter.ValueFormatter
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.adapter.PatternProgressTextAdapter
 import com.sd.src.stepcounterapp.model.generic.BasicInfoResponse
@@ -31,7 +29,6 @@ import com.sd.src.stepcounterapp.model.syncDevice.FetchDeviceDataRequest
 import com.sd.src.stepcounterapp.model.syncDevice.FetchDeviceDataResponse
 import com.sd.src.stepcounterapp.model.syncDevice.SyncRequest
 import com.sd.src.stepcounterapp.utils.DayAxisValueFormatter
-import com.sd.src.stepcounterapp.utils.MyXAxisValueFormatter
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import com.sd.src.stepcounterapp.viewModels.DeviceViewModel
 import kotlinx.android.synthetic.main.fragment_hayatech.*
@@ -73,7 +70,6 @@ class HayatechFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mViewModel = ViewModelProviders.of(activity!!).get(DeviceViewModel::class.java)
-//        circular_progress.setProgress(60.00, 10.00)
         circular_progress.setProgressTextAdapter(PatternProgressTextAdapter())
         setStepsText()
         initBarChart()
@@ -81,18 +77,19 @@ class HayatechFragment : Fragment() {
         mViewModel.getSyncResponse().observe(this,
             Observer<BasicInfoResponse> { mResponse ->
                 Toast.makeText(activity, "Data synced successfully", Toast.LENGTH_LONG).show()
-                mViewModel.fetchSyncData(
-                    FetchDeviceDataRequest("daily", SharedPreferencesManager.getUserId(mContext))
-                )
-            })
 
+            })
+        mViewModel.fetchSyncData(
+            FetchDeviceDataRequest("daily", SharedPreferencesManager.getUserId(mContext))
+        )
         mViewModel.getDashResponse().observe(this,
             Observer<FetchDeviceDataResponse> { mResponse ->
 //                Toast.makeText(activity, "Data fetched successfully", Toast.LENGTH_LONG).show()
-                totalstepsCount.text = mResponse.data[0].todayToken.toString()
-                circular_progress.setProgress( mResponse.data[0].todayToken.toDouble(), 10.00)
-                company_rank_count.text = mResponse.data[0].companyRank.toString()
-//                totl_dist.text = mResponse.data[0].dis.toString()
+                steps.text = mResponse.data.todayToken.toString()
+                totalstepsCount.text = mResponse.data.todayToken.toString()
+                circular_progress.setProgress( mResponse.data.todayToken.toDouble(), 10.00)
+                company_rank_count.text = mResponse.data.companyRank.toString()
+                totl_dist.text = mResponse.data.totalUserDistance.toString()
             })
 
 
@@ -117,17 +114,19 @@ class HayatechFragment : Fragment() {
     private fun setStepsText() {
         val stepCount = SpannableString("" + circular_progress.progress)
         val spannable = SpannableString("TODAY")
+        val tokensMsg = SpannableString("Tokens")
+        tokensMsg.setSpan(StyleSpan(Typeface.BOLD), 0, tokensMsg.length, 0)
+
         spannable.setSpan(
             ForegroundColorSpan(Color.CYAN),
             0, 5,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
 
-        stepCount.setSpan(StyleSpan(Typeface.BOLD), 0, stepCount.length, 0);
-
+        stepCount.setSpan(StyleSpan(Typeface.BOLD), 0, stepCount.length, 0)
         totalsteps.text = spannable
         totalstepsCount.text = stepCount
-
+        stepsmsg.text = tokensMsg
     }
 
     private fun initBarChart() {

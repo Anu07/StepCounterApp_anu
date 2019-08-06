@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
               android:orientation="vertical"
               android:layout_width="match_parent"
+              android:background="@color/colorbg"
               android:layout_height="match_parent">
     <ScrollView
             android:layout_width="match_parent"
@@ -22,6 +23,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:orientation="vertical"
+                        android:background="@color/colorbg"
                         android:layout_height="wrap_content">
 
                     <androidx.viewpager.widget.ViewPager
@@ -31,7 +33,7 @@
                             app:layout_constraintLeft_toLeftOf="parent"
                             app:layout_constraintRight_toRightOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            android:layout_height="230dp"/>
+                            android:layout_height="200dp"/>
                     <com.tbuonomo.viewpagerdotsindicator.SpringDotsIndicator
                             android:id="@+id/spring_dots_indicator"
                             android:layout_width="wrap_content"
@@ -43,7 +45,7 @@
                             android:layout_gravity="bottom|center"
                             android:layout_marginBottom="@dimen/_20sdp"
                             app:dotsColor="@color/white"
-                            app:dotsStrokeColor="@color/colorBlack"
+                            app:dotsStrokeColor="@color/lightGray"
                             app:dotsCornerRadius="6dp"
                             app:dotsSize="12dp"
                             app:dotsSpacing="6dp"
@@ -60,27 +62,28 @@
                         android:layout_gravity="bottom"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_10sdp"
-                        android:layout_marginRight="@dimen/_8sdp"
-                        android:layout_marginLeft="@dimen/_8sdp"
+                        android:layout_marginRight="@dimen/_5sdp"
+                        android:layout_marginLeft="@dimen/_5sdp"
                         android:layout_marginBottom="@dimen/_8sdp"
                         android:textColor="@color/blue_txt"/>
 
                 <View android:layout_width="match_parent"
-                      android:layout_margin="@dimen/_7sdp"
+                      android:layout_margin="@dimen/_8sdp"
                       android:layout_height="1dp"
-                      android:background="@color/divider_color"/>
+                      android:background="@color/lightGray"/>
 
             </LinearLayout>
 
             <LinearLayout
                     android:layout_width="match_parent"
                     android:orientation="vertical"
+                    android:layout_marginTop="@dimen/_10sdp"
                     android:layout_height="wrap_content">
 
                 <com.sd.src.stepcounterapp.utils.CustomTextView
                         android:textColor="@color/colorBlack"
                         android:layout_width="match_parent"
-                        android:text="CHALLENGES"
+                        android:text="ONGOING CHALLENGES"
                         android:padding="@dimen/_2sdp"
                         android:textSize="@dimen/_15ssp"
                         android:layout_marginLeft="@dimen/_2sdp"
@@ -94,13 +97,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:padding="@dimen/_10sdp"
+                        android:layout_marginTop="@dimen/_10sdp"
                         android:orientation="vertical"
                         android:background="@drawable/challenges_started_bg">
 
-                    <LinearLayout
+                    <RelativeLayout
                             android:layout_width="match_parent"
                             android:orientation="horizontal"
                             android:gravity="center_vertical"
+                            android:layout_gravity="right"
                             android:layout_height="wrap_content">
 
                         <com.sd.src.stepcounterapp.utils.CustomTextView
@@ -108,22 +113,25 @@
                                 android:layout_height="wrap_content"
                                 android:text="Sahi Sponsored C..."
                                 android:ellipsize="end"
+                                android:layout_alignParentLeft="true"
                                 android:maxLines="1"
                                 android:textColor="@color/colorBlack"
                                 android:textSize="@dimen/_18ssp"
+                                android:drawableRight="@drawable/info"
                                 app:appfont="montserrat_regular.ttf"/>
 
-                        <androidx.appcompat.widget.AppCompatImageView android:layout_width="wrap_content"
-                                                                      android:layout_height="wrap_content"
-                                                                      android:layout_weight="1"
-                                                                      android:src="@drawable/info_icon"/>
 
-                        <androidx.appcompat.widget.AppCompatImageView android:layout_width="wrap_content"
-                                                                      android:layout_height="wrap_content"
-                                                                      android:src="@drawable/info_icon"/>
+                        <androidx.appcompat.widget.AppCompatImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_alignParentRight="true"
+                                android:layout_marginRight="@dimen/_5sdp"
+                                android:layout_gravity="right"
+                                android:src="@drawable/stop" android:layout_alignParentBottom="true"
+                                android:layout_marginBottom="2dp"/>
 
 
-                    </LinearLayout>
+                    </RelativeLayout>
                     <com.sd.src.stepcounterapp.utils.CustomTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -134,11 +142,19 @@
                             android:textColor="@color/colorBlack"
                             android:textSize="@dimen/_10ssp"
                             app:appfont="montserrat_regular.ttf"/>
+
+                    <View
+                            android:id="@+id/vDottedLine"
+                            android:background="@drawable/dotted_line"
+                            android:layout_width="match_parent"
+                            android:layout_height="2px"
+                            android:layerType="software" />
                     <LinearLayout
                             android:layout_width="match_parent"
                             android:orientation="horizontal"
                             android:layout_gravity="center_vertical"
                             android:gravity="center_vertical"
+                             android:layout_marginTop="@dimen/_10sdp"
                             android:layout_height="wrap_content">
 
                         <com.sd.src.stepcounterapp.utils.CustomTextView
@@ -163,9 +179,10 @@
                                 android:textSize="@dimen/_10ssp"
                                 app:appfont="montserrat_regular.ttf"/>
 
-                        <androidx.appcompat.widget.AppCompatImageView android:layout_width="wrap_content"
-                                                                      android:layout_height="wrap_content"
-                                                                      android:src="@drawable/challenge_s"
+                        <androidx.appcompat.widget.AppCompatImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/challenge_s"
 
                         />
 
@@ -178,6 +195,7 @@
             <LinearLayout
                     android:layout_width="match_parent"
                     android:orientation="vertical"
+                    android:layout_marginTop="@dimen/_15sdp"
                     android:layout_height="wrap_content">
 
                 <com.sd.src.stepcounterapp.utils.CustomTextView

@@ -127,6 +127,10 @@
         will lose the progress
     </string>
 
+    <!-- Settings Fragment-->
+    <string name="notification_setting">Notification Settings</string>
+    <string name="privacy">Privacy Policy</string>
+    <string name="terms_of_service">Terms of Service</string>
 
 
     <string name="redeem_now">Redeem Now</string>

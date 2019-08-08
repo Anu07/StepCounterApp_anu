@@ -30,71 +30,80 @@
                         app:appfont="montserrat_regular.ttf"
                         android:textAlignment="center"
                         android:textColor="#A8A8A8"
-                        android:textSize="@dimen/_14sdp"
+                        android:textSize="@dimen/_14ssp"
                         android:text="Total Earnings"
                         app:layout_constraintStart_toStartOf="parent"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="8dp"
-                        app:layout_constraintTop_toTopOf="parent" android:id="@+id/customTextView3"/>
+                        android:layout_marginStart="@dimen/_14sdp"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:id="@+id/customTextView3"/>
+
+                <LinearLayout android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:orientation="horizontal"
+                              app:layout_constraintStart_toStartOf="@+id/customTextView3"
+                              app:layout_constraintTop_toBottomOf="@+id/customTextView3"
+                              android:id="@+id/linearLayout3">
 
 
-                <com.sd.src.stepcounterapp.utils.CustomTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/tokensVal"
-                        app:appfont="montserrat_semibold.ttf"
-                        android:textAlignment="center"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="@dimen/_28sdp"
-                        android:text="3256" app:layout_constraintStart_toStartOf="@+id/customTextView3"
-                        app:layout_constraintTop_toBottomOf="@+id/customTextView3"/>
+                    <com.sd.src.stepcounterapp.utils.CustomTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tokensVal"
+                            app:appfont="montserrat_semibold.ttf"
+                            android:textAlignment="center"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/_28sdp"
+                            android:text="3256"/>
 
-                <com.sd.src.stepcounterapp.utils.CustomTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:appfont="montserrat_regular.ttf"
-                        android:textAlignment="center"
-                        android:textColor="#A8A8A8"
-                        android:textSize="@dimen/_12sdp"
-                        android:text="Tokens"
-                        android:id="@+id/customTextView2"
-                        app:layout_constraintStart_toEndOf="@+id/tokensVal"
-                        app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="60dp"/>
+                    <com.sd.src.stepcounterapp.utils.CustomTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:appfont="montserrat_regular.ttf"
+                            android:textAlignment="center"
+                            android:textColor="#A8A8A8"
+                            android:layout_marginStart="@dimen/_5sdp"
+                            android:textSize="@dimen/_12sdp"
+                            android:text="Tokens"
+                            android:id="@+id/customTextView2"/>
+                </LinearLayout>
+                <LinearLayout android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:orientation="horizontal"
+                              app:layout_constraintStart_toStartOf="@+id/linearLayout3"
+                              app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
 
 
-                <com.sd.src.stepcounterapp.utils.CustomTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:appfont="montserrat_regular.ttf"
-                        android:textAlignment="center"
-                        android:textColor="#A8A8A8"
-                        android:gravity="center"
-                        android:textSize="@dimen/_10ssp"
-                        android:text="Updated"
-                        android:id="@+id/customTextView4"
-                        app:layout_constraintStart_toStartOf="@+id/tokensVal"
-                        android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/tokensVal"
-                        android:layout_marginBottom="16dp" app:layout_constraintBottom_toBottomOf="parent"/>
+                    <com.sd.src.stepcounterapp.utils.CustomTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:appfont="montserrat_regular.ttf"
+                            android:textAlignment="center"
+                            android:textColor="#A8A8A8"
+                            android:gravity="center"
+                            android:textSize="@dimen/_10ssp"
+                            android:text="Updated"
+                            android:id="@+id/customTextView4"
+                            android:layout_marginBottom="@dimen/_14sdp"/>
 
-                <com.sd.src.stepcounterapp.utils.CustomTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:appfont="montserrat_semibold.ttf"
-                        android:textAlignment="center"
-                        android:textColor="@color/colorBlack"
-                        android:id="@+id/txtUpdateTime"
-                        android:textSize="@dimen/_10ssp"
-                        android:text="20.07.2019 | 11:31 AM"
-                        android:layout_marginBottom="16dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/customTextView4" android:layout_marginStart="8dp"/>
-
+                    <com.sd.src.stepcounterapp.utils.CustomTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:appfont="montserrat_semibold.ttf"
+                            android:textAlignment="center"
+                            android:textColor="@color/colorBlack"
+                            android:id="@+id/txtUpdateTime"
+                            android:textSize="@dimen/_10ssp"
+                            android:text="20.07.2019 | 11:31 AM"
+                            android:layout_marginBottom="@dimen/_14sdp"
+                            android:layout_marginStart="@dimen/_8sdp"/>
+                </LinearLayout>
                 <LinearLayout android:layout_width="wrap_content"
                               android:orientation="vertical"
                               android:gravity="center"
                               android:layout_height="wrap_content"
                               app:layout_constraintTop_toTopOf="parent" app:layout_constraintEnd_toEndOf="parent"
-                              android:layout_marginEnd="32dp"
+                              android:layout_marginEnd="@dimen/_22sdp"
                               app:layout_constraintBottom_toBottomOf="parent">
 
                     <ImageView android:layout_width="wrap_content"
@@ -136,10 +145,9 @@
                         android:textSize="@dimen/_14sdp"
                         android:text="Number of Steps"
                         android:id="@+id/customTextView5"
-                        android:layout_marginTop="8dp"
-                        app:layout_constraintTop_toTopOf="parent" android:layout_marginStart="16dp"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        app:layout_constraintTop_toTopOf="parent" android:layout_marginStart="@dimen/_14sdp"
                         app:layout_constraintStart_toStartOf="parent"/>
-
 
                 <com.sd.src.stepcounterapp.utils.CustomTextView
                         android:layout_width="wrap_content"
@@ -149,10 +157,17 @@
                         android:textColor="@color/colorBlack"
                         android:textSize="@dimen/_14sdp"
                         android:text="Tokens Generated"
-                        android:layout_marginEnd="16dp"
-                        app:layout_constraintEnd_toEndOf="parent" android:layout_marginTop="8dp"
+                        android:layout_marginEnd="@dimen/_14sdp"
+                        app:layout_constraintEnd_toEndOf="parent" android:layout_marginTop="@dimen/_8sdp"
                         app:layout_constraintTop_toTopOf="parent" android:id="@+id/customTextView6"/>
 
+                <View android:layout_width="@dimen/_1sdp"
+                      app:layout_constraintEnd_toStartOf="@+id/customTextView6"
+                      app:layout_constraintStart_toEndOf="@+id/customTextView5"
+                      app:layout_constraintTop_toTopOf="@+id/customTextView6"
+                      android:id="@+id/view2"
+                      android:layout_height="0dp"
+                      app:layout_constraintBottom_toBottomOf="@+id/txtTokens"/>
 
                 <com.sd.src.stepcounterapp.utils.CustomTextView
                         android:layout_width="wrap_content"
@@ -165,16 +180,6 @@
                         app:layout_constraintTop_toBottomOf="@+id/customTextView5" android:id="@+id/customTextView7"
                         app:layout_constraintStart_toStartOf="@+id/customTextView5"/>
 
-
-                <View android:layout_width="@dimen/_1sdp"
-                      app:layout_constraintEnd_toStartOf="@+id/customTextView6"
-                      android:layout_marginEnd="8dp"
-                      app:layout_constraintStart_toEndOf="@+id/customTextView5" android:layout_marginStart="8dp"
-                      app:layout_constraintTop_toTopOf="@+id/customTextView6" android:id="@+id/view2"
-                      android:layout_height="0dp"
-                      app:layout_constraintBottom_toBottomOf="@+id/customTextView11"/>
-
-
                 <com.sd.src.stepcounterapp.utils.CustomTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -184,7 +189,7 @@
                         android:textSize="@dimen/_28ssp"
                         android:text="08"
                         app:layout_constraintStart_toStartOf="@+id/customTextView6"
-                        app:layout_constraintTop_toBottomOf="@+id/customTextView6" android:id="@+id/customTextView11"/>
+                        app:layout_constraintTop_toBottomOf="@+id/customTextView6" android:id="@+id/txtTokens"/>
 
                 <com.sd.src.stepcounterapp.utils.CustomTextView
                         android:layout_width="wrap_content"
@@ -196,7 +201,7 @@
                         android:textSize="@dimen/_10ssp"
                         android:text="Today*"
                         app:layout_constraintStart_toStartOf="@+id/customTextView7"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="@dimen/_8sdp"
                         app:layout_constraintTop_toBottomOf="@+id/customTextView7" android:id="@+id/customTextView10"/>
 
                 <com.sd.src.stepcounterapp.utils.CustomTextView
@@ -212,8 +217,8 @@
                         android:padding="@dimen/_5sdp"
                         app:layout_constraintStart_toStartOf="@+id/customTextView7"
                         android:id="@+id/customTextView8"
-                        android:layout_marginTop="8dp"
-                        app:layout_constraintTop_toBottomOf="@+id/customTextView10"/>
+                        app:layout_constraintTop_toBottomOf="@+id/customTextView10"
+                        android:layout_marginTop="@dimen/_8sdp"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.cardview.widget.CardView>
@@ -301,7 +306,7 @@
                                 android:textColor="@color/arrow_color"
                                 android:textSize="@dimen/_12ssp"
                                 app:appfont="montserrat_semibold.ttf"
-                                android:layout_marginStart="8dp"
+                                android:layout_marginStart="@dimen/_8sdp"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/imgProductFirst"/>
 
@@ -341,9 +346,11 @@
                                 android:src="@drawable/ic_delete"
                                 android:padding="@dimen/_4sdp"
                                 android:background="@drawable/white_fill_circle"
-                                app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+                                app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintBottom_toBottomOf="parent"
-                                android:layout_marginBottom="38dp" android:layout_marginTop="8dp"
+                                android:layout_marginEnd="@dimen/_8sdp"
+                                android:layout_marginBottom="@dimen/_24sdp"
+                                android:layout_marginTop="@dimen/_8sdp"
                                 app:layout_constraintTop_toTopOf="parent" app:layout_constraintVertical_bias="0.98"/>
 
                         <com.sd.src.stepcounterapp.utils.CustomTextView
@@ -361,11 +368,11 @@
                                 android:textColor="@color/colorBlack"
                                 android:textSize="@dimen/_10ssp"
                                 app:appfont="montserrat_semibold.ttf"
-                                android:layout_marginEnd="8dp"
+                                android:layout_marginEnd="@dimen/_8sdp"
+                                android:layout_marginStart="@dimen/_8sdp"
+                                android:layout_marginTop="@dimen/_14sdp"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                android:layout_marginStart="8dp"
                                 app:layout_constraintStart_toStartOf="parent"
-                                android:layout_marginTop="16dp"
                                 app:layout_constraintTop_toTopOf="@+id/imgProductFirst"/>
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -404,7 +411,7 @@
                                 android:textColor="@color/arrow_color"
                                 android:textSize="@dimen/_12ssp"
                                 app:appfont="montserrat_semibold.ttf"
-                                android:layout_marginStart="8dp"
+                                android:layout_marginStart="@dimen/_8sdp"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/imgProductSecond"/>
 
@@ -444,9 +451,11 @@
                                 android:src="@drawable/ic_delete"
                                 android:padding="@dimen/_4sdp"
                                 android:background="@drawable/white_fill_circle"
-                                app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+                                app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintBottom_toBottomOf="parent"
-                                android:layout_marginBottom="38dp" android:layout_marginTop="8dp"
+                                android:layout_marginEnd="@dimen/_8sdp"
+                                android:layout_marginBottom="@dimen/_24sdp"
+                                android:layout_marginTop="@dimen/_8sdp"
                                 app:layout_constraintTop_toTopOf="parent" app:layout_constraintVertical_bias="0.98"/>
 
                         <com.sd.src.stepcounterapp.utils.CustomTextView
@@ -464,11 +473,11 @@
                                 android:textColor="@color/colorBlack"
                                 android:textSize="@dimen/_10ssp"
                                 app:appfont="montserrat_semibold.ttf"
-                                android:layout_marginEnd="8dp"
+                                android:layout_marginEnd="@dimen/_8sdp"
+                                android:layout_marginStart="@dimen/_8sdp"
+                                android:layout_marginTop="@dimen/_14sdp"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                android:layout_marginStart="8dp"
                                 app:layout_constraintStart_toStartOf="parent"
-                                android:layout_marginTop="16dp"
                                 app:layout_constraintTop_toTopOf="@+id/imgProductSecond"/>
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -604,11 +613,11 @@
                                 android:textColor="@color/colorBlack"
                                 android:textSize="@dimen/_8ssp"
                                 app:appfont="montserrat_semibold.ttf"
-                                android:layout_marginEnd="8dp"
+                                android:layout_marginEnd="@dimen/_8sdp"
+                                android:layout_marginStart="@dimen/_8sdp"
+                                android:layout_marginTop="@dimen/_14sdp"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                android:layout_marginStart="8dp"
                                 app:layout_constraintStart_toStartOf="parent"
-                                android:layout_marginTop="16dp"
                                 app:layout_constraintTop_toTopOf="@+id/imgProductRedeemFirst"/>
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -696,11 +705,11 @@
                                 android:textColor="@color/colorBlack"
                                 android:textSize="@dimen/_8ssp"
                                 app:appfont="montserrat_semibold.ttf"
-                                android:layout_marginEnd="8dp"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                android:layout_marginStart="8dp"
                                 app:layout_constraintStart_toStartOf="parent"
-                                android:layout_marginTop="16dp"
+                                android:layout_marginEnd="@dimen/_8sdp"
+                                android:layout_marginStart="@dimen/_8sdp"
+                                android:layout_marginTop="@dimen/_14sdp"
                                 app:layout_constraintTop_toTopOf="@+id/imgProductRedeemSecond"/>
                     </androidx.constraintlayout.widget.ConstraintLayout>
 

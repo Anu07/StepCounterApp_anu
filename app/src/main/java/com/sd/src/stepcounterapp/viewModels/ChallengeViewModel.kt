@@ -30,7 +30,6 @@ class ChallengeViewModel(application: Application) : AndroidViewModel(applicatio
 
     fun getchallenges(request: BasicRequest) {
         call!!.getChallenges(request).enqueue(object : Callback<ChallengeResponse> {
-
             override fun onFailure(call: Call<ChallengeResponse>?, t: Throwable?) {
                 Log.v("retrofit", "call failed")
                 Toast.makeText(AppApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()

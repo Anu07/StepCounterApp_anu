@@ -45,7 +45,6 @@
                               app:layout_constraintTop_toBottomOf="@+id/customTextView3"
                               android:id="@+id/linearLayout3">
 
-
                     <com.sd.src.stepcounterapp.utils.CustomTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -54,7 +53,7 @@
                             android:textAlignment="center"
                             android:textColor="@color/colorBlack"
                             android:textSize="@dimen/_20ssp"
-                            android:text="3256"/>
+                            android:text="0"/>
 
                     <com.sd.src.stepcounterapp.utils.CustomTextView
                             android:layout_width="wrap_content"
@@ -178,7 +177,7 @@
                         android:textAlignment="center"
                         android:textColor="@color/blue_txt"
                         android:textSize="@dimen/_20ssp"
-                        android:text="8,271"
+                        android:text="0"
                         app:layout_constraintTop_toBottomOf="@+id/customTextView5" android:id="@+id/customTextView7"
                         app:layout_constraintStart_toStartOf="@+id/customTextView5"/>
 
@@ -189,7 +188,7 @@
                         android:textAlignment="center"
                         android:textColor="#8DC540"
                         android:textSize="@dimen/_20ssp"
-                        android:text="08"
+                        android:text="0"
                         app:layout_constraintStart_toStartOf="@+id/customTextView6"
                         app:layout_constraintTop_toBottomOf="@+id/customTextView6" android:id="@+id/txtTokens"/>
 

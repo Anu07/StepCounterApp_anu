@@ -14,7 +14,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class WalletViewModel(application: Application): AndroidViewModel(application) {
+class WalletViewModel(application: Application) : AndroidViewModel(application) {
     val call = RetrofitClient.instance
 
     private var mUserModel: MutableLiveData<TokenModel>? = null
@@ -27,16 +27,20 @@ class WalletViewModel(application: Application): AndroidViewModel(application) {
     }
 
     fun setTokensFromSteps() {
-        call!!.steps_to_token(BasicRequest(SharedPreferencesManager.getUserId(getApplication())!!
-        )).enqueue(object : Callback<TokenModel> {
+        call!!.steps_to_token(
+            BasicRequest(
+                SharedPreferencesManager.getUserId(getApplication())!!
+            )
+        ).enqueue(object : Callback<TokenModel> {
             override fun onFailure(call: Call<TokenModel>?, t: Throwable?) {
                 Log.v("retrofit", "call failed")
                 Toast.makeText(AppApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
             }
+
             override fun onResponse(call: Call<TokenModel>?, response: Response<TokenModel>?) {
-                if(response!!.code()==200){
+                if (response!!.code() == 200) {
                     mUserModel!!.value = response.body()!!
-                }else{
+                } else {
                     var login = TokenModel()
                     login.message = "Invalid request"
                     mUserModel!!.value = login

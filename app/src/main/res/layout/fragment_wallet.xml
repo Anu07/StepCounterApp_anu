@@ -30,7 +30,7 @@
                         app:appfont="montserrat_regular.ttf"
                         android:textAlignment="center"
                         android:textColor="#A8A8A8"
-                        android:textSize="@dimen/_14ssp"
+                        android:textSize="@dimen/_12ssp"
                         android:text="Total Earnings"
                         app:layout_constraintStart_toStartOf="parent"
                         android:layout_marginStart="@dimen/_14sdp"
@@ -53,7 +53,7 @@
                             app:appfont="montserrat_semibold.ttf"
                             android:textAlignment="center"
                             android:textColor="@color/colorBlack"
-                            android:textSize="@dimen/_28sdp"
+                            android:textSize="@dimen/_20ssp"
                             android:text="3256"/>
 
                     <com.sd.src.stepcounterapp.utils.CustomTextView
@@ -62,8 +62,8 @@
                             app:appfont="montserrat_regular.ttf"
                             android:textAlignment="center"
                             android:textColor="#A8A8A8"
-                            android:layout_marginStart="@dimen/_5sdp"
-                            android:textSize="@dimen/_12sdp"
+                            android:layout_marginStart="@dimen/_2sdp"
+                            android:textSize="@dimen/_10ssp"
                             android:text="Tokens"
                             android:id="@+id/customTextView2"/>
                 </LinearLayout>
@@ -142,7 +142,7 @@
                         app:appfont="montserrat_regular.ttf"
                         android:textAlignment="center"
                         android:textColor="@color/colorBlack"
-                        android:textSize="@dimen/_14sdp"
+                        android:textSize="@dimen/_12ssp"
                         android:text="Number of Steps"
                         android:id="@+id/customTextView5"
                         android:layout_marginTop="@dimen/_8sdp"
@@ -155,7 +155,7 @@
                         app:appfont="montserrat_regular.ttf"
                         android:textAlignment="center"
                         android:textColor="@color/colorBlack"
-                        android:textSize="@dimen/_14sdp"
+                        android:textSize="@dimen/_12ssp"
                         android:text="Tokens Generated"
                         android:layout_marginEnd="@dimen/_14sdp"
                         app:layout_constraintEnd_toEndOf="parent" android:layout_marginTop="@dimen/_8sdp"
@@ -166,8 +166,10 @@
                       app:layout_constraintStart_toEndOf="@+id/customTextView5"
                       app:layout_constraintTop_toTopOf="@+id/customTextView6"
                       android:id="@+id/view2"
+                      android:layout_marginTop="@dimen/_8sdp"
                       android:layout_height="0dp"
-                      app:layout_constraintBottom_toBottomOf="@+id/txtTokens"/>
+                      android:background="#86A7A7A7"
+                      app:layout_constraintBottom_toBottomOf="@+id/txtTokens" android:layout_marginBottom="8dp"/>
 
                 <com.sd.src.stepcounterapp.utils.CustomTextView
                         android:layout_width="wrap_content"
@@ -175,7 +177,7 @@
                         app:appfont="montserrat_semibold.ttf"
                         android:textAlignment="center"
                         android:textColor="@color/blue_txt"
-                        android:textSize="@dimen/_28ssp"
+                        android:textSize="@dimen/_20ssp"
                         android:text="8,271"
                         app:layout_constraintTop_toBottomOf="@+id/customTextView5" android:id="@+id/customTextView7"
                         app:layout_constraintStart_toStartOf="@+id/customTextView5"/>
@@ -186,7 +188,7 @@
                         app:appfont="montserrat_semibold.ttf"
                         android:textAlignment="center"
                         android:textColor="#8DC540"
-                        android:textSize="@dimen/_28ssp"
+                        android:textSize="@dimen/_20ssp"
                         android:text="08"
                         app:layout_constraintStart_toStartOf="@+id/customTextView6"
                         app:layout_constraintTop_toBottomOf="@+id/customTextView6" android:id="@+id/txtTokens"/>

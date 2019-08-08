@@ -147,7 +147,6 @@ class ChallengesFragment : Fragment(), ChallengeAdapter.ItemClickListener {
         mChallengesAdapter = ChallengeAdapter(mContext, mChallengeCategory, this)
         challengesList.adapter = mChallengesAdapter
         setChallengesView()
-
     }
 
     private fun setChallengesView() {

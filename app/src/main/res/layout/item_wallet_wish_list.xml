@@ -18,6 +18,7 @@
                 android:id="@+id/imgProduct"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_160sdp"
+                android:scaleType="centerCrop"
                 android:src="@drawable/body_clouds_early"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

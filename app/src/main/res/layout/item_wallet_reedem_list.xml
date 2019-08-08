@@ -19,6 +19,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_160sdp"
                 android:src="@drawable/body_clouds_early"
+                android:scaleType="centerCrop"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
@@ -74,6 +75,7 @@
                 android:text="Expiry 5 June 2019"
                 android:ellipsize="end"
                 android:maxLines="1"
+
                 android:paddingStart="@dimen/_15sdp"
                 android:paddingEnd="@dimen/_15sdp"
                 android:paddingTop="@dimen/_8sdp"

@@ -23,7 +23,6 @@ import com.sd.src.stepcounterapp.model.wishList.GetWishListRequest
 import com.sd.src.stepcounterapp.model.wishList.WishListResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -115,12 +114,16 @@ interface ApiInterface {
         @Body body: BasicRequest
     ): Call<ChallengeResponse>
 
+    @FormUrlEncoded
     @POST("/api/stop_challenge")
-    fun stopChallenges(@Body body: JSONObject): Call<BaseModel>
+    fun stopChallenges(
+        @Field("userId") userId: String,
+        @Field("challengeId") challengeId: String
+    ): Call<BaseModel>
 
-
+    @FormUrlEncoded
     @POST("api/steps_to_token")
-    fun steps_to_token(@Body body: BasicRequest): Call<TokenModel>
+    fun steps_to_token(@Field("userId") body: String): Call<TokenModel>
 
     @GET("api/survey")
     fun getsurvey(): Call<SurveyModel>

@@ -28,9 +28,7 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
 
     fun setTokensFromSteps() {
         call!!.steps_to_token(
-            BasicRequest(
                 SharedPreferencesManager.getUserId(getApplication())!!
-            )
         ).enqueue(object : Callback<TokenModel> {
             override fun onFailure(call: Call<TokenModel>?, t: Throwable?) {
                 Log.v("retrofit", "call failed")

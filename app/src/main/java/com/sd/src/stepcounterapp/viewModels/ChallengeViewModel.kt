@@ -46,11 +46,8 @@ class ChallengeViewModel(application: Application) : AndroidViewModel(applicatio
         })
     }
     fun stopchallenges(challengeId: String) {
-        val reqObj = JSONObject() // Move inside the loop
-        reqObj.put("userId",  SharedPreferencesManager.getUserId(getApplication())!!)
-        reqObj.put("challengeId","")
-
-        call!!.stopChallenges(reqObj).enqueue(object : Callback<BaseModel> {
+        call!!.stopChallenges( SharedPreferencesManager.getUserId(getApplication())!!,"").
+            enqueue(object : Callback<BaseModel> {
             override fun onFailure(call: Call<BaseModel>?, t: Throwable?) {
                 Log.v("retrofit", "call failed")
                 Toast.makeText(AppApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()

@@ -6,12 +6,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.adapter.WalletRedeemListAdapter
 import com.sd.src.stepcounterapp.adapter.WalletWishListAdapter
+import com.sd.src.stepcounterapp.model.wallet.TokenModel
+import com.sd.src.stepcounterapp.viewModels.WalletViewModel
 import kotlinx.android.synthetic.main.fragment_wallet.*
 
 class WalletFragment : Fragment() {
@@ -34,14 +39,27 @@ class WalletFragment : Fragment() {
     lateinit var mWishListAdapter: WalletWishListAdapter
     lateinit var mRedeemListAdapter: WalletRedeemListAdapter
     private var mData: ArrayList<String> = ArrayList()
+    private lateinit var mViewModel: WalletViewModel
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_wallet, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        mViewModel = ViewModelProviders.of(activity!!).get(WalletViewModel::class.java)
+
+        mViewModel.getStepToken().observe(this,
+            Observer<TokenModel> { mData ->
+                if (mData.data != null) {
+                    txtTokens.text = mData.data!!.totalEarntokens.toString()
+                } else {
+                    Toast.makeText(mContext, mData.message, Toast.LENGTH_SHORT).show()
+                }
+            })
+
         setWishListAdapter()
         setReedemListAdapter()
+        mViewModel.setTokensFromSteps()
 
         txtWishSeeAll.setOnClickListener {
             if (!rvWishList.isVisible) {

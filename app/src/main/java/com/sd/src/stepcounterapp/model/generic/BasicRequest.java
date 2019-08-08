@@ -13,7 +13,9 @@ public class BasicRequest{
         this.userId = userId;
         this.page = page;
     }
-    
+    public BasicRequest(String userId) {
+        this.userId = userId;
+    }
     public String getPage() {
         return page;
     }

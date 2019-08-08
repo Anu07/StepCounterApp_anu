@@ -109,18 +109,14 @@ interface ApiInterface {
     ): Call<DashboardResponse>
 
 
-
     @POST("api/challenges")
     fun getChallenges(
         @Body body: BasicRequest
     ): Call<ChallengeResponse>
 
 
-    @FormUrlEncoded
     @POST("api/steps_to_token")
-    fun steps_to_token(
-        @Field("userId") userId: String
-    ): Call<TokenModel>
+    fun steps_to_token(@Body body: BasicRequest): Call<TokenModel>
 
     @GET("api/survey")
     fun getsurvey(): Call<SurveyModel>

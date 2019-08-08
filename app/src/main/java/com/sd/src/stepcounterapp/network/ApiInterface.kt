@@ -19,11 +19,13 @@ import com.sd.src.stepcounterapp.model.survey.SurveyModel
 import com.sd.src.stepcounterapp.model.syncDevice.FetchDeviceDataRequest
 import com.sd.src.stepcounterapp.model.syncDevice.SyncRequest
 import com.sd.src.stepcounterapp.model.wallet.TokenModel
+import com.sd.src.stepcounterapp.model.wallet.WalletModel
 import com.sd.src.stepcounterapp.model.wishList.AddWishRequest
 import com.sd.src.stepcounterapp.model.wishList.GetWishListRequest
 import com.sd.src.stepcounterapp.model.wishList.WishListResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -125,10 +127,12 @@ interface ApiInterface {
     @POST("/api/join_challenge")
     fun startChallenge(@Body body: Data): Call<BaseModel>
 
-    @FormUrlEncoded
     @POST("api/steps_to_token")
-    fun steps_to_token(@Field("userId") body: String): Call<TokenModel>
+    fun steps_to_token(@Body body: BasicRequest): Call<TokenModel>
 
     @GET("api/survey")
     fun getsurvey(): Call<SurveyModel>
+
+    @POST("/api/wallet")
+    fun wallet(@Body body: BasicRequest): Call<WalletModel>
 }

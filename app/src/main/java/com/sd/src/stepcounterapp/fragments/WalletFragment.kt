@@ -15,7 +15,10 @@ import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.adapter.WalletRedeemListAdapter
 import com.sd.src.stepcounterapp.adapter.WalletWishListAdapter
 import com.sd.src.stepcounterapp.model.wallet.TokenModel
+import com.sd.src.stepcounterapp.model.wallet.WalletModel
+import com.sd.src.stepcounterapp.network.RetrofitClient
 import com.sd.src.stepcounterapp.viewModels.WalletViewModel
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_wallet.*
 
 class WalletFragment : Fragment() {
@@ -37,7 +40,8 @@ class WalletFragment : Fragment() {
 
     lateinit var mWishListAdapter: WalletWishListAdapter
     lateinit var mRedeemListAdapter: WalletRedeemListAdapter
-    private var mData: ArrayList<String> = ArrayList()
+    private var mDataWishList: ArrayList<WalletModel.DataBean.WishlistBean> = ArrayList()
+    private var mDataReedemList: ArrayList<WalletModel.DataBean.RedeemlistBean> = ArrayList()
     private lateinit var mViewModel: WalletViewModel
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_wallet, container, false)
@@ -55,9 +59,53 @@ class WalletFragment : Fragment() {
                 }
             })
 
-        setWishListAdapter()
-        setReedemListAdapter()
+        mViewModel.getWalletData().observe(this,
+            Observer<WalletModel> { mData ->
+                if (mData.data != null) {
+                    txtTokens.text = mData.data!!.totalGenerated.toString()
+                    txtSteps.text = mData.data!!.steps.toString()
+                    tokensVal.text = mData.data!!.totalEarnings.toString()
+
+                    if (mData.data!!.wishlist != null && mData.data!!.wishlist!!.size > 0) {
+                        mDataWishList = mData.data!!.wishlist!!
+
+                        setWishListAdapter()
+                        setWishListView()
+
+                        llWishListSeeLess.visibility = View.VISIBLE
+                        txtWishSeeAll.visibility = View.VISIBLE
+                        txtNoWishList.visibility = View.GONE
+
+                    } else {
+                        mDataWishList = arrayListOf()
+                        setWishListAdapter()
+                        llWishListSeeLess.visibility = View.GONE
+                        txtWishSeeAll.visibility = View.GONE
+                        txtNoWishList.visibility = View.GONE
+                    }
+
+                    if (mData.data!!.redeemed != null && mData.data!!.redeemed!!.size > 0) {
+                        mDataReedemList = mData.data!!.redeemed!!
+                        setReedemListAdapter()
+                        setRedeemListView()
+
+                        llRedeemSeeLess.visibility = View.VISIBLE
+                        txtRedeemSeeAll.visibility = View.VISIBLE
+                        txtNoRedeemList.visibility = View.GONE
+                    } else {
+                        mDataReedemList = arrayListOf()
+                        setReedemListAdapter()
+                        llRedeemSeeLess.visibility = View.GONE
+                        txtRedeemSeeAll.visibility = View.GONE
+                        txtNoRedeemList.visibility = View.VISIBLE
+                    }
+
+                }
+
+            })
+
         mViewModel.setTokensFromSteps()
+        mViewModel.hitWalletApi()
 
         txtWishSeeAll.setOnClickListener {
             if (!rvWishList.isVisible) {
@@ -86,14 +134,47 @@ class WalletFragment : Fragment() {
 
     private fun setWishListAdapter() {
         rvWishList.layoutManager = LinearLayoutManager(mContext)
-        mWishListAdapter = WalletWishListAdapter(mData)
+        mWishListAdapter = WalletWishListAdapter(mDataWishList)
         rvWishList.adapter = mWishListAdapter
+    }
+
+    private fun setWishListView() {
+        txtProductNameFirst.text = mDataWishList[0].name
+        txtShortDescFirst.text = mDataWishList[0].shortDesc
+        txtTokenFirst.text = "${mDataWishList[0].token} TKS"
+        Picasso.get().load(RetrofitClient.IMG_URL + "" + mDataWishList[0].image).into(imgProductFirst)
+        if (mDataWishList.size > 1) {
+            cdWishSecond.visibility = View.VISIBLE
+            txtProductNameSecond.text = mDataWishList[1].name
+            txtShortDescSecond.text = mDataWishList[1].shortDesc
+            txtTokenSecond.text = "${mDataWishList[1].token} TKS"
+            Picasso.get().load(RetrofitClient.IMG_URL + "" + mDataWishList[1].image).into(imgProductSecond)
+        } else {
+            cdWishSecond.visibility = View.GONE
+        }
     }
 
     private fun setReedemListAdapter() {
         rvRedeem.layoutManager = LinearLayoutManager(mContext)
-        mRedeemListAdapter = WalletRedeemListAdapter(mData)
+        mRedeemListAdapter = WalletRedeemListAdapter(mDataReedemList)
         rvRedeem.adapter = mRedeemListAdapter
+    }
+
+    private fun setRedeemListView() {
+        txtProductNameRedeemFirst.text = mDataReedemList[0].name
+        txtShortDescRedeemFirst.text = mDataReedemList[0].shortDesc
+        txtTokenRedeemFirst.text = "${mDataReedemList[0].token} TKS"
+        Picasso.get().load(RetrofitClient.IMG_URL + "" + mDataReedemList[0].image).into(imgProductRedeemFirst)
+
+        if (mDataReedemList.size > 1) {
+            cdRedeemSecond.visibility = View.VISIBLE
+            txtProductNameRedeemSecond.text = mDataReedemList[1].name
+            txtShortDescRedeemSecond.text = mDataReedemList[1].shortDesc
+            txtTokenRedeemSecond.text = "${mDataReedemList[1].token} TKS"
+            Picasso.get().load(RetrofitClient.IMG_URL + "" + mDataReedemList[1].image).into(imgProductRedeemSecond)
+        } else {
+            cdRedeemSecond.visibility = View.GONE
+        }
     }
 
 }

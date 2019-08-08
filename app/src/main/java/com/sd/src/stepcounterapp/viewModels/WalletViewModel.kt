@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import com.sd.src.stepcounterapp.AppApplication
 import com.sd.src.stepcounterapp.model.generic.BasicRequest
 import com.sd.src.stepcounterapp.model.wallet.TokenModel
+import com.sd.src.stepcounterapp.model.wallet.WalletModel
 import com.sd.src.stepcounterapp.network.RetrofitClient
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import retrofit2.Call
@@ -17,17 +18,28 @@ import retrofit2.Response
 class WalletViewModel(application: Application) : AndroidViewModel(application) {
     val call = RetrofitClient.instance
 
-    private var mUserModel: MutableLiveData<TokenModel>? = null
+    private var mTokenModel: MutableLiveData<TokenModel>? = null
+    private var mWalletModel: MutableLiveData<WalletModel>? = null
 
     fun getStepToken(): MutableLiveData<TokenModel> {
-        if (mUserModel == null) {
-            mUserModel = MutableLiveData()
+        if (mTokenModel == null) {
+            mTokenModel = MutableLiveData()
         }
-        return mUserModel as MutableLiveData<TokenModel>
+        return mTokenModel as MutableLiveData<TokenModel>
+    }
+
+    fun getWalletData(): MutableLiveData<WalletModel> {
+        if (mWalletModel == null) {
+            mWalletModel = MutableLiveData()
+        }
+        return mWalletModel as MutableLiveData<WalletModel>
     }
 
     fun setTokensFromSteps() {
-        call!!.steps_to_token(SharedPreferencesManager.getUserId(getApplication())!!).enqueue(object : Callback<TokenModel> {
+
+
+
+        call!!.steps_to_token(BasicRequest(SharedPreferencesManager.getUserId(getApplication())!!)).enqueue(object : Callback<TokenModel> {
             override fun onFailure(call: Call<TokenModel>?, t: Throwable?) {
                 Log.v("retrofit", "call failed")
                 Toast.makeText(AppApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
@@ -35,11 +47,29 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
 
             override fun onResponse(call: Call<TokenModel>?, response: Response<TokenModel>?) {
                 if (response!!.code() == 200) {
-                    mUserModel!!.value = response.body()!!
+                    mTokenModel!!.value = response.body()!!
                 } else {
-                    var login = TokenModel()
-                    login.message = "Invalid request"
-                    mUserModel!!.value = login
+                    var model = TokenModel()
+                    model.message = "Invalid request"
+                    mTokenModel!!.value = model
+                }
+            }
+        })
+    }
+    fun hitWalletApi() {
+        call!!.wallet(BasicRequest(SharedPreferencesManager.getUserId(getApplication())!!)).enqueue(object : Callback<WalletModel> {
+            override fun onFailure(call: Call<WalletModel>?, t: Throwable?) {
+                Log.v("retrofit", "call failed")
+                Toast.makeText(AppApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
+            }
+
+            override fun onResponse(call: Call<WalletModel>?, response: Response<WalletModel>?) {
+                if (response!!.code() == 200) {
+                    mWalletModel!!.value = response.body()!!
+                } else {
+                    var model = WalletModel()
+                    model.message = "Invalid request"
+                    mWalletModel!!.value = model
                 }
             }
         })

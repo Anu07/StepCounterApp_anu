@@ -5,9 +5,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.sd.src.stepcounterapp.R
+import com.sd.src.stepcounterapp.model.wallet.WalletModel
+import com.sd.src.stepcounterapp.network.RetrofitClient
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_wallet_wish_list.view.*
 
-class WalletWishListAdapter(var mData: ArrayList<String>) :
+class WalletWishListAdapter(var mData: ArrayList<WalletModel.DataBean.WishlistBean>) :
     RecyclerView.Adapter<WalletWishListAdapter.ViewHolder>() {
 
     override
@@ -19,14 +22,14 @@ class WalletWishListAdapter(var mData: ArrayList<String>) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-//        holder.txtProductName.text = mData[position].name
-//        holder.txtShortDesc.text = mData[position].shortDesc
-//        holder.txtToken.text = "${mData[position].token} TKS"
-//        Picasso.get().load(RetrofitClient.IMG_URL + "" + mData[position].image).into(holder.imgProduct)
+        holder.txtProductName.text = mData[position].name
+        holder.txtShortDesc.text = mData[position].shortDesc
+        holder.txtToken.text = "${mData[position].token} TKS"
+        Picasso.get().load(RetrofitClient.IMG_URL + "" + mData[position].image).into(holder.imgProduct)
     }
 
     override fun getItemCount(): Int {
-        return 2
+        return mData.size
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

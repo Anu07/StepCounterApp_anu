@@ -37,7 +37,7 @@ class ChallengesFragment : Fragment(), ChallengeAdapter.ItemClickListener {
             ChallengesDialog(mContext, item, R.style.pullBottomfromTop, R.layout.dialog_challenges,
                 object : ChallengesDialog.StartInterface {
                     override fun onStart(data: Data) {
-//                        mViewModel.startChallenge(data)
+                        mViewModel.startChallenge(data)
                     }
                 })
         dialog.show()

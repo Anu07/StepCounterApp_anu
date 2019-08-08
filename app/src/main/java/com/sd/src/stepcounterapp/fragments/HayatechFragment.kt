@@ -31,7 +31,6 @@ import com.sd.src.stepcounterapp.model.DeviceResponse.DashboardResponse
 import com.sd.src.stepcounterapp.model.generic.BasicInfoResponse
 import com.sd.src.stepcounterapp.model.syncDevice.Activity
 import com.sd.src.stepcounterapp.model.syncDevice.FetchDeviceDataRequest
-import com.sd.src.stepcounterapp.model.syncDevice.FetchDeviceDataResponse
 import com.sd.src.stepcounterapp.model.syncDevice.SyncRequest
 import com.sd.src.stepcounterapp.utils.DayAxisValueFormatter
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
@@ -90,10 +89,10 @@ class HayatechFragment : Fragment() {
             Observer<DashboardResponse> { mDashResponse ->
                 steps.text = mDashResponse.data.todayToken.toString()
                 totalstepsCount.text = mDashResponse.data.todayToken.toString()
-                circular_progress.setProgress( mDashResponse.data.todayToken.toDouble(), 10.00)
+                circular_progress.setProgress(mDashResponse.data.todayToken.toDouble(), 10.00)
                 company_rank_count.text = mDashResponse.data.companyRank.toString()
                 totl_dist.text = mDashResponse.data.totalUserDistance.toString()
-                SharedPreferencesManager.setString(mContext,SYNCDATE,mDashResponse.data.lastUpdated)
+                SharedPreferencesManager.setString(mContext, SYNCDATE, mDashResponse.data.lastUpdated)
             })
 
         mViewModel.fetchSyncData(
@@ -104,7 +103,7 @@ class HayatechFragment : Fragment() {
 
 
         if (SharedPreferencesManager.hasKey(mContext, "Wearable")) {
-            var android_id= Settings.Secure.getString(
+            var android_id = Settings.Secure.getString(
                 mContext.contentResolver,
                 Settings.Secure.ANDROID_ID
             )
@@ -121,12 +120,20 @@ class HayatechFragment : Fragment() {
 
 
     private fun getActivityData(): java.util.ArrayList<Activity>? {
-        var list:ArrayList<DailyStep>? = SharedPreferencesManager.getSyncObject(mContext)
-       var activityList : ArrayList<Activity>? = ArrayList()
+        var list: ArrayList<DailyStep>? = SharedPreferencesManager.getSyncObject(mContext)
+        var activityList: ArrayList<Activity>? = ArrayList()
         list!!.iterator().forEach {
-            activityList!!.add(Activity(it.date,it.distance.toDouble(),it.duration.toInt(),it.count.toInt(),it.calories.toInt()))
+            activityList!!.add(
+                Activity(
+                    it.date,
+                    it.distance.toDouble(),
+                    it.duration.toInt(),
+                    it.count.toInt(),
+                    it.calories.toInt()
+                )
+            )
         }
-        Log.i("Size","list"+activityList!!.size)
+        Log.i("Size", "list" + activityList!!.size)
         return activityList
     }
 

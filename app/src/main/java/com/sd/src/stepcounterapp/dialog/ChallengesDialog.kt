@@ -8,7 +8,12 @@ import com.sd.src.stepcounterapp.interfaces.InterfacesCall
 import com.sd.src.stepcounterapp.model.challenge.Data
 import kotlinx.android.synthetic.main.dialog_challenges.*
 
-class ChallengesDialog(context: Context, data: Data,themeResId: Int,private val LayoutId: Int)
+class ChallengesDialog(
+    context: Context,
+    data: Data,
+    themeResId: Int,
+    private val LayoutId: Int,
+   var mListener: StartInterface)
     : BaseDialog(context, themeResId) {
     var mData: Data = data
 
@@ -25,6 +30,9 @@ class ChallengesDialog(context: Context, data: Data,themeResId: Int,private val 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreateStuff() {
         setData()
+        btnStart.setOnClickListener {
+            mListener.onStart(mData)
+        }
     }
 
     override fun getContentView(): Int {
@@ -42,5 +50,9 @@ class ChallengesDialog(context: Context, data: Data,themeResId: Int,private val 
 
     override fun clickIndex(pos: Int) {
         dismiss()
+    }
+
+    interface StartInterface{
+        fun onStart(data: Data)
     }
 }

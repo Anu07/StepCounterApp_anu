@@ -28,6 +28,8 @@ public class DeviceAdapter extends FitpoloBaseAdapter<BleDevice> {
         holder.deviceName.setText(device.name);
         holder.deviceAddress.setText(device.address);
         holder.deviceRssi.setText(device.rssi + "");
+    
+     
     }
 
     @Override

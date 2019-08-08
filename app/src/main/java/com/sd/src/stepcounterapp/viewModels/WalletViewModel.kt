@@ -27,9 +27,7 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     fun setTokensFromSteps() {
-        call!!.steps_to_token(
-                SharedPreferencesManager.getUserId(getApplication())!!
-        ).enqueue(object : Callback<TokenModel> {
+        call!!.steps_to_token(SharedPreferencesManager.getUserId(getApplication())!!).enqueue(object : Callback<TokenModel> {
             override fun onFailure(call: Call<TokenModel>?, t: Throwable?) {
                 Log.v("retrofit", "call failed")
                 Toast.makeText(AppApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()

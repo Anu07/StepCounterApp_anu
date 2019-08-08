@@ -31,9 +31,15 @@ import kotlin.collections.ArrayList
 
 
 class ChallengesFragment : Fragment(), ChallengeAdapter.ItemClickListener {
+
     override fun onItemClick(pos: Int, item: Data) {
         val dialog =
-            ChallengesDialog(mContext, item, R.style.pullBottomfromTop, R.layout.dialog_challenges)
+            ChallengesDialog(mContext, item, R.style.pullBottomfromTop, R.layout.dialog_challenges,
+                object : ChallengesDialog.StartInterface {
+                    override fun onStart(data: Data) {
+//                        mViewModel.startChallenge(data)
+                    }
+                })
         dialog.show()
     }
 
@@ -48,17 +54,14 @@ class ChallengesFragment : Fragment(), ChallengeAdapter.ItemClickListener {
     private lateinit var mViewModel: ChallengeViewModel
 
     companion object {
-
-
         @SuppressLint("StaticFieldLeak")
         lateinit var instance: ChallengesFragment
-
 
         @SuppressLint("StaticFieldLeak")
         lateinit var mContext: Context
 
-
         private val IMAGES = arrayOf(R.drawable.slider_img, R.drawable.slider_img, R.drawable.slider_img)
+
         fun newInstance(context: Context): ChallengesFragment {
             instance = ChallengesFragment()
             mContext = context
@@ -75,17 +78,22 @@ class ChallengesFragment : Fragment(), ChallengeAdapter.ItemClickListener {
         mViewModel.getChallengeObject().observe(this,
             Observer<ChallengeResponse> { mChallenge ->
                 if (mChallenge != null) {
-                    if (mChallenge.data.size > 0) {
+                    if (mChallenge.data != null && mChallenge.tranding.size > 0) {
                         mChallengeCategory = mChallenge.data
-                        if (mChallenge.tranding != null) {
-                            mTrendChallengeCategory = mChallenge.tranding
-                        }
                         setChallengeAdapter()
-                        setTrendingChallengeAdapter()
+                    } else {
+                        setChallengesView()
                     }
+
+                    if (mChallenge.tranding != null && mChallenge.tranding.size > 0) {
+                        mTrendChallengeCategory = mChallenge.tranding
+                        setTrendingChallengeAdapter()
+                    } else {
+                        setTrendingView()
+                    }
+
                 }
             })
-
         llStartChallenges.setOnClickListener {
             StopChallengeDialog(mContext, R.style.pullBottomfromTop, R.layout.dialog_stop_challenges).show()
         }
@@ -119,7 +127,7 @@ class ChallengesFragment : Fragment(), ChallengeAdapter.ItemClickListener {
         // Auto start of viewpager
         val handler = Handler()
         val Update = Runnable {
-            if (currentPage === NUM_PAGES) {
+            if (currentPage == NUM_PAGES) {
                 currentPage = 0
             }
             rewardsViewPager.setCurrentItem(currentPage++, true)
@@ -138,6 +146,18 @@ class ChallengesFragment : Fragment(), ChallengeAdapter.ItemClickListener {
         challengesList.layoutManager = gridLayoutManager
         mChallengesAdapter = ChallengeAdapter(mContext, mChallengeCategory, this)
         challengesList.adapter = mChallengesAdapter
+        setChallengesView()
+
+    }
+
+    private fun setChallengesView() {
+        if (mChallengeCategory.size > 0) {
+            llChallenges.visibility = View.VISIBLE
+            txtNoChallenges.visibility = View.GONE
+        } else {
+            txtNoChallenges.visibility = View.VISIBLE
+            llChallenges.visibility = View.GONE
+        }
     }
 
     private fun setTrendingChallengeAdapter() {
@@ -145,6 +165,17 @@ class ChallengesFragment : Fragment(), ChallengeAdapter.ItemClickListener {
         trendchallengesList.layoutManager = gridLayoutManager
         mTrendingChallengesAdapter = ChallengeTrendingAdapter(mContext, mTrendChallengeCategory)
         trendchallengesList.adapter = mTrendingChallengesAdapter
+        setTrendingView()
+    }
+
+    private fun setTrendingView() {
+        if (mTrendChallengeCategory.size > 0) {
+            llTrending.visibility = View.VISIBLE
+            txtNoTrending.visibility = View.GONE
+        } else {
+            llTrending.visibility = View.VISIBLE
+            txtNoTrending.visibility = View.GONE
+        }
     }
 
 }

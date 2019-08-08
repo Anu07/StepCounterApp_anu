@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:background="@color/colorbg"
@@ -148,13 +148,13 @@
                             android:background="@drawable/dotted_line"
                             android:layout_width="match_parent"
                             android:layout_height="2px"
-                            android:layerType="software" />
+                            android:layerType="software"/>
                     <LinearLayout
                             android:layout_width="match_parent"
                             android:orientation="horizontal"
                             android:layout_gravity="center_vertical"
                             android:gravity="center_vertical"
-                             android:layout_marginTop="@dimen/_10sdp"
+                            android:layout_marginTop="@dimen/_10sdp"
                             android:layout_height="wrap_content">
 
                         <com.sd.src.stepcounterapp.utils.CustomTextView
@@ -192,62 +192,105 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                    android:layout_width="match_parent"
-                    android:orientation="vertical"
-                    android:layout_marginTop="@dimen/_15sdp"
+            <RelativeLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
+                <LinearLayout
+                        android:id="@+id/llChallenges"
+                        android:layout_width="match_parent"
+                        android:orientation="vertical"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:layout_height="wrap_content">
+
+                    <com.sd.src.stepcounterapp.utils.CustomTextView
+                            android:id="@+id/header"
+                            android:text="CHALLENGES"
+                            android:textColor="@color/colorBlack"
+                            android:layout_width="match_parent"
+                            android:padding="@dimen/_2sdp"
+                            android:textSize="@dimen/_15ssp"
+                            android:layout_marginLeft="@dimen/_2sdp"
+                            android:layout_marginRight="@dimen/_2sdp"
+                            app:appfont="montserrat_medium.ttf"
+                            android:layout_height="wrap_content"/>
+
+
+                    <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/challengesList"
+                            android:layout_width="match_parent"
+                            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                            android:layout_height="wrap_content">
+
+                    </androidx.recyclerview.widget.RecyclerView>
+
+                </LinearLayout>
+
+
                 <com.sd.src.stepcounterapp.utils.CustomTextView
-                        android:id="@+id/header"
-                        android:text="CHALLENGES"
+                        android:id="@+id/txtNoChallenges"
+                        android:text="NO CHALLENGES AVAILABLE"
                         android:textColor="@color/colorBlack"
                         android:layout_width="match_parent"
                         android:padding="@dimen/_2sdp"
+                        android:gravity="center"
+                        android:visibility="gone"
+                        android:layout_centerInParent="true"
                         android:textSize="@dimen/_15ssp"
                         android:layout_marginLeft="@dimen/_2sdp"
                         android:layout_marginRight="@dimen/_2sdp"
                         app:appfont="montserrat_medium.ttf"
                         android:layout_height="wrap_content"/>
+            </RelativeLayout>
 
-
-                <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/challengesList"
-                        android:layout_width="match_parent"
-                        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                        android:layout_height="wrap_content">
-
-                </androidx.recyclerview.widget.RecyclerView>
-            </LinearLayout>
-
-            <LinearLayout
-                    android:layout_width="match_parent"
-                    android:orientation="vertical"
+            <RelativeLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
+                <LinearLayout
+                        android:id="@+id/llTrending"
+                        android:layout_width="match_parent"
+                        android:orientation="vertical"
+                        android:layout_height="wrap_content">
+
+                    <com.sd.src.stepcounterapp.utils.CustomTextView
+                            android:id="@+id/trendheader"
+                            android:text="TRENDING NOW"
+                            android:textColor="@color/colorBlack"
+                            android:layout_width="match_parent"
+                            android:padding="@dimen/_2sdp"
+                            android:textSize="@dimen/_15ssp"
+                            app:appfont="montserrat_medium.ttf"
+                            android:layout_margin="@dimen/_5sdp"
+                            android:layout_height="wrap_content"/>
+
+
+                    <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/trendchallengesList"
+                            android:layout_width="match_parent"
+                            android:layout_margin="@dimen/_5sdp"
+                            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                            android:layout_height="wrap_content">
+
+                    </androidx.recyclerview.widget.RecyclerView>
+
+                </LinearLayout>
+
                 <com.sd.src.stepcounterapp.utils.CustomTextView
-                        android:id="@+id/trendheader"
-                        android:text="TRENDING NOW"
+                        android:id="@+id/txtNoTrending"
+                        android:text="NO TRENDING AVAILABLE"
                         android:textColor="@color/colorBlack"
                         android:layout_width="match_parent"
                         android:padding="@dimen/_2sdp"
+                        android:gravity="center"
+                        android:visibility="gone"
+                        android:layout_centerInParent="true"
                         android:textSize="@dimen/_15ssp"
+                        android:layout_marginLeft="@dimen/_2sdp"
+                        android:layout_marginRight="@dimen/_2sdp"
                         app:appfont="montserrat_medium.ttf"
-                        android:layout_margin="@dimen/_5sdp"
                         android:layout_height="wrap_content"/>
-
-
-                <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/trendchallengesList"
-                        android:layout_width="match_parent"
-                        android:layout_margin="@dimen/_5sdp"
-                        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                        android:layout_height="wrap_content">
-
-                </androidx.recyclerview.widget.RecyclerView>
-
-            </LinearLayout>
-
+            </RelativeLayout>
 
         </LinearLayout>
 

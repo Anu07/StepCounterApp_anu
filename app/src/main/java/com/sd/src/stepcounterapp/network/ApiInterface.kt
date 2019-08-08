@@ -4,6 +4,7 @@ import com.sd.src.stepcounterapp.model.BaseModel
 import com.sd.src.stepcounterapp.model.BasicInfoRequestObject
 import com.sd.src.stepcounterapp.model.DeviceResponse.DashboardResponse
 import com.sd.src.stepcounterapp.model.challenge.ChallengeResponse
+import com.sd.src.stepcounterapp.model.challenge.Data
 import com.sd.src.stepcounterapp.model.generic.BasicInfoResponse
 import com.sd.src.stepcounterapp.model.generic.BasicRequest
 import com.sd.src.stepcounterapp.model.image.ImageResponse
@@ -16,7 +17,6 @@ import com.sd.src.stepcounterapp.model.rewards.AddRewardsRequestObject
 import com.sd.src.stepcounterapp.model.rewards.RewardsCategoriesResponse
 import com.sd.src.stepcounterapp.model.survey.SurveyModel
 import com.sd.src.stepcounterapp.model.syncDevice.FetchDeviceDataRequest
-import com.sd.src.stepcounterapp.model.syncDevice.FetchDeviceDataResponse
 import com.sd.src.stepcounterapp.model.syncDevice.SyncRequest
 import com.sd.src.stepcounterapp.model.wallet.TokenModel
 import com.sd.src.stepcounterapp.model.wishList.AddWishRequest
@@ -121,6 +121,9 @@ interface ApiInterface {
         @Field("userId") userId: String,
         @Field("challengeId") challengeId: String
     ): Call<BaseModel>
+
+    @POST("/api/join_challenge")
+    fun startChallenge(@Body body: Data): Call<BaseModel>
 
     @FormUrlEncoded
     @POST("api/steps_to_token")

@@ -9,7 +9,6 @@ import com.sd.src.stepcounterapp.AppApplication
 import com.sd.src.stepcounterapp.model.DeviceResponse.DashboardResponse
 import com.sd.src.stepcounterapp.model.generic.BasicInfoResponse
 import com.sd.src.stepcounterapp.model.syncDevice.FetchDeviceDataRequest
-import com.sd.src.stepcounterapp.model.syncDevice.FetchDeviceDataResponse
 import com.sd.src.stepcounterapp.model.syncDevice.SyncRequest
 import com.sd.src.stepcounterapp.network.RetrofitClient
 import retrofit2.Call
@@ -52,14 +51,14 @@ class DeviceViewModel(application: Application) : AndroidViewModel(application) 
 
 
     fun fetchSyncData(request: FetchDeviceDataRequest) {
-        call!!.getSyncData(request).enqueue(object : Callback<DashboardResponse>{
+        call!!.getSyncData(request).enqueue(object : Callback<DashboardResponse> {
             override fun onFailure(call: Call<DashboardResponse>, t: Throwable) {
                 Log.v("retrofit", "call failed")
                 Toast.makeText(AppApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
             }
 
             override fun onResponse(call: Call<DashboardResponse>, response: Response<DashboardResponse>) {
-                mDashResponse!!.value = response!!.body()
+                mDashResponse!!.value = response.body()
             }
 
         })

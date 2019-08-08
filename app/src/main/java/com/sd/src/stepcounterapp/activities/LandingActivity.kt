@@ -15,6 +15,7 @@ import com.sd.src.stepcounterapp.adapter.LandingPagerAdapter
 import com.sd.src.stepcounterapp.fragments.*
 import com.sd.src.stepcounterapp.network.RetrofitClient.IMG_URL
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
+import com.sd.src.stepcounterapp.utils.SharedPreferencesManager.SYNCDATE
 import com.sd.src.stepcounterapp.viewModels.BaseViewModel
 import com.sd.src.stepcounterapp.viewModels.BaseViewModelFactory
 import com.sdi.sdeiarchitecturemvvm.activities.BaseActivity
@@ -94,8 +95,10 @@ class LandingActivity : BaseActivity<BaseViewModel>(), View.OnClickListener {
     }
 
     private fun setNavHeader() {
-        if (SharedPreferencesManager.getUserObject(this@LandingActivity) != null) {
+        if (SharedPreferencesManager.hasKey(this@LandingActivity,"User")) {
             var user = SharedPreferencesManager.getUserObject(this@LandingActivity)
+
+
             userNameNav.text = "Hello " + user.data.firstName + "!"
             Picasso.get().load(IMG_URL + user.data.image).resize(100, 100).into(img_nav_header)
             Picasso.get().load(IMG_URL + user.data.image).resize(80, 80).into(profileImgTitle)
@@ -123,23 +126,23 @@ class LandingActivity : BaseActivity<BaseViewModel>(), View.OnClickListener {
         when (selected) {
             FRAG_HAYATECH -> {
                 imgHayatech.setImageResource(R.drawable.dashboard_s)
-                txt_title.text = getString(R.string.hayatech)
+//                txt_title.text = getString(R.string.hayatech)
             }
             FRAG_CHALLENGES -> {
                 imgChallenges.setImageResource(R.drawable.challenge_s)
-                txt_title.text = getString(R.string.challenges)
+//                txt_title.text = getString(R.string.challenges)
             }
             FRAG_MARKET_PLACE -> {
                 imgMarketPalace.setImageResource(R.drawable.marketplace_s)
-                txt_title.text = getString(R.string.marketplace)
+//                txt_title.text = getString(R.string.marketplace)
             }
             FRAG_SURVEY -> {
                 imgSurvey.setImageResource(R.drawable.survey_s)
-                txt_title.text = getString(R.string.surveys)
+//                txt_title.text = getString(R.string.surveys)
             }
             FRAG_WALLET -> {
                 imgWallet.setImageResource(R.drawable.wallet_s)
-                txt_title.text = getString(R.string.wallet)
+//                txt_title.text = getString(R.string.wallet)
             }
         }
         mSelected = selected

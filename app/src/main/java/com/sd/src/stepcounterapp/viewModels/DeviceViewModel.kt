@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.sd.src.stepcounterapp.AppApplication
+import com.sd.src.stepcounterapp.model.DeviceResponse.DashboardResponse
 import com.sd.src.stepcounterapp.model.generic.BasicInfoResponse
 import com.sd.src.stepcounterapp.model.syncDevice.FetchDeviceDataRequest
 import com.sd.src.stepcounterapp.model.syncDevice.FetchDeviceDataResponse
@@ -17,7 +18,7 @@ import retrofit2.Response
 
 class DeviceViewModel(application: Application) : AndroidViewModel(application) {
     private var mResponse: MutableLiveData<BasicInfoResponse>? = null
-    private var mDashResponse: MutableLiveData<FetchDeviceDataResponse>? = null
+    private var mDashResponse: MutableLiveData<DashboardResponse>? = null
     val call = RetrofitClient.instance
 
     fun getSyncResponse(): MutableLiveData<BasicInfoResponse> {
@@ -27,11 +28,11 @@ class DeviceViewModel(application: Application) : AndroidViewModel(application) 
         return mResponse as MutableLiveData<BasicInfoResponse>
     }
 
-    fun getDashResponse(): MutableLiveData<FetchDeviceDataResponse> {
+    fun getDashResponse(): MutableLiveData<DashboardResponse> {
         if (mDashResponse == null) {
             mDashResponse = MutableLiveData()
         }
-        return mDashResponse as MutableLiveData<FetchDeviceDataResponse>
+        return mDashResponse as MutableLiveData<DashboardResponse>
     }
 
 
@@ -51,18 +52,16 @@ class DeviceViewModel(application: Application) : AndroidViewModel(application) 
 
 
     fun fetchSyncData(request: FetchDeviceDataRequest) {
-        call!!.getSyncData(request).enqueue(object : Callback<FetchDeviceDataResponse> {
-
-            override fun onFailure(call: Call<FetchDeviceDataResponse>?, t: Throwable?) {
+        call!!.getSyncData(request).enqueue(object : Callback<DashboardResponse>{
+            override fun onFailure(call: Call<DashboardResponse>, t: Throwable) {
                 Log.v("retrofit", "call failed")
                 Toast.makeText(AppApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
             }
 
-            override fun onResponse(call: Call<FetchDeviceDataResponse>?, response: Response<FetchDeviceDataResponse>?) {
-                if(response!!.body() != null) {
-                    mDashResponse!!.value = response.body()
-                }
+            override fun onResponse(call: Call<DashboardResponse>, response: Response<DashboardResponse>) {
+                mDashResponse!!.value = response!!.body()
             }
+
         })
     }
 

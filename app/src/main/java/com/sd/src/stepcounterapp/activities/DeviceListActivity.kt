@@ -26,8 +26,8 @@ import com.sd.src.stepcounterapp.adapter.DeviceAdapter
 import com.sd.src.stepcounterapp.service.DfuService
 import com.sd.src.stepcounterapp.service.MokoService
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
+import com.sd.src.stepcounterapp.utils.SharedPreferencesManager.SYNCDATE
 import com.sd.src.stepcounterapp.utils.Utils
-import kotlinx.android.synthetic.main.activity_list_devices.*
 import no.nordicsemi.android.dfu.DfuProgressListenerAdapter
 import no.nordicsemi.android.dfu.DfuServiceListenerHelper
 import java.text.SimpleDateFormat
@@ -163,7 +163,7 @@ class DeviceListActivity : Basefit(), AdapterView.OnItemClickListener, MokoScanD
                             Toast.LENGTH_LONG
                         ).show()
                     }
-                    SharedPreferencesManager.saveSyncObject(this@DeviceListActivity, lastestSteps!!.last())
+                    SharedPreferencesManager.saveSyncObject(this@DeviceListActivity, lastestSteps)
                     gotoDeviceconnctd()
                 }
                 if (MokoConstants.ACTION_ORDER_TIMEOUT == action) {
@@ -171,6 +171,7 @@ class DeviceListActivity : Basefit(), AdapterView.OnItemClickListener, MokoScanD
                 }
                 if (MokoConstants.ACTION_ORDER_FINISH == action) {
                     Toast.makeText(this@DeviceListActivity, "Success", Toast.LENGTH_SHORT).show()
+
                 }
             }
         }
@@ -262,10 +263,10 @@ class DeviceListActivity : Basefit(), AdapterView.OnItemClickListener, MokoScanD
 //        } else {
 //            noAvlbl.visibility = View.GONE
 //            lvDevice!!.visibility = View.VISIBLE
-            deviceMap!![device.address] = device
-            mDatas!!.clear()
-            mDatas!!.addAll(deviceMap!!.values)
-            mAdapter!!.notifyDataSetChanged()
+        deviceMap!![device.address] = device
+        mDatas!!.clear()
+        mDatas!!.addAll(deviceMap!!.values)
+        mAdapter!!.notifyDataSetChanged()
 //        }
     }
 
@@ -280,9 +281,9 @@ class DeviceListActivity : Basefit(), AdapterView.OnItemClickListener, MokoScanD
 //        } else {
 //            noAvlbl.visibility = View.GONE
 //            lvDevice!!.visibility = View.VISIBLE
-            mDatas!!.clear()
-            mDatas!!.addAll(deviceMap!!.values)
-            mAdapter!!.notifyDataSetChanged()
+        mDatas!!.clear()
+        mDatas!!.addAll(deviceMap!!.values)
+        mAdapter!!.notifyDataSetChanged()
 //        }
     }
 
@@ -305,8 +306,24 @@ class DeviceListActivity : Basefit(), AdapterView.OnItemClickListener, MokoScanD
 
 
     fun getLastestSteps() {
-
-        val calendar = Utils.strDate2Calendar("2019-07-01 00:00", AppConstants.PATTERN_YYYY_MM_DD_HH_MM)
+        /*var calendar: Calendar? = if (getToday()!!.isEmpty()) {
+            Log.i(
+                "Date",
+                "server Sync" + SharedPreferencesManager.getString(this@DeviceListActivity, SYNCDATE) + " 00:00"
+            )
+            Utils.strDate2Calendar(
+                "2019-08-07 00:00",
+                AppConstants.PATTERN_YYYY_MM_DD_HH_MM
+            )
+        } else {
+            Log.i("Date", "Sync" + getToday() + " 00:00")
+            Utils.strDate2Calendar(getToday() + " 00:00", AppConstants.PATTERN_YYYY_MM_DD_HH_MM)
+        }*/
+        var calendar: Calendar? = null
+        calendar = Utils.strDate2Calendar(
+             "2018-06-01 00:00",
+            AppConstants.PATTERN_YYYY_MM_DD_HH_MM
+        )
         MokoSupport.getInstance().sendOrder(ZReadStepTask(mService, calendar!!))
     }
 
@@ -334,12 +351,10 @@ class DeviceListActivity : Basefit(), AdapterView.OnItemClickListener, MokoScanD
 
 
     private fun getToday(): String? {
-        var dateStr: String = "2019-07-01 00:00"
-
-        var curFormater = SimpleDateFormat("dd/MM/yyyy")
-        var dateObj = curFormater.parse(dateStr)
-        var postFormater = SimpleDateFormat("MMMM dd, yyyy")
-        return postFormater.format(dateObj)
+        //2019-08-07
+        var c = Calendar.getInstance().getTime()
+        var df: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd")
+        return df.format(c)
     }
 
 }

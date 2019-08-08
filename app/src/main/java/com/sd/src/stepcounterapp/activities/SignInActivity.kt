@@ -22,7 +22,7 @@ import kotlinx.android.synthetic.main.activity_signin.*
 
 
 class SignInActivity : BaseActivity<SignInViewModel>() {
-    private var android_id : String= ""
+    private var android_id: String = ""
     override val layoutId: Int
         get() = R.layout.activity_signin
     override val viewModel: SignInViewModel
@@ -37,33 +37,38 @@ class SignInActivity : BaseActivity<SignInViewModel>() {
         mViewModel!!.getUser().observe(this,
             Observer<LoginResponseJ> { loginUser ->
                 showPopupProgressSpinner(false)
-                if(loginUser.data!=null){
-                    SharedPreferencesManager.setUserId(this@SignInActivity,loginUser.data!!._id)
-                   if(loginUser.data.username.isNotEmpty()){
-                       SharedPreferencesManager.saveUserObject(this@SignInActivity,loginUser)
-                       if(loginUser.data.basicFlag && loginUser.data.rewardFlag){
-                           val intent = Intent(mContext, LandingActivity::class.java)
-//                    val options = ActivityOptions.makeSceneTransitionAnimation(this@SignInActivity)
-                           startActivity(intent)
-                           finish()
-                       }else if(!loginUser.data.basicFlag){
-                           val intent = Intent(applicationContext, BasicInfoActivity::class.java)
-                           startActivity(intent)
-                           finish()
-                       }else if(!loginUser.data.rewardFlag){
-                           val intent = Intent(applicationContext, RewardsCategorySelectionActivity::class.java)
-                           startActivity(intent)
-                           finish()
-                       }
+                if (loginUser.data != null) {
+                    SharedPreferencesManager.setUserId(this@SignInActivity, loginUser.data!!._id)
+                    if (loginUser.data.username.isNotEmpty()) {
+                        SharedPreferencesManager.saveUserObject(this@SignInActivity, loginUser)
+                        if (loginUser.data.basicFlag && loginUser.data.rewardFlag) {
+                            if (SharedPreferencesManager.hasKey(this@SignInActivity, "Wearable")) {
+                                val intent = Intent(applicationContext, LandingActivity::class.java)
+                                startActivity(intent)
+                                finish()
+                            } else {
+                                val intent = Intent(applicationContext, SyncDeviceActivity::class.java)
+                                startActivity(intent)
+                                finish()
+                            }
+                        } else if (!loginUser.data.basicFlag) {
+                            val intent = Intent(applicationContext, BasicInfoActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        } else if (!loginUser.data.rewardFlag) {
+                            val intent = Intent(applicationContext, RewardsCategorySelectionActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        }
 
-                   }else{
-                       val intent = Intent(mContext, BasicInfoActivity::class.java)
+                    } else {
+                        val intent = Intent(mContext, BasicInfoActivity::class.java)
 //                    val options = ActivityOptions.makeSceneTransitionAnimation(this@SignInActivity)
-                       startActivity(intent)
-                       finish()
-                   }
-                }else{
-                    Toast.makeText(this@SignInActivity,loginUser.message,Toast.LENGTH_LONG).show()
+                        startActivity(intent)
+                        finish()
+                    }
+                } else {
+                    Toast.makeText(this@SignInActivity, loginUser.message, Toast.LENGTH_LONG).show()
 
                 }
             })
@@ -77,11 +82,11 @@ class SignInActivity : BaseActivity<SignInViewModel>() {
         }
 
         signBttn.setOnClickListener {
-            android_id= Secure.getString(
+            android_id = Secure.getString(
                 this@SignInActivity.contentResolver,
                 Secure.ANDROID_ID
             )
-            Log.i("test Id",android_id)
+            Log.i("test Id", android_id)
 
             if (validate()) {
                 if (AppApplication.hasNetwork()) {

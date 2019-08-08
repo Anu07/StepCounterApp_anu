@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.adapter.RecyclerSyncGridAdapter
 import com.sd.src.stepcounterapp.model.rewards.Data
+import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import com.sd.src.stepcounterapp.viewModels.BaseViewModel
 import com.sd.src.stepcounterapp.viewModels.BaseViewModelFactory
 import com.sdi.sdeiarchitecturemvvm.activities.BaseActivity
@@ -45,6 +46,8 @@ class SyncDeviceActivity : BaseActivity<BaseViewModel>(),
         recyclerView = findViewById(R.id.syncsCategory)
         gridLayoutManager = GridLayoutManager(this, 2)
         recyclerView!!.layoutManager = gridLayoutManager
+        var user = SharedPreferencesManager.getUserObject(this@SyncDeviceActivity)
+        headerTextwelcome.text = "Welcome "+user.data.firstName+"!"
         var lm = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
         gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER)
@@ -58,6 +61,7 @@ class SyncDeviceActivity : BaseActivity<BaseViewModel>(),
             val intent = Intent(mContext, LandingActivity::class.java)
 //                    val options = ActivityOptions.makeSceneTransitionAnimation(this@SignInActivity)
             startActivity(intent)
+            finish()
         }
 
         cntnBttn.setOnClickListener {

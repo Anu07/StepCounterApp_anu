@@ -43,24 +43,26 @@
                 android:layout_height="wrap_content">
             <com.sd.src.stepcounterapp.utils.CustomTextView
                     android:id="@+id/txtChallengeName"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
+                    android:gravity="center_horizontal"
                     android:maxLines="1"
                     android:textColor="@color/white"
-                    android:paddingLeft="@dimen/_5ssp"
+                    android:inputType="textCapWords"
                     android:capitalize="words"
                     android:textSize="@dimen/_12ssp"
                     app:appfont="montserrat_medium.ttf"/>
 
             <com.sd.src.stepcounterapp.utils.CustomTextView
                     android:id="@+id/txtShortDesc"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
                     android:ellipsize="end"
-                    android:paddingLeft="@dimen/_5ssp"
+                    android:gravity="center_horizontal"
                     android:alpha="0.4"
+                    android:inputType="textCapWords"
                     android:textSize="@dimen/_8ssp"
                     app:appfont="montserrat_regular.ttf"/>
 

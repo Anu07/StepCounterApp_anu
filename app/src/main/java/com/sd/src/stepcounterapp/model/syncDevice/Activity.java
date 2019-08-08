@@ -5,40 +5,58 @@ import com.google.gson.annotations.SerializedName;
  * Awesome Pojo Generator
  * */
 public class Activity{
-  @SerializedName("date")
+  @SerializedName("sportDate")
   @Expose
-  private String date;
+  private String sportDate;
   @SerializedName("distance")
   @Expose
-  private Integer distance;
-  @SerializedName("steps")
+  private Double distance;
+  @SerializedName("sportTime")
   @Expose
-  private Integer steps;
-  @SerializedName("token")
+  private Integer sportTime;
+  @SerializedName("stepCount")
   @Expose
-  private Integer token;
-  public void setDate(String date){
-   this.date=date;
+  private Integer stepCount;
+  @SerializedName("burnCalories")
+  @Expose
+  private Integer burnCalories;
+    
+    public Activity(String sportDate, Double distance, Integer sportTime, Integer stepCount, Integer burnCalories) {
+        this.sportDate = sportDate;
+        this.distance = distance;
+        this.sportTime = sportTime;
+        this.stepCount = stepCount;
+        this.burnCalories = burnCalories;
+    }
+    
+    public void setSportDate(String sportDate){
+   this.sportDate=sportDate;
   }
-  public String getDate(){
-   return date;
+  public String getSportDate(){
+   return sportDate;
   }
-  public void setDistance(Integer distance){
+  public void setDistance(Double distance){
    this.distance=distance;
   }
-  public Integer getDistance(){
+  public Double getDistance(){
    return distance;
   }
-  public void setSteps(Integer steps){
-   this.steps=steps;
+  public void setSportTime(Integer sportTime){
+   this.sportTime=sportTime;
   }
-  public Integer getSteps(){
-   return steps;
+  public Integer getSportTime(){
+   return sportTime;
   }
-  public void setToken(Integer token){
-   this.token=token;
+  public void setStepCount(Integer stepCount){
+   this.stepCount=stepCount;
   }
-  public Integer getToken(){
-   return token;
+  public Integer getStepCount(){
+   return stepCount;
+  }
+  public void setBurnCalories(Integer burnCalories){
+   this.burnCalories=burnCalories;
+  }
+  public Integer getBurnCalories(){
+   return burnCalories;
   }
 }

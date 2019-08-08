@@ -96,10 +96,10 @@ class BasicInfoActivity : BaseActivity<SignInViewModel>(), DatePickerDialog.OnDa
                             mViewModel!!.uploadImage(requestUserID, getFiletoServer())
                         } else {
                             val intent = Intent(mContext, BmiCalculatorActivity::class.java)
-                            intent.putExtra("email",emailTxt.text.toString())
                             intent.putExtra("firstname",mobileTxt.text.toString())
                             intent.putExtra("lastname",pwdTxt.text.toString())
                             intent.putExtra("dob",dobTxt.text.toString())
+                            intent.putExtra("username",emailTxt.text.toString())
 
 
 //                                        val options = ActivityOptions.makeSceneTransitionAnimation(this@SignInActivity)

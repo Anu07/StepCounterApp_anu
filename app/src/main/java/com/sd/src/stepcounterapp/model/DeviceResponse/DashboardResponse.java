@@ -1,10 +1,10 @@
-package com.sd.src.stepcounterapp.model.login;
+package com.sd.src.stepcounterapp.model.DeviceResponse;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 /**
  * Awesome Pojo Generator
  * */
-public class LoginResponseJ {
+public class DashboardResponse{
   @SerializedName("data")
   @Expose
   private Data data;
@@ -14,11 +14,7 @@ public class LoginResponseJ {
   @SerializedName("status")
   @Expose
   private Integer status;
-  @SerializedName("token")
-  @Expose
-  private String token;
-    
-    public void setData(Data data){
+  public void setData(Data data){
    this.data=data;
   }
   public Data getData(){
@@ -35,11 +31,5 @@ public class LoginResponseJ {
   }
   public Integer getStatus(){
    return status;
-  }
-  public void setToken(String token){
-   this.token=token;
-  }
-  public String getToken(){
-   return token;
   }
 }

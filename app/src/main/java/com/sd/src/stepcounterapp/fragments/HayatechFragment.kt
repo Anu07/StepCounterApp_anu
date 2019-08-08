@@ -86,13 +86,6 @@ class HayatechFragment : Fragment() {
                 Toast.makeText(activity, "Data synced successfully", Toast.LENGTH_LONG).show()
 
             })
-
-
-        mViewModel.fetchSyncData(
-            FetchDeviceDataRequest("daily", SharedPreferencesManager.getUserId(mContext))
-        )
-
-
         mViewModel.getDashResponse().observe(this,
             Observer<DashboardResponse> { mDashResponse ->
                 steps.text = mDashResponse.data.todayToken.toString()
@@ -103,6 +96,9 @@ class HayatechFragment : Fragment() {
                 SharedPreferencesManager.setString(mContext,SYNCDATE,mDashResponse.data.lastUpdated)
             })
 
+        mViewModel.fetchSyncData(
+            FetchDeviceDataRequest("daily", SharedPreferencesManager.getUserId(mContext))
+        )
 
 
 

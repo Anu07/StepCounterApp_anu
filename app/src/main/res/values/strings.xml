@@ -55,7 +55,7 @@
     <string name="msg">Normal BMI ranges between 19 to 25</string>
     <string name="earn_rewards">Earn Rewards</string>
     <string name="earn_rewards_msg">Select any of the categories that interest you!</string>
-    <string name="welcome">Welcome Mariam!</string>
+    <string name="welcome">Welcome!</string>
     <string name="sync_ur_fitness">Sync your fitness Variable</string>
     <string name="sync_msg">Please select your preferred fitness wearable</string>
     <string-array name="departmentArray">
@@ -134,4 +134,5 @@
 
 
     <string name="redeem_now">Redeem Now</string>
+    <string name="earnMore">EARN MORE TOKENS</string>
 </resources>

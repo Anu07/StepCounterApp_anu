@@ -29,6 +29,7 @@ public class Data {
 	@Expose
 	private String username;
 	
+	
 	public Boolean getBasicFlag() {
 		return basicFlag;
 	}

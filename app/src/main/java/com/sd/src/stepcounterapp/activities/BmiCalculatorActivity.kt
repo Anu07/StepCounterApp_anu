@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -17,6 +18,8 @@ import com.sd.src.stepcounterapp.adapter.PickerAdapter
 import com.sd.src.stepcounterapp.dialog.SelectCityDialog
 import com.sd.src.stepcounterapp.interfaces.InterfacesCall
 import com.sd.src.stepcounterapp.model.BasicInfoRequestObject
+import com.sd.src.stepcounterapp.model.login.Data
+import com.sd.src.stepcounterapp.model.login.LoginResponseJ
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import com.sd.src.stepcounterapp.viewModels.BaseViewModelFactory
 import com.sd.src.stepcounterapp.viewModels.SignInViewModel
@@ -150,7 +153,7 @@ class BmiCalculatorActivity : BaseActivity<SignInViewModel>(), View.OnClickListe
         cms_ht.performClick()
 
         viewModel.getBasicResponse()
-            .observe(this, androidx.lifecycle.Observer { mUser ->
+            .observe(this, Observer { mUser ->
                 if (mUser.status == 200) {
                     val intent = Intent(mContext, RewardsCategorySelectionActivity::class.java)
 //                      val options = ActivityOptions.makeSceneTransitionAnimation(this@SignInActivity)
@@ -248,7 +251,7 @@ override fun initListeners() {
                         mViewModel!!.addBasicInfo(
                             BasicInfoRequestObject(
                                 SharedPreferencesManager.getUserId(this@BmiCalculatorActivity)!!,
-                                intent.getStringExtra("email"),
+                                intent.getStringExtra("username"),
                                 intent.getStringExtra("firstname"),
                                 intent.getStringExtra("lastname"),
                                 intent.getStringExtra("dob"),
@@ -272,7 +275,7 @@ override fun initListeners() {
         mViewModel!!.addBasicInfo(
             BasicInfoRequestObject(
                 SharedPreferencesManager.getUserId(this@BmiCalculatorActivity)!!,
-                intent.getStringExtra("email"),
+                intent.getStringExtra("username"),
                 intent.getStringExtra("firstname"),
                 intent.getStringExtra("lastname"),
                 intent.getStringExtra("dob"),

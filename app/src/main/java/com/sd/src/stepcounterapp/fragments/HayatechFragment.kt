@@ -5,10 +5,12 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
+import android.provider.Settings
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +18,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.fitpolo.support.entity.DailyStep
 import com.github.mikephil.charting.components.LimitLine
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.XAxis.XAxisPosition
@@ -24,12 +27,15 @@ import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.adapter.PatternProgressTextAdapter
+import com.sd.src.stepcounterapp.model.DeviceResponse.DashboardResponse
 import com.sd.src.stepcounterapp.model.generic.BasicInfoResponse
+import com.sd.src.stepcounterapp.model.syncDevice.Activity
 import com.sd.src.stepcounterapp.model.syncDevice.FetchDeviceDataRequest
 import com.sd.src.stepcounterapp.model.syncDevice.FetchDeviceDataResponse
 import com.sd.src.stepcounterapp.model.syncDevice.SyncRequest
 import com.sd.src.stepcounterapp.utils.DayAxisValueFormatter
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
+import com.sd.src.stepcounterapp.utils.SharedPreferencesManager.SYNCDATE
 import com.sd.src.stepcounterapp.viewModels.DeviceViewModel
 import kotlinx.android.synthetic.main.fragment_hayatech.*
 
@@ -65,6 +71,7 @@ class HayatechFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_hayatech, container, false)
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -79,36 +86,52 @@ class HayatechFragment : Fragment() {
                 Toast.makeText(activity, "Data synced successfully", Toast.LENGTH_LONG).show()
 
             })
+
+
         mViewModel.fetchSyncData(
             FetchDeviceDataRequest("daily", SharedPreferencesManager.getUserId(mContext))
         )
+
+
         mViewModel.getDashResponse().observe(this,
-            Observer<FetchDeviceDataResponse> { mResponse ->
-//                Toast.makeText(activity, "Data fetched successfully", Toast.LENGTH_LONG).show()
-                steps.text = mResponse.data.todayToken.toString()
-                totalstepsCount.text = mResponse.data.todayToken.toString()
-                circular_progress.setProgress( mResponse.data.todayToken.toDouble(), 10.00)
-                company_rank_count.text = mResponse.data.companyRank.toString()
-                totl_dist.text = mResponse.data.totalUserDistance.toString()
+            Observer<DashboardResponse> { mDashResponse ->
+                steps.text = mDashResponse.data.todayToken.toString()
+                totalstepsCount.text = mDashResponse.data.todayToken.toString()
+                circular_progress.setProgress( mDashResponse.data.todayToken.toDouble(), 10.00)
+                company_rank_count.text = mDashResponse.data.companyRank.toString()
+                totl_dist.text = mDashResponse.data.totalUserDistance.toString()
+                SharedPreferencesManager.setString(mContext,SYNCDATE,mDashResponse.data.lastUpdated)
             })
 
 
-        if (SharedPreferencesManager.hasKey(mContext, "Wearable")) {
-            var syncObject = SharedPreferencesManager.getSyncObject(mContext)
 
+
+
+        if (SharedPreferencesManager.hasKey(mContext, "Wearable")) {
+            var android_id= Settings.Secure.getString(
+                mContext.contentResolver,
+                Settings.Secure.ANDROID_ID
+            )
             mViewModel.syncDevice(
                 SyncRequest(
-                    syncObject.date,
-                    syncObject.distance.toInt(),
-                    syncObject.count.toInt(),
-                    SharedPreferencesManager.getUserId(
-                        mContext
-                    ),
-                    SharedPreferencesManager.getString(mContext, "address")
+                    getActivityData(),
+                    SharedPreferencesManager.getUserId(mContext),
+                    android_id
                 )
             )
         }
 
+    }
+
+
+    private fun getActivityData(): java.util.ArrayList<Activity>? {
+        var list:ArrayList<DailyStep>? = SharedPreferencesManager.getSyncObject(mContext)
+       var activityList : ArrayList<Activity>? = ArrayList()
+        list!!.iterator().forEach {
+            activityList!!.add(Activity(it.date,it.distance.toDouble(),it.duration.toInt(),it.count.toInt(),it.calories.toInt()))
+        }
+        Log.i("Size","list"+activityList!!.size)
+        return activityList
     }
 
     private fun setStepsText() {
@@ -157,7 +180,7 @@ class HayatechFragment : Fragment() {
         var XAx = barchart.xAxis
         XAx.valueFormatter = xAxisFormatter
 
-        /*   val l = barchart.legend
+        /* val l = barchart.legend
            l.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
            l.horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
            l.orientation = Legend.LegendOrientation.HORIZONTAL

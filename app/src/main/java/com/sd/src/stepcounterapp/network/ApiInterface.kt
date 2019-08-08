@@ -1,6 +1,7 @@
 package com.sd.src.stepcounterapp.network
 
 import com.sd.src.stepcounterapp.model.BasicInfoRequestObject
+import com.sd.src.stepcounterapp.model.DeviceResponse.DashboardResponse
 import com.sd.src.stepcounterapp.model.challenge.ChallengeResponse
 import com.sd.src.stepcounterapp.model.generic.BasicInfoResponse
 import com.sd.src.stepcounterapp.model.generic.BasicRequest
@@ -105,7 +106,7 @@ interface ApiInterface {
     @POST("api/dashboard")
     fun getSyncData(
         @Body body: FetchDeviceDataRequest
-    ): Call<FetchDeviceDataResponse>
+    ): Call<DashboardResponse>
 
 
 

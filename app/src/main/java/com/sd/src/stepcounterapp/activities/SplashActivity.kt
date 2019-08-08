@@ -3,6 +3,7 @@ package com.sd.src.stepcounterapp.activities
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.view.Window
 import androidx.appcompat.app.AppCompatActivity
 import com.sd.src.stepcounterapp.AppConstants
 import com.sd.src.stepcounterapp.R
@@ -24,9 +25,16 @@ class SplashActivity : AppCompatActivity() {
             }else{
                 userObj = SharedPreferencesManager.getUserObject(this@SplashActivity)
                 if(userObj.data.basicFlag && userObj.data.rewardFlag){
-                    val intent = Intent(applicationContext, SyncDeviceActivity::class.java)
-                    startActivity(intent)
-                    finish()
+                    if(SharedPreferencesManager.hasKey(this@SplashActivity,"Wearable")){
+                        val intent = Intent(applicationContext, LandingActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    }else{
+                        val intent = Intent(applicationContext, SyncDeviceActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    }
+
                 }else if(!userObj.data.basicFlag && !userObj.data.rewardFlag){
                     val intent = Intent(applicationContext, BasicInfoActivity::class.java)
                     startActivity(intent)
@@ -42,8 +50,8 @@ class SplashActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(R.layout.activity_splash)
-
         //Initialize the Handler
         mDelayHandler = Handler()
 

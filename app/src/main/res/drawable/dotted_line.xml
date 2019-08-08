@@ -7,7 +7,7 @@
             android:dashGap="1px"
             android:dashWidth="1dp"
             android:height="5dp"
-            android:color="#E90C0C" />
+            android:color="@color/gray_text" />
     <size android:height="5dp" android:width="20dp"/>
 
 </shape>

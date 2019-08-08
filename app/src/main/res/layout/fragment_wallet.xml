@@ -178,7 +178,7 @@
                         android:textColor="@color/blue_txt"
                         android:textSize="@dimen/_20ssp"
                         android:text="0"
-                        app:layout_constraintTop_toBottomOf="@+id/customTextView5" android:id="@+id/customTextView7"
+                        app:layout_constraintTop_toBottomOf="@+id/customTextView5" android:id="@+id/txtSteps"
                         app:layout_constraintStart_toStartOf="@+id/customTextView5"/>
 
                 <com.sd.src.stepcounterapp.utils.CustomTextView
@@ -201,9 +201,9 @@
                         android:gravity="center"
                         android:textSize="@dimen/_10ssp"
                         android:text="Today*"
-                        app:layout_constraintStart_toStartOf="@+id/customTextView7"
+                        app:layout_constraintStart_toStartOf="@+id/txtSteps"
                         android:layout_marginTop="@dimen/_8sdp"
-                        app:layout_constraintTop_toBottomOf="@+id/customTextView7" android:id="@+id/customTextView10"/>
+                        app:layout_constraintTop_toBottomOf="@+id/txtSteps" android:id="@+id/customTextView10"/>
 
                 <com.sd.src.stepcounterapp.utils.CustomTextView
                         android:layout_width="match_parent"
@@ -216,7 +216,7 @@
                         android:background="@drawable/_blue_bottom_round"
                         android:text="CONVERT STEPS INTO TOKENS"
                         android:padding="@dimen/_5sdp"
-                        app:layout_constraintStart_toStartOf="@+id/customTextView7"
+                        app:layout_constraintStart_toStartOf="@+id/txtSteps"
                         android:id="@+id/customTextView8"
                         app:layout_constraintTop_toBottomOf="@+id/customTextView10"
                         android:layout_marginTop="@dimen/_8sdp"/>

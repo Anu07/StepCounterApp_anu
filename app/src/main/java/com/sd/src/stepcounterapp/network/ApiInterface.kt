@@ -1,5 +1,6 @@
 package com.sd.src.stepcounterapp.network
 
+import com.sd.src.stepcounterapp.model.BaseModel
 import com.sd.src.stepcounterapp.model.BasicInfoRequestObject
 import com.sd.src.stepcounterapp.model.challenge.ChallengeResponse
 import com.sd.src.stepcounterapp.model.generic.BasicInfoResponse
@@ -22,6 +23,7 @@ import com.sd.src.stepcounterapp.model.wishList.GetWishListRequest
 import com.sd.src.stepcounterapp.model.wishList.WishListResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -58,14 +60,14 @@ interface ApiInterface {
     fun getRewardsCategories(): Call<RewardsCategoriesResponse>
 
     @POST("api/category_products")
-    fun getCategoryProducts(@Body body:BasicRequest): Call<MarketResponse>
+    fun getCategoryProducts(@Body body: BasicRequest): Call<MarketResponse>
 
 
     @POST("api/category_products")
     fun searchCategoryProducts(@Body body: BasicSearchRequest): Call<MarketResponse>
 
     @POST("api/popular_products")
-    fun getPopularityProducts(@Body body:BasicRequest): Call<PopularProducts>
+    fun getPopularityProducts(@Body body: BasicRequest): Call<PopularProducts>
 
 
     @POST("api/popular_products")
@@ -112,6 +114,9 @@ interface ApiInterface {
     fun getChallenges(
         @Body body: BasicRequest
     ): Call<ChallengeResponse>
+
+    @POST("/api/stop_challenge")
+    fun stopChallenges(@Body body: JSONObject): Call<BaseModel>
 
 
     @POST("api/steps_to_token")

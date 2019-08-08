@@ -70,9 +70,7 @@ class ChallengesFragment : Fragment(), ChallengeAdapter.ItemClickListener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         mViewModel = ViewModelProviders.of(activity!!).get(ChallengeViewModel::class.java)
-
         mViewModel.getchallenges(BasicRequest(SharedPreferencesManager.getUserId(mContext), ""))
-
 
         mViewModel.getChallengeObject().observe(this,
             Observer<ChallengeResponse> { mChallenge ->
@@ -89,8 +87,7 @@ class ChallengesFragment : Fragment(), ChallengeAdapter.ItemClickListener {
             })
 
         llStartChallenges.setOnClickListener {
-            StopChallengeDialog(mContext, R.style.pullBottomfromTop, R.layout.dialog_stop_challenges)
-                .show()
+            StopChallengeDialog(mContext, R.style.pullBottomfromTop, R.layout.dialog_stop_challenges).show()
         }
 
     }

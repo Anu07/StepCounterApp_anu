@@ -1,16 +1,13 @@
 package com.sd.src.stepcounterapp.model.wallet
 
-class TokenModel {
+import com.sd.src.stepcounterapp.model.BaseModel
+
+class TokenModel : BaseModel() {
     /**
-     * status : 200
-     * message : Success
      * data : {"totalSteps":111,"totalEarntokens":0}
      */
 
-    var status: Int = 0
-    var message: String? = null
     var data: DataBean? = null
-
     class DataBean {
         /**
          * totalSteps : 111

@@ -101,7 +101,6 @@ class WalletFragment : Fragment() {
                         txtRedeemSeeAll.visibility = View.GONE
                         txtNoRedeemList.visibility = View.VISIBLE
                     }
-
                 } else {
                     mDataWishList = arrayListOf()
                     setWishListAdapter()

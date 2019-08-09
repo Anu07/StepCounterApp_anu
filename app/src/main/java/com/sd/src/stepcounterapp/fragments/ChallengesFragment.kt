@@ -91,7 +91,7 @@ class ChallengesFragment : Fragment(), ChallengeAdapter.ItemClickListener {
                     } else {
                         setTrendingView()
                     }
-                }else{
+                } else {
                     txtNoChallenges.visibility = View.VISIBLE
                     challengesList.visibility = View.GONE
 

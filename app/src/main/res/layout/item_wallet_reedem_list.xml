@@ -75,7 +75,6 @@
                 android:text="Expiry 5 June 2019"
                 android:ellipsize="end"
                 android:maxLines="1"
-
                 android:paddingStart="@dimen/_15sdp"
                 android:paddingEnd="@dimen/_15sdp"
                 android:paddingTop="@dimen/_8sdp"

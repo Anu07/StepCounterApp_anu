@@ -107,10 +107,6 @@ class HayatechFragment : Fragment() {
 
             })
 
-
-
-
-
         if (SharedPreferencesManager.hasKey(mContext, "Wearable")) {
             var android_id = Settings.Secure.getString(
                 mContext.contentResolver,

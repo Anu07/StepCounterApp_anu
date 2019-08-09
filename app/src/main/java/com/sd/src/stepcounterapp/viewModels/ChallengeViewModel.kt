@@ -23,7 +23,6 @@ class ChallengeViewModel(application: Application) : AndroidViewModel(applicatio
     val call = RetrofitClient.instance
     private var mChallengeProduct: MutableLiveData<ChallengeResponse>? = null
 
-
     fun getChallengeObject(): MutableLiveData<ChallengeResponse> {
         if (mChallengeProduct == null) {
             mChallengeProduct = MutableLiveData()
@@ -37,6 +36,7 @@ class ChallengeViewModel(application: Application) : AndroidViewModel(applicatio
             override fun onFailure(call: Call<ChallengeResponse>?, t: Throwable?) {
                 Log.v("retrofit", "call failed")
                 Toast.makeText(AppApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
+                mChallengeProduct!!.value = null
             }
 
             override fun onResponse(call: Call<ChallengeResponse>?, response: Response<ChallengeResponse>?) {

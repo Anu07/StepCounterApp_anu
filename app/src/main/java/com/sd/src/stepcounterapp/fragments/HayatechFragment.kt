@@ -37,6 +37,10 @@ import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager.SYNCDATE
 import com.sd.src.stepcounterapp.viewModels.DeviceViewModel
 import kotlinx.android.synthetic.main.fragment_hayatech.*
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class HayatechFragment : Fragment() {
@@ -80,6 +84,12 @@ class HayatechFragment : Fragment() {
         setStepsText()
         initBarChart()
         setBarChart()
+        mViewModel.fetchSyncData(
+            FetchDeviceDataRequest("weekly", SharedPreferencesManager.getUserId(mContext))
+        )
+
+
+
         mViewModel.getSyncResponse().observe(this,
             Observer<BasicInfoResponse> { mResponse ->
                 Toast.makeText(activity, "Data synced successfully", Toast.LENGTH_LONG).show()
@@ -87,17 +97,16 @@ class HayatechFragment : Fragment() {
             })
         mViewModel.getDashResponse().observe(this,
             Observer<DashboardResponse> { mDashResponse ->
-                steps.text = mDashResponse.data.todayToken.toString()
+                steps.text = (mDashResponse.data.activity.sumBy { it.steps }).toString()
                 totalstepsCount.text = mDashResponse.data.todayToken.toString()
                 circular_progress.setProgress(mDashResponse.data.todayToken.toDouble(), 10.00)
                 company_rank_count.text = mDashResponse.data.companyRank.toString()
-                totl_dist.text = mDashResponse.data.totalUserDistance.toString()
+                totl_dist.text = mDashResponse.data.totalUserDistance.toString()+"Km"
+                tokensVal.text = mDashResponse.data.totalUserToken.toString()
                 SharedPreferencesManager.setString(mContext, SYNCDATE, mDashResponse.data.lastUpdated)
+
             })
 
-        mViewModel.fetchSyncData(
-            FetchDeviceDataRequest("daily", SharedPreferencesManager.getUserId(mContext))
-        )
 
 
 
@@ -214,6 +223,17 @@ class HayatechFragment : Fragment() {
         barchart.data = data
 
 
+    }
+
+
+    /**
+     * get day of week from date
+     */
+    fun dayFromDate(inputDate: String) : String {
+        var format1: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd")
+        var dt1: Date = format1.parse(inputDate)
+        var format2: DateFormat = SimpleDateFormat("EEEE")
+        return format2.format(dt1)
     }
 
 }

@@ -28,7 +28,7 @@ class SurveysAdapter(
     }
 
     override fun getItemCount(): Int {
-        return mData.size
+        return 10
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)

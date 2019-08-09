@@ -57,7 +57,8 @@ class MarketPlaceCategoryAdapter(
                 wisListener.onWish(position, mItem[position])
             }
 
-            if (mItem.size == 2) {
+            if (position == 1) {
+                 holder.cdSecond.visibility=View.VISIBLE
                 Picasso.get().load(RetrofitClient.IMG_URL + "" + mItem[1].image).error(R.drawable.placeholder)
                     .into(holder.imgProductSecond)
                 holder.txtProductNameSecond.text = mItem[1].name
@@ -68,6 +69,8 @@ class MarketPlaceCategoryAdapter(
                 holder.txtSeeAll.setOnClickListener {
                     itemClick.onSeeAllClick(position)
                 }
+            } else{
+                holder.cdSecond.visibility=View.GONE
             }
         }
     }
@@ -91,7 +94,7 @@ class MarketPlaceCategoryAdapter(
         val txtShortDescSecond = itemView.txtShortDescSecond!!
         val txtTokenSecond = itemView.txtTokenSecond!!
         val wishListView = itemView.wishBttn!!
-
+        val cdSecond = itemView.cdSecond!!
     }
 
     interface twoItemListener {

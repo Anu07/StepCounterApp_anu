@@ -50,19 +50,21 @@ class SurveysFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         mViewModel = ViewModelProviders.of(activity!!).get(SurveyViewModel::class.java)
 
-        mViewModel.getSurveyList().observe(this,
-            Observer<SurveyModel> { mData ->
-                if (mData != null) {
-//                    if (mData.data.size > 0) {
-//                        this.mData.addAll(mData.data)
+//        mViewModel.getSurveyList().observe(this,
+//            Observer<SurveyModel> { mData ->
+//                if (mData != null) {
+//                    if (mData.data!!.size > 0) {
+//                        this.mData.addAll(mData.data!!)
 //                        rvProduct.visibility = View.VISIBLE
 //                        noRec.visibility = View.GONE
 //                    }
-                } else {
-                    rvProduct.visibility = View.GONE
-                    noRec.visibility = View.VISIBLE
-                }
-            })
+//                } else {
+//                    rvProduct.visibility = View.GONE
+//                    noRec.visibility = View.VISIBLE
+//                }
+//            })
+
+//        mViewModel.hitSurveyListApi()
 
         setSurveyAdapter()
     }

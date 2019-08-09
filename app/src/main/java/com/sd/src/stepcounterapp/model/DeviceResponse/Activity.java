@@ -10,7 +10,7 @@ public class Activity{
   private String date;
   @SerializedName("distance")
   @Expose
-  private Integer distance;
+  private Double distance;
   @SerializedName("steps")
   @Expose
   private Integer steps;
@@ -23,10 +23,10 @@ public class Activity{
   public String getDate(){
    return date;
   }
-  public void setDistance(Integer distance){
+  public void setDistance(Double distance){
    this.distance=distance;
   }
-  public Integer getDistance(){
+  public Double getDistance(){
    return distance;
   }
   public void setSteps(Integer steps){

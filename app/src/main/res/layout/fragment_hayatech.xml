@@ -24,7 +24,7 @@
                         app:layout_constraintRight_toRightOf="parent"
                         android:layout_margin="@dimen/_10sdp"
                         android:entries="@array/periodArray"
-                        android:paddingLeft="@dimen/_6sdp"
+                        android:paddingLeft="@dimen/_5sdp"
                         android:dropDownWidth="fill_parent"
                         android:background="@drawable/filter"
                         android:layout_height="wrap_content"/>

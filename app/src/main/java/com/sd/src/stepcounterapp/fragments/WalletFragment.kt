@@ -61,13 +61,13 @@ class WalletFragment : Fragment() {
 
         mViewModel.getWalletData().observe(this,
             Observer<WalletModel> { mData ->
-                if (mData.data != null) {
-                    txtTokens.text = mData.data!!.totalGenerated.toString()
-                    txtSteps.text = mData.data!!.steps.toString()
-                    tokensVal.text = mData.data!!.totalEarnings.toString()
+                if (mData != null || mData?.data != null) {
+                    txtTokens.text = mData.data?.totalGenerated.toString()
+                    txtSteps.text = mData.data?.steps.toString()
+                    tokensVal.text = mData.data?.totalEarnings.toString()
 
-                    if (mData.data!!.wishlist != null && mData.data!!.wishlist!!.size > 0) {
-                        mDataWishList = mData.data!!.wishlist!!
+                    if (mData.data!!.wishlist != null && mData.data?.wishlist!!.size > 0) {
+                        mDataWishList = mData.data?.wishlist!!
 
                         setWishListAdapter()
                         setWishListView()
@@ -79,13 +79,14 @@ class WalletFragment : Fragment() {
                     } else {
                         mDataWishList = arrayListOf()
                         setWishListAdapter()
+                        setWishListView()
                         llWishListSeeLess.visibility = View.GONE
                         txtWishSeeAll.visibility = View.GONE
-                        txtNoWishList.visibility = View.GONE
+                        txtNoWishList.visibility = View.VISIBLE
                     }
 
                     if (mData.data!!.redeemed != null && mData.data!!.redeemed!!.size > 0) {
-                        mDataReedemList = mData.data!!.redeemed!!
+                        mDataReedemList = mData.data?.redeemed!!
                         setReedemListAdapter()
                         setRedeemListView()
 
@@ -95,11 +96,26 @@ class WalletFragment : Fragment() {
                     } else {
                         mDataReedemList = arrayListOf()
                         setReedemListAdapter()
+                        setRedeemListView()
                         llRedeemSeeLess.visibility = View.GONE
                         txtRedeemSeeAll.visibility = View.GONE
                         txtNoRedeemList.visibility = View.VISIBLE
                     }
 
+                } else {
+                    mDataWishList = arrayListOf()
+                    setWishListAdapter()
+                    setWishListView()
+                    llWishListSeeLess.visibility = View.GONE
+                    txtWishSeeAll.visibility = View.GONE
+                    txtNoWishList.visibility = View.VISIBLE
+
+                    mDataReedemList = arrayListOf()
+                    setReedemListAdapter()
+                    setRedeemListView()
+                    llRedeemSeeLess.visibility = View.GONE
+                    txtRedeemSeeAll.visibility = View.GONE
+                    txtNoRedeemList.visibility = View.VISIBLE
                 }
 
             })
@@ -139,19 +155,29 @@ class WalletFragment : Fragment() {
     }
 
     private fun setWishListView() {
-        txtProductNameFirst.text = mDataWishList[0].name
-        txtShortDescFirst.text = mDataWishList[0].shortDesc
-        txtTokenFirst.text = "${mDataWishList[0].token} TKS"
-        Picasso.get().load(RetrofitClient.IMG_URL + "" + mDataWishList[0].image).into(imgProductFirst)
-        if (mDataWishList.size > 1) {
+        if (mDataWishList.size > 0) {
             cdWishSecond.visibility = View.VISIBLE
-            txtProductNameSecond.text = mDataWishList[1].name
-            txtShortDescSecond.text = mDataWishList[1].shortDesc
-            txtTokenSecond.text = "${mDataWishList[1].token} TKS"
-            Picasso.get().load(RetrofitClient.IMG_URL + "" + mDataWishList[1].image).into(imgProductSecond)
+            cdWishFirst.visibility = View.VISIBLE
+
+            txtProductNameFirst.text = mDataWishList[0].name
+            txtShortDescFirst.text = mDataWishList[0].shortDesc
+            txtTokenFirst.text = "${mDataWishList[0].token} TKS"
+            Picasso.get().load(RetrofitClient.IMG_URL + "" + mDataWishList[0].image).into(imgProductFirst)
+
+            if (mDataWishList.size > 1) {
+                cdWishSecond.visibility = View.VISIBLE
+                txtProductNameSecond.text = mDataWishList[1].name
+                txtShortDescSecond.text = mDataWishList[1].shortDesc
+                txtTokenSecond.text = "${mDataWishList[1].token} TKS"
+                Picasso.get().load(RetrofitClient.IMG_URL + "" + mDataWishList[1].image).into(imgProductSecond)
+            } else {
+                cdWishSecond.visibility = View.GONE
+            }
         } else {
             cdWishSecond.visibility = View.GONE
+            cdWishFirst.visibility = View.GONE
         }
+
     }
 
     private fun setReedemListAdapter() {
@@ -161,19 +187,24 @@ class WalletFragment : Fragment() {
     }
 
     private fun setRedeemListView() {
-        txtProductNameRedeemFirst.text = mDataReedemList[0].name
-        txtShortDescRedeemFirst.text = mDataReedemList[0].shortDesc
-        txtTokenRedeemFirst.text = "${mDataReedemList[0].token} TKS"
-        Picasso.get().load(RetrofitClient.IMG_URL + "" + mDataReedemList[0].image).into(imgProductRedeemFirst)
+        if (mDataReedemList.size > 0) {
+            txtProductNameRedeemFirst.text = mDataReedemList[0].name
+            txtShortDescRedeemFirst.text = mDataReedemList[0].shortDesc
+            txtTokenRedeemFirst.text = "${mDataReedemList[0].token} TKS"
+            Picasso.get().load(RetrofitClient.IMG_URL + "" + mDataReedemList[0].image).into(imgProductRedeemFirst)
 
-        if (mDataReedemList.size > 1) {
-            cdRedeemSecond.visibility = View.VISIBLE
-            txtProductNameRedeemSecond.text = mDataReedemList[1].name
-            txtShortDescRedeemSecond.text = mDataReedemList[1].shortDesc
-            txtTokenRedeemSecond.text = "${mDataReedemList[1].token} TKS"
-            Picasso.get().load(RetrofitClient.IMG_URL + "" + mDataReedemList[1].image).into(imgProductRedeemSecond)
+            if (mDataReedemList.size > 1) {
+                cdRedeemSecond.visibility = View.VISIBLE
+                txtProductNameRedeemSecond.text = mDataReedemList[1].name
+                txtShortDescRedeemSecond.text = mDataReedemList[1].shortDesc
+                txtTokenRedeemSecond.text = "${mDataReedemList[1].token} TKS"
+                Picasso.get().load(RetrofitClient.IMG_URL + "" + mDataReedemList[1].image).into(imgProductRedeemSecond)
+            } else {
+                cdRedeemSecond.visibility = View.GONE
+            }
         } else {
             cdRedeemSecond.visibility = View.GONE
+            cdRedeemFirst.visibility = View.GONE
         }
     }
 

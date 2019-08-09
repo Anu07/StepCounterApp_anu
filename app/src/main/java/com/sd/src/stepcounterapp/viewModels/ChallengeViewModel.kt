@@ -23,7 +23,6 @@ class ChallengeViewModel(application: Application) : AndroidViewModel(applicatio
     val call = RetrofitClient.instance
     private var mChallengeProduct: MutableLiveData<ChallengeResponse>? = null
 
-
     fun getChallengeObject(): MutableLiveData<ChallengeResponse> {
         if (mChallengeProduct == null) {
             mChallengeProduct = MutableLiveData()

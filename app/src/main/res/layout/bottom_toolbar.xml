@@ -2,7 +2,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/llBottomNavigation"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_46sdp"
+        android:layout_height="?actionBarSize"
         android:layout_alignParentBottom="true"
         android:gravity="center_vertical" android:orientation="horizontal">
 

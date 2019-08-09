@@ -91,7 +91,11 @@ class ChallengesFragment : Fragment(), ChallengeAdapter.ItemClickListener {
                     } else {
                         setTrendingView()
                     }
-
+                }else{
+                    txtNoChallenges.visibility = View.VISIBLE
+                    llChallenges.visibility = View.GONE
+                    llTrending.visibility = View.VISIBLE
+                    txtNoTrending.visibility = View.GONE
                 }
             })
         llStartChallenges.setOnClickListener {

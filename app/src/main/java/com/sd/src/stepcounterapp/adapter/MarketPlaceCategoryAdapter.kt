@@ -58,7 +58,9 @@ class MarketPlaceCategoryAdapter(
             }
 
             if (position == 1) {
-                 holder.cdSecond.visibility=View.VISIBLE
+                holder.cdSecond.visibility=View.VISIBLE
+                holder.txtSeeAll.visibility=View.VISIBLE
+
                 Picasso.get().load(RetrofitClient.IMG_URL + "" + mItem[1].image).error(R.drawable.placeholder)
                     .into(holder.imgProductSecond)
                 holder.txtProductNameSecond.text = mItem[1].name
@@ -70,6 +72,7 @@ class MarketPlaceCategoryAdapter(
                     itemClick.onSeeAllClick(position)
                 }
             } else{
+                holder.txtSeeAll.visibility=View.GONE
                 holder.cdSecond.visibility=View.GONE
             }
         }

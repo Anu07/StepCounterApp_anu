@@ -93,9 +93,10 @@ class ChallengesFragment : Fragment(), ChallengeAdapter.ItemClickListener {
                     }
                 }else{
                     txtNoChallenges.visibility = View.VISIBLE
-                    llChallenges.visibility = View.GONE
-                    llTrending.visibility = View.VISIBLE
-                    txtNoTrending.visibility = View.GONE
+                    challengesList.visibility = View.GONE
+
+                    trendchallengesList.visibility = View.GONE
+                    txtNoTrending.visibility = View.VISIBLE
                 }
             })
         llStartChallenges.setOnClickListener {
@@ -155,11 +156,11 @@ class ChallengesFragment : Fragment(), ChallengeAdapter.ItemClickListener {
 
     private fun setChallengesView() {
         if (mChallengeCategory.size > 0) {
-            llChallenges.visibility = View.VISIBLE
+            challengesList.visibility = View.VISIBLE
             txtNoChallenges.visibility = View.GONE
         } else {
             txtNoChallenges.visibility = View.VISIBLE
-            llChallenges.visibility = View.GONE
+            challengesList.visibility = View.GONE
         }
     }
 
@@ -173,11 +174,11 @@ class ChallengesFragment : Fragment(), ChallengeAdapter.ItemClickListener {
 
     private fun setTrendingView() {
         if (mTrendChallengeCategory.size > 0) {
-            llTrending.visibility = View.VISIBLE
+            trendchallengesList.visibility = View.VISIBLE
             txtNoTrending.visibility = View.GONE
         } else {
-            llTrending.visibility = View.VISIBLE
-            txtNoTrending.visibility = View.GONE
+            trendchallengesList.visibility = View.GONE
+            txtNoTrending.visibility = View.VISIBLE
         }
     }
 

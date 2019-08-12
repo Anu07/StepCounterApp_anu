@@ -23,6 +23,7 @@ import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.adapter.MarketPlaceCategoryAdapter
 import com.sd.src.stepcounterapp.adapter.MarketPlacePopularityAdapter
 import com.sd.src.stepcounterapp.adapter.MarketPlaceSeeAllAdapter
+import com.sd.src.stepcounterapp.dialog.FilterDialog
 import com.sd.src.stepcounterapp.interfaces.MarketPlaceClickInterface
 import com.sd.src.stepcounterapp.model.generic.BasicInfoResponse
 import com.sd.src.stepcounterapp.model.generic.BasicRequest
@@ -263,9 +264,6 @@ class MarketPlaceFragment : Fragment(), MarketPlaceClickInterface, MarketPlaceCa
                 R.layout.dialog_filter).show()
         }
 
-        /*wishlist.setOnClickListener {
-            mViewModel.addWishList(AddWishRequest(SharedPreferencesManager.getUserId(mContext),))
-        }*/
         wishlist.setOnClickListener {
             callback.onFragmentClick()
         }

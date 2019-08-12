@@ -23,7 +23,7 @@ public class Data{
   private Integer todayToken;
   @SerializedName("totalUserDistance")
   @Expose
-  private Integer totalUserDistance;
+  private Double totalUserDistance;
   public void setLastUpdated(String lastUpdated){
    this.lastUpdated=lastUpdated;
   }
@@ -54,10 +54,10 @@ public class Data{
   public Integer getTodayToken(){
    return todayToken;
   }
-  public void setTotalUserDistance(Integer totalUserDistance){
+  public void setTotalUserDistance(Double totalUserDistance){
    this.totalUserDistance=totalUserDistance;
   }
-  public Integer getTotalUserDistance(){
+  public Double getTotalUserDistance(){
    return totalUserDistance;
   }
 }

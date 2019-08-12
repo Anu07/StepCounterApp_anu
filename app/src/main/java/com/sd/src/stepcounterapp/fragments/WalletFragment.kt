@@ -14,8 +14,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.adapter.WalletRedeemListAdapter
 import com.sd.src.stepcounterapp.adapter.WalletWishListAdapter
+import com.sd.src.stepcounterapp.model.wallet.Redeemed
 import com.sd.src.stepcounterapp.model.wallet.TokenModel
 import com.sd.src.stepcounterapp.model.wallet.WalletModel
+import com.sd.src.stepcounterapp.model.wallet.Wishlist
 import com.sd.src.stepcounterapp.network.RetrofitClient
 import com.sd.src.stepcounterapp.viewModels.WalletViewModel
 import com.squareup.picasso.Picasso
@@ -40,8 +42,8 @@ class WalletFragment : Fragment() {
 
     lateinit var mWishListAdapter: WalletWishListAdapter
     lateinit var mRedeemListAdapter: WalletRedeemListAdapter
-    private var mDataWishList: ArrayList<WalletModel.DataBean.WishlistBean> = ArrayList()
-    private var mDataReedemList: ArrayList<WalletModel.DataBean.RedeemlistBean> = ArrayList()
+    private var mDataWishList: ArrayList<Wishlist> = ArrayList()
+    private var mDataReedemList: ArrayList<Redeemed> = ArrayList()
     private lateinit var mViewModel: WalletViewModel
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_wallet, container, false)
@@ -67,7 +69,7 @@ class WalletFragment : Fragment() {
                     tokensVal.text = mData.data?.totalEarnings.toString()
 
                     if (mData.data!!.wishlist != null && mData.data?.wishlist!!.size > 0) {
-                        mDataWishList = mData.data?.wishlist!!
+                        mDataWishList = (mData.data?.wishlist as ArrayList<Wishlist>?)!!
 
                         setWishListAdapter()
                         setWishListView()
@@ -86,7 +88,7 @@ class WalletFragment : Fragment() {
                     }
 
                     if (mData.data!!.redeemed != null && mData.data!!.redeemed!!.size > 0) {
-                        mDataReedemList = mData.data?.redeemed!!
+                        mDataReedemList = (mData.data?.redeemed as ArrayList<Redeemed>?)!!
                         setReedemListAdapter()
                         setRedeemListView()
 
@@ -187,7 +189,7 @@ class WalletFragment : Fragment() {
     }
 
     private fun setRedeemListView() {
-        if (mDataReedemList.size > 0) {
+        if (mDataReedemList.size > 0 ) {
             txtProductNameRedeemFirst.text = mDataReedemList[0].name
             txtShortDescRedeemFirst.text = mDataReedemList[0].shortDesc
             txtTokenRedeemFirst.text = "${mDataReedemList[0].token} TKS"

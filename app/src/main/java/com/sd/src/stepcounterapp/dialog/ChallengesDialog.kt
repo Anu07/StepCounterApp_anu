@@ -6,6 +6,8 @@ import android.view.Gravity
 import androidx.annotation.RequiresApi
 import com.sd.src.stepcounterapp.interfaces.InterfacesCall
 import com.sd.src.stepcounterapp.model.challenge.Data
+import com.sd.src.stepcounterapp.network.RetrofitClient
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.dialog_challenges.*
 
 class ChallengesDialog(
@@ -40,6 +42,7 @@ class ChallengesDialog(
     }
 
     fun setData() {
+        Picasso.get().load(RetrofitClient.IMG_URL+mData.image).into(challengeImg)
         txtName.text = mData.name
         txtDepartment.text = mData.department
         txtStartDate.text = mData.startDateTime

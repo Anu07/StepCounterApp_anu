@@ -74,7 +74,9 @@
         <activity
                 android:name=".activities.GuideActivity"
                 android:screenOrientation="portrait"/>
-
+        <activity
+                android:name=".activities.SurveyDetailActivity"
+                android:screenOrientation="portrait"/>
         <service android:name=".service.MokoService"/>
         <service
                 android:name=".service.FitpoloNotificationCollectorService"

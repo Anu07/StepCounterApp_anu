@@ -40,7 +40,7 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
             override fun onFailure(call: Call<TokenModel>?, t: Throwable?) {
                 Log.v("retrofit", "call failed")
                 Toast.makeText(AppApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
-                mTokenModel!!.value = null
+//                mTokenModel!!.value = null
             }
 
             override fun onResponse(call: Call<TokenModel>?, response: Response<TokenModel>?) {

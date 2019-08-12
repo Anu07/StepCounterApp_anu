@@ -27,6 +27,7 @@ import com.sd.src.stepcounterapp.service.DfuService
 import com.sd.src.stepcounterapp.service.MokoService
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager.SYNCDATE
+import com.sd.src.stepcounterapp.utils.SharedPreferencesManager.WEARABLEID
 import com.sd.src.stepcounterapp.utils.Utils
 import no.nordicsemi.android.dfu.DfuProgressListenerAdapter
 import no.nordicsemi.android.dfu.DfuServiceListenerHelper
@@ -111,7 +112,7 @@ class DeviceListActivity : Basefit(), AdapterView.OnItemClickListener, MokoScanD
     }
 
 
-    private val mReceiver = object : BroadcastReceiver() {
+     val mReceiver = object : BroadcastReceiver() {
 
         override fun onReceive(context: Context, intent: Intent?) {
             mDialog!!.dismiss()
@@ -155,14 +156,14 @@ class DeviceListActivity : Basefit(), AdapterView.OnItemClickListener, MokoScanD
                     if (lastestSteps == null || lastestSteps!!.isEmpty()) {
                         return
                     }
-                    for (step in lastestSteps!!) {
+                    /*for (step in lastestSteps!!) {
 
                         Toast.makeText(
                             this@DeviceListActivity,
                             "Total steps taken till now: " + step.count,
                             Toast.LENGTH_LONG
                         ).show()
-                    }
+                    }*/
                     SharedPreferencesManager.saveSyncObject(this@DeviceListActivity, lastestSteps)
                     gotoDeviceconnctd()
                 }
@@ -236,7 +237,7 @@ class DeviceListActivity : Basefit(), AdapterView.OnItemClickListener, MokoScanD
         mDialog!!.show()
         val device = parent.getItemAtPosition(position) as BleDevice
         deviceWearableId = device.address
-        SharedPreferencesManager.setString(this@DeviceListActivity, device.address, "address")
+        SharedPreferencesManager.setString(this@DeviceListActivity, device.address, WEARABLEID)
         mService!!.connectBluetoothDevice(device.address)
         mDevice = device
     }
@@ -306,19 +307,6 @@ class DeviceListActivity : Basefit(), AdapterView.OnItemClickListener, MokoScanD
 
 
     fun getLastestSteps() {
-        /*var calendar: Calendar? = if (getToday()!!.isEmpty()) {
-            Log.i(
-                "Date",
-                "server Sync" + SharedPreferencesManager.getString(this@DeviceListActivity, SYNCDATE) + " 00:00"
-            )
-            Utils.strDate2Calendar(
-                "2019-08-07 00:00",
-                AppConstants.PATTERN_YYYY_MM_DD_HH_MM
-            )
-        } else {
-            Log.i("Date", "Sync" + getToday() + " 00:00")
-            Utils.strDate2Calendar(getToday() + " 00:00", AppConstants.PATTERN_YYYY_MM_DD_HH_MM)
-        }*/
         var calendar: Calendar? = null
         calendar = Utils.strDate2Calendar(
              "2018-06-01 00:00",

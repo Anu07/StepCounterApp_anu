@@ -177,7 +177,8 @@
                         android:textColor="@color/blue_txt"
                         android:textSize="@dimen/_20ssp"
                         android:text="0"
-                        app:layout_constraintTop_toBottomOf="@+id/customTextView5" android:id="@+id/txtSteps"
+                        app:layout_constraintTop_toBottomOf="@+id/customTextView5"
+                        android:id="@+id/txtSteps"
                         app:layout_constraintStart_toStartOf="@+id/customTextView5"/>
 
                 <com.sd.src.stepcounterapp.utils.CustomTextView

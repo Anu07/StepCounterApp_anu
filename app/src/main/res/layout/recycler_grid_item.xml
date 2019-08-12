@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView
         xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
         android:orientation="vertical"
         android:layout_width="wrap_content"
         android:id="@+id/cdMain"
@@ -9,7 +9,7 @@
         android:layout_margin="@dimen/_5sdp"
         android:layout_height="wrap_content">
     <FrameLayout android:layout_width="150dp"
-                 android:layout_height="150dp">
+                 android:layout_height="wrap_content">
         <LinearLayout android:orientation="vertical"
                       android:id="@+id/coverImg"
                       android:layout_width="150dp"
@@ -39,7 +39,7 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_gravity="bottom"
-                android:layout_marginBottom="@dimen/_5sdp"
+                android:layout_marginBottom="@dimen/_7sdp"
                 android:layout_height="wrap_content">
             <com.sd.src.stepcounterapp.utils.CustomTextView
                     android:id="@+id/txtChallengeName"
@@ -48,11 +48,12 @@
                     android:ellipsize="end"
                     android:gravity="center_horizontal"
                     android:maxLines="1"
+                    tools:text = "test"
                     android:textColor="@color/white"
                     android:inputType="textCapWords"
                     android:capitalize="words"
                     android:textSize="@dimen/_12ssp"
-                    app:appfont="montserrat_medium.ttf"/>
+                    app:appfont="montserrat_semibold.ttf"/>
 
             <com.sd.src.stepcounterapp.utils.CustomTextView
                     android:id="@+id/txtShortDesc"
@@ -61,9 +62,13 @@
                     android:maxLines="1"
                     android:ellipsize="end"
                     android:gravity="center_horizontal"
-                    android:alpha="0.4"
+                    android:text = "test"
+                    android:layout_marginRight="@dimen/_5sdp"
+                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:singleLine="true"
+                    android:textColor="@color/border_color"
                     android:inputType="textCapWords"
-                    android:textSize="@dimen/_8ssp"
+                    android:textSize="@dimen/_12ssp"
                     app:appfont="montserrat_regular.ttf"/>
 
         </LinearLayout>

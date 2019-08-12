@@ -5,12 +5,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.sd.src.stepcounterapp.R
-import com.sd.src.stepcounterapp.model.wallet.WalletModel
+import com.sd.src.stepcounterapp.model.wallet.Wishlist
 import com.sd.src.stepcounterapp.network.RetrofitClient
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_wallet_wish_list.view.*
 
-class WalletWishListAdapter(var mData: ArrayList<WalletModel.DataBean.WishlistBean>) :
+class WalletWishListAdapter(var mData: ArrayList<Wishlist>) :
     RecyclerView.Adapter<WalletWishListAdapter.ViewHolder>() {
 
     override

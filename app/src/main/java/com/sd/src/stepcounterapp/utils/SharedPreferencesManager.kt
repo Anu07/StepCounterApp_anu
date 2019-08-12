@@ -19,6 +19,7 @@ object SharedPreferencesManager {
     // properties
     private val USERID = "userId"
      val SYNCDATE = "syncDate"
+    val WEARABLEID = "wearableId"
 
     private fun getSharedPreferences(context: Context): SharedPreferences {
         return context.getSharedPreferences(APP_SETTINGS, Context.MODE_PRIVATE)

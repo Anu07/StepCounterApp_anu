@@ -28,7 +28,7 @@ class ChallengeAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         this.item = mValues[position]
         holder.textView.text = item.name
-        holder.textShort.text = item.description
+        holder.textShort.text = item.shortDesc
         holder.imageView.setOnClickListener {
             mListener!!.onItemClick(position,item)
         }

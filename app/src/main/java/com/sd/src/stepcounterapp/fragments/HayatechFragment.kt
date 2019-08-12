@@ -28,6 +28,7 @@ import com.github.mikephil.charting.data.BarEntry
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.adapter.PatternProgressTextAdapter
 import com.sd.src.stepcounterapp.model.DeviceResponse.DashboardResponse
+import com.sd.src.stepcounterapp.model.DeviceResponse.Data
 import com.sd.src.stepcounterapp.model.generic.BasicInfoResponse
 import com.sd.src.stepcounterapp.model.syncDevice.Activity
 import com.sd.src.stepcounterapp.model.syncDevice.FetchDeviceDataRequest
@@ -35,6 +36,7 @@ import com.sd.src.stepcounterapp.model.syncDevice.SyncRequest
 import com.sd.src.stepcounterapp.utils.DayAxisValueFormatter
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager.SYNCDATE
+import com.sd.src.stepcounterapp.utils.YAxisValueFormatter
 import com.sd.src.stepcounterapp.viewModels.DeviceViewModel
 import kotlinx.android.synthetic.main.fragment_hayatech.*
 import java.text.DateFormat
@@ -60,6 +62,7 @@ class HayatechFragment : Fragment() {
     }
 
 
+    private var mDataList: Data? = Data()
     private lateinit var mViewModel: DeviceViewModel
     var xAxis: XAxis? = null
     private val xVal = arrayOf(
@@ -83,13 +86,9 @@ class HayatechFragment : Fragment() {
         circular_progress.setProgressTextAdapter(PatternProgressTextAdapter())
         setStepsText()
         initBarChart()
-        setBarChart()
         mViewModel.fetchSyncData(
             FetchDeviceDataRequest("weekly", SharedPreferencesManager.getUserId(mContext))
         )
-
-
-
         mViewModel.getSyncResponse().observe(this,
             Observer<BasicInfoResponse> { mResponse ->
                 Toast.makeText(activity, "Data synced successfully", Toast.LENGTH_LONG).show()
@@ -97,14 +96,16 @@ class HayatechFragment : Fragment() {
             })
         mViewModel.getDashResponse().observe(this,
             Observer<DashboardResponse> { mDashResponse ->
+                mDataList = mDashResponse.data
                 steps.text = (mDashResponse.data.activity.sumBy { it.steps }).toString()
                 totalstepsCount.text = mDashResponse.data.todayToken.toString()
                 circular_progress.setProgress(mDashResponse.data.todayToken.toDouble(), 10.00)
                 company_rank_count.text = mDashResponse.data.companyRank.toString()
-                totl_dist.text = mDashResponse.data.totalUserDistance.toString()+"Km"
+                totl_dist.text = mDashResponse.data.totalUserDistance.toString()
+                totl_dist_suffix.text = "Km"
                 tokensVal.text = mDashResponse.data.totalUserToken.toString()
                 SharedPreferencesManager.setString(mContext, SYNCDATE, mDashResponse.data.lastUpdated)
-
+                setBarChart()
             })
 
         if (SharedPreferencesManager.hasKey(mContext, "Wearable")) {
@@ -188,6 +189,11 @@ class HayatechFragment : Fragment() {
         var XAx = barchart.xAxis
         XAx.valueFormatter = xAxisFormatter
 
+
+      /*  var yAxisFormatter = YAxisValueFormatter(barchart)
+        var YAx = barchart.axisLeft
+        YAx.valueFormatter = yAxisFormatter*/
+
         /* val l = barchart.legend
            l.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
            l.horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
@@ -201,18 +207,10 @@ class HayatechFragment : Fragment() {
 
     private fun setBarChart() {
 
-        val NoOfEmp = ArrayList<BarEntry>()
-
-        NoOfEmp.add(BarEntry(0f, 10f))
-        NoOfEmp.add(BarEntry(1f, 3f))
-        NoOfEmp.add(BarEntry(2f, 2f))
-        NoOfEmp.add(BarEntry(3f, 3f))
-        NoOfEmp.add(BarEntry(4f, 1f))
-        NoOfEmp.add(BarEntry(5f, 5f))
-        NoOfEmp.add(BarEntry(6f, 2f))
+        var weeklyData: ArrayList<BarEntry> = addDataFromServer()
 
 
-        val bardataset = BarDataSet(NoOfEmp, null)
+        val bardataset = BarDataSet(weeklyData, "Goal achieved")
         bardataset.color = Color.parseColor("#8DC540")
         barchart.animateY(5000)
         val data = BarData(bardataset)
@@ -221,15 +219,42 @@ class HayatechFragment : Fragment() {
 
     }
 
+    private fun addDataFromServer(): ArrayList<BarEntry> {
+
+        var graphData = ArrayList<BarEntry>()
+
+        if (mDataList!!.activity != null) {
+                if (mDataList!!.activity.size >7) {
+                    mDataList!!.activity.subList((mDataList!!.activity.size - 8), (mDataList!!.activity.size - 1))
+                        .forEachIndexed { index, element ->
+                            graphData.add(index, BarEntry(index.toFloat(), element.steps.toFloat()))
+                        }
+                } else {
+                    mDataList!!.activity.forEachIndexed { index, element ->
+                        graphData.add(index, BarEntry(index.toFloat(), element.steps.toFloat()))
+                    }
+                }
+            }
+            return graphData
+    }
+
 
     /**
      * get day of week from date
      */
-    fun dayFromDate(inputDate: String) : String {
+    fun dayFromDate(inputDate: String): String {
         var format1: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd")
         var dt1: Date = format1.parse(inputDate)
         var format2: DateFormat = SimpleDateFormat("EEEE")
         return format2.format(dt1)
     }
+
+    fun setCurrentSteps(dailyStep: DailyStep) {
+        if (dailyStep != null) {
+            Log.e("Updating", "steps" + dailyStep.count)
+            steps.text = dailyStep.count
+        }
+    }
+
 
 }

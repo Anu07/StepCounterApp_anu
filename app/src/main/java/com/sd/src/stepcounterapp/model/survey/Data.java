@@ -1,11 +1,15 @@
 package com.sd.src.stepcounterapp.model.survey;
+import android.os.Parcel;
+import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.ArrayList;
 import java.util.List;
 /**
  * Awesome Pojo Generator
  * */
-public class Data{
+public class Data implements Parcelable {
   @SerializedName("expireOn")
   @Expose
   private String expireOn;
@@ -51,4 +55,42 @@ public class Data{
   public List<Products> getProducts(){
    return products;
   }
+    
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+    
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.expireOn);
+        dest.writeValue(this.earningToken);
+        dest.writeString(this.name);
+        dest.writeString(this._id);
+        dest.writeList(this.products);
+    }
+    
+    public Data() {
+    }
+    
+    protected Data(Parcel in) {
+        this.expireOn = in.readString();
+        this.earningToken = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.name = in.readString();
+        this._id = in.readString();
+        this.products = new ArrayList<Products>();
+        in.readList(this.products, Products.class.getClassLoader());
+    }
+    
+    public static final Parcelable.Creator<Data> CREATOR = new Parcelable.Creator<Data>() {
+        @Override
+        public Data createFromParcel(Parcel source) {
+            return new Data(source);
+        }
+        
+        @Override
+        public Data[] newArray(int size) {
+            return new Data[size];
+        }
+    };
 }

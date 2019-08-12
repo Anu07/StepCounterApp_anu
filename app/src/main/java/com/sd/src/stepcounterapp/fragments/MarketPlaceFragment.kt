@@ -16,6 +16,7 @@ import android.widget.EditText
 import android.widget.ProgressBar
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -108,6 +109,11 @@ class MarketPlaceFragment : Fragment(), MarketPlaceClickInterface, MarketPlaceCa
             mContext = context
             return instance
         }
+    }
+    internal lateinit var callback: FragmentClick
+
+    fun FragmentClickListener(callback: FragmentClick) {
+        this.callback = callback
     }
 
     private lateinit var progressDialog: Dialog
@@ -252,9 +258,9 @@ class MarketPlaceFragment : Fragment(), MarketPlaceClickInterface, MarketPlaceCa
             }
         })
 
-        /*wishlist.setOnClickListener {
-            mViewModel.addWishList(AddWishRequest(SharedPreferencesManager.getUserId(mContext),))
-        }*/
+        wishlist.setOnClickListener {
+            callback.onFragmentClick()
+        }
     }
 
     private fun performSearch() {
@@ -341,5 +347,9 @@ class MarketPlaceFragment : Fragment(), MarketPlaceClickInterface, MarketPlaceCa
         }
     }
 
+
+    interface FragmentClick {
+        fun onFragmentClick()
+    }
 
 }

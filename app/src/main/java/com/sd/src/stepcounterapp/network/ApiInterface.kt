@@ -15,7 +15,7 @@ import com.sd.src.stepcounterapp.model.marketplace.MarketResponse
 import com.sd.src.stepcounterapp.model.marketplace.PopularProducts
 import com.sd.src.stepcounterapp.model.rewards.AddRewardsRequestObject
 import com.sd.src.stepcounterapp.model.rewards.RewardsCategoriesResponse
-import com.sd.src.stepcounterapp.model.survey.SurveyModel
+import com.sd.src.stepcounterapp.model.survey.SurveyListResponse
 import com.sd.src.stepcounterapp.model.syncDevice.FetchDeviceDataRequest
 import com.sd.src.stepcounterapp.model.syncDevice.SyncRequest
 import com.sd.src.stepcounterapp.model.wallet.TokenModel
@@ -25,7 +25,6 @@ import com.sd.src.stepcounterapp.model.wishList.GetWishListRequest
 import com.sd.src.stepcounterapp.model.wishList.WishListResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -131,7 +130,7 @@ interface ApiInterface {
     fun steps_to_token(@Body body: BasicRequest): Call<TokenModel>
 
     @GET("api/survey")
-    fun getsurvey(): Call<SurveyModel>
+    fun getsurvey(): Call<SurveyListResponse>
 
     @POST("/api/wallet")
     fun wallet(@Body body: BasicRequest): Call<WalletModel>

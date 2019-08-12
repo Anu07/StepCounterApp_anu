@@ -118,6 +118,7 @@
                     android:layout_marginStart="@dimen/_5sdp"
                     android:text="June 22, 2019"
                     android:ellipsize="end"
+                    android:id="@+id/datesurvey"
                     android:textColor="@color/colorBlack"
                     android:maxLines="1"
                     android:textSize="@dimen/_12ssp"

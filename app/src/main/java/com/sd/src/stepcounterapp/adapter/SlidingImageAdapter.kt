@@ -33,7 +33,7 @@ class SlidingImageAdapter(private val context: Context, private val IMAGES: Arra
         imageView.setImageResource(IMAGES[position])
 
        /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            imageView.foreground = context.getDrawable(R.drawable.img_ovrlay_slider)
+            textEarnToken.foreground = context.getDrawable(R.drawable.img_ovrlay_slider)
         }
         */
         view.addView(imageLayout, 0)

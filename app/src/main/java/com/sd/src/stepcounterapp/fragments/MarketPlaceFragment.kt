@@ -16,7 +16,6 @@ import android.widget.EditText
 import android.widget.ProgressBar
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -258,6 +257,15 @@ class MarketPlaceFragment : Fragment(), MarketPlaceClickInterface, MarketPlaceCa
             }
         })
 
+
+        filter.setOnClickListener {
+            FilterDialog(mContext, R.style.pullBottomfromTop,
+                R.layout.dialog_filter).show()
+        }
+
+        /*wishlist.setOnClickListener {
+            mViewModel.addWishList(AddWishRequest(SharedPreferencesManager.getUserId(mContext),))
+        }*/
         wishlist.setOnClickListener {
             callback.onFragmentClick()
         }

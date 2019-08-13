@@ -24,7 +24,9 @@ class SelectCityAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.txtOption.text = mData[position].name
-        holder.llOption.setOnClickListener { mClick.clickIndex(position) }
+        holder.llOption.setOnClickListener {
+            mClick.clickIndex(position)
+        }
     }
 
     override fun getItemCount(): Int {

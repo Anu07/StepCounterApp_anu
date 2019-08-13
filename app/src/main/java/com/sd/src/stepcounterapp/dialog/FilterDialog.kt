@@ -5,6 +5,7 @@ import android.os.Build
 import android.view.Gravity
 import androidx.annotation.RequiresApi
 import com.sd.src.stepcounterapp.interfaces.InterfacesCall
+import kotlinx.android.synthetic.main.dialog_filter.*
 import kotlinx.android.synthetic.main.dialog_stop_challenges.*
 
 class FilterDialog(context: Context, themeResId: Int, private val LayoutId: Int)
@@ -30,7 +31,7 @@ class FilterDialog(context: Context, themeResId: Int, private val LayoutId: Int)
     }
 
     fun setData() {
-        btnNo.setOnClickListener {
+        btnSave.setOnClickListener {
             dismiss()
         }
     }

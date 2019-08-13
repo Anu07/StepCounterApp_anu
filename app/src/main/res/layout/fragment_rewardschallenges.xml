@@ -99,6 +99,7 @@
                         android:padding="@dimen/_10sdp"
                         android:layout_marginTop="@dimen/_10sdp"
                         android:orientation="vertical"
+                        android:visibility="gone"
                         android:background="@drawable/challenges_started_bg">
 
                     <RelativeLayout
@@ -109,25 +110,28 @@
                             android:layout_height="wrap_content">
 
                         <com.sd.src.stepcounterapp.utils.CustomTextView
+                                android:id="@+id/ongoingchallengeName"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Sahi Sponsored C..."
                                 android:ellipsize="end"
                                 android:layout_alignParentLeft="true"
                                 android:maxLines="1"
                                 android:textColor="@color/colorBlack"
                                 android:textSize="@dimen/_18ssp"
+                                android:paddingRight="@dimen/_15sdp"
                                 android:drawableRight="@drawable/info"
                                 app:appfont="montserrat_regular.ttf"/>
 
 
                         <androidx.appcompat.widget.AppCompatImageView
+                                android:id="@+id/stopchallengeBttn"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:layout_alignParentRight="true"
                                 android:layout_marginRight="@dimen/_5sdp"
                                 android:layout_gravity="right"
-                                android:src="@drawable/stop" android:layout_alignParentBottom="true"
+                                android:src="@drawable/stop"
+                                android:layout_alignParentBottom="true"
                                 android:layout_marginBottom="2dp"/>
 
 
@@ -137,6 +141,7 @@
                             android:layout_height="wrap_content"
                             android:text="Duration : 30 Days"
                             android:ellipsize="end"
+                            android:id="@+id/ongoingChallengeDetail"
                             android:layout_marginBottom="@dimen/_5sdp"
                             android:maxLines="1"
                             android:textColor="@color/colorBlack"

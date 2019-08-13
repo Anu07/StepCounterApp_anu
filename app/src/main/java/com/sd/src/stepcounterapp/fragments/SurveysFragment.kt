@@ -59,7 +59,7 @@ class SurveysFragment : Fragment(),ItemClickGlobalListner {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val v =inflater.inflate(R.layout.fragment_surveys, container, false)
-        rewardsViewPager = v.findViewById<ViewPager>(R.id.rewardsViewPager)
+        rewardsViewPager = v.findViewById(R.id.rewardsViewPager)
         return v
 
     }

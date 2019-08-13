@@ -208,8 +208,6 @@ class HayatechFragment : Fragment() {
     private fun setBarChart() {
 
         var weeklyData: ArrayList<BarEntry> = addDataFromServer()
-
-
         val bardataset = BarDataSet(weeklyData, "Goal achieved")
         bardataset.color = Color.parseColor("#8DC540")
         barchart.animateY(5000)
@@ -251,8 +249,10 @@ class HayatechFragment : Fragment() {
 
     fun setCurrentSteps(dailyStep: DailyStep) {
         if (dailyStep != null) {
-            Log.e("Updating", "steps" + dailyStep.count)
-            steps.text = dailyStep.count
+            Log.e("Updating", "steps" +((mDataList!!.activity.sumBy { it.steps }) + dailyStep.count.toInt()).toString())
+            steps.text =((mDataList!!.activity.sumBy { it.steps }) + dailyStep.count.toInt()).toString()
+            totl_dist.text = (mDataList!!.totalUserDistance + dailyStep.distance.toDouble()).toString()
+            totl_dist_suffix.text = "Km"
         }
     }
 

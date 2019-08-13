@@ -43,6 +43,7 @@
                     android:layout_width="0dp"
                     android:orientation="vertical"
                     android:layout_weight="1"
+                    android:layout_marginBottom="@dimen/_3sdp"
                     android:layout_gravity="center_vertical"
                     android:layout_height="wrap_content">
                 <com.sd.src.stepcounterapp.utils.CustomTextView
@@ -70,6 +71,7 @@
                     android:layout_width="0dp"
                     android:orientation="vertical"
                     android:layout_weight="1"
+                    android:layout_marginBottom="@dimen/_3sdp"
                     android:layout_marginLeft="@dimen/_10sdp"
                     android:layout_marginRight="@dimen/_10sdp"
                     android:layout_gravity="center_vertical"
@@ -101,24 +103,42 @@
                     android:orientation="horizontal"
                     android:layout_marginRight="@dimen/_5sdp"
                     android:layout_weight="1"
-                     android:padding="@dimen/_5sdp"
                     android:gravity="center"
+                    android:layout_marginBottom="@dimen/_3sdp"
                     android:layout_gravity="center_vertical|center"
                     android:layout_height="wrap_content">
-                <ImageView android:id="@+id/wishlist"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:padding="@dimen/_7sdp"
-                        android:layout_margin="@dimen/_2sdp"
-                        android:background="@drawable/circle_bg"
-                        android:src="@drawable/featured"/>
+                <FrameLayout android:layout_width="45dp"
+                             android:layout_marginRight="@dimen/_5sdp"
+                             android:layout_height="wrap_content">
+
+                    <ImageView android:id="@+id/wishlist"
+                               android:layout_width="40dp"
+                               android:layout_height="40dp"
+                               android:padding="@dimen/_7sdp"
+                               android:background="@drawable/circle_bg"
+                               android:src="@drawable/featured"/>
+
+                    <TextView
+                            android:id="@+id/cart_badge"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="right|end|top"
+                            android:layout_marginBottom="@dimen/_5sdp"
+                            android:layout_marginTop="1dp"
+                            android:background="@drawable/badge_bg"
+                            android:gravity="center"
+                            android:padding="3dp"
+                            android:textColor="@android:color/white"
+                            android:text="0"
+                            android:textSize="10sp"/>
+                </FrameLayout>
+
                 <ImageView android:id="@+id/filter"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:padding="@dimen/_7sdp"
-                        android:background="@drawable/circle_bg"
-                        android:layout_margin="@dimen/_2sdp"
-                        android:src="@drawable/filters"/>
+                           android:layout_width="40dp"
+                           android:layout_height="40dp"
+                           android:padding="@dimen/_7sdp"
+                           android:background="@drawable/circle_bg"
+                           android:src="@drawable/filters"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -182,7 +202,7 @@
                 android:visibility="gone"
                 android:text="No records found"
                 android:layout_height="match_parent"
-                 android:gravity="center"
+                android:gravity="center"
                 android:layout_gravity="center"
                 android:textColor="@color/colorBlack"
                 android:paddingTop="@dimen/_10sdp"
@@ -268,7 +288,6 @@
                 android:layout_height="match_parent"/>
 
     </LinearLayout>
-
 
 
 </LinearLayout>

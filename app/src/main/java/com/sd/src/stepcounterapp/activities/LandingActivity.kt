@@ -55,7 +55,7 @@ import java.util.*
 
 class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback, View.OnClickListener, MarketPlaceFragment.FragmentClick {
     override fun onFragmentClick() {
-        vpLanding.currentItem = 2
+        vpLanding.currentItem = 4
     }
 
     private var deviceSynced: String? = ""
@@ -123,8 +123,12 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
         vpLanding.adapter = mAdapter
         vpLanding.offscreenPageLimit = 4
 
+        if(intent.hasExtra("surveyBack")){
+            vpLanding.currentItem = 3
+        }
         loadFragment(FRAG_HAYATECH)
         bindService(Intent(this, MokoService::class.java), mServiceConnection, Activity.BIND_AUTO_CREATE)
+
     }
 
     override fun initListeners() {

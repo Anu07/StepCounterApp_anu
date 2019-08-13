@@ -26,6 +26,7 @@ class DeviceConnctdActivity : BaseActivity<BaseViewModel>() {
             //                    val options = ActivityOptions.makeSceneTransitionAnimation(this@SignInActivity)
             intent.putExtra("Steps", getIntent().getStringExtra("Steps"))
             startActivity(intent)
+            finish()
         }
 
     }

@@ -81,6 +81,19 @@ class ChallengesFragment : Fragment(), ChallengeAdapter.ItemClickListener {
                     if (mChallenge.data != null && mChallenge.tranding.size > 0) {
                         mChallengeCategory = mChallenge.data
                         setChallengeAdapter()
+                        var mActiveList = mChallengeCategory.filter { data ->
+                            data.is_active == true
+                        }
+                        if (mActiveList.isNotEmpty()) {
+                            llStartChallenges.visibility = View.VISIBLE
+                            ongoingchallengeName.text = mActiveList[0].name
+                            ongoingChallengeDetail.text = "Duration: "+mActiveList[0].duration
+                            stopchallengeBttn.setOnClickListener {
+                                mViewModel.stopchallenges(mActiveList[0]._id)
+                            }
+                        } else {
+                            llStartChallenges.visibility = View.GONE
+                        }
                     } else {
                         setChallengesView()
                     }

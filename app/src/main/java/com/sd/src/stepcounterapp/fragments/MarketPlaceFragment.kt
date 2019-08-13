@@ -110,6 +110,8 @@ class MarketPlaceFragment : Fragment(), MarketPlaceClickInterface, MarketPlaceCa
             return instance
         }
     }
+
+    private val mCartItemCount: Int = 0
     internal lateinit var callback: FragmentClick
 
     fun FragmentClickListener(callback: FragmentClick) {
@@ -186,6 +188,7 @@ class MarketPlaceFragment : Fragment(), MarketPlaceClickInterface, MarketPlaceCa
         setCategoryAdapter()
         setPopularityAdapter()
         setSeeAllAdapter()
+        setupBadge()
 
         txtSeeAll.setOnClickListener {
             rvSeeAll.visibility = View.GONE
@@ -209,6 +212,10 @@ class MarketPlaceFragment : Fragment(), MarketPlaceClickInterface, MarketPlaceCa
             llPopularity.visibility = View.VISIBLE
         }
 
+        filter.setOnClickListener {
+            FilterDialog(mContext, R.style.pullBottomfromTop,
+                R.layout.dialog_filter).show()
+        }
 
 
         searchView.setOnEditorActionListener { v, actionId, event ->
@@ -257,12 +264,6 @@ class MarketPlaceFragment : Fragment(), MarketPlaceClickInterface, MarketPlaceCa
 
             }
         })
-
-
-        filter.setOnClickListener {
-            FilterDialog(mContext, R.style.pullBottomfromTop,
-                R.layout.dialog_filter).show()
-        }
 
         wishlist.setOnClickListener {
             callback.onFragmentClick()
@@ -356,6 +357,25 @@ class MarketPlaceFragment : Fragment(), MarketPlaceClickInterface, MarketPlaceCa
 
     interface FragmentClick {
         fun onFragmentClick()
+    }
+
+    /**
+     * to setup wishlist badge count
+     */
+
+    fun setupBadge() {
+        if (cart_badge != null) {
+            if (mCartItemCount == 0) {
+                if (cart_badge.visibility != View.GONE) {
+                    cart_badge.visibility = View.GONE;
+                }
+            } else {
+                cart_badge.text = "1"
+                if (cart_badge.visibility != View.VISIBLE) {
+                    cart_badge.visibility = View.VISIBLE;
+                }
+            }
+        }
     }
 
 }

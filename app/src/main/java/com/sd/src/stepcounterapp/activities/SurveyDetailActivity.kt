@@ -48,7 +48,7 @@ class SurveyDetailActivity : BaseActivity<BaseViewModel>() {
 
     override fun onBackPressed() {
 //        super.onBackPressed()
-        startActivity(Intent(this@SurveyDetailActivity, LandingActivity::class.java))
+        startActivity(Intent(this@SurveyDetailActivity, LandingActivity::class.java).putExtra("surveyBack",""))
     }
 
 

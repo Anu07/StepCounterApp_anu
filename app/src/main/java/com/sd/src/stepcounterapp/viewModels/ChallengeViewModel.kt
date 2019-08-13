@@ -46,7 +46,7 @@ class ChallengeViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     fun stopchallenges(challengeId: String) {
-        call!!.stopChallenges(SharedPreferencesManager.getUserId(getApplication())!!, "")
+        call!!.stopChallenges(SharedPreferencesManager.getUserId(getApplication())!!, challengeId)
             .enqueue(object : Callback<BaseModel> {
                 override fun onFailure(call: Call<BaseModel>?, t: Throwable?) {
                     Log.v("retrofit", "call failed")
@@ -56,6 +56,7 @@ class ChallengeViewModel(application: Application) : AndroidViewModel(applicatio
                 override fun onResponse(call: Call<BaseModel>?, response: Response<BaseModel>?) {
                     Toast.makeText(AppApplication.applicationContext(), response!!.body()!!.message, Toast.LENGTH_LONG)
                         .show()
+                    getchallenges(BasicRequest(SharedPreferencesManager.getUserId(ChallengesFragment.mContext), ""))
                 }
             })
     }

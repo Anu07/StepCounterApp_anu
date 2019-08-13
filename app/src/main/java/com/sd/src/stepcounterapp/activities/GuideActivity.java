@@ -22,7 +22,6 @@ import com.sd.src.stepcounterapp.service.MokoService;
 import com.sd.src.stepcounterapp.utils.Utils;
 
 public class GuideActivity extends Basefit {
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

@@ -15,7 +15,6 @@ import com.sd.src.stepcounterapp.model.loginrequest.LoginRequestObject
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import com.sd.src.stepcounterapp.viewModels.BaseViewModelFactory
 import com.sd.src.stepcounterapp.viewModels.SignInViewModel
-import com.sdi.sdeiarchitecturemvvm.activities.BaseActivity
 import com.wajahatkarim3.easyvalidation.core.view_ktx.nonEmpty
 import com.wajahatkarim3.easyvalidation.core.view_ktx.validEmail
 import kotlinx.android.synthetic.main.activity_signin.*

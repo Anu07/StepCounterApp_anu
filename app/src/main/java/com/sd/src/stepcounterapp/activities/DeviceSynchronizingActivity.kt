@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModelProviders
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.viewModels.BaseViewModel
 import com.sd.src.stepcounterapp.viewModels.BaseViewModelFactory
-import com.sdi.sdeiarchitecturemvvm.activities.BaseActivity
 import kotlinx.android.synthetic.main.activity_synchronizing_device.*
 
 

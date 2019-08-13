@@ -1,4 +1,4 @@
-package com.sdi.sdeiarchitecturemvvm.activities
+package com.sd.src.stepcounterapp.activities
 
 import android.annotation.TargetApi
 import android.content.Context
@@ -17,9 +17,7 @@ import android.app.Dialog
 import android.widget.ProgressBar
 import android.graphics.drawable.ColorDrawable
 import android.view.Window
-import android.view.Window.FEATURE_NO_TITLE
 import com.sd.src.stepcounterapp.R
-
 
 /**
  * Created by shubham on 22/05/19.
@@ -29,7 +27,7 @@ abstract class BaseActivity<V : AndroidViewModel> : AppCompatActivity() {
 
     private lateinit var progressBar: ProgressBar
     private lateinit var progressDialog: Dialog
-    var TAG: String = "BaseActivity:-"
+    var TAG: String = "com.sd.src.stepcounterapp.activities.BaseActivity:-"
 
     // since its going to be common for all the activities
     var mViewModel: V? = null
@@ -125,7 +123,7 @@ abstract class BaseActivity<V : AndroidViewModel> : AppCompatActivity() {
             progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
             progressDialog.setContentView(R.layout.popup_progressbar)
             progressDialog.setCancelable(false)
-            progressDialog.getWindow().setBackgroundDrawable(
+            progressDialog.window.setBackgroundDrawable(
                 ColorDrawable(Color.TRANSPARENT)
             )
 

@@ -28,7 +28,6 @@ import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import com.sd.src.stepcounterapp.viewModels.BaseViewModelFactory
 import com.sd.src.stepcounterapp.viewModels.SignInViewModel
-import com.sdi.sdeiarchitecturemvvm.activities.BaseActivity
 import com.squareup.picasso.Picasso
 import com.wajahatkarim3.easyvalidation.core.view_ktx.nonEmpty
 import kotlinx.android.synthetic.main.activity_basic_info.*

@@ -10,7 +10,6 @@ import com.sd.src.stepcounterapp.interfaces.InterfacesCall
 import com.sd.src.stepcounterapp.model.OptionsModel
 import com.sd.src.stepcounterapp.viewModels.BaseViewModel
 import com.sd.src.stepcounterapp.viewModels.BaseViewModelFactory
-import com.sdi.sdeiarchitecturemvvm.activities.BaseActivity
 import kotlinx.android.synthetic.main.activity_corporate_info.*
 import java.util.*
 

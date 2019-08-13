@@ -18,7 +18,6 @@ import com.sd.src.stepcounterapp.model.rewards.RewardsCategoriesResponse
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import com.sd.src.stepcounterapp.viewModels.BaseViewModelFactory
 import com.sd.src.stepcounterapp.viewModels.SignInViewModel
-import com.sdi.sdeiarchitecturemvvm.activities.BaseActivity
 import kotlinx.android.synthetic.main.activity_rewards_category_selection.*
 
 class RewardsCategorySelectionActivity : BaseActivity<SignInViewModel>(),

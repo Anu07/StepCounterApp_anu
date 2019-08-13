@@ -14,7 +14,6 @@ import com.sd.src.stepcounterapp.model.rewards.Data
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import com.sd.src.stepcounterapp.viewModels.BaseViewModel
 import com.sd.src.stepcounterapp.viewModels.BaseViewModelFactory
-import com.sdi.sdeiarchitecturemvvm.activities.BaseActivity
 import kotlinx.android.synthetic.main.activity_select_syncsdk.*
 
 

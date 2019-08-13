@@ -43,7 +43,6 @@ import com.sd.src.stepcounterapp.utils.SharedPreferencesManager.WEARABLEID
 import com.sd.src.stepcounterapp.utils.Utils
 import com.sd.src.stepcounterapp.viewModels.BaseViewModelFactory
 import com.sd.src.stepcounterapp.viewModels.DeviceViewModel
-import com.sdi.sdeiarchitecturemvvm.activities.BaseActivity
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_landing.*
 import kotlinx.android.synthetic.main.bottom_toolbar.*

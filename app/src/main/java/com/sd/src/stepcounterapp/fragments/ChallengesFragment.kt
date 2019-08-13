@@ -2,6 +2,7 @@ package com.sd.src.stepcounterapp.fragments
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.sd.src.stepcounterapp.R
+import com.sd.src.stepcounterapp.activities.LeaderboardActivity
 import com.sd.src.stepcounterapp.adapter.ChallengeAdapter
 import com.sd.src.stepcounterapp.adapter.ChallengeTrendingAdapter
 import com.sd.src.stepcounterapp.adapter.SlidingImageAdapter
@@ -126,6 +128,9 @@ class ChallengesFragment : Fragment(), ChallengeAdapter.ItemClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         rewardsViewPager = view.findViewById(R.id.rewardsViewPager)
+        leaderBttn.setOnClickListener {
+            startActivity(Intent(mContext,LeaderboardActivity::class.java))
+        }
         init()
     }
 

@@ -107,6 +107,9 @@ class HayatechFragment : Fragment() {
 
             })
         mViewModel.getDashResponse().observe(this,
+
+
+
             Observer<DashboardResponse> { mDashResponse ->
                 mDataList = mDashResponse.data
                 steps.text = (mDashResponse.data.activity.sumBy { it.steps }).toString()

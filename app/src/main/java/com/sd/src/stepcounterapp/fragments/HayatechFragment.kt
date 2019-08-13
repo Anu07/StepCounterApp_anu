@@ -39,7 +39,6 @@ import com.sd.src.stepcounterapp.model.syncDevice.SyncRequest
 import com.sd.src.stepcounterapp.utils.DayAxisValueFormatter
 import com.sd.src.stepcounterapp.utils.InterConsts.MONTHLY
 import com.sd.src.stepcounterapp.utils.InterConsts.WEEKLY
-import com.sd.src.stepcounterapp.utils.LoadingDialog
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager.SYNCDATE
 import com.sd.src.stepcounterapp.viewModels.DeviceViewModel
@@ -81,7 +80,7 @@ class HayatechFragment : Fragment() {
         "Sat",
         "Sun"
     )
-    private val mMonthListFormater = arrayOf<String>()
+    private val mMonthListFormater = arrayOfNulls<String>(31)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_hayatech, container, false)
@@ -95,7 +94,6 @@ class HayatechFragment : Fragment() {
         mViewModel = ViewModelProviders.of(activity!!).get(DeviceViewModel::class.java)
         circular_progress.setProgressTextAdapter(PatternProgressTextAdapter())
         setStepsText()
-        initBarChart()
         mViewModel.fetchSyncData(
             if (txtGraphFilter.text.toString().equals(WEEKLY, ignoreCase = true)) {
                 FetchDeviceDataRequest(WEEKLY, SharedPreferencesManager.getUserId(mContext))
@@ -119,11 +117,11 @@ class HayatechFragment : Fragment() {
                 totl_dist_suffix.text = "Km"
                 tokensVal.text = mDashResponse.data.totalUserToken.toString()
                 SharedPreferencesManager.setString(mContext, SYNCDATE, mDashResponse.data.lastUpdated)
-                setBarChart()
+                setBarChart("STEPS")
             })
 
         if (SharedPreferencesManager.hasKey(mContext, "Wearable")) {
-            var android_id = Settings.Secure.getString(
+            val android_id = Settings.Secure.getString(
                 mContext.contentResolver,
                 Settings.Secure.ANDROID_ID
             )
@@ -143,8 +141,8 @@ class HayatechFragment : Fragment() {
                     optionArray,
                     "SELECT FILTER",
                     InterfacesCall.Callback { pos ->
-                        setFilterOptionArray()
                         txtGraphFilter.text = optionArray[pos].name
+                        setFilterOptionArray()
                         optionArray[pos].isSelected = true
                         mViewModel.fetchSyncData(
                             if (txtGraphFilter.text.toString().equals(WEEKLY, ignoreCase = true)) {
@@ -156,6 +154,30 @@ class HayatechFragment : Fragment() {
 
                     })
             dialog.show()
+        }
+
+        steps_title.setOnClickListener {
+            steps_title.setTextColor(mContext.resources.getColor(R.color.colorBlack))
+            token_title.setTextColor(mContext.resources.getColor(R.color.gray_text))
+            distance.setTextColor(mContext.resources.getColor(R.color.gray_text))
+            setBarChart("STEPS")
+
+        }
+
+        token_title.setOnClickListener {
+            token_title.setTextColor(mContext.resources.getColor(R.color.colorBlack))
+            steps_title.setTextColor(mContext.resources.getColor(R.color.gray_text))
+            distance.setTextColor(mContext.resources.getColor(R.color.gray_text))
+            setBarChart("TOKEN")
+
+        }
+
+        distance.setOnClickListener {
+            distance.setTextColor(mContext.resources.getColor(R.color.colorBlack))
+            steps_title.setTextColor(mContext.resources.getColor(R.color.gray_text))
+            token_title.setTextColor(mContext.resources.getColor(R.color.gray_text))
+            setBarChart("DISTANCE")
+
         }
 
     }
@@ -247,9 +269,9 @@ class HayatechFragment : Fragment() {
         XAx.valueFormatter = xAxisFormatter
 
 
-        /*  var yAxisFormatter = YAxisValueFormatter(barchart)
-          var YAx = barchart.axisLeft
-          YAx.valueFormatter = yAxisFormatter*/
+        /* var yAxisFormatter = YAxisValueFormatter(barchart)
+           var YAx = barchart.axisLeft
+           YAx.valueFormatter = yAxisFormatter */
 
         /* val l = barchart.legend
            l.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
@@ -262,8 +284,8 @@ class HayatechFragment : Fragment() {
            l.xEntrySpace = 4f*/
     }
 
-    private fun setBarChart() {
-        var weeklyData: ArrayList<BarEntry> = addDataFromServer()
+    private fun setBarChart(format: String) {
+        var weeklyData: ArrayList<BarEntry> = addDataFromServer(format)
         val bardataset = BarDataSet(weeklyData, "Goal achieved")
         bardataset.color = Color.parseColor("#8DC540")
         barchart.animateY(5000)
@@ -271,41 +293,100 @@ class HayatechFragment : Fragment() {
         barchart.data = data
     }
 
-    private fun addDataFromServer(): ArrayList<BarEntry> {
+    private fun addDataFromServer(format: String): ArrayList<BarEntry> {
         val graphData = ArrayList<BarEntry>()
-        if (txtGraphFilter.text.toString().equals(WEEKLY, ignoreCase = true)) {
-            if (mDataList!!.activity != null) {
-                if (mDataList!!.activity.size > 7) {
-                    mDataList!!.activity.subList((mDataList!!.activity.size - 8), (mDataList!!.activity.size - 1))
-                        .forEachIndexed { index, element ->
+        if(format == "STEPS") {
+            if (txtGraphFilter.text.toString().equals(WEEKLY, ignoreCase = true)) {
+                if (mDataList!!.activity != null) {
+                    if (mDataList!!.activity.size > 7) {
+                        mDataList!!.activity.subList((mDataList!!.activity.size - 8), (mDataList!!.activity.size - 1))
+                            .forEachIndexed { index, element ->
+                                graphData.add(index, BarEntry(index.toFloat(), element.steps.toFloat()))
+                            }
+                    } else {
+                        mDataList!!.activity.forEachIndexed { index, element ->
                             graphData.add(index, BarEntry(index.toFloat(), element.steps.toFloat()))
-
                         }
-                } else {
-                    mDataList!!.activity.forEachIndexed { index, element ->
-                        graphData.add(index, BarEntry(index.toFloat(), element.steps.toFloat()))
-
+                    }
+                }
+            } else {
+                if (mDataList!!.activity != null) {
+                    if (mDataList!!.activity.size > 31) {
+                        mDataList!!.activity.subList((mDataList!!.activity.size - 32), (mDataList!!.activity.size - 1))
+                            .forEachIndexed { index, element ->
+                                graphData.add(index, BarEntry(index.toFloat(), element.steps.toFloat()))
+                                mMonthListFormater.set(index, element.date.toString())
+                            }
+                    } else {
+                        mDataList!!.activity.forEachIndexed { index, element ->
+                            graphData.add(index, BarEntry(index.toFloat(), element.steps.toFloat()))
+                            mMonthListFormater.set(index, element.date.toString())
+                        }
                     }
                 }
             }
-        } else {
-            if (mDataList!!.activity != null) {
-                if (mDataList!!.activity.size > 31) {
-                    mDataList!!.activity.subList((mDataList!!.activity.size - 32), (mDataList!!.activity.size - 1))
-                        .forEachIndexed { index, element ->
-                            graphData.add(index, BarEntry(index.toFloat(), element.steps.toFloat()))
-                            mMonthListFormater[index] = mDataList!!.activity[index].date.toString()
-
+        }else if(format == "TOKEN"){
+            if (txtGraphFilter.text.toString().equals(WEEKLY, ignoreCase = true)) {
+                if (mDataList!!.todayToken != null) {
+                    if (mDataList!!.activity.size > 7) {
+                        mDataList!!.activity.subList((mDataList!!.activity.size - 8), (mDataList!!.activity.size - 1))
+                            .forEachIndexed { index, element ->
+                                graphData.add(index, BarEntry(index.toFloat(), element.token.toFloat()))
+                            }
+                    } else {
+                        mDataList!!.activity.forEachIndexed { index, element ->
+                            graphData.add(index, BarEntry(index.toFloat(), element.token.toFloat()))
                         }
-                } else {
-                    mDataList!!.activity.forEachIndexed { index, element ->
-                        graphData.add(index, BarEntry(index.toFloat(), element.steps.toFloat()))
-                        mMonthListFormater[index] = mDataList!!.activity[index].date.toString()
-
+                    }
+                }
+            } else {
+                if (mDataList!!.activity != null) {
+                    if (mDataList!!.activity.size > 31) {
+                        mDataList!!.activity.subList((mDataList!!.activity.size - 32), (mDataList!!.activity.size - 1))
+                            .forEachIndexed { index, element ->
+                                graphData.add(index, BarEntry(index.toFloat(), element.token.toFloat()))
+                                mMonthListFormater.set(index, element.date.toString())
+                            }
+                    } else {
+                        mDataList!!.activity.forEachIndexed { index, element ->
+                            graphData.add(index, BarEntry(index.toFloat(), element.token.toFloat()))
+                            mMonthListFormater.set(index, element.date.toString())
+                        }
+                    }
+                }
+            }
+        }else if(format == "DISTANCE"){
+            if (txtGraphFilter.text.toString().equals(WEEKLY, ignoreCase = true)) {
+                if (mDataList!!.todayToken != null) {
+                    if (mDataList!!.activity.size > 7) {
+                        mDataList!!.activity.subList((mDataList!!.activity.size - 8), (mDataList!!.activity.size - 1))
+                            .forEachIndexed { index, element ->
+                                graphData.add(index, BarEntry(index.toFloat(), element.distance.toFloat()))
+                            }
+                    } else {
+                        mDataList!!.activity.forEachIndexed { index, element ->
+                            graphData.add(index, BarEntry(index.toFloat(), element.distance.toFloat()))
+                        }
+                    }
+                }
+            } else {
+                if (mDataList!!.activity != null) {
+                    if (mDataList!!.activity.size > 31) {
+                        mDataList!!.activity.subList((mDataList!!.activity.size - 32), (mDataList!!.activity.size - 1))
+                            .forEachIndexed { index, element ->
+                                graphData.add(index, BarEntry(index.toFloat(), element.distance.toFloat()))
+                                mMonthListFormater.set(index, element.date.toString())
+                            }
+                    } else {
+                        mDataList!!.activity.forEachIndexed { index, element ->
+                            graphData.add(index, BarEntry(index.toFloat(), element.distance.toFloat()))
+                            mMonthListFormater.set(index, element.date.toString())
+                        }
                     }
                 }
             }
         }
+        initBarChart()
         return graphData
     }
 

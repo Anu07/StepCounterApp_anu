@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.Window
 import androidx.appcompat.app.AppCompatActivity
+import com.jaeger.library.StatusBarUtil
 import com.sd.src.stepcounterapp.AppConstants
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.model.login.LoginResponseJ
@@ -49,8 +50,9 @@ class SplashActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         this.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        StatusBarUtil.setTransparent(this@SplashActivity)
+        super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
         //Initialize the Handler
         mDelayHandler = Handler()

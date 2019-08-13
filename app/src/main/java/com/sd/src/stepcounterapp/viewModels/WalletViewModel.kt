@@ -6,10 +6,12 @@ import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.sd.src.stepcounterapp.AppApplication
+import com.sd.src.stepcounterapp.fragments.HayatechFragment
 import com.sd.src.stepcounterapp.model.generic.BasicRequest
 import com.sd.src.stepcounterapp.model.wallet.TokenModel
 import com.sd.src.stepcounterapp.model.wallet.WalletModel
 import com.sd.src.stepcounterapp.network.RetrofitClient
+import com.sd.src.stepcounterapp.utils.LoadingDialog
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import retrofit2.Call
 import retrofit2.Callback
@@ -60,6 +62,7 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
                 Log.v("retrofit", "call failed")
                 Toast.makeText(AppApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
                 mWalletModel!!.value = null
+                LoadingDialog.getLoader().dismissLoader()
             }
 
             override fun onResponse(call: Call<WalletModel>?, response: Response<WalletModel>?) {
@@ -69,6 +72,8 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
                     var model = WalletModel()
                     model.message = "Invalid request"
                     mWalletModel!!.value = model
+                    LoadingDialog.getLoader().dismissLoader()
+
                 }
             }
         })

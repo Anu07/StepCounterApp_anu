@@ -27,13 +27,19 @@ import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.adapter.PatternProgressTextAdapter
+import com.sd.src.stepcounterapp.dialog.OptionDialog
+import com.sd.src.stepcounterapp.interfaces.InterfacesCall
 import com.sd.src.stepcounterapp.model.DeviceResponse.DashboardResponse
 import com.sd.src.stepcounterapp.model.DeviceResponse.Data
+import com.sd.src.stepcounterapp.model.OptionsModel
 import com.sd.src.stepcounterapp.model.generic.BasicInfoResponse
 import com.sd.src.stepcounterapp.model.syncDevice.Activity
 import com.sd.src.stepcounterapp.model.syncDevice.FetchDeviceDataRequest
 import com.sd.src.stepcounterapp.model.syncDevice.SyncRequest
 import com.sd.src.stepcounterapp.utils.DayAxisValueFormatter
+import com.sd.src.stepcounterapp.utils.InterConsts.MONTHLY
+import com.sd.src.stepcounterapp.utils.InterConsts.WEEKLY
+import com.sd.src.stepcounterapp.utils.LoadingDialog
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager.SYNCDATE
 import com.sd.src.stepcounterapp.viewModels.DeviceViewModel
@@ -63,6 +69,8 @@ class HayatechFragment : Fragment() {
 
     private var mDataList: Data? = Data()
     private lateinit var mViewModel: DeviceViewModel
+    var optionArray = arrayListOf<OptionsModel>()
+
     var xAxis: XAxis? = null
     private val xVal = arrayOf(
         "Mon",
@@ -73,20 +81,27 @@ class HayatechFragment : Fragment() {
         "Sat",
         "Sun"
     )
+    private val mMonthListFormater = arrayOf<String>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_hayatech, container, false)
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setFilterOptionArray()
+
         mViewModel = ViewModelProviders.of(activity!!).get(DeviceViewModel::class.java)
         circular_progress.setProgressTextAdapter(PatternProgressTextAdapter())
         setStepsText()
         initBarChart()
         mViewModel.fetchSyncData(
-            FetchDeviceDataRequest("weekly", SharedPreferencesManager.getUserId(mContext))
+            if (txtGraphFilter.text.toString().equals(WEEKLY, ignoreCase = true)) {
+                FetchDeviceDataRequest(WEEKLY, SharedPreferencesManager.getUserId(mContext))
+            } else {
+                FetchDeviceDataRequest(MONTHLY, SharedPreferencesManager.getUserId(mContext))
+            }
         )
         mViewModel.getSyncResponse().observe(this,
             Observer<BasicInfoResponse> { mResponse ->
@@ -112,6 +127,7 @@ class HayatechFragment : Fragment() {
                 mContext.contentResolver,
                 Settings.Secure.ANDROID_ID
             )
+
             mViewModel.syncDevice(
                 SyncRequest(
                     getActivityData(),
@@ -121,6 +137,42 @@ class HayatechFragment : Fragment() {
             )
         }
 
+        txtGraphFilter.setOnClickListener {
+            val dialog =
+                OptionDialog(mContext, R.style.pullBottomfromTop, R.layout.dialog_options,
+                    optionArray,
+                    "SELECT FILTER",
+                    InterfacesCall.Callback { pos ->
+                        setFilterOptionArray()
+                        txtGraphFilter.text = optionArray[pos].name
+                        optionArray[pos].isSelected = true
+                        mViewModel.fetchSyncData(
+                            if (txtGraphFilter.text.toString().equals(WEEKLY, ignoreCase = true)) {
+                                FetchDeviceDataRequest(WEEKLY, SharedPreferencesManager.getUserId(mContext))
+                            } else {
+                                FetchDeviceDataRequest(MONTHLY, SharedPreferencesManager.getUserId(mContext))
+                            }
+                        )
+
+                    })
+            dialog.show()
+        }
+
+    }
+
+    private fun setFilterOptionArray() {
+        optionArray.clear()
+        if (txtGraphFilter.text.toString().equals(WEEKLY, true)) {
+            optionArray.add(OptionsModel(0, WEEKLY, true))
+        } else {
+            optionArray.add(OptionsModel(0, WEEKLY, false))
+        }
+
+        if (txtGraphFilter.text.toString().equals(MONTHLY, true)) {
+            optionArray.add(OptionsModel(1, MONTHLY, true))
+        } else {
+            optionArray.add(OptionsModel(1, MONTHLY, false))
+        }
     }
 
 
@@ -183,7 +235,13 @@ class HayatechFragment : Fragment() {
         ll.lineWidth = 4f
         ll.textSize = 12f
 
-        var xAxisFormatter = DayAxisValueFormatter(barchart)
+        var xAxisFormatter: DayAxisValueFormatter =
+            if (txtGraphFilter.text.toString().equals(WEEKLY, ignoreCase = true)) {
+                DayAxisValueFormatter(barchart, WEEKLY)
+            } else {
+                DayAxisValueFormatter(barchart, MONTHLY, mMonthListFormater)
+            }
+
         leftAxis.addLimitLine(ll)
         var XAx = barchart.xAxis
         XAx.valueFormatter = xAxisFormatter
@@ -214,18 +272,37 @@ class HayatechFragment : Fragment() {
     }
 
     private fun addDataFromServer(): ArrayList<BarEntry> {
-
         val graphData = ArrayList<BarEntry>()
+        if (txtGraphFilter.text.toString().equals(WEEKLY, ignoreCase = true)) {
+            if (mDataList!!.activity != null) {
+                if (mDataList!!.activity.size > 7) {
+                    mDataList!!.activity.subList((mDataList!!.activity.size - 8), (mDataList!!.activity.size - 1))
+                        .forEachIndexed { index, element ->
+                            graphData.add(index, BarEntry(index.toFloat(), element.steps.toFloat()))
 
-        if (mDataList!!.activity != null) {
-            if (mDataList!!.activity.size > 7) {
-                mDataList!!.activity.subList((mDataList!!.activity.size - 8), (mDataList!!.activity.size - 1))
-                    .forEachIndexed { index, element ->
+                        }
+                } else {
+                    mDataList!!.activity.forEachIndexed { index, element ->
                         graphData.add(index, BarEntry(index.toFloat(), element.steps.toFloat()))
+
                     }
-            } else {
-                mDataList!!.activity.forEachIndexed { index, element ->
-                    graphData.add(index, BarEntry(index.toFloat(), element.steps.toFloat()))
+                }
+            }
+        } else {
+            if (mDataList!!.activity != null) {
+                if (mDataList!!.activity.size > 31) {
+                    mDataList!!.activity.subList((mDataList!!.activity.size - 32), (mDataList!!.activity.size - 1))
+                        .forEachIndexed { index, element ->
+                            graphData.add(index, BarEntry(index.toFloat(), element.steps.toFloat()))
+                            mMonthListFormater[index] = mDataList!!.activity[index].date.toString()
+
+                        }
+                } else {
+                    mDataList!!.activity.forEachIndexed { index, element ->
+                        graphData.add(index, BarEntry(index.toFloat(), element.steps.toFloat()))
+                        mMonthListFormater[index] = mDataList!!.activity[index].date.toString()
+
+                    }
                 }
             }
         }

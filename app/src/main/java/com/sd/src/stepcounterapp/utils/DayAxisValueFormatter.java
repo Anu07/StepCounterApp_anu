@@ -8,7 +8,7 @@ import com.github.mikephil.charting.formatter.ValueFormatter;
  */
 public class DayAxisValueFormatter extends ValueFormatter {
 	
-	private final String[] mMonths = new String[]{
+	private final String[] mWeeks = new String[]{
 			"Mon",
 			"Tue",
 			"Wed",
@@ -18,19 +18,32 @@ public class DayAxisValueFormatter extends ValueFormatter {
 			"Sun"
 	};
 	
-	private final BarLineChartBase<?> chart;
+	private String[] mMonth = new String[]{};
 	
-	public DayAxisValueFormatter(BarLineChartBase<?> chart) {
+	private final BarLineChartBase<?> chart;
+	private final String format;
+	
+	public DayAxisValueFormatter(BarLineChartBase<?> chart, String format) {
 		this.chart = chart;
+		this.format=format;
+	}
+	public DayAxisValueFormatter(BarLineChartBase<?> chart, String format,String[] month) {
+		this.chart = chart;
+		this.format=format;
+		this.mMonth =month;
 	}
 	
 	@Override
 	public String getFormattedValue(float value) {
-		
 		int days = (int) value;
+		String array;
+		if(format.equalsIgnoreCase(InterConsts.MONTHLY)) {
+			array = mMonth[(int) value];
+		}else  {
+			array = mWeeks[(int) value];
+		}
 		
-		String monthName = mMonths[(int) value];
-		return monthName ;
+		return array;
 	}
 	
 	

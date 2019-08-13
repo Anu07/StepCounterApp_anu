@@ -8,6 +8,7 @@ import com.sd.src.stepcounterapp.model.challenge.Data
 import com.sd.src.stepcounterapp.model.generic.BasicInfoResponse
 import com.sd.src.stepcounterapp.model.generic.BasicRequest
 import com.sd.src.stepcounterapp.model.image.ImageResponse
+import com.sd.src.stepcounterapp.model.leaderboard.LeaderBoardResponse
 import com.sd.src.stepcounterapp.model.login.LoginResponseJ
 import com.sd.src.stepcounterapp.model.loginrequest.LoginRequestObject
 import com.sd.src.stepcounterapp.model.marketplace.BasicSearchRequest
@@ -134,4 +135,7 @@ interface ApiInterface {
 
     @POST("/api/wallet")
     fun wallet(@Body body: BasicRequest): Call<WalletModel>
+
+    @POST("/api/leaderboard")
+    fun getLeaderboard(@Body body: BasicRequest): Call<LeaderBoardResponse>
 }

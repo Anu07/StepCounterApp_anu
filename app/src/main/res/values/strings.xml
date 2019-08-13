@@ -135,4 +135,13 @@
 
     <string name="redeem_now">Redeem Now</string>
     <string name="earnMore">EARN MORE TOKENS</string>
+
+    <!-- My Profile -->
+    <string name="your_bmi">Your BMI is</string>
+    <string name="calculate_again">CALCULATE AGAIN</string>
+
+    <string name="edit_profile">Edit Profile</string>
+    <string name="my_challenges">My Challenges</string>
+    <string name="my_redeemed_rewards">My Redeemed Rewards</string>
+    <string name="my_surveys">My Surveys</string>
 </resources>

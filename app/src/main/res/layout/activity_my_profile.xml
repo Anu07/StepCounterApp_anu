@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:background="@color/white"
+              android:layout_marginBottom="@dimen/_10sdp"
+              android:layout_height="match_parent" android:orientation="vertical">
+
+    <include layout="@layout/black_crosstitlebar"/>
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:orientation="vertical">
+
+            <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:background="@color/colorbg"
+                    android:layout_height="wrap_content">
+
+                <com.mikhaellopez.circularimageview.CircularImageView
+                        android:id="@+id/profileImg"
+                        android:layout_width="@dimen/_100sdp"
+                        android:src="@drawable/nouser"
+                        android:layout_centerInParent="true"
+                        android:layout_marginRight="@dimen/_30sdp"
+                        android:layout_marginLeft="@dimen/_30sdp"
+                        android:layout_marginTop="@dimen/_50sdp"
+                        app:civ_border="true"
+                        app:civ_border_color="@color/arrow_color"
+                        app:civ_border_width="@dimen/_3sdp"
+                        android:padding="@dimen/_2sdp"
+                        android:layout_height="@dimen/_100sdp"/>
+
+            </RelativeLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:orientation="vertical"
+                          android:background="@color/light_grey">
+
+
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:textSize="@dimen/_14ssp"
+                          android:textColor="@color/colorBlack"
+                          android:text="@string/your_bmi"
+                          android:layout_marginHorizontal="@dimen/_14ssp"
+                          android:layout_marginTop="@dimen/_14sdp"/>
+
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:textSize="@dimen/_18ssp"
+                          android:textColor="@color/arrow_color"
+                          android:textStyle="bold"
+                          android:layout_marginHorizontal="@dimen/_14ssp"
+                          android:text="00000"/>
+
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:textColor="@color/border_color"
+                          android:layout_marginHorizontal="@dimen/_14ssp"
+                          android:hint="Last Updated"
+                />
+
+            </LinearLayout>
+
+            <Button android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/arrow_color"
+                    android:textColor="@color/white"
+                    android:text="@string/calculate_again"
+            />
+
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:orientation="horizontal"
+                          android:padding="@dimen/_15sdp">
+
+                <ImageView android:layout_width="0dp"
+                           android:layout_height="wrap_content"
+                           android:layout_weight="1"
+                           android:src="@drawable/edit_profile"/>
+
+                <TextView android:layout_width="0dp"
+                          android:layout_height="wrap_content"
+                          android:layout_weight="5"
+                          android:textColor="@color/textcolor"
+                          android:text="@string/edit_profile"/>
+
+                <ImageView android:layout_width="0dp"
+                           android:layout_height="wrap_content"
+                           android:layout_weight="1"
+                           android:src="@drawable/right_arrow"/>
+
+            </LinearLayout>
+
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:orientation="horizontal"
+                          android:padding="@dimen/_15sdp"
+                          android:layout_marginTop="@dimen/_25sdp">
+
+                <ImageView android:layout_width="0dp"
+                           android:layout_height="wrap_content"
+                           android:layout_weight="1"
+                           android:src="@drawable/my_challenges"/>
+
+                <TextView android:layout_width="0dp"
+                          android:layout_height="wrap_content"
+                          android:layout_weight="5"
+                          android:textColor="@color/textcolor"
+                          android:text="@string/my_challenges"/>
+
+                <ImageView android:layout_width="0dp"
+                           android:layout_height="wrap_content"
+                           android:layout_weight="1"
+                           android:src="@drawable/right_arrow"/>
+
+            </LinearLayout>
+
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:orientation="horizontal"
+                          android:padding="@dimen/_15sdp">
+
+                <ImageView android:layout_width="0dp"
+                           android:layout_height="wrap_content"
+                           android:layout_weight="1"
+                           android:src="@drawable/my_redeemed_rewards"/>
+
+                <TextView android:layout_width="0dp"
+                          android:layout_height="wrap_content"
+                          android:layout_weight="5"
+                          android:textColor="@color/textcolor"
+                          android:text="@string/my_redeemed_rewards"/>
+
+                <ImageView android:layout_width="0dp"
+                           android:layout_height="wrap_content"
+                           android:layout_weight="1"
+                           android:src="@drawable/right_arrow"/>
+
+            </LinearLayout>
+
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:orientation="horizontal"
+                          android:padding="@dimen/_15sdp">
+
+                <ImageView android:layout_width="0dp"
+                           android:layout_height="wrap_content"
+                           android:layout_weight="1"
+                           android:src="@drawable/my_surveys"/>
+
+                <TextView android:layout_width="0dp"
+                          android:layout_height="wrap_content"
+                          android:layout_weight="5"
+                          android:textColor="@color/textcolor"
+                          android:text="@string/my_surveys"/>
+
+                <ImageView android:layout_width="0dp"
+                           android:layout_height="wrap_content"
+                           android:layout_weight="1"
+                           android:src="@drawable/right_arrow"/>
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

@@ -27,5 +27,6 @@
     <color name="divider_color">#707070</color>
     <color name="colorbg">#F6F6F6</color>
     <color name="featured">#FF5A5A</color>
+    <color name="light_grey">#E4E4E4</color>
 
 </resources>

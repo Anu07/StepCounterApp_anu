@@ -13,7 +13,6 @@ import com.sd.src.stepcounterapp.adapter.OnBoardingViewPagerAdapter
 import com.sd.src.stepcounterapp.fragments.OnBoardingFragment
 import com.sd.src.stepcounterapp.viewModels.BaseViewModel
 import com.sd.src.stepcounterapp.viewModels.BaseViewModelFactory
-import com.sdi.sdeiarchitecturemvvm.activities.BaseActivity
 import kotlinx.android.synthetic.main.activity_onboarding.*
 
 
@@ -62,7 +61,9 @@ class OnboardingActivity : BaseActivity<BaseViewModel>() {
         spring_dots_indicator.setViewPager(view_pager)
         // keep track of the current screen
         view_pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+
             override fun onPageScrollStateChanged(state: Int) {
+
             }
 
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {

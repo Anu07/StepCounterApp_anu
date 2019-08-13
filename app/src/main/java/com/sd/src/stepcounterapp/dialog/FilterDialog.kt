@@ -36,7 +36,6 @@ class FilterDialog(context: Context, themeResId: Int, private val LayoutId: Int)
         }
     }
 
-
     override fun clickIndex(pos: Int) {
         dismiss()
     }

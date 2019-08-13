@@ -11,7 +11,6 @@ import com.sd.src.stepcounterapp.model.survey.Data
 import com.sd.src.stepcounterapp.model.survey.Products
 import com.sd.src.stepcounterapp.viewModels.BaseViewModel
 import com.sd.src.stepcounterapp.viewModels.BaseViewModelFactory
-import com.sdi.sdeiarchitecturemvvm.activities.BaseActivity
 import kotlinx.android.synthetic.main.activity_survey_detail.*
 import kotlinx.android.synthetic.main.backtitlebar.*
 

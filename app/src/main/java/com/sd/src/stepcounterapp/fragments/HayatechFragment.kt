@@ -36,7 +36,6 @@ import com.sd.src.stepcounterapp.model.syncDevice.SyncRequest
 import com.sd.src.stepcounterapp.utils.DayAxisValueFormatter
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager.SYNCDATE
-import com.sd.src.stepcounterapp.utils.YAxisValueFormatter
 import com.sd.src.stepcounterapp.viewModels.DeviceViewModel
 import kotlinx.android.synthetic.main.fragment_hayatech.*
 import java.text.DateFormat
@@ -190,9 +189,9 @@ class HayatechFragment : Fragment() {
         XAx.valueFormatter = xAxisFormatter
 
 
-      /*  var yAxisFormatter = YAxisValueFormatter(barchart)
-        var YAx = barchart.axisLeft
-        YAx.valueFormatter = yAxisFormatter*/
+        /*  var yAxisFormatter = YAxisValueFormatter(barchart)
+          var YAx = barchart.axisLeft
+          YAx.valueFormatter = yAxisFormatter*/
 
         /* val l = barchart.legend
            l.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
@@ -206,34 +205,31 @@ class HayatechFragment : Fragment() {
     }
 
     private fun setBarChart() {
-
         var weeklyData: ArrayList<BarEntry> = addDataFromServer()
         val bardataset = BarDataSet(weeklyData, "Goal achieved")
         bardataset.color = Color.parseColor("#8DC540")
         barchart.animateY(5000)
         val data = BarData(bardataset)
         barchart.data = data
-
-
     }
 
     private fun addDataFromServer(): ArrayList<BarEntry> {
 
-        var graphData = ArrayList<BarEntry>()
+        val graphData = ArrayList<BarEntry>()
 
         if (mDataList!!.activity != null) {
-                if (mDataList!!.activity.size >7) {
-                    mDataList!!.activity.subList((mDataList!!.activity.size - 8), (mDataList!!.activity.size - 1))
-                        .forEachIndexed { index, element ->
-                            graphData.add(index, BarEntry(index.toFloat(), element.steps.toFloat()))
-                        }
-                } else {
-                    mDataList!!.activity.forEachIndexed { index, element ->
+            if (mDataList!!.activity.size > 7) {
+                mDataList!!.activity.subList((mDataList!!.activity.size - 8), (mDataList!!.activity.size - 1))
+                    .forEachIndexed { index, element ->
                         graphData.add(index, BarEntry(index.toFloat(), element.steps.toFloat()))
                     }
+            } else {
+                mDataList!!.activity.forEachIndexed { index, element ->
+                    graphData.add(index, BarEntry(index.toFloat(), element.steps.toFloat()))
                 }
             }
-            return graphData
+        }
+        return graphData
     }
 
 
@@ -241,7 +237,7 @@ class HayatechFragment : Fragment() {
      * get day of week from date
      */
     fun dayFromDate(inputDate: String): String {
-        var format1: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd")
+        var format1 = SimpleDateFormat("yyyy-MM-dd")
         var dt1: Date = format1.parse(inputDate)
         var format2: DateFormat = SimpleDateFormat("EEEE")
         return format2.format(dt1)
@@ -249,8 +245,11 @@ class HayatechFragment : Fragment() {
 
     fun setCurrentSteps(dailyStep: DailyStep) {
         if (dailyStep != null) {
-            Log.e("Updating", "steps" +((mDataList!!.activity.sumBy { it.steps }) + dailyStep.count.toInt()).toString())
-            steps.text =((mDataList!!.activity.sumBy { it.steps }) + dailyStep.count.toInt()).toString()
+            Log.e(
+                "Updating",
+                "steps" + ((mDataList!!.activity.sumBy { it.steps }) + dailyStep.count.toInt()).toString()
+            )
+            steps.text = ((mDataList!!.activity.sumBy { it.steps }) + dailyStep.count.toInt()).toString()
             totl_dist.text = (mDataList!!.totalUserDistance + dailyStep.distance.toDouble()).toString()
             totl_dist_suffix.text = "Km"
         }

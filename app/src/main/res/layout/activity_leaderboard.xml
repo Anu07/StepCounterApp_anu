@@ -94,6 +94,7 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:text="Abeer Bader"
+                                             android:id="@+id/secName"
                                             android:textSize="@dimen/_10ssp"
                                             android:layout_marginLeft="@dimen/_5sdp"
                                             android:layout_marginRight="@dimen/_5sdp"
@@ -105,6 +106,7 @@
                                             android:layout_height="wrap_content"
                                             android:text="11200 Steps"
                                             android:textSize="@dimen/_10ssp"
+                                            android:id="@+id/secSteps"
                                             android:textColor="@color/white"
                                             app:appfont="montserrat_light.ttf"/>
                                 </LinearLayout>
@@ -113,7 +115,7 @@
                                               android:gravity="center_vertical|center_horizontal"
                                               android:orientation="vertical"
                                               android:layout_height="match_parent">
-                                    <ImageView
+                                    <ImageView android:id="@+id/firstImg"
                                             android:layout_width="100dp"
                                             android:textColor="@color/white"
                                             android:textSize="@dimen/_15ssp"
@@ -129,11 +131,13 @@
                                             android:layout_marginRight="@dimen/_5sdp"
                                             android:layout_marginTop="@dimen/_5sdp"
                                             android:textColor="@color/white"
+                                            android:id="@+id/firstName"
                                             app:appfont="montserrat_regular.ttf"/>
                                     <com.sd.src.stepcounterapp.utils.CustomTextView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:text="11800 Steps"
+                                            android:id="@+id/firstSteps"
                                             android:textSize="@dimen/_11ssp"
                                             android:textColor="@color/white"
                                             app:appfont="montserrat_light.ttf"/>
@@ -156,6 +160,7 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:text="Abeer Bader"
+                                            android:id="@+id/thirdName"
                                             android:textSize="@dimen/_10ssp"
                                             android:layout_marginLeft="@dimen/_5sdp"
                                             android:layout_marginRight="@dimen/_5sdp"
@@ -167,6 +172,7 @@
                                             android:layout_height="wrap_content"
                                             android:text="11180 Steps"
                                             android:textSize="@dimen/_10ssp"
+                                            android:id="@+id/thirdSteps"
                                             android:textColor="@color/white"
                                             app:appfont="montserrat_light.ttf"/>
                                 </LinearLayout>

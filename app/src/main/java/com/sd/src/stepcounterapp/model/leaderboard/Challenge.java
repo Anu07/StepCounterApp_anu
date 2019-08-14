@@ -10,7 +10,7 @@ public class Challenge{
   private String image;
   @SerializedName("distance")
   @Expose
-  private Integer distance;
+  private Double distance;
   @SerializedName("name")
   @Expose
   private String name;
@@ -26,10 +26,10 @@ public class Challenge{
   public String getImage(){
    return image;
   }
-  public void setDistance(Integer distance){
+  public void setDistance(Double distance){
    this.distance=distance;
   }
-  public Integer getDistance(){
+  public Double getDistance(){
    return distance;
   }
   public void setName(String name){

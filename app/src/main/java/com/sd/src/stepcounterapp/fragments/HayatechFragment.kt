@@ -71,15 +71,6 @@ class HayatechFragment : Fragment() {
     var optionArray = arrayListOf<OptionsModel>()
 
     var xAxis: XAxis? = null
-    private val xVal = arrayOf(
-        "Mon",
-        "Tue",
-        "Wed",
-        "Thu",
-        "Fri",
-        "Sat",
-        "Sun"
-    )
     private val mMonthListFormater = arrayOfNulls<String>(31)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -107,9 +98,6 @@ class HayatechFragment : Fragment() {
 
             })
         mViewModel.getDashResponse().observe(this,
-
-
-
             Observer<DashboardResponse> { mDashResponse ->
                 mDataList = mDashResponse.data
                 steps.text = (mDashResponse.data.activity.sumBy { it.steps }).toString()

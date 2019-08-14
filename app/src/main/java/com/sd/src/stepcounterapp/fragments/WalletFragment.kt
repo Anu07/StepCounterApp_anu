@@ -49,8 +49,8 @@ class WalletFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_wallet, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         mViewModel = ViewModelProviders.of(activity!!).get(WalletViewModel::class.java)
 
         mViewModel.getStepToken().observe(this,
@@ -148,6 +148,8 @@ class WalletFragment : Fragment() {
             }
         }
     }
+
+
 
     private fun setWishListAdapter() {
         rvWishList.layoutManager = LinearLayoutManager(mContext)

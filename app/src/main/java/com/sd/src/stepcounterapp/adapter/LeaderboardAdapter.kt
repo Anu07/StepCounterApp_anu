@@ -26,10 +26,12 @@ class LeaderboardAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        this.item = mData[position]
-        holder.textViewPosition.text = (3+position).toString()      //list displays leadrebaord from position 3
-        holder.textName.text = item!!.name.toString()
-        holder.textSteps.text = item!!.steps.toString()
+        if(position>2){
+            this.item = mData[position]
+            holder.textViewPosition.text = position.toString()      //list displays leadrebaord from position 3
+            holder.textName.text = item!!.name.toString()
+            holder.textSteps.text = item!!.steps.toString()
+        }
     }
 
     override fun getItemCount(): Int {

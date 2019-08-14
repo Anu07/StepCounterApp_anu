@@ -12,7 +12,7 @@ import com.sd.src.stepcounterapp.model.leaderboard.General
 import com.sd.src.stepcounterapp.utils.ItemClickGlobalListner
 import com.sd.src.stepcounterapp.viewModels.BaseViewModelFactory
 import com.sd.src.stepcounterapp.viewModels.LeaderboardViewModel
-import com.sdi.sdeiarchitecturemvvm.activities.BaseActivity
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_leaderboard.*
 
 class LeaderboardActivity : BaseActivity<LeaderboardViewModel>(), ItemClickGlobalListner {
@@ -39,6 +39,16 @@ class LeaderboardActivity : BaseActivity<LeaderboardViewModel>(), ItemClickGloba
             mData->
             showPopupProgressSpinner(false)
             if(mData.challenge.isNotEmpty()){
+                Picasso.get().load(mData.challenge[0].image).error(R.drawable.facial_hair).into(firstImg)
+                firstName.text = mData.challenge[0].name
+                firstSteps.text =mData.challenge[0].steps.toString()
+
+                secName.text =mData.challenge[1].name
+                secSteps.text = mData.challenge[1].steps.toString()
+
+                thirdName.text = mData.challenge[2].name
+                thirdSteps.text = mData.challenge[2].steps.toString()
+
                 mChallengeDataList= mData.challenge as ArrayList<Challenge>
                 mLeaderAdapter.swap(mChallengeDataList)
             }

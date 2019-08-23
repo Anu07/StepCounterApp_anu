@@ -8,6 +8,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.sd.src.stepcounterapp.activities.SignInActivity
 import com.sd.src.stepcounterapp.model.login.LoginResponseJ
+import com.sd.src.stepcounterapp.model.profile.Data
 import java.util.*
 
 
@@ -71,6 +72,16 @@ object SharedPreferencesManager {
     }
 
 
+    fun saveUpdatedUserObject(context: Context, myObject: Data){
+        val prefsEditor = getSharedPreferences(context).edit()
+        val gson = Gson()
+        val json = gson.toJson(myObject) // myObject - instance of MyObject
+        prefsEditor.putString("UpdatedUser", json)
+        prefsEditor.commit()
+    }
+
+
+
     fun saveSyncObject(context: Context, myWearData: ArrayList<DailyStep>?){
         val prefsEditor = getSharedPreferences(context).edit()
         val gson = Gson()
@@ -91,6 +102,13 @@ object SharedPreferencesManager {
         val gson = Gson()
         val json = getSharedPreferences(context).getString("User", "")
         val obj:LoginResponseJ = gson.fromJson<LoginResponseJ>(json, LoginResponseJ::class.java)
+        return obj
+    }
+
+    fun getUpdatedUserObject(context: Context): Data {
+        val gson = Gson()
+        val json = getSharedPreferences(context).getString("UpdatedUser", "")
+        val obj:Data = gson.fromJson<Data>(json, Data::class.java)
         return obj
     }
 

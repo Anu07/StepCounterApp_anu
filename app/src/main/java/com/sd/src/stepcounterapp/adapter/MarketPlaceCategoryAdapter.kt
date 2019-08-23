@@ -38,43 +38,24 @@ class MarketPlaceCategoryAdapter(
 
 //        Toast.makeText(mContext, mCategoryData[position].name, Toast.LENGTH_SHORT).show()
         if (mItem != null) {
-            Picasso.get().load(RetrofitClient.IMG_URL + "" + mItem[0].image).error(R.drawable.placeholder)
-                .into(holder.imgProductFirst)
-            holder.txtCategoryName.text = mItem[0].name
-            holder.txtProductNameFirst.text = mItem[0].name
-            holder.txtShortDescFirst.text = mItem[0].shortDesc
-            holder.txtTokenFirst.text = mItem[0].token.toString()
+            mItem.forEachIndexed { _, products ->
+                Picasso.get().load(RetrofitClient.IMG_URL + "" + products.image).error(R.drawable.placeholder)
+                    .into(holder.imgProductFirst)
+                holder.txtCategoryName.text =products.name
+                holder.txtProductNameFirst.text =products.name
+                holder.txtShortDescFirst.text = products.shortDesc
+                holder.txtTokenFirst.text = products.token.toString()
 
-            Log.i("flag cat", "" + mItem[0].wishlist)
+                Log.i("flag cat", "" + position + products.wishlist)
 
-            if (position <= 1 && mItem[position].wishlist) {
-                holder.wishListView.setImageResource(R.drawable.wishlist_fill)
-            } else {
-                holder.wishListView.setImageResource(R.drawable.featured)
-            }
-
-            holder.wishListView.setOnClickListener {
-                wisListener.onWish(position, mItem[position])
-            }
-
-            if (position == 1) {
-                holder.cdSecond.visibility=View.VISIBLE
-                holder.txtSeeAll.visibility=View.VISIBLE
-
-                Picasso.get().load(RetrofitClient.IMG_URL + "" + mItem[1].image).error(R.drawable.placeholder)
-                    .into(holder.imgProductSecond)
-                holder.txtProductNameSecond.text = mItem[1].name
-                holder.txtShortDescSecond.text = mItem[1].shortDesc
-                holder.txtTokenSecond.text = mItem[1].token.toString()
-                Log.i("flag cat", "" + mItem[1].wishlist)
-
-                holder.txtSeeAll.setOnClickListener {
-                    itemClick.onSeeAllClick(position)
+                holder.wishListView.setOnClickListener {
+                    wisListener.onWish(position, products)
                 }
-            } else{
-                holder.txtSeeAll.visibility=View.GONE
-                holder.cdSecond.visibility=View.GONE
             }
+
+        } else {
+            holder.txtSeeAll.visibility = View.GONE
+            holder.cdSecond.visibility = View.GONE
         }
     }
 

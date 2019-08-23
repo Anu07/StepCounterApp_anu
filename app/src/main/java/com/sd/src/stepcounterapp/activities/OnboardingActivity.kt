@@ -25,7 +25,7 @@ class OnboardingActivity : BaseActivity<BaseViewModel>() {
         }
     }
 
-    val message = arrayOf("Get Moving and Track your Progress!","Earn Tokens and Redeem Rewards in the Wellness Marketplace!","Join the Movement and Participate in Exciting Movement Challenges!")
+    val message = arrayOf("Get Moving and Track your Progress!","Earn Tokens and Redeem Rewards in the Wellness Marketplace!","Join the Movement and Participate in Exciting Movement challenges!")
 
 
     private var currentPage = 0

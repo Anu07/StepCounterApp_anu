@@ -4,6 +4,19 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 /**
  * Awesome Pojo Generator
+ * {
+ * "status": 200,
+ * "message": "Success",
+ * "data": {
+ * "totalEarnings": 7004,
+ * "updatedAt": "2019-08-10T11:20:07.950Z",
+ * "steps": 9856,
+ * "days": 7,
+ * "totalGenerated": 6,
+ * "wishlist": [],
+ * "redeemed": [],
+ * }
+ * }
  * */
 public class Data{
   @SerializedName("totalEarnings")

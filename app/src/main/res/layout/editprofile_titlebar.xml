@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/ll_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?actionBarSize"
+                android:background="@color/white"
+                android:orientation="vertical">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+        <ImageView
+                android:id="@+id/img_back"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="@dimen/_5sdp"
+                android:layout_weight="0.5"
+                android:padding="@dimen/_8sdp"
+                android:src="@drawable/ic_arrow_back" />
+
+        <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="2">
+
+            <com.sd.src.stepcounterapp.utils.CustomTextView
+                    android:layout_width="match_parent"
+                    app:appfont="montserrat_regular.ttf"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|center"
+                    android:gravity="center"
+                    android:text="Edit Profile" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

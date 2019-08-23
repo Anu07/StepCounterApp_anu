@@ -4,13 +4,16 @@ import com.google.gson.annotations.SerializedName;
 /**
  * Awesome Pojo Generator
  * */
-public class Tranding{
+public class Trending{
   @SerializedName("image")
   @Expose
   private String image;
   @SerializedName("is_active")
   @Expose
   private Boolean is_active;
+  @SerializedName("addedBy")
+  @Expose
+  private String addedBy;
   @SerializedName("description")
   @Expose
   private String description;
@@ -32,12 +35,12 @@ public class Tranding{
   @SerializedName("bonusPoint1")
   @Expose
   private Integer bonusPoint1;
-  @SerializedName("startDateTime")
-  @Expose
-  private String startDateTime;
   @SerializedName("is_deleted")
   @Expose
   private Boolean is_deleted;
+  @SerializedName("startDateTime")
+  @Expose
+  private String startDateTime;
   @SerializedName("joinedIn")
   @Expose
   private Integer joinedIn;
@@ -59,6 +62,9 @@ public class Tranding{
   @SerializedName("department")
   @Expose
   private String department;
+  @SerializedName("is_featured")
+  @Expose
+  private Boolean is_featured;
   @SerializedName("updatedAt")
   @Expose
   private String updatedAt;
@@ -73,6 +79,12 @@ public class Tranding{
   }
   public Boolean getIs_active(){
    return is_active;
+  }
+  public void setAddedBy(String addedBy){
+   this.addedBy=addedBy;
+  }
+  public String getAddedBy(){
+   return addedBy;
   }
   public void setDescription(String description){
    this.description=description;
@@ -116,17 +128,17 @@ public class Tranding{
   public Integer getBonusPoint1(){
    return bonusPoint1;
   }
-  public void setStartDateTime(String startDateTime){
-   this.startDateTime=startDateTime;
-  }
-  public String getStartDateTime(){
-   return startDateTime;
-  }
   public void setIs_deleted(Boolean is_deleted){
    this.is_deleted=is_deleted;
   }
   public Boolean getIs_deleted(){
    return is_deleted;
+  }
+  public void setStartDateTime(String startDateTime){
+   this.startDateTime=startDateTime;
+  }
+  public String getStartDateTime(){
+   return startDateTime;
   }
   public void setJoinedIn(Integer joinedIn){
    this.joinedIn=joinedIn;
@@ -169,6 +181,12 @@ public class Tranding{
   }
   public String getDepartment(){
    return department;
+  }
+  public void setIs_featured(Boolean is_featured){
+   this.is_featured=is_featured;
+  }
+  public Boolean getIs_featured(){
+   return is_featured;
   }
   public void setUpdatedAt(String updatedAt){
    this.updatedAt=updatedAt;

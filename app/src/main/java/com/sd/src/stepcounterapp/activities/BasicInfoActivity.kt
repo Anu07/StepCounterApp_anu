@@ -368,7 +368,7 @@ class BasicInfoActivity : BaseActivity<SignInViewModel>(), DatePickerDialog.OnDa
     }
 
 
-    fun getFiletoServer(): Part {
+     fun getFiletoServer(): Part {
 
         // add another part within the multipart request
         if (selectedImage != null) {

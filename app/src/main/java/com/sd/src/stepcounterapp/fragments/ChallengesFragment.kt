@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,12 +19,13 @@ import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.activities.LeaderboardActivity
 import com.sd.src.stepcounterapp.adapter.ChallengeAdapter
 import com.sd.src.stepcounterapp.adapter.ChallengeTrendingAdapter
-import com.sd.src.stepcounterapp.adapter.SlidingImageAdapter
+import com.sd.src.stepcounterapp.adapter.SlidingFeaturedChallengeImageAdapter
 import com.sd.src.stepcounterapp.dialog.ChallengesDialog
 import com.sd.src.stepcounterapp.dialog.StopChallengeDialog
 import com.sd.src.stepcounterapp.model.challenge.ChallengeResponse
 import com.sd.src.stepcounterapp.model.challenge.Data
-import com.sd.src.stepcounterapp.model.challenge.Tranding
+import com.sd.src.stepcounterapp.model.challenge.Featured
+import com.sd.src.stepcounterapp.model.challenge.Trending
 import com.sd.src.stepcounterapp.model.generic.BasicRequest
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import com.sd.src.stepcounterapp.viewModels.ChallengeViewModel
@@ -45,7 +47,8 @@ class ChallengesFragment : Fragment(), ChallengeAdapter.ItemClickListener {
         dialog.show()
     }
 
-    private lateinit var mTrendChallengeCategory: MutableList<Tranding>
+    private  var mFeaturedChallengeCategory: MutableList<Featured> =  mutableListOf()
+    private lateinit var mTrendChallengeCategory: MutableList<Trending>
     private lateinit var mTrendingChallengesAdapter: ChallengeTrendingAdapter
     private lateinit var mChallengesAdapter: ChallengeAdapter
     private lateinit var mChallengeCategory: MutableList<Data>
@@ -80,12 +83,10 @@ class ChallengesFragment : Fragment(), ChallengeAdapter.ItemClickListener {
         mViewModel.getChallengeObject().observe(this,
             Observer<ChallengeResponse> { mChallenge ->
                 if (mChallenge != null) {
-                    if (mChallenge.data != null && mChallenge.tranding.size > 0) {
+                    if (mChallenge.data != null && mChallenge.trending.size > 0) {
                         mChallengeCategory = mChallenge.data
                         setChallengeAdapter()
-                        var mActiveList = mChallengeCategory.filter { data ->
-                            data.is_active == true
-                        }
+                        var mActiveList = mChallenge.ongoing
                         if (mActiveList.isNotEmpty()) {
                             llStartChallenges.visibility = View.VISIBLE
                             ongoingchallengeName.text = mActiveList[0].name
@@ -100,8 +101,13 @@ class ChallengesFragment : Fragment(), ChallengeAdapter.ItemClickListener {
                         setChallengesView()
                     }
 
-                    if (mChallenge.tranding != null && mChallenge.tranding.size > 0) {
-                        mTrendChallengeCategory = mChallenge.tranding
+                    if (mChallenge.featured != null && mChallenge.featured.size > 0) {
+                        mFeaturedChallengeCategory = mChallenge.featured
+                        setFeaturedChallengeSliderAdapter(mFeaturedChallengeCategory)
+                    }
+
+                    if (mChallenge.trending != null && mChallenge.trending.size > 0) {
+                        mTrendChallengeCategory = mChallenge.trending
                         setTrendingChallengeAdapter()
                     } else {
                         setTrendingView()
@@ -117,6 +123,13 @@ class ChallengesFragment : Fragment(), ChallengeAdapter.ItemClickListener {
         llStartChallenges.setOnClickListener {
             StopChallengeDialog(mContext, R.style.pullBottomfromTop, R.layout.dialog_stop_challenges).show()
         }
+
+    }
+
+    private fun setFeaturedChallengeSliderAdapter(mFeaturedNewChallengeCategory: MutableList<Featured>) {
+
+        Log.i("new ","list"+mFeaturedNewChallengeCategory.size)
+        rewardsViewPager.adapter = SlidingFeaturedChallengeImageAdapter(mContext, mFeaturedNewChallengeCategory)
 
     }
 
@@ -141,9 +154,8 @@ class ChallengesFragment : Fragment(), ChallengeAdapter.ItemClickListener {
         for (i in 0 until IMAGES.size)
             ImagesArray!!.add(IMAGES[i])
 
-        rewardsViewPager.adapter = SlidingImageAdapter(mContext, ImagesArray!!)
+        rewardsViewPager.adapter = SlidingFeaturedChallengeImageAdapter(mContext, mFeaturedChallengeCategory)
 
-        val density = resources.displayMetrics.density
 
         NUM_PAGES = IMAGES.size
 

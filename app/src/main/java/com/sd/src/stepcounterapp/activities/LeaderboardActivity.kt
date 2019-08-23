@@ -18,7 +18,6 @@ import kotlinx.android.synthetic.main.activity_leaderboard.*
 class LeaderboardActivity : BaseActivity<LeaderboardViewModel>(), ItemClickGlobalListner {
     override fun onItemClick(pos: Int) {
     }
-    private var mGeneralDataList: ArrayList<General> = ArrayList()
     private var mChallengeDataList: ArrayList<Challenge> = ArrayList()
     private lateinit var mLeaderAdapter: LeaderboardAdapter
     override val layoutId: Int

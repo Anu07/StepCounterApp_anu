@@ -67,13 +67,13 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
 
             override fun onResponse(call: Call<WalletModel>?, response: Response<WalletModel>?) {
                 if (response!!.code() == 200) {
+                    LoadingDialog.getLoader().dismissLoader()
                     mWalletModel!!.value = response.body()!!
                 } else {
                     var model = WalletModel()
                     model.message = "Invalid request"
                     mWalletModel!!.value = model
                     LoadingDialog.getLoader().dismissLoader()
-
                 }
             }
         })

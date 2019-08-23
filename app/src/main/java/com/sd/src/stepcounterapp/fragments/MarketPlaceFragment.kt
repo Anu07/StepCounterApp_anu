@@ -37,7 +37,7 @@ import com.sd.src.stepcounterapp.viewModels.MarketPlaceViewModel
 import kotlinx.android.synthetic.main.fragment_market_place.*
 
 
-class MarketPlaceFragment : Fragment(), MarketPlaceClickInterface, MarketPlaceCategoryAdapter.twoItemListener,
+class MarketPlaceFragment : BaseFragment(), MarketPlaceClickInterface, MarketPlaceCategoryAdapter.twoItemListener,
     MarketPlacePopularityAdapter.PopularInterface, MarketPlaceSeeAllAdapter.CategoryInterface {
     override fun onWish(position: Int, mItem: MarketResponse.Products) {
         if (!mItem.wishlist) {
@@ -118,7 +118,6 @@ class MarketPlaceFragment : Fragment(), MarketPlaceClickInterface, MarketPlaceCa
         this.callback = callback
     }
 
-    private lateinit var progressDialog: Dialog
     private var tabtype: Boolean = true
     private var mDataWish: ArrayList<Data> = ArrayList()
     private lateinit var mViewModel: MarketPlaceViewModel
@@ -266,7 +265,7 @@ class MarketPlaceFragment : Fragment(), MarketPlaceClickInterface, MarketPlaceCa
         })
 
         wishlist.setOnClickListener {
-            callback.onFragmentClick()
+            callback.onFragmentClick(2)
         }
     }
 
@@ -332,31 +331,11 @@ class MarketPlaceFragment : Fragment(), MarketPlaceClickInterface, MarketPlaceCa
         imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
-    fun showPopupProgressSpinner(isShowing: Boolean?) {
-        if (isShowing == true) {
-            progressDialog = Dialog(activity)
-            progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-            progressDialog.setContentView(R.layout.popup_progressbar)
-            progressDialog.setCancelable(false)
-            progressDialog.window.setBackgroundDrawable(
-                ColorDrawable(Color.TRANSPARENT)
-            )
 
-            var progressBar = progressDialog
-                .findViewById(R.id.progressBar) as ProgressBar
-            progressBar.indeterminateDrawable.setColorFilter(
-                Color.parseColor("#8DC540"),
-                android.graphics.PorterDuff.Mode.MULTIPLY
-            )
-            progressDialog.show()
-        } else if (isShowing == false) {
-            progressDialog.dismiss()
-        }
-    }
 
 
     interface FragmentClick {
-        fun onFragmentClick()
+        fun onFragmentClick(pos:Int)
     }
 
     /**

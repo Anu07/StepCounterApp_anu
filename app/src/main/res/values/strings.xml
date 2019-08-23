@@ -144,4 +144,20 @@
     <string name="my_challenges">My Challenges</string>
     <string name="my_redeemed_rewards">My Redeemed Rewards</string>
     <string name="my_surveys">My Surveys</string>
+    <string name="sync_now">Sync now</string>
+
+
+
+    <!--EDIT PROFILE-->
+    <string name="edit_fname">FIRST NAME</string>
+    <string name="edit_lname">LAST NAME</string>
+    <string name="edit_dob">DATE OF BIRTH</string>
+    <string name="edit_heigth">HEIGHT</string>
+    <string name="edit_weight">WEIGHT</string>
+    <string name="edit_email">EMAIL</string>
+    <string name="edit_cname">COMPANY NAME</string>
+    <string name="edit_dep">DEPARTMENT</string>
+    <string name="edit_gender">GENDER</string>
+    <string name="edit_phone">MOBILE NUMBER</string>
+    <string name="edit_save">SAVE PROFILE</string>
 </resources>

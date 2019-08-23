@@ -4,6 +4,7 @@
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
         android:layout_alignParentBottom="true"
+        android:background="@color/white"
         android:gravity="center_vertical" android:orientation="horizontal">
 
     <LinearLayout
@@ -51,7 +52,7 @@
                 android:id="@+id/imgMarketPalace"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/marketplace"/>
+                android:src="@drawable/marketplace_un"/>
 
 
     </LinearLayout>
@@ -87,7 +88,7 @@
                 android:id="@+id/imgWallet"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/wallet"/>
+                android:src="@drawable/wallet_un"/>
 
     </LinearLayout>
 

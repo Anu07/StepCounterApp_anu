@@ -64,7 +64,11 @@ class HayatechFragment : Fragment() {
             return instance
         }
     }
+    internal lateinit var callback: MarketPlaceFragment.FragmentClick
 
+    fun FragmentClickListener(callback: MarketPlaceFragment.FragmentClick) {
+        this.callback = callback
+    }
 
     private var mDataList: Data? = Data()
     private lateinit var mViewModel: DeviceViewModel
@@ -107,7 +111,7 @@ class HayatechFragment : Fragment() {
                 totl_dist.text = mDashResponse.data.totalUserDistance.toString()
                 totl_dist_suffix.text = "Km"
                 tokensVal.text = mDashResponse.data.totalUserToken.toString()
-                SharedPreferencesManager.setString(mContext, SYNCDATE, mDashResponse.data.lastUpdated)
+                SharedPreferencesManager.setString(mContext, mDashResponse.data.lastUpdated,SYNCDATE)
                 setBarChart("STEPS")
             })
 
@@ -153,6 +157,10 @@ class HayatechFragment : Fragment() {
             distance.setTextColor(mContext.resources.getColor(R.color.gray_text))
             setBarChart("STEPS")
 
+        }
+
+        spndTokens.setOnClickListener {
+            callback.onFragmentClick(0)
         }
 
         token_title.setOnClickListener {
@@ -277,8 +285,8 @@ class HayatechFragment : Fragment() {
 
     private fun setBarChart(format: String) {
         var weeklyData: ArrayList<BarEntry> = addDataFromServer(format)
-        val bardataset = BarDataSet(weeklyData, "Goal achieved")
-        bardataset.color = Color.parseColor("#8DC540")
+        val bardataset = BarDataSet(weeklyData, "")
+        bardataset.color = Color.parseColor("#FFFFFF")
         barchart.animateY(5000)
         val data = BarData(bardataset)
         barchart.data = data

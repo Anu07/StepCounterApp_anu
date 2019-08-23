@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent" xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_margin="@dimen/_5sdp"
+        android:layout_height="wrap_content">
+    <LinearLayout android:orientation="vertical"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent">
+        <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/forest"/>
+        <com.sd.src.stepcounterapp.utils.CustomTextView
+                android:layout_width="match_parent"
+                android:id="@+id/titleTxt"
+                tools:text="Walk Bharain"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:textSize="@dimen/_16sdp"
+                android:textColor="@color/blue_txt"
+                app:appfont="montserrat_semibold.ttf"
+                android:textAlignment="textStart"
+                android:layout_height="wrap_content"/>
+        <com.sd.src.stepcounterapp.utils.CustomTextView
+                android:layout_width="match_parent"
+                android:id="@+id/subtitleTxt"
+                tools:text="Duration: 30days"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:textSize="@dimen/_12sdp"
+                android:textColor="@color/colorBlack"
+                app:appfont="montserrat_regular.ttf"
+                android:textAlignment="textStart"
+                android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

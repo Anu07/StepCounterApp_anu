@@ -11,14 +11,14 @@ import androidx.annotation.RequiresApi
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.sd.src.stepcounterapp.R
-import com.sd.src.stepcounterapp.model.challenge.Tranding
+import com.sd.src.stepcounterapp.model.challenge.Trending
 import com.sd.src.stepcounterapp.network.RetrofitClient
 import com.squareup.picasso.Picasso
 
 
 class ChallengeTrendingAdapter(
     internal var mContext: Context,
-    internal var mValues: MutableList<Tranding>
+    internal var mValues: MutableList<Trending>
 ) : RecyclerView.Adapter<ChallengeTrendingAdapter.ViewHolder>() {
 
 
@@ -33,7 +33,7 @@ class ChallengeTrendingAdapter(
     }
 
 
-    private lateinit var item: Tranding
+    private lateinit var item: Trending
 
     inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
 
@@ -42,7 +42,7 @@ class ChallengeTrendingAdapter(
         var imageView: ImageView
         var cdMain: CardView
 
-        internal lateinit var item: Tranding
+        internal lateinit var item: Trending
 
         init {
             textView = v.findViewById<View>(R.id.txtChallengeName) as TextView

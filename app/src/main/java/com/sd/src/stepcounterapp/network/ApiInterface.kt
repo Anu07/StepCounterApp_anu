@@ -4,7 +4,6 @@ import com.sd.src.stepcounterapp.model.BaseModel
 import com.sd.src.stepcounterapp.model.BasicInfoRequestObject
 import com.sd.src.stepcounterapp.model.DeviceResponse.DashboardResponse
 import com.sd.src.stepcounterapp.model.challenge.ChallengeResponse
-import com.sd.src.stepcounterapp.model.challenge.Data
 import com.sd.src.stepcounterapp.model.generic.BasicInfoResponse
 import com.sd.src.stepcounterapp.model.generic.BasicRequest
 import com.sd.src.stepcounterapp.model.image.ImageResponse
@@ -14,11 +13,15 @@ import com.sd.src.stepcounterapp.model.loginrequest.LoginRequestObject
 import com.sd.src.stepcounterapp.model.marketplace.BasicSearchRequest
 import com.sd.src.stepcounterapp.model.marketplace.MarketResponse
 import com.sd.src.stepcounterapp.model.marketplace.PopularProducts
+import com.sd.src.stepcounterapp.model.profile.ProfileResponse
+import com.sd.src.stepcounterapp.model.profile.UpdateProfileRequest
 import com.sd.src.stepcounterapp.model.rewards.AddRewardsRequestObject
 import com.sd.src.stepcounterapp.model.rewards.RewardsCategoriesResponse
+import com.sd.src.stepcounterapp.model.survey.Data
 import com.sd.src.stepcounterapp.model.survey.SurveyListResponse
 import com.sd.src.stepcounterapp.model.syncDevice.FetchDeviceDataRequest
 import com.sd.src.stepcounterapp.model.syncDevice.SyncRequest
+import com.sd.src.stepcounterapp.model.updateresponse.UpdateProfileResponse
 import com.sd.src.stepcounterapp.model.wallet.TokenModel
 import com.sd.src.stepcounterapp.model.wallet.WalletModel
 import com.sd.src.stepcounterapp.model.wishList.AddWishRequest
@@ -47,11 +50,15 @@ interface ApiInterface {
         @Body body: BasicInfoRequestObject
     ): Call<BasicInfoResponse>
 
+    @PUT("api/profile")
+    fun update_profile(
+        @Body body: UpdateProfileRequest
+    ): Call<UpdateProfileResponse>
+
     @Multipart
     @POST("api/upload_profile_pic")
     fun uploadImage(@Part("userId") userId: RequestBody, @Part imageFile: MultipartBody.Part):
             Call<ImageResponse>
-
 
     @FormUrlEncoded
     @POST("api/check_username")
@@ -118,14 +125,14 @@ interface ApiInterface {
     ): Call<ChallengeResponse>
 
     @FormUrlEncoded
-    @POST("/api/stop_challenge")
+    @POST("api/stop_challenge")
     fun stopChallenges(
         @Field("userId") userId: String,
         @Field("challengeId") challengeId: String
     ): Call<BaseModel>
 
-    @POST("/api/join_challenge")
-    fun startChallenge(@Body body: Data): Call<BaseModel>
+    @POST("api/join_challenge")
+    fun startChallenge(@Body body: com.sd.src.stepcounterapp.model.challenge.Data): Call<BaseModel>
 
     @POST("api/steps_to_token")
     fun steps_to_token(@Body body: BasicRequest): Call<TokenModel>
@@ -138,4 +145,11 @@ interface ApiInterface {
 
     @POST("/api/leaderboard")
     fun getLeaderboard(@Body body: BasicRequest): Call<LeaderBoardResponse>
+
+
+
+    @POST("api/profile")
+    fun getProfileData(
+        @Body body: BasicRequest
+    ): Call<ProfileResponse>
 }

@@ -1,23 +1,25 @@
 package com.sd.src.stepcounterapp.activities
 
 import android.annotation.TargetApi
+import android.app.Dialog
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
+import android.view.Window
 import android.view.inputmethod.InputMethodManager
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.AndroidViewModel
 import com.google.android.material.snackbar.Snackbar
-import android.app.Dialog
-import android.widget.ProgressBar
-import android.graphics.drawable.ColorDrawable
-import android.view.Window
 import com.sd.src.stepcounterapp.R
+
 
 /**
  * Created by shubham on 22/05/19.
@@ -33,7 +35,7 @@ abstract class BaseActivity<V : AndroidViewModel> : AppCompatActivity() {
     var mViewModel: V? = null
     lateinit var mContext: Context
     private var mSnackbar: Snackbar? = null
-
+    var doubleBackToExitPressedOnce = false
     /**
      * Override for set binding variable
      *
@@ -138,5 +140,21 @@ abstract class BaseActivity<V : AndroidViewModel> : AppCompatActivity() {
             progressDialog.dismiss()
         }
     }
+
+    override fun onBackPressed() {
+        if (supportFragmentManager.backStackEntryCount > 0) {
+            supportFragmentManager.popBackStack()
+        } else if (!doubleBackToExitPressedOnce) {
+            this.doubleBackToExitPressedOnce = true
+            Toast.makeText(this, "Please click BACK again to exit.", Toast.LENGTH_SHORT).show()
+
+            Handler().postDelayed(Runnable { doubleBackToExitPressedOnce = false }, 2000)
+        } else {
+            super.onBackPressed()
+            return
+        }
+
+    }
+
 }
 

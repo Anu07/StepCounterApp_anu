@@ -14,16 +14,23 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-        <include
-                android:id="@+id/tool"
-                layout="@layout/titlebar"/>
 
-        <com.sd.src.stepcounterapp.utils.CustomViewPager
-                android:id="@+id/vpLanding"
+        <FrameLayout
+                android:id="@+id/container"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@+id/tool"
-                android:layout_above="@+id/bottom_bar"/>
+                android:layout_marginBottom="?actionBarSize"
+                android:layout_height="match_parent">
+            <include
+                    android:id="@+id/tool"
+                    layout="@layout/titlebar"/>
+            <com.sd.src.stepcounterapp.utils.CustomViewPager
+                    android:id="@+id/vpLanding"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="?actionBarSize"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/tool"
+                    android:layout_above="@+id/bottom_bar"/>
+        </FrameLayout>
 
         <include
                 android:id="@+id/bottom_bar"

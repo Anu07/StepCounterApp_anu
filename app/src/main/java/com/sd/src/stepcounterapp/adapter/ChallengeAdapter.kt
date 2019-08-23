@@ -12,7 +12,6 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.model.challenge.Data
-import com.sd.src.stepcounterapp.model.challenge.Tranding
 import com.sd.src.stepcounterapp.network.RetrofitClient
 import com.squareup.picasso.Picasso
 

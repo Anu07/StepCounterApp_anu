@@ -266,7 +266,7 @@ class MarketPlaceFragment : Fragment(), MarketPlaceClickInterface, MarketPlaceCa
         })
 
         wishlist.setOnClickListener {
-            callback.onFragmentClick()
+            callback.onFragmentClick(2)
         }
     }
 
@@ -356,7 +356,7 @@ class MarketPlaceFragment : Fragment(), MarketPlaceClickInterface, MarketPlaceCa
 
 
     interface FragmentClick {
-        fun onFragmentClick()
+        fun onFragmentClick(pos:Int)
     }
 
     /**

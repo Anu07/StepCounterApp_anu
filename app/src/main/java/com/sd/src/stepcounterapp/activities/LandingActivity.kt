@@ -18,6 +18,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProviders
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.fitpolo.support.MokoConstants
@@ -53,8 +54,12 @@ import java.util.*
 
 
 class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback, View.OnClickListener, MarketPlaceFragment.FragmentClick {
-    override fun onFragmentClick() {
-        vpLanding.currentItem = 4
+    override fun onFragmentClick(position: Int) {
+        if(position==2){
+            vpLanding.currentItem = 4
+        }else if(position ==0){
+            vpLanding.currentItem = 2
+        }
     }
 
     private var deviceSynced: String? = ""
@@ -106,6 +111,12 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
         var aAdapter = ArrayAdapter(this, R.layout.menu_textview, users)
         list_menu_item.adapter = aAdapter
         list_menu_item.onItemClickListener = AdapterView.OnItemClickListener { a, v, position, id ->
+            when(position){
+                0-> openEditActivity()
+                1-> openTransactionFragment()
+                4->openFragment()
+            }
+
             if (position == 6) {
                 logoutUser()
             }
@@ -130,7 +141,34 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
 
     }
 
+    private fun openEditActivity() {
+        startActivity(Intent(this@LandingActivity, MyProfileActivity::class.java))
+    }
+
+    private fun openFragment() {
+        mDrawerLayout.closeDrawer(GravityCompat.START)
+        var fragmentTransaction = supportFragmentManager.beginTransaction()
+        fragmentTransaction.add(R.id.container, SettingsFragment.newInstance(this@LandingActivity))
+        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()
+
+
+    }
+
+    private fun openTransactionFragment() {
+        mDrawerLayout.closeDrawer(GravityCompat.START)
+        var fragmentTransaction = supportFragmentManager.beginTransaction()
+        fragmentTransaction.add(R.id.container, TransactionHistoryFragment.newInstance(this@LandingActivity))
+        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()
+
+
+    }
+
     override fun initListeners() {
+        profileImgTitle.setOnClickListener {
+            startActivity(Intent(this@LandingActivity, MyProfileActivity::class.java))
+        }
         setNavHeader()
         checkBluetoothGPSPermissions()
         llHayatech.setOnClickListener(this@LandingActivity)
@@ -165,6 +203,9 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
             userNameNav.text = "Hello " + user.data.firstName + "!"
             Picasso.get().load(IMG_URL + user.data.image).resize(100, 100).into(img_nav_header)
             Picasso.get().load(IMG_URL + user.data.image).resize(80, 80).into(profileImgTitle)
+            profileImgTitle.setOnClickListener {
+                openEditActivity()
+            }
         }
     }
 
@@ -181,9 +222,9 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
         hideKeyboard()
         imgHayatech.setImageResource(R.drawable.dashboard)
         imgChallenges.setImageResource(R.drawable.challenge)
-        imgMarketPalace.setImageResource(R.drawable.marketplace)
+        imgMarketPalace.setImageResource(R.drawable.marketplace_un)
         imgSurvey.setImageResource(R.drawable.survey)
-        imgWallet.setImageResource(R.drawable.wallet)
+        imgWallet.setImageResource(R.drawable.wallet_un)
 
         when (selected) {
             FRAG_HAYATECH -> {
@@ -581,6 +622,8 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
 
     override fun onAttachFragment(fragment: Fragment) {
         if (fragment is MarketPlaceFragment) {
+            fragment.FragmentClickListener(this)
+        }else if(fragment is HayatechFragment){
             fragment.FragmentClickListener(this)
         }
     }

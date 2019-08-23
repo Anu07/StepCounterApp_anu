@@ -76,14 +76,56 @@
 
     </LinearLayout>
 
-
-    <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/quesList"
-            android:layout_marginBottom="@dimen/_20sdp"
+    <FrameLayout
             android:layout_width="match_parent"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:background="@color/colorbg"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:background="@color/white"
+                android:weightSum="2"
+                android:padding="@dimen/_5sdp"
+                android:layout_gravity="bottom"
+                android:layout_height="wrap_content">
+
+            <com.sd.src.stepcounterapp.utils.CustomButton
+                    android:id="@+id/savebutton"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/full_border_bgray"
+                    app:appButtonfont="montserrat_regular.ttf"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/_12ssp"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_marginRight="@dimen/_5sdp"
+                    android:text="SAVE"
+            />
+
+            <com.sd.src.stepcounterapp.utils.CustomButton
+                    android:id="@+id/finishbutton"
+                    android:background="@drawable/button_background"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:textSize="@dimen/_12ssp"
+                    android:textColor="@color/white"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:layout_marginLeft="@dimen/_5sdp"
+                    app:appButtonfont="montserrat_regular.ttf"
+                    android:layout_height="wrap_content"
+                    android:text="FINISH"
+            />
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/quesList"
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:background="@color/colorbg"
+                android:layout_height="wrap_content"/>
+
+
+    </FrameLayout>
 
 
 </LinearLayout>

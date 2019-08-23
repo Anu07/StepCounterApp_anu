@@ -15,7 +15,7 @@ class ChallengesDialog(
     data: Data,
     themeResId: Int,
     private val LayoutId: Int,
-   var mListener: StartInterface)
+    var mListener: StartInterface)
     : BaseDialog(context, themeResId) {
     var mData: Data = data
 

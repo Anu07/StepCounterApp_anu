@@ -144,4 +144,8 @@
     <string name="my_challenges">My Challenges</string>
     <string name="my_redeemed_rewards">My Redeemed Rewards</string>
     <string name="my_surveys">My Surveys</string>
+    <string name="sync_now">Sync now</string>
+    <string name="today_18_jun_2019">Today. 18 Jun 2019</string>
+    <string name="closing_tokens">Closing Tokens </string>
+    <string name="transaction_id">Transaction ID</string>
 </resources>

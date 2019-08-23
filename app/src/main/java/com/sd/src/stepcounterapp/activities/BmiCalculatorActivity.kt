@@ -152,12 +152,30 @@ class BmiCalculatorActivity : BaseActivity<SignInViewModel>(), View.OnClickListe
         viewModel.getBasicResponse()
             .observe(this, Observer { mUser ->
                 if (mUser.status == 200) {
-                    val intent = Intent(mContext, RewardsCategorySelectionActivity::class.java)
+                    if (intent.hasExtra("inApp")) {
+                        finish()
+                    } else {
+                        val intent = Intent(mContext, RewardsCategorySelectionActivity::class.java)
 //                      val options = ActivityOptions.makeSceneTransitionAnimation(this@SignInActivity)
-                    startActivity(intent)
+                        startActivity(intent)
+                    }
+
 
                 }
             })
+
+
+        if (intent.hasExtra("inApp")) {
+            skipBttn.visibility = View.GONE
+            if (SharedPreferencesManager.getUpdatedUserObject(this@BmiCalculatorActivity).gender.equals("Male", true)) {
+                isGenderClicked= false
+                selectGender(maleBttn)
+            } else {
+                isGenderClicked= true
+                selectGender(femaleBttn)
+            }
+        }
+
     }
 
     /**
@@ -245,22 +263,41 @@ class BmiCalculatorActivity : BaseActivity<SignInViewModel>(), View.OnClickListe
                         "",
                         InterfacesCall.Callback {
 
-                            mViewModel!!.addBasicInfo(
-                                BasicInfoRequestObject(
-                                    SharedPreferencesManager.getUserId(this@BmiCalculatorActivity)!!,
-                                    intent.getStringExtra("username"),
-                                    intent.getStringExtra("firstname"),
-                                    intent.getStringExtra("lastname"),
-                                    intent.getStringExtra("dob"),
-                                    gender,
-                                    weight.toInt(),
-                                    w,
-                                    flooredheight.toInt(),
-                                    "Cms",          //TODO
-                                    calcBMI(weight.toInt(), height),
-                                    true
+                            if (intent.hasExtra("inApp")) {
+                                mViewModel!!.addBasicInfo(
+                                    BasicInfoRequestObject(
+                                        SharedPreferencesManager.getUserId(this@BmiCalculatorActivity)!!,
+                                        SharedPreferencesManager.getUpdatedUserObject(this@BmiCalculatorActivity).username,
+                                        SharedPreferencesManager.getUpdatedUserObject(this@BmiCalculatorActivity).firstName,
+                                        SharedPreferencesManager.getUpdatedUserObject(this@BmiCalculatorActivity).lastName,
+                                        SharedPreferencesManager.getUpdatedUserObject(this@BmiCalculatorActivity).dob,
+                                        SharedPreferencesManager.getUpdatedUserObject(this@BmiCalculatorActivity).gender,
+                                        SharedPreferencesManager.getUpdatedUserObject(this@BmiCalculatorActivity).weight,
+                                        SharedPreferencesManager.getUpdatedUserObject(this@BmiCalculatorActivity).weightType,
+                                        SharedPreferencesManager.getUpdatedUserObject(this@BmiCalculatorActivity).height,
+                                        SharedPreferencesManager.getUpdatedUserObject(this@BmiCalculatorActivity).heightType,          //TODO
+                                        calcBMI(weight.toInt(), height),
+                                        true
+                                    )
                                 )
-                            )
+                            } else {
+                                mViewModel!!.addBasicInfo(
+                                    BasicInfoRequestObject(
+                                        SharedPreferencesManager.getUserId(this@BmiCalculatorActivity)!!,
+                                        intent.getStringExtra("username"),
+                                        intent.getStringExtra("firstname"),
+                                        intent.getStringExtra("lastname"),
+                                        intent.getStringExtra("dob"),
+                                        gender,
+                                        weight.toInt(),
+                                        w,
+                                        flooredheight.toInt(),
+                                        "Cms",          //TODO
+                                        calcBMI(weight.toInt(), height),
+                                        true
+                                    )
+                                )
+                            }
 
 
                         })
@@ -401,4 +438,9 @@ class BmiCalculatorActivity : BaseActivity<SignInViewModel>(), View.OnClickListe
     }
 
 
+    override fun onBackPressed() {
+        if (intent.hasExtra("inApp")) {
+            super.onBackPressed()
+        }
+    }
 }

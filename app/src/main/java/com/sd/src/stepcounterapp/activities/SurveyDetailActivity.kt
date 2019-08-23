@@ -34,6 +34,13 @@ class SurveyDetailActivity : BaseActivity<BaseViewModel>() {
         surveyName.text = mItemData.name
         quesCount.text = mItemData.products.size.toString()
         expireDate.text = mItemData.expireOn.split("T")[0]
+        savebutton.setOnClickListener {
+            finish()
+        }
+        finishbutton.setOnClickListener {
+            finish()
+        }
+
         setQuestionSurveyAdapter()
     }
 

@@ -6,6 +6,9 @@ import android.text.Editable
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Created by shubham on 12/06/19.
@@ -47,5 +50,33 @@ fun ImageView.loadImageOrHide(image: String?) =
 private fun View.ifNotDestroyed(block: () -> Unit) {
     if (!(context as Activity).isDestroyed) {
         block()
+    }
+}
+
+fun changeDateFormat(currentFormat: String, requiredFormat: String, dateString: String?): String {
+    var result = ""
+    if (dateString.isNullOrEmpty()) {
+        return result
+    }
+    val formatterOld = SimpleDateFormat(currentFormat, Locale.getDefault())
+    val formatterNew = SimpleDateFormat(requiredFormat, Locale.getDefault())
+    var date: Date? = null
+    try {
+        date = formatterOld.parse(dateString)
+    } catch (e: ParseException) {
+        e.printStackTrace()
+    }
+
+    if (date != null) {
+        result = formatterNew.format(date)
+    }
+    return result
+}
+
+fun setFirstCapWord(word: String?): String {
+    return if (word != null && !word.isEmpty()) {
+        word.substring(0, 1).toUpperCase() + word.substring(1)
+    } else {
+        ""
     }
 }

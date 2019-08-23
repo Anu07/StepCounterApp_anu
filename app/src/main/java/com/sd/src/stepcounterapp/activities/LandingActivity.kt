@@ -18,7 +18,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProviders
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.fitpolo.support.MokoConstants
@@ -112,7 +111,8 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
         list_menu_item.adapter = aAdapter
         list_menu_item.onItemClickListener = AdapterView.OnItemClickListener { a, v, position, id ->
             when(position){
-                1-> openEditActivity()
+                0-> openEditActivity()
+                1-> openTransactionFragment()
                 4->openFragment()
             }
 
@@ -140,24 +140,7 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
 
     }
 
-    private fun openEditActivity() {
-        startActivity(Intent(this@LandingActivity, MyProfileActivity::class.java))
-    }
-
-    private fun openFragment() {
-        mDrawerLayout.closeDrawer(GravityCompat.START)
-        var fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.add(R.id.container, SettingsFragment.newInstance(this@LandingActivity))
-        fragmentTransaction.addToBackStack(null)
-        fragmentTransaction.commit()
-
-
-    }
-
     override fun initListeners() {
-        profileImgTitle.setOnClickListener {
-            startActivity(Intent(this@LandingActivity, MyProfileActivity::class.java))
-        }
         setNavHeader()
         checkBluetoothGPSPermissions()
         llHayatech.setOnClickListener(this@LandingActivity)
@@ -612,8 +595,6 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
 
     override fun onAttachFragment(fragment: Fragment) {
         if (fragment is MarketPlaceFragment) {
-            fragment.FragmentClickListener(this)
-        }else if(fragment is HayatechFragment){
             fragment.FragmentClickListener(this)
         }
     }

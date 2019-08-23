@@ -2,12 +2,18 @@ package com.sd.src.stepcounterapp.activities
 
 import android.content.Context
 import android.content.Intent
+<<<<<<< HEAD
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.fragments.ProfileFragment
 import com.sd.src.stepcounterapp.fragments.SettingsFragment
+=======
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import com.sd.src.stepcounterapp.R
+>>>>>>> origin/master
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager.SYNCDATE
 import com.sd.src.stepcounterapp.viewModels.BaseViewModelFactory
@@ -60,6 +66,7 @@ class MyProfileActivity : BaseActivity<ProfileViewModel>() {
         img_back.setOnClickListener {
             finish()
         }
+<<<<<<< HEAD
         editClick.setOnClickListener {
             openFragment()
         }
@@ -75,6 +82,8 @@ class MyProfileActivity : BaseActivity<ProfileViewModel>() {
         fragmentTransaction.add(R.id.editcontainer, ProfileFragment.newInstance(this))
         fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()
+=======
+>>>>>>> origin/master
     }
 
 }

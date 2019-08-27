@@ -249,7 +249,7 @@ class BmiCalculatorActivity : BaseActivity<SignInViewModel>(), View.OnClickListe
             if (validate()) {
                 var bundle = Bundle()
                 var w = if (isWtButtonClicked) "Kgs" else "Lbs"
-                var h = if (isHtButtonClicked) "Cms" else ""
+                var h = if (isHtButtonClicked) "Cms" else "Feet"
                 bundle.putString("Weigth", weight + w)
                 bundle.putString("heigth", height + h)
                 bundle.putFloat("bmi", calcBMI(weight.toInt(), height))
@@ -276,7 +276,7 @@ class BmiCalculatorActivity : BaseActivity<SignInViewModel>(), View.OnClickListe
                                         SharedPreferencesManager.getUpdatedUserObject(this@BmiCalculatorActivity).weightType,
                                         SharedPreferencesManager.getUpdatedUserObject(this@BmiCalculatorActivity).height,
                                         SharedPreferencesManager.getUpdatedUserObject(this@BmiCalculatorActivity).heightType,          //TODO
-                                        calcBMI(weight.toInt(), height),
+                                        calcBMI(weight.toInt(), height).toDouble(),
                                         true
                                     )
                                 )
@@ -289,11 +289,11 @@ class BmiCalculatorActivity : BaseActivity<SignInViewModel>(), View.OnClickListe
                                         intent.getStringExtra("lastname"),
                                         intent.getStringExtra("dob"),
                                         gender,
-                                        weight.toInt(),
+                                        weight.toFloat(),
                                         w,
-                                        flooredheight.toInt(),
+                                        flooredheight,
                                         "Cms",          //TODO
-                                        calcBMI(weight.toInt(), height),
+                                        calcBMI(weight.toInt(), height).toDouble(),
                                         true
                                     )
                                 )
@@ -314,11 +314,11 @@ class BmiCalculatorActivity : BaseActivity<SignInViewModel>(), View.OnClickListe
                     intent.getStringExtra("lastname"),
                     intent.getStringExtra("dob"),
                     "",
-                    0,
-                    "",
-                    0,
+                    0.0f,
                     "",
                     0.0f,
+                    "",
+                    0.0,
                     true
                 )
             )
@@ -367,7 +367,7 @@ class BmiCalculatorActivity : BaseActivity<SignInViewModel>(), View.OnClickListe
     }
 
     /**
-     * height in CMs
+     * height in Fts
      */
     fun getHeightData(count: Int): List<String> {
         val data = ArrayList<String>()

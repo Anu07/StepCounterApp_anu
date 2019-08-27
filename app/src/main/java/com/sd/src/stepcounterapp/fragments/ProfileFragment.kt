@@ -2,9 +2,8 @@ package com.sd.src.stepcounterapp.fragments
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Activity
+import android.app.Activity.RESULT_OK
 import android.app.DatePickerDialog
-import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -28,19 +27,25 @@ import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.sd.src.stepcounterapp.R
+import com.sd.src.stepcounterapp.activities.MyProfileActivity
 import com.sd.src.stepcounterapp.model.profile.Data
 import com.sd.src.stepcounterapp.model.profile.UpdateProfileRequest
+import com.sd.src.stepcounterapp.network.RetrofitClient
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import com.sd.src.stepcounterapp.viewModels.ProfileViewModel
 import com.sd.src.stepcounterapp.viewModels.SignInViewModel
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.activity_basic_info.*
+import com.theartofdev.edmodo.cropper.CropImage
+import com.theartofdev.edmodo.cropper.CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE
+import com.theartofdev.edmodo.cropper.CropImageView
+import kotlinx.android.synthetic.main.backtitlebar.*
 import kotlinx.android.synthetic.main.fragment_profile.*
-import kotlinx.android.synthetic.main.fragment_profile.dobTxt
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -57,37 +62,59 @@ class ProfileFragment : BaseFragment(), View.OnClickListener {
                 isGenderClicked = true
                 selectGender(v)
             }
-            R.id.profileImg -> {
+            R.id.img_nav_header -> {
                 chooseImage()
             }
+            R.id.img_back -> {
+                activity?.onBackPressed()
+            }
             R.id.saveinfoBttn -> {
-                if(validateInputs()){
+                if (validateInputs()) {
                     saveProfile()
                 }
+            }
+
+            R.id.lbs_wt -> {
+                isWtButtonClicked = false
+                changeBttnBg(v)
+            }
+            R.id.kgs_wt -> {
+                isWtButtonClicked = true
+                changeBttnBg(v)
+
+            }
+            R.id.cms_ht -> {
+                isHtButtonClicked = true
+                changeHtBttnBg(v)
+
+            }
+            R.id.fts_ht -> {
+                isHtButtonClicked = false
+                changeHtBttnBg(v)
             }
         }
     }
 
 
     /**
-     * va;idate inputs
+     * validate inputs
      */
 
     private fun validateInputs(): Boolean {
-        if(firstNameEd.text.isEmpty()){
-            Toast.makeText(activity, "Firstname field can't be empty.",Toast.LENGTH_LONG).show()
+        if (firstNameEd.text.isEmpty()) {
+            Toast.makeText(activity, "Firstname field can't be empty.", Toast.LENGTH_LONG).show()
             return false
-        }else if(lastNameEd.text.isEmpty()){
-            Toast.makeText(activity, "Lastname field can't be empty.",Toast.LENGTH_LONG).show()
+        } else if (lastNameEd.text.isEmpty()) {
+            Toast.makeText(activity, "Lastname field can't be empty.", Toast.LENGTH_LONG).show()
             return false
-        }else if(heightTxt.text.isEmpty()){
-            Toast.makeText(activity, "Height field can't be empty.",Toast.LENGTH_LONG).show()
+        } else if (heightTxt.text.isEmpty()) {
+            Toast.makeText(activity, "Height field can't be empty.", Toast.LENGTH_LONG).show()
             return false
-        }else if(weightTxt.text.isEmpty()){
-            Toast.makeText(activity, "Weight field can't be empty.",Toast.LENGTH_LONG).show()
+        } else if (weightTxt.text.isEmpty()) {
+            Toast.makeText(activity, "Weight field can't be empty.", Toast.LENGTH_LONG).show()
             return false
-        }else if(mobileEd.text.isEmpty()){
-            Toast.makeText(activity, "Mobile field can't be empty.",Toast.LENGTH_LONG).show()
+        } else if (mobileEd.text.isEmpty()) {
+            Toast.makeText(activity, "Mobile field can't be empty.", Toast.LENGTH_LONG).show()
             return false
         }
         return true
@@ -98,12 +125,25 @@ class ProfileFragment : BaseFragment(), View.OnClickListener {
      */
 
     private fun saveProfile() {
-        showPopupProgressSpinner(true)
-        mProfileViewModel.updateProfileData(UpdateProfileRequest(firstNameEd.text.toString(),lastNameEd.text.toString()
-        ,"","Kgs",gender,"Cms",dobTxt.text.toString(),mobileEd.text.toString().toDouble(),Integer.getInteger(weightTxt.text.toString()),SharedPreferencesManager.getUserId(
-                mContext),
-            Integer.getInteger(heightTxt.text.toString()),SharedPreferencesManager.getUpdatedUserObject(mContext).bmi))
 
+        var w = if (isWtButtonClicked) "Kgs" else "Lbs"
+        var h = if (isHtButtonClicked) "Cms" else "Feet"
+        showPopupProgressSpinner(true)
+        mProfileViewModel.updateProfileData(
+            UpdateProfileRequest(
+                firstNameEd.text.toString(),
+                lastNameEd.text.toString(),
+                w,
+                gender,
+                h,
+                dobTxt.text.toString(),
+                mobileEd.text.toString().toInt(),
+                weightTxt.text.toString().toFloat(),
+                SharedPreferencesManager.getUserId(mContext),
+                heightTxt.text.toString().toFloat(),
+                SharedPreferencesManager.getUpdatedUserObject(mContext).bmi
+            )
+        )
 
     }
 
@@ -136,6 +176,8 @@ class ProfileFragment : BaseFragment(), View.OnClickListener {
             }).check()
     }
 
+    private var croppedImage: Bitmap? = null
+    private val file: File? = null
     private lateinit var mProfileViewModel: ProfileViewModel
     private var mCalendar = Calendar.getInstance()
     var selectedImage: Uri? = null
@@ -149,6 +191,9 @@ class ProfileFragment : BaseFragment(), View.OnClickListener {
     private val REQUEST_IMAGE_CAPTURE: Int = 112
     private val REQUEST_CROP_IMAGE: Int = 113
     private lateinit var mViewModel: SignInViewModel
+    var isWtButtonClicked: Boolean = false
+    var isHtButtonClicked: Boolean = false
+
 
     companion object {
         @SuppressLint("StaticFieldLeak")
@@ -174,9 +219,9 @@ class ProfileFragment : BaseFragment(), View.OnClickListener {
         mViewModel = ViewModelProviders.of(activity!!).get(SignInViewModel::class.java)
         mProfileViewModel = ViewModelProviders.of(activity!!).get(ProfileViewModel::class.java)
         userData = SharedPreferencesManager.getUpdatedUserObject(mContext)
-        Picasso.get().load(userData?.image).placeholder(R.drawable.nouser).into(img_nav_header)
-        firstNameEd.setText(userData!!.firstName)
-        lastNameEd.setText(userData!!.firstName)
+        Picasso.get().load(RetrofitClient.IMG_URL + userData?.image).placeholder(R.drawable.nouser).into(img_nav_header)
+        firstNameEd.setText(userData!!.firstName.toString())
+        lastNameEd.setText(userData!!.lastName.toString())
         if (SharedPreferencesManager.getUpdatedUserObject(mContext).gender.equals("Male", true)) {
             isGenderClicked = false
             selectGender(maleBttn)
@@ -184,14 +229,23 @@ class ProfileFragment : BaseFragment(), View.OnClickListener {
             isGenderClicked = true
             selectGender(femaleBttn)
         }
-        dobTxt.setText(userData!!.dob)
-        heightTxt.setText(userData!!.height)
-        weightTxt.setText(userData!!.weight)
+        dobTxt.setText(userData!!.dob.toString())
+        heightTxt.setText(userData!!.height.toString())
+        weightTxt.setText(userData!!.weight.toString())
         maleBttn.setOnClickListener(this)
         femaleBttn.setOnClickListener(this)
-
+        saveinfoBttn.setOnClickListener(this)
         mobileEd.setText(userData!!.mobile.toString())
-        profileImg.setOnClickListener(this)
+        img_nav_header.setOnClickListener(this)
+        kgs_wt.setOnClickListener(this)
+        lbs_wt.setOnClickListener(this)
+        fts_ht.setOnClickListener(this)
+        cms_ht.setOnClickListener(this)
+        img_back.setOnClickListener(this)
+        kgs_wt.performClick()
+        cms_ht.performClick()
+
+
         dobTxt.setOnTouchListener(object : View.OnTouchListener, DatePickerDialog.OnDateSetListener {
             override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
                 mCalendar.set(Calendar.YEAR, year)
@@ -218,13 +272,15 @@ class ProfileFragment : BaseFragment(), View.OnClickListener {
         })
         mViewModel.getImageResponse()
             .observe(this, androidx.lifecycle.Observer { mImg ->
-                    showPopupProgressSpinner(false)
+                showPopupProgressSpinner(false)
             })
 
-        mProfileViewModel.getProfileResponse().observe(this,androidx.lifecycle.Observer {mData->
+        mProfileViewModel.getUpdateProfileResponse().observe(this, androidx.lifecycle.Observer { mData ->
             showPopupProgressSpinner(false)
-            if(mData.status==200){
-                Toast.makeText(activity, "Profile updated successfully",Toast.LENGTH_LONG).show()
+            if (mData.status == 200) {
+                Toast.makeText(activity, "Profile updated successfully", Toast.LENGTH_LONG).show()
+                mContext.startActivity(Intent(activity, MyProfileActivity::class.java))
+
             }
         })
 
@@ -253,6 +309,47 @@ class ProfileFragment : BaseFragment(), View.OnClickListener {
             femaleBttn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.female, 0, 0, 0)
             maleBttn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.male, 0, 0, 0)
             gender = "female"
+        }
+    }
+
+
+    /**
+     * weight units selection
+     */
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun changeBttnBg(v: View) {
+        if (v.id == R.id.kgs_wt) {
+            lbs_wt.setBackgroundResource(if (isWtButtonClicked) R.drawable.unfill else R.drawable.fill)
+            v.setBackgroundResource(if (isWtButtonClicked) R.drawable.fill else R.drawable.unfill)
+            kgs_wt.setTextColor(resources.getColor(R.color.white))
+            lbs_wt.setTextColor(resources.getColor(R.color.colorBlack))
+
+        } else if (v.id == R.id.lbs_wt) {
+            kgs_wt.setBackgroundResource(if (!isWtButtonClicked) R.drawable.unfill else R.drawable.fill)
+            v.setBackgroundResource(if (!isWtButtonClicked) R.drawable.fill else R.drawable.unfill)
+            kgs_wt.setTextColor(resources.getColor(R.color.colorBlack))
+            lbs_wt.setTextColor(resources.getColor(R.color.white))
+        }
+    }
+
+    /**
+     * height units selection
+     */
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun changeHtBttnBg(v: View) {
+        if (v.id == R.id.cms_ht) {
+            fts_ht.setBackgroundResource(if (isHtButtonClicked) R.drawable.unfill else R.drawable.fill)
+            v.setBackgroundResource(if (isHtButtonClicked) R.drawable.fill else R.drawable.unfill)
+            cms_ht.setTextColor(resources.getColor(R.color.white))
+            fts_ht.setTextColor(resources.getColor(R.color.colorBlack))
+
+        } else if (v.id == R.id.fts_ht) {
+            cms_ht.setBackgroundResource(if (!isHtButtonClicked) R.drawable.unfill else R.drawable.fill)
+            v.setBackgroundResource(if (!isHtButtonClicked) R.drawable.fill else R.drawable.unfill)
+            fts_ht.setTextColor(resources.getColor(R.color.white))
+            cms_ht.setTextColor(resources.getColor(R.color.colorBlack))
+
         }
     }
 
@@ -329,34 +426,24 @@ class ProfileFragment : BaseFragment(), View.OnClickListener {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
-            REQUEST_IMAGE_CAPTURE -> if (resultCode == Activity.RESULT_OK) {
+            REQUEST_IMAGE_CAPTURE -> if (resultCode == RESULT_OK) {
                 selectedImage = data!!.data
-                profileImg.setImageURI(selectedImage)
+//                img_nav_header.setImageURI(selectedImage)
                 ImageCropFunction()
 
-            } else {
-                setResultCancelled()
             }
-            REQUEST_GALLERY_IMAGE -> if (resultCode == Activity.RESULT_OK) {
+            REQUEST_GALLERY_IMAGE -> if (resultCode == RESULT_OK) {
                 selectedImage = data!!.data
 //                profileImg.setImageURI(selectedImage)
                 ImageCropFunction()
-            } else {
-                setResultCancelled()
             }
-            REQUEST_CROP_IMAGE -> if (resultCode == Activity.RESULT_OK) {
-                if (data != null) {
-
-                    var bundle: Bundle = data.getExtras()
-
-                    var bitmap: Bitmap = bundle.getParcelable("data")
-
-                    profileImg.setImageBitmap(bitmap)
-                    uploadImageToServer()
-                }
-            } else {
-                setResultCancelled()
+            CROP_IMAGE_ACTIVITY_REQUEST_CODE -> {
+                var result: CropImage.ActivityResult = CropImage.getActivityResult(data)
+                img_nav_header.setImageURI(result.uri)
+                croppedImage = result.bitmap
+                uploadImageToServer()
             }
+
         }
     }
 
@@ -368,13 +455,6 @@ class ProfileFragment : BaseFragment(), View.OnClickListener {
             )
         showPopupProgressSpinner(true)
         mViewModel!!.uploadImage(requestUserID, getFiletoServer())
-    }
-
-
-    private fun setResultCancelled() {
-        val intent = Intent()
-        activity?.setResult(Activity.RESULT_CANCELED, intent)
-        activity?.finish()
     }
 
 
@@ -392,37 +472,46 @@ class ProfileFragment : BaseFragment(), View.OnClickListener {
 
 
     fun getFiletoServer(): MultipartBody.Part {
+        Log.i("Selected", "Cropped" + selectedImage + "!!!" + croppedImage)
 
         // add another part within the multipart request
-        if (selectedImage != null) {
-            var file = File(getRealPathFromURI(selectedImage!!))
-            var requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file)
-            imageFileBody = MultipartBody.Part.createFormData("image", file.name, requestBody)
+        if (croppedImage != null) {
+            var requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), getFileFromBitmap())
+            imageFileBody = MultipartBody.Part.createFormData("image", file!!.name, requestBody)
         }
         return imageFileBody!!
     }
 
 
+    /**
+     * create file from bitmap
+     */
+
+    private fun getFileFromBitmap(): File {
+        var f = File(context?.cacheDir, "CroppedImg" + System.currentTimeMillis())
+        f.createNewFile()
+//Convert bitmap to byte array
+        var bitmap = croppedImage
+        var bos = ByteArrayOutputStream()
+        bitmap?.compress(Bitmap.CompressFormat.PNG, 0 /*ignored for PNG*/, bos);
+        var bitmapdata = bos.toByteArray();
+
+//write the bytes in file
+        var fos = FileOutputStream(f)
+        fos.write(bitmapdata)
+        fos.flush()
+        fos.close()
+        return f
+    }
+
+
     fun ImageCropFunction() {
-
-        // Image Crop Code
-        try {
-            var cropIntent = Intent("com.android.camera.action.CROP")
-
-            cropIntent.setDataAndType(selectedImage, "image/*")
-
-            cropIntent.putExtra("crop", "true")
-            cropIntent.putExtra("outputX", 180)
-            cropIntent.putExtra("outputY", 180)
-            cropIntent.putExtra("aspectX", 3)
-            cropIntent.putExtra("aspectY", 4)
-            cropIntent.putExtra("scaleUpIfNeeded", true)
-            cropIntent.putExtra("return-data", true)
-
-            startActivityForResult(cropIntent, REQUEST_CROP_IMAGE)
-
-        } catch (e: ActivityNotFoundException) {
-            Log.i("Cropping error", "" + e.localizedMessage)
+        context?.let {
+            CropImage.activity(selectedImage)
+                .setGuidelines(CropImageView.Guidelines.ON)
+                .setMinCropResultSize(800, 800)
+                .setMaxCropResultSize(1000, 1000)
+                .start(it, this)
         }
     }
 
@@ -432,4 +521,25 @@ class ProfileFragment : BaseFragment(), View.OnClickListener {
         var sdf = SimpleDateFormat(myFormat, Locale.getDefault())
         dobTxt.setText(sdf.format(mCalendar.time))
     }
+
+
+    /**
+     * Kgs to Lbs
+     */
+
+    fun convertKgsToLbs(kgs: Int): Int {
+        var result = kgs * 2.20
+        return result.toInt()
+    }
+
+
+    /**
+     * Cms to Feet
+     */
+
+    fun convertCmsToInch(cms: Int): Int {
+        var result = cms * 0.39f
+        return result.toInt()
+    }
+
 }

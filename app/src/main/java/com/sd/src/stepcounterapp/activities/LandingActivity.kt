@@ -52,11 +52,13 @@ import no.nordicsemi.android.dfu.DfuServiceListenerHelper
 import java.util.*
 
 
-class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback, View.OnClickListener, MarketPlaceFragment.FragmentClick {
+class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback, View.OnClickListener,
+    MarketPlaceFragment.FragmentClick {
+
     override fun onFragmentClick(position: Int) {
-        if(position==2){
+        if (position == 2) {
             vpLanding.currentItem = 4
-        }else if(position ==0){
+        } else if (position == 0) {
             vpLanding.currentItem = 2
         }
     }
@@ -110,10 +112,10 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
         var aAdapter = ArrayAdapter(this, R.layout.menu_textview, users)
         list_menu_item.adapter = aAdapter
         list_menu_item.onItemClickListener = AdapterView.OnItemClickListener { a, v, position, id ->
-            when(position){
-                0-> openEditActivity()
-                1-> openTransactionFragment()
-                4->openFragment()
+            when (position) {
+                0 -> openEditActivity()
+                1 -> openTransactionFragment()
+                4 -> openFragment()
             }
 
             if (position == 6) {
@@ -132,7 +134,7 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
         vpLanding.adapter = mAdapter
         vpLanding.offscreenPageLimit = 4
 
-        if(intent.hasExtra("surveyBack")){
+        if (intent.hasExtra("surveyBack")) {
             vpLanding.currentItem = 3
         }
         loadFragment(FRAG_HAYATECH)
@@ -140,7 +142,24 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
 
     }
 
+    private fun openEditActivity() {
+        startActivity(Intent(this@LandingActivity, MyProfileActivity::class.java))
+    }
+
+    private fun openFragment() {
+        mDrawerLayout.closeDrawer(GravityCompat.START)
+        var fragmentTransaction = supportFragmentManager.beginTransaction()
+        fragmentTransaction.add(R.id.container, SettingsFragment.newInstance(this@LandingActivity))
+        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()
+
+
+    }
+
     override fun initListeners() {
+        profileImgTitle.setOnClickListener {
+            startActivity(Intent(this@LandingActivity, MyProfileActivity::class.java))
+        }
         setNavHeader()
         checkBluetoothGPSPermissions()
         llHayatech.setOnClickListener(this@LandingActivity)
@@ -167,18 +186,30 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
     }
 
 
+    fun setNavHeader() {
+//         UpdatedUser
 
-    private fun setNavHeader() {
-        if (SharedPreferencesManager.hasKey(this@LandingActivity, "User")) {
+        if (SharedPreferencesManager.hasKey(this@LandingActivity, "UpdatedUser")) {
+            var user = SharedPreferencesManager.getUpdatedUserObject(this@LandingActivity)
+            deviceSynced = SharedPreferencesManager.getString(this@LandingActivity, WEARABLEID)
+            userNameNav.text = "Hello " + user.firstName + "!"
+            Picasso.get().load(IMG_URL + user.image).resize(100, 100).placeholder(R.drawable.nouser)
+                .into(img_nav_header)
+            Picasso.get().load(IMG_URL + user.image).resize(80, 80).placeholder(R.drawable.nouser).into(profileImgTitle)
+
+        } else {
             var user = SharedPreferencesManager.getUserObject(this@LandingActivity)
             deviceSynced = SharedPreferencesManager.getString(this@LandingActivity, WEARABLEID)
             userNameNav.text = "Hello " + user.data.firstName + "!"
-            Picasso.get().load(IMG_URL + user.data.image).resize(100, 100).into(img_nav_header)
-            Picasso.get().load(IMG_URL + user.data.image).resize(80, 80).into(profileImgTitle)
-            profileImgTitle.setOnClickListener {
-                mDrawerLayout.closeDrawer(GravityCompat.START)
-                openEditActivity()
-            }
+            Picasso.get().load(IMG_URL + user.data.image).resize(100, 100).placeholder(R.drawable.nouser)
+                .into(img_nav_header)
+            Picasso.get().load(IMG_URL + user.data.image).resize(80, 80).placeholder(R.drawable.nouser)
+                .into(profileImgTitle)
+
+        }
+        profileImgTitle.setOnClickListener {
+            mDrawerLayout.closeDrawer(GravityCompat.START)
+            openEditActivity()
         }
     }
 
@@ -329,13 +360,13 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
                     if (lastestSteps == null || lastestSteps!!.isEmpty()) {
                         return
                     }
-                   /* for (step in lastestSteps!!) {
-                        Toast.makeText(
-                            this@LandingActivity,
-                            "Steps count " + lastestSteps!![lastestSteps!!.size - 1].count,
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }*/
+                    /* for (step in lastestSteps!!) {
+                         Toast.makeText(
+                             this@LandingActivity,
+                             "Steps count " + lastestSteps!![lastestSteps!!.size - 1].count,
+                             Toast.LENGTH_LONG
+                         ).show()
+                     }*/
                     SharedPreferencesManager.saveSyncObject(this@LandingActivity, lastestSteps)
                     updateDeviceData()
                 }
@@ -347,7 +378,8 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
 
                 }
                 if (MokoConstants.ACTION_CURRENT_DATA == action) {
-                    val orderEnum:OrderEnum = intent.getSerializableExtra(MokoConstants.EXTRA_KEY_CURRENT_DATA_TYPE) as OrderEnum
+                    val orderEnum: OrderEnum =
+                        intent.getSerializableExtra(MokoConstants.EXTRA_KEY_CURRENT_DATA_TYPE) as OrderEnum
                     when (orderEnum) {
                         OrderEnum.Z_STEPS_CHANGES_LISTENER -> {
                             val dailyStep = MokoSupport.getInstance().dailyStep
@@ -481,6 +513,7 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
         super.onResume()
         DfuServiceListenerHelper.registerProgressListener(this, mDfuProgressListener)
         checkBluetoothGPSPermissions()
+        setNavHeader()
     }
 
 
@@ -498,7 +531,7 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
         }
 
         override fun onDeviceDisconnecting(deviceAddress: String?) {
-           Log.i("","onDeviceDisconnecting...")
+            Log.i("", "onDeviceDisconnecting...")
         }
 
         override fun onDfuProcessStarting(deviceAddress: String?) {
@@ -587,7 +620,11 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
                 // Do whatever you want
                 checkBluetoothGPSPermissions()
             } else {
-                Toast.makeText(this@LandingActivity, "These permissions are required for app to work function properly.", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    this@LandingActivity,
+                    "These permissions are required for app to work function properly.",
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
     }
@@ -599,5 +636,14 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
         }
     }
 
+    private fun openTransactionFragment() {
+        mDrawerLayout.closeDrawer(GravityCompat.START)
+        var fragmentTransaction = supportFragmentManager.beginTransaction()
+        fragmentTransaction.add(R.id.container, TransactionHistoryFragment.newInstance(this@LandingActivity))
+        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()
+
+
+    }
 
 }

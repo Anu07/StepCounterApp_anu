@@ -1,6 +1,9 @@
 package com.sd.src.stepcounterapp.model.profile;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.math.BigInteger;
+
 /**
  * Awesome Pojo Generator
  * */
@@ -11,9 +14,6 @@ public class UpdateProfileRequest{
   @SerializedName("lastName")
   @Expose
   private String lastName;
-  @SerializedName("image")
-  @Expose
-  private String image;
   @SerializedName("weightType")
   @Expose
   private String weightType;
@@ -28,27 +28,26 @@ public class UpdateProfileRequest{
   private String dob;
   @SerializedName("mobile")
   @Expose
-  private Double mobile;
+  private Integer mobile;
   @SerializedName("weight")
   @Expose
-  private Integer weight;
+  private Float weight;
   @SerializedName("userId")
   @Expose
   private String userId;
   @SerializedName("height")
   @Expose
-  private Integer height;
+  private Float height;
   @SerializedName("bmi")
   @Expose
   private Double bmi;
     
-    public UpdateProfileRequest(String firstName, String lastName, String image,
+    public UpdateProfileRequest(String firstName, String lastName,
                                 String weightType, String gender, String heightType,
-                                String dob, Double mobile, Integer weight, String userId,
-                                Integer height, Double bmi) {
+                                String dob, Integer mobile, Float weight, String userId,
+                                Float height, Double bmi) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.image = image;
         this.weightType = weightType;
         this.gender = gender;
         this.heightType = heightType;
@@ -71,12 +70,6 @@ public class UpdateProfileRequest{
   }
   public String getLastName(){
    return lastName;
-  }
-  public void setImage(String image){
-   this.image=image;
-  }
-  public String getImage(){
-   return image;
   }
   public void setWeightType(String weightType){
    this.weightType=weightType;
@@ -102,16 +95,16 @@ public class UpdateProfileRequest{
   public String getDob(){
    return dob;
   }
-  public void setMobile(Double mobile){
+  public void setMobile(Integer mobile){
    this.mobile=mobile;
   }
-  public Double getMobile(){
+  public Integer getMobile(){
    return mobile;
   }
-  public void setWeight(Integer weight){
+  public void setWeight(Float weight){
    this.weight=weight;
   }
-  public Integer getWeight(){
+  public Float getWeight(){
    return weight;
   }
   public void setUserId(String userId){
@@ -120,10 +113,10 @@ public class UpdateProfileRequest{
   public String getUserId(){
    return userId;
   }
-  public void setHeight(Integer height){
+  public void setHeight(Float height){
    this.height=height;
   }
-  public Integer getHeight(){
+  public Float getHeight(){
    return height;
   }
   public void setBmi(Double bmi){

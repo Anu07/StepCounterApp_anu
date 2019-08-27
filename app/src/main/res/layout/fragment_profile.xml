@@ -32,7 +32,7 @@
                         android:layout_gravity="center"
                         android:src="@drawable/nouser"
                         app:civ_border="true"
-                        app:civ_border_color="@color/white"
+                        app:civ_border_color="@color/green_txt"
                         app:civ_border_width="2dp"/>
 
                 <ImageView
@@ -194,7 +194,7 @@
                                 android:singleLine="true"
                                 android:id="@+id/heightTxt"
                                 android:inputType="numberDecimal"
-                                android:maxLength="5"
+                                android:maxLength="7"
                                 android:textColorHint="@color/blue_txt"
                                 app:appEditfont="montserrat_regular.ttf"/>
 
@@ -206,6 +206,7 @@
                                 android:layout_marginLeft="@dimen/_5sdp"
                                 android:layout_weight=".7"
                                 android:text="Lbs"
+                                android:background="@drawable/button_selector"
                                 android:textAllCaps="false"
                                 app:appButtonfont="montserrat_regular.ttf"/>
 
@@ -214,12 +215,12 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="left"
+                                android:background="@drawable/button_selector"
                                 android:layout_marginLeft="@dimen/_10sdp"
                                 android:layout_weight=".7"
-                                android:background="@drawable/button_background"
                                 android:drawable="@drawable/button_selector"
                                 android:text="Kgs"
-                                android:textColor="@color/white"
+                                android:textColor="@color/colorBlack"
                                 android:textAllCaps="false"
                                 app:appButtonfont="montserrat_regular.ttf"/>
                     </LinearLayout>
@@ -237,7 +238,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1.5"
                                 android:inputType="numberDecimal"
-                                android:maxLength="5"
+                                android:maxLength="7"
                                 android:hint="@string/edit_weight"
                                 android:imeOptions="actionNext"
                                 android:id="@+id/weightTxt"
@@ -283,7 +284,7 @@
                                 android:imeOptions="actionNext"
                                 android:id="@+id/mobileEd"
                                 android:singleLine="true"
-                                android:maxLength="15"
+                                android:maxLength="8"
                                 app:appEditfont="montserrat_regular.ttf"/>
 
                     </com.google.android.material.textfield.TextInputLayout>

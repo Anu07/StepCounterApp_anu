@@ -16,10 +16,10 @@ public class Data{
   private String gender;
   @SerializedName("mobile")
   @Expose
-  private Double mobile;
+  private Integer mobile;
   @SerializedName("weight")
   @Expose
-  private Integer weight;
+  private Float weight;
   @SerializedName("firstName")
   @Expose
   private String firstName;
@@ -52,7 +52,7 @@ public class Data{
   private Double bmi;
   @SerializedName("height")
   @Expose
-  private Integer height;
+  private Float height;
   public void setLastName(String lastName){
    this.lastName=lastName;
   }
@@ -71,16 +71,16 @@ public class Data{
   public String getGender(){
    return gender;
   }
-  public void setMobile(Double mobile){
+  public void setMobile(Integer mobile){
    this.mobile=mobile;
   }
-  public Double getMobile(){
+  public Integer getMobile(){
    return mobile;
   }
-  public void setWeight(Integer weight){
+  public void setWeight(Float weight){
    this.weight=weight;
   }
-  public Integer getWeight(){
+  public Float getWeight(){
    return weight;
   }
   public void setFirstName(String firstName){
@@ -143,10 +143,10 @@ public class Data{
   public Double getBmi(){
    return bmi;
   }
-  public void setHeight(Integer height){
+  public void setHeight(Float height){
    this.height=height;
   }
-  public Integer getHeight(){
+  public Float getHeight(){
    return height;
   }
 }

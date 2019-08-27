@@ -160,4 +160,7 @@
     <string name="edit_gender">GENDER</string>
     <string name="edit_phone">MOBILE NUMBER</string>
     <string name="edit_save">SAVE PROFILE</string>
+    <string name="today_18_jun_2019">Today. 18 Jun 2019</string>
+    <string name="closing_tokens">Closing Tokens </string>
+    <string name="transaction_id">Transaction ID</string>
 </resources>

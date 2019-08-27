@@ -14,11 +14,15 @@ import com.sd.src.stepcounterapp.model.loginrequest.LoginRequestObject
 import com.sd.src.stepcounterapp.model.marketplace.BasicSearchRequest
 import com.sd.src.stepcounterapp.model.marketplace.MarketResponse
 import com.sd.src.stepcounterapp.model.marketplace.PopularProducts
+import com.sd.src.stepcounterapp.model.profile.ProfileResponse
+import com.sd.src.stepcounterapp.model.profile.UpdateProfileRequest
 import com.sd.src.stepcounterapp.model.rewards.AddRewardsRequestObject
 import com.sd.src.stepcounterapp.model.rewards.RewardsCategoriesResponse
 import com.sd.src.stepcounterapp.model.survey.SurveyListResponse
 import com.sd.src.stepcounterapp.model.syncDevice.FetchDeviceDataRequest
 import com.sd.src.stepcounterapp.model.syncDevice.SyncRequest
+import com.sd.src.stepcounterapp.model.transactionhistory.TransactionHistoryModel
+import com.sd.src.stepcounterapp.model.updateresponse.UpdateProfileResponse
 import com.sd.src.stepcounterapp.model.wallet.TokenModel
 import com.sd.src.stepcounterapp.model.wallet.WalletModel
 import com.sd.src.stepcounterapp.model.wishList.AddWishRequest
@@ -137,6 +141,9 @@ interface ApiInterface {
 
     @GET("api/survey")
     fun getsurvey(): Call<SurveyListResponse>
+
+    @POST("api/attend_survey")
+    fun takesurvey(): Call<BasicInfoResponse>
 
     @POST("/api/wallet")
     fun wallet(@Body body: BasicRequest): Call<WalletModel>

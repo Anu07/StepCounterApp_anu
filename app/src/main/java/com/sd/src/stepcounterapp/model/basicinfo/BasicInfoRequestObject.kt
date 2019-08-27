@@ -7,10 +7,10 @@ data class BasicInfoRequestObject(
     val lastName: String,
     val dob: String,
     val gender: String,
-    val weight: Int,
+    val weight: Float,
     val weightType: String,
-    val height: Int,
+    val height: Float,
     val heightType: String,
-    val bmi: Float,
+    val bmi: Double,
     val basicFlag: Boolean
 )

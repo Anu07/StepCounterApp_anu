@@ -158,7 +158,7 @@ class WalletFragment : Fragment() {
     }
 
     private fun setWishListView() {
-        if (mDataWishList.size > 0) {
+        if (mDataWishList.size > 0 && mDataWishList.size<3) {
             cdWishSecond.visibility = View.VISIBLE
             cdWishFirst.visibility = View.VISIBLE
 

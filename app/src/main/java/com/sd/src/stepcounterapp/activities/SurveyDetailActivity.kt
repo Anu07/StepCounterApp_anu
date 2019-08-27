@@ -48,6 +48,7 @@ class SurveyDetailActivity : BaseActivity<BaseViewModel>() {
         img_back.setOnClickListener {
             startActivity(Intent(this@SurveyDetailActivity, LandingActivity::class.java))
         }
+        finishbutton
 
     }
 

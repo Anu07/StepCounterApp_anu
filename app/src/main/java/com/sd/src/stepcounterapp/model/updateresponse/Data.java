@@ -1,6 +1,9 @@
 package com.sd.src.stepcounterapp.model.updateresponse;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.math.BigInteger;
+
 /**
  * Awesome Pojo Generator
  * */
@@ -19,7 +22,7 @@ public class Data{
   private Integer mobile;
   @SerializedName("weight")
   @Expose
-  private Integer weight;
+  private Float weight;
   @SerializedName("firstName")
   @Expose
   private String firstName;
@@ -46,10 +49,10 @@ public class Data{
   private String username;
   @SerializedName("bmi")
   @Expose
-  private Integer bmi;
+  private Double bmi;
   @SerializedName("height")
   @Expose
-  private Integer height;
+  private Float height;
   public void setLastName(String lastName){
    this.lastName=lastName;
   }
@@ -74,10 +77,10 @@ public class Data{
   public Integer getMobile(){
    return mobile;
   }
-  public void setWeight(Integer weight){
+  public void setWeight(Float weight){
    this.weight=weight;
   }
-  public Integer getWeight(){
+  public Float getWeight(){
    return weight;
   }
   public void setFirstName(String firstName){
@@ -128,16 +131,16 @@ public class Data{
   public String getUsername(){
    return username;
   }
-  public void setBmi(Integer bmi){
+  public void setBmi(Double bmi){
    this.bmi=bmi;
   }
-  public Integer getBmi(){
+  public Double getBmi(){
    return bmi;
   }
-  public void setHeight(Integer height){
+  public void setHeight(Float height){
    this.height=height;
   }
-  public Integer getHeight(){
+  public Float getHeight(){
    return height;
   }
 }

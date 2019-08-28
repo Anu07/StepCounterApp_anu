@@ -17,6 +17,7 @@ import android.view.View.OnTouchListener
 import android.widget.DatePicker
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.net.toFile
 import androidx.lifecycle.ViewModelProviders
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
@@ -29,9 +30,13 @@ import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import com.sd.src.stepcounterapp.viewModels.BaseViewModelFactory
 import com.sd.src.stepcounterapp.viewModels.SignInViewModel
 import com.squareup.picasso.Picasso
+import com.theartofdev.edmodo.cropper.CropImage
 import com.wajahatkarim3.easyvalidation.core.view_ktx.nonEmpty
 import kotlinx.android.synthetic.main.activity_basic_info.*
+import kotlinx.android.synthetic.main.activity_basic_info.dobTxt
+import kotlinx.android.synthetic.main.fragment_profile.*
 import okhttp3.MediaType
+import okhttp3.MultipartBody
 import okhttp3.MultipartBody.Part
 import okhttp3.MultipartBody.Part.createFormData
 import okhttp3.RequestBody
@@ -52,8 +57,10 @@ class BasicInfoActivity : BaseActivity<SignInViewModel>(), DatePickerDialog.OnDa
         var myFormat = "dd/MM/yyyy" //In which you need put here
         var sdf = SimpleDateFormat(myFormat, Locale.getDefault())
         dobTxt.setText(sdf.format(mCalendar.time))
+        hideKeyboard()
     }
 
+    private lateinit var croppedImage: File
     private var mCalendar = Calendar.getInstance()
     var selectedImage: Uri? = null
     private lateinit var fileName: String
@@ -85,7 +92,7 @@ class BasicInfoActivity : BaseActivity<SignInViewModel>(), DatePickerDialog.OnDa
 
                     if (AppApplication.hasNetwork()) {
                         // add another part within the multipart request
-                        if (selectedImage != null) {
+                        if (croppedImage != null) {
                             showPopupProgressSpinner(true)
                             var requestUserID: RequestBody =
                                 RequestBody.create(
@@ -318,7 +325,7 @@ class BasicInfoActivity : BaseActivity<SignInViewModel>(), DatePickerDialog.OnDa
         when (requestCode) {
             REQUEST_IMAGE_CAPTURE -> if (resultCode == Activity.RESULT_OK) {
                 selectedImage = data!!.data
-                profileImg.setImageURI(selectedImage)
+//                profileImg.setImageURI(selectedImage)
                 ImageCropFunction()
 
             } else {
@@ -331,26 +338,18 @@ class BasicInfoActivity : BaseActivity<SignInViewModel>(), DatePickerDialog.OnDa
             } else {
                 setResultCancelled()
             }
-            REQUEST_CROP_IMAGE -> if (resultCode == Activity.RESULT_OK) {
-               if (data != null) {
-
-                 var bundle:Bundle = data.getExtras()
-
-                 var bitmap:Bitmap = bundle.getParcelable("data")
-
-                   profileImg.setImageBitmap(bitmap)
-
-            }
-            } else {
-                setResultCancelled()
+            CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE -> {
+                var result = CropImage.getActivityResult(data);
+                if (resultCode == RESULT_OK) {
+                    profileImg.setImageURI(result.uri)
+                    croppedImage = result.uri.toFile()
+                } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                    var error = result.getError();
+                    Log.e("Error","Imge cropping"+error)
+                }
             }
         }
     }
-
-    private fun showImage(cacheImagePath: Uri) {
-        Picasso.get().load(getRealPathFromURI(cacheImagePath)).into(profileImg)
-    }
-
 
     private fun setResultCancelled() {
         val intent = Intent()
@@ -359,47 +358,20 @@ class BasicInfoActivity : BaseActivity<SignInViewModel>(), DatePickerDialog.OnDa
     }
 
 
-    fun getRealPathFromURI(contentUri: Uri): String {
-        val proj = arrayOf(MediaStore.Audio.Media.DATA)
-        val cursor = managedQuery(contentUri, proj, null, null, null)
-        val column_index = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)
-        cursor.moveToFirst()
-        return cursor.getString(column_index)
-    }
-
-
      fun getFiletoServer(): Part {
 
         // add another part within the multipart request
-        if (selectedImage != null) {
-            var file = File(getRealPathFromURI(selectedImage!!))
-            var requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file)
-            imageFileBody = createFormData("image", file.name, requestBody)
+        if (croppedImage != null) {
+            var requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), croppedImage)
+            imageFileBody = createFormData("image", croppedImage.name, requestBody)
         }
         return imageFileBody!!
     }
 
     fun ImageCropFunction() {
 
-        // Image Crop Code
-        try {
-            var cropIntent = Intent("com.android.camera.action.CROP")
-
-            cropIntent.setDataAndType(selectedImage, "image/*")
-
-            cropIntent.putExtra("crop", "true")
-            cropIntent.putExtra("outputX", 180)
-            cropIntent.putExtra("outputY", 180)
-            cropIntent.putExtra("aspectX", 3)
-            cropIntent.putExtra("aspectY", 4)
-            cropIntent.putExtra("scaleUpIfNeeded", true)
-            cropIntent.putExtra("return-data", true)
-
-            startActivityForResult(cropIntent, REQUEST_CROP_IMAGE)
-
-        } catch (e: ActivityNotFoundException) {
-            Log.i("Cropping error", "" + e.localizedMessage)
-        }
+        CropImage.activity(selectedImage)
+            .start(this)
     }
 }
 

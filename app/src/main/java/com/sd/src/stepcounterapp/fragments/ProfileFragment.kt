@@ -6,7 +6,6 @@ import android.app.Activity.RESULT_OK
 import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -20,6 +19,8 @@ import android.widget.DatePicker
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
+import androidx.core.net.toFile
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProviders
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
@@ -43,9 +44,7 @@ import kotlinx.android.synthetic.main.fragment_profile.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import java.io.ByteArrayOutputStream
 import java.io.File
-import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -66,7 +65,7 @@ class ProfileFragment : BaseFragment(), View.OnClickListener {
                 chooseImage()
             }
             R.id.img_back -> {
-                activity?.onBackPressed()
+                    fragmentManager!!.popBackStackImmediate()
             }
             R.id.saveinfoBttn -> {
                 if (validateInputs()) {
@@ -77,20 +76,31 @@ class ProfileFragment : BaseFragment(), View.OnClickListener {
             R.id.lbs_wt -> {
                 isWtButtonClicked = false
                 changeBttnBg(v)
+                if (weightTxt.text.toString().isNotEmpty()) {
+                    weightTxt.setText(convertLbsToKgs().toString())
+                }
             }
             R.id.kgs_wt -> {
                 isWtButtonClicked = true
                 changeBttnBg(v)
-
+                if (weightTxt.text.toString().isNotEmpty()) {
+                    weightTxt.setText(convertKgsToLbs().toString())
+                }
             }
             R.id.cms_ht -> {
                 isHtButtonClicked = true
                 changeHtBttnBg(v)
-
+                if (heightTxt.text.toString().isNotEmpty()) {
+                    heightTxt.setText(convertFeetToCms().toString())
+                }
             }
             R.id.fts_ht -> {
                 isHtButtonClicked = false
                 changeHtBttnBg(v)
+                if (heightTxt.text.toString().isNotEmpty()) {
+                    heightTxt.setText(convertCmsToFeet().toString())
+                }
+
             }
         }
     }
@@ -176,7 +186,7 @@ class ProfileFragment : BaseFragment(), View.OnClickListener {
             }).check()
     }
 
-    private var croppedImage: Bitmap? = null
+    private lateinit var croppedImage: File
     private val file: File? = null
     private lateinit var mProfileViewModel: ProfileViewModel
     private var mCalendar = Calendar.getInstance()
@@ -242,8 +252,16 @@ class ProfileFragment : BaseFragment(), View.OnClickListener {
         fts_ht.setOnClickListener(this)
         cms_ht.setOnClickListener(this)
         img_back.setOnClickListener(this)
-        kgs_wt.performClick()
-        cms_ht.performClick()
+        if (userData!!.heightType == "Cms") {
+            cms_ht.performClick()
+        } else {
+            fts_ht.performClick()
+        }
+        if (userData!!.weightType == "Kgs") {
+            kgs_wt.performClick()
+        } else {
+            lbs_wt.performClick()
+        }
 
 
         dobTxt.setOnTouchListener(object : View.OnTouchListener, DatePickerDialog.OnDateSetListener {
@@ -279,8 +297,7 @@ class ProfileFragment : BaseFragment(), View.OnClickListener {
             showPopupProgressSpinner(false)
             if (mData.status == 200) {
                 Toast.makeText(activity, "Profile updated successfully", Toast.LENGTH_LONG).show()
-                mContext.startActivity(Intent(activity, MyProfileActivity::class.java))
-
+                fragmentManager!!.popBackStackImmediate()
             }
         })
 
@@ -429,6 +446,8 @@ class ProfileFragment : BaseFragment(), View.OnClickListener {
             REQUEST_IMAGE_CAPTURE -> if (resultCode == RESULT_OK) {
                 selectedImage = data!!.data
 //                img_nav_header.setImageURI(selectedImage)
+                img_nav_header.setImageURI(selectedImage)
+
                 ImageCropFunction()
 
             }
@@ -440,9 +459,13 @@ class ProfileFragment : BaseFragment(), View.OnClickListener {
             CROP_IMAGE_ACTIVITY_REQUEST_CODE -> {
                 var result: CropImage.ActivityResult = CropImage.getActivityResult(data)
                 img_nav_header.setImageURI(result.uri)
-                croppedImage = result.bitmap
+                croppedImage = result.uri.toFile()
                 uploadImageToServer()
             }
+            CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE -> {
+                Toast.makeText(activity, "Some error occurred", Toast.LENGTH_LONG).show()
+            }
+
 
         }
     }
@@ -472,36 +495,14 @@ class ProfileFragment : BaseFragment(), View.OnClickListener {
 
 
     fun getFiletoServer(): MultipartBody.Part {
-        Log.i("Selected", "Cropped" + selectedImage + "!!!" + croppedImage)
+        Log.i("Selected", "Cropped$selectedImage!!!$croppedImage")
 
         // add another part within the multipart request
         if (croppedImage != null) {
-            var requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), getFileFromBitmap())
-            imageFileBody = MultipartBody.Part.createFormData("image", file!!.name, requestBody)
+            var requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), croppedImage)
+            imageFileBody = MultipartBody.Part.createFormData("image", croppedImage.name, requestBody)
         }
         return imageFileBody!!
-    }
-
-
-    /**
-     * create file from bitmap
-     */
-
-    private fun getFileFromBitmap(): File {
-        var f = File(context?.cacheDir, "CroppedImg" + System.currentTimeMillis())
-        f.createNewFile()
-//Convert bitmap to byte array
-        var bitmap = croppedImage
-        var bos = ByteArrayOutputStream()
-        bitmap?.compress(Bitmap.CompressFormat.PNG, 0 /*ignored for PNG*/, bos);
-        var bitmapdata = bos.toByteArray();
-
-//write the bytes in file
-        var fos = FileOutputStream(f)
-        fos.write(bitmapdata)
-        fos.flush()
-        fos.close()
-        return f
     }
 
 
@@ -527,9 +528,13 @@ class ProfileFragment : BaseFragment(), View.OnClickListener {
      * Kgs to Lbs
      */
 
-    fun convertKgsToLbs(kgs: Int): Int {
-        var result = kgs * 2.20
-        return result.toInt()
+    private fun convertKgsToLbs(): Double {
+        return weightTxt.text.toString().toFloat() * 2.20
+    }
+
+
+    private fun convertLbsToKgs(): Double {
+        return weightTxt.text.toString().toFloat() * 0.454
     }
 
 
@@ -537,9 +542,12 @@ class ProfileFragment : BaseFragment(), View.OnClickListener {
      * Cms to Feet
      */
 
-    fun convertCmsToInch(cms: Int): Int {
-        var result = cms * 0.39f
-        return result.toInt()
+    private fun convertCmsToFeet(): Double {
+        return heightTxt.text.toString().toFloat() / 30.48
+    }
+
+    private fun convertFeetToCms(): Double {
+        return heightTxt.text.toString().toFloat() * 30.48
     }
 
 }

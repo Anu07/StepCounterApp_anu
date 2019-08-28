@@ -1,6 +1,7 @@
 package com.sd.src.stepcounterapp.activities
 
 import android.annotation.TargetApi
+import android.app.ActivityManager
 import android.app.Dialog
 import android.content.Context
 import android.content.pm.PackageManager
@@ -142,18 +143,27 @@ abstract class BaseActivity<V : AndroidViewModel> : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (supportFragmentManager.backStackEntryCount > 0) {
+
+        if (getCurrentActivityName().equals("com.sd.src.stepcounterapp.activities.MyProfileActivity")) {
+            super.onBackPressed()
+        } else if (supportFragmentManager.backStackEntryCount > 0) {
             supportFragmentManager.popBackStack()
         } else if (!doubleBackToExitPressedOnce) {
             this.doubleBackToExitPressedOnce = true
             Toast.makeText(this, "Please click BACK again to exit.", Toast.LENGTH_SHORT).show()
 
-            Handler().postDelayed(Runnable { doubleBackToExitPressedOnce = false }, 2000)
+            Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
         } else {
             super.onBackPressed()
             return
         }
 
+    }
+
+    private fun getCurrentActivityName(): String {
+        val am = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        val cn = am.getRunningTasks(1)[0].topActivity
+        return cn.className
     }
 
 }

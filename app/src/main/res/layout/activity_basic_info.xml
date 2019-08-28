@@ -5,6 +5,7 @@
               android:layout_height="match_parent">
     <ScrollView
             android:layout_width="match_parent"
+             android:fillViewport="true"
             android:layout_height="match_parent">
 
         <LinearLayout
@@ -24,15 +25,16 @@
                     app:civ_border_width="@dimen/_2sdp"
                     android:padding="@dimen/_2sdp"
                     android:layout_height="@dimen/_100sdp"/>
-            <com.sd.src.stepcounterapp.utils.CustomTextView android:id="@+id/headerText2"
-                                                            android:layout_width="match_parent"
-                                                            app:layout_constraintTop_toBottomOf="@+id/appLogo"
-                                                            style="@style/headerTextStyle"
-                                                            android:text="@string/basic_info"
-                                                            android:gravity="left"
-                                                            app:appfont="montserrat_semibold.ttf"
-                                                            android:layout_height="wrap_content"
-                                                            app:layout_constraintStart_toStartOf="parent"/>
+            <com.sd.src.stepcounterapp.utils.CustomTextView
+                    android:id="@+id/headerText2"
+                    android:layout_width="match_parent"
+                    app:layout_constraintTop_toBottomOf="@+id/appLogo"
+                    style="@style/headerTextStyle"
+                    android:text="@string/basic_info"
+                    android:gravity="left"
+                    app:appfont="montserrat_semibold.ttf"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"/>
 
             <com.google.android.material.textfield.TextInputLayout style="@style/textLayoutStyle"
                                                                    android:id="@+id/emailLayout"
@@ -89,8 +91,8 @@
                         android:hint="@string/hint_dob"
                         android:layout_width="match_parent"
                         android:clickable="true"
-                        android:editable="false"
                         android:singleLine="true"
+                        android:inputType="text"
                         android:imeOptions="actionDone"
                         app:appEditfont="montserrat_regular.ttf"
                         android:drawableRight="@drawable/calendar"

@@ -38,8 +38,8 @@ class SignInActivity : BaseActivity<SignInViewModel>() {
                 showPopupProgressSpinner(false)
                 if (loginUser.data != null) {
                     SharedPreferencesManager.setUserId(this@SignInActivity, loginUser.data!!._id)
+                    SharedPreferencesManager.saveUserObject(this@SignInActivity, loginUser)
                     if (loginUser.data.username.isNotEmpty()) {
-                        SharedPreferencesManager.saveUserObject(this@SignInActivity, loginUser)
                         if (loginUser.data.basicFlag && loginUser.data.rewardFlag) {
                             if (SharedPreferencesManager.hasKey(this@SignInActivity, "Wearable")) {
                                 val intent = Intent(applicationContext, LandingActivity::class.java)

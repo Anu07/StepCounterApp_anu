@@ -147,6 +147,11 @@ class WalletFragment : Fragment() {
                 llRedeemSeeLess.visibility = View.VISIBLE
             }
         }
+
+      /*  historyView.setOnClickListener{
+            OpenFragment()
+        }*/
+
     }
 
 

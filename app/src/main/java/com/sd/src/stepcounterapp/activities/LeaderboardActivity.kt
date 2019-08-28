@@ -37,7 +37,7 @@ class LeaderboardActivity : BaseActivity<LeaderboardViewModel>(), ItemClickGloba
         mViewModel!!.getLeaderboardResponse().observe(this, Observer {
             mData->
             showPopupProgressSpinner(false)
-            if(mData.challenge.isNotEmpty()){
+            if(mData.challenge!=null){
                 Picasso.get().load(mData.challenge[0].image).error(R.drawable.facial_hair).into(firstImg)
                 firstName.text = mData.challenge[0].name
                 firstSteps.text =mData.challenge[0].steps.toString()

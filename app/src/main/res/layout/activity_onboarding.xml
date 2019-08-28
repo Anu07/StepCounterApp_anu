@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout android:layout_width="match_parent" xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:weightSum="5"
+              android:layout_height="match_parent"
+              android:orientation="vertical" xmlns:android="http://schemas.android.com/apk/res/android">
+    <androidx.viewpager.widget.ViewPager
+            android:id="@+id/view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3.8"
+    />
+    <com.tbuonomo.viewpagerdotsindicator.SpringDotsIndicator
+            android:id="@+id/spring_dots_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:dampingRatio="0.5"
+            android:layout_gravity="center"
+            app:dotsColor="@color/gradientColorStart"
+            app:dotsStrokeColor="@color/gray_text"
+            app:dotsCornerRadius="6dp"
+            app:dotsSize="12dp"
+            android:layout_marginTop="@dimen/_3sdp"
+            app:dotsSpacing="6dp"
+            app:dotsStrokeWidth="2dp"
+            app:stiffness="300"
+    />
+
+    <com.sd.src.stepcounterapp.utils.CustomTextView
+            android:id="@+id/tv_name"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:textSize="@dimen/_18sdp"
+            android:layout_weight="0.75"
+            android:gravity="center_vertical"
+            android:textColor="@android:color/black"
+            android:textAlignment="center"
+            app:appfont="montserrat_medium.ttf"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:text="@string/ear_tokens"
+            android:layout_marginLeft="@dimen/_20sdp"
+            android:layout_marginRight="@dimen/_20sdp"
+    />
+
+    <com.sd.src.stepcounterapp.utils.CustomButton
+            android:id="@+id/tv_next"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:appButtonfont="montserrat_medium.ttf"
+            android:padding="@dimen/_5sdp"
+            android:textColor="@color/white"
+            android:layout_weight="0.35"
+            android:layout_marginLeft="@dimen/_12sdp"
+            android:layout_marginRight="@dimen/_12sdp"
+            android:layout_marginBottom="@dimen/_12sdp"
+            android:textSize="@dimen/_15sdp"
+            android:background="@drawable/button_background"
+            android:text="@string/get_started"
+    />
+
+</LinearLayout>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_margin="@dimen/_10sdp"
+              android:layout_height="match_parent">
+
+    <com.sd.src.stepcounterapp.utils.CustomTextView
+            android:id="@+id/quesText"
+            android:text="What is question?"
+            app:appfont="montserrat_semibold.ttf"
+            android:layout_width="match_parent"
+            android:textSize="@dimen/_18sdp"
+            android:textColor="@color/colorBlack"
+            android:layout_marginLeft="@dimen/_5sdp"
+            android:layout_marginRight="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_height="wrap_content"/>
+
+    <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:id="@+id/optionsview"
+            android:background="@color/white"
+            android:layout_margin="@dimen/_5sdp"
+            android:layout_height="wrap_content">
+
+        <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <RadioButton android:id="@+id/option_1"
+                         android:buttonTint="@color/blue_txt"
+                         android:layout_width="match_parent"
+                         android:layout_margin="@dimen/_5sdp"
+                         android:layout_height="wrap_content"/>
+            <RadioButton android:id="@+id/option_2"
+                         android:buttonTint="@color/blue_txt"
+                         android:layout_width="match_parent"
+                         android:layout_margin="@dimen/_5sdp"
+                         android:layout_height="wrap_content"/>
+            <RadioButton android:id="@+id/option_3"
+                         android:buttonTint="@color/blue_txt"
+                         android:layout_margin="@dimen/_5sdp"
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content"/>
+            <RadioButton android:id="@+id/option_4"
+                         android:buttonTint="@color/blue_txt"
+                         android:layout_margin="@dimen/_5sdp"
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content"/>
+        </RadioGroup>
+
+
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

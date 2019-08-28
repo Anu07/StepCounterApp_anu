@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <LinearLayout android:orientation="horizontal"
+                      android:layout_width="match_parent"
+                      android:weightSum="2"
+                      android:layout_marginTop="@dimen/_20sdp"
+                      android:layout_height="wrap_content">
+            <com.sd.src.stepcounterapp.utils.CustomTextView
+                    android:id="@+id/headerText2"
+                    android:layout_width="0dp"
+                    android:layout_weight="1.7"
+                    android:text="@string/earn_rewards"
+                    android:gravity="left"
+                    android:textSize="@dimen/_30sdp"
+                    android:textColor="@color/colorBlack"
+                    android:layout_marginTop="@dimen/_30sdp"
+                    android:layout_marginLeft="@dimen/_12sdp"
+                    android:layout_marginRight="@dimen/_12sdp"
+                    app:appfont="montserrat_semibold.ttf"
+                    android:layout_height="wrap_content"/>
+            <com.sd.src.stepcounterapp.utils.CustomTextView
+                    android:layout_width="0dp"
+                    android:layout_weight="0.3"
+                    android:id="@+id/skipBttn"
+                    android:text="Skip"
+                    android:textSize="@dimen/_18sdp"
+                    android:textAllCaps="true"
+                    android:gravity="right|bottom"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:layout_marginRight="@dimen/_12sdp"
+                    android:textColor="@color/gray_text"
+                    android:layout_height="match_parent"/>
+        </LinearLayout>
+
+        <com.sd.src.stepcounterapp.utils.CustomTextView
+                android:id="@+id/headerTextttl"
+                android:layout_width="match_parent"
+                android:textSize="@dimen/_14sdp"
+                android:textColor="@color/gray_text"
+                android:layout_marginLeft="@dimen/_12sdp"
+                android:layout_marginRight="@dimen/_12sdp"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:layout_marginBottom="@dimen/_20sdp"
+                android:text="@string/earn_rewards_msg"
+                android:gravity="left"
+                app:appfont="montserrat_regular.ttf"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"/>
+        <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rewardsCategory"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_width="match_parent"
+                        android:layout_marginBottom="@dimen/_15sdp"
+                        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                        android:layout_height="wrap_content">
+
+                </androidx.recyclerview.widget.RecyclerView>
+
+                <com.sd.src.stepcounterapp.utils.CustomButton
+                        android:id="@+id/svBttn"
+                        android:text="Save &amp; Continue"
+                        android:layout_marginRight="@dimen/_12sdp"
+                        android:layout_marginLeft="@dimen/_12sdp"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_15sdp"
+                        android:textAllCaps="true"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:layout_marginBottom="@dimen/_15sdp"
+                        app:layout_constraintTop_toBottomOf="@+id/rewardsCategory"
+                        android:background="@drawable/button_background"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+
+    </LinearLayout>
+
+
+</LinearLayout>

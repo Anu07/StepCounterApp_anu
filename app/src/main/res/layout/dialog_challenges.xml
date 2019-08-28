@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:padding="@dimen/_15sdp"
+              android:layout_gravity="bottom"
+              android:background="@color/white"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+
+
+    <com.sd.src.stepcounterapp.utils.CustomTextView
+            android:id="@+id/txtName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sahi Sponsored Challenge"
+            android:ellipsize="end"
+            android:textColor="@color/colorBlack"
+            android:maxLines="1"
+            android:textSize="@dimen/_18ssp"
+            app:appfont="montserrat_regular.ttf"/>
+
+    <com.sd.src.stepcounterapp.utils.CustomTextView
+            android:id="@+id/txtDepartment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sahi Sponsored Challenge"
+            android:ellipsize="end"
+            android:textColor="@color/colorBlack"
+            android:maxLines="1"
+            android:textSize="@dimen/_8ssp"
+            app:appfont="montserrat_regular.ttf"/>
+
+    <ImageView android:id="@+id/challengeImg"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_180sdp"/>
+
+    <com.sd.src.stepcounterapp.utils.CustomTextView
+            android:id="@+id/txtDetail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Give yourself something to celebrate with us! A new Personal Best. Increase your average daily step distance by 1k for 1 month &amp; choose any featured SAHI REWARD for FREE."
+            android:textColor="@color/gray_text"
+            android:textSize="@dimen/_12ssp"
+            android:layout_marginBottom="@dimen/_15sdp"
+            app:appfont="montserrat_regular.ttf"/>
+
+
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_marginBottom="@dimen/_5sdp"
+                  android:orientation="horizontal">
+
+        <com.sd.src.stepcounterapp.utils.CustomTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Start Date"
+                android:ellipsize="end"
+                android:textColor="@color/gray_text"
+                android:maxLines="1"
+                android:textSize="@dimen/_12ssp"
+                app:appfont="montserrat_regular.ttf"/>
+
+        <com.sd.src.stepcounterapp.utils.CustomTextView
+                android:id="@+id/txtStartDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:text="June 22, 2019"
+                android:ellipsize="end"
+                android:textColor="@color/colorBlack"
+                android:maxLines="1"
+                android:textSize="@dimen/_12ssp"
+                app:appfont="montserrat_semibold.ttf"/>
+
+    </LinearLayout>
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_marginBottom="@dimen/_5sdp"
+                  android:orientation="horizontal">
+
+        <com.sd.src.stepcounterapp.utils.CustomTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="End Date"
+                android:ellipsize="end"
+                android:textColor="@color/gray_text"
+                android:maxLines="1"
+                android:textSize="@dimen/_12ssp"
+                app:appfont="montserrat_regular.ttf"/>
+
+        <com.sd.src.stepcounterapp.utils.CustomTextView
+                android:id="@+id/txtEndDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:text="June 22, 2019"
+                android:ellipsize="end"
+                android:textColor="@color/colorBlack"
+                android:maxLines="1"
+                android:textSize="@dimen/_12ssp"
+                app:appfont="montserrat_semibold.ttf"/>
+
+    </LinearLayout>
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_marginBottom="@dimen/_5sdp"
+                  android:orientation="horizontal">
+
+        <com.sd.src.stepcounterapp.utils.CustomTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total Participants"
+                android:ellipsize="end"
+                android:textColor="@color/gray_text"
+                android:maxLines="1"
+                android:textSize="@dimen/_12ssp"
+                app:appfont="montserrat_regular.ttf"/>
+
+        <com.sd.src.stepcounterapp.utils.CustomTextView
+                android:id="@+id/txtParticipants"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:text="22"
+                android:ellipsize="end"
+                android:textColor="@color/colorBlack"
+                android:maxLines="1"
+                android:textSize="@dimen/_12ssp"
+                app:appfont="montserrat_semibold.ttf"/>
+    </LinearLayout>
+
+    <com.sd.src.stepcounterapp.utils.CustomButton
+            android:id="@+id/btnStart"
+            android:text="@string/start_challenge"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:layout_width="match_parent"
+            android:textColor="@color/white"
+            android:padding="@dimen/_10sdp"
+            app:appButtonfont="montserrat_medium.ttf"
+            android:background="@drawable/button_background"
+            android:layout_height="wrap_content"/>
+
+</LinearLayout>

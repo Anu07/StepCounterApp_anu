@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:background="@color/colorbg"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+
+    <include layout="@layout/backtitlebar"/>
+
+
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_height="match_parent">
+
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:background="@drawable/top_bottom_border"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:orientation="horizontal">
+
+
+                <ImageView android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:layout_marginLeft="@dimen/_10sdp"
+                           android:layout_marginTop="@dimen/_15sdp"
+                           android:layout_marginBottom="@dimen/_15sdp"
+                           android:layout_alignParentLeft="true"
+                           android:src="@drawable/kisspng_fitbit"/>
+
+                <LinearLayout android:layout_width="match_parent"
+                              android:layout_height="wrap_content"
+                              android:padding="@dimen/_5sdp"
+                              android:layout_gravity="center_vertical"
+                              android:orientation="vertical">
+
+                    <com.sd.src.stepcounterapp.utils.CustomTextView
+                            android:id="@+id/tv_sync"
+                            android:layout_width="wrap_content"
+                            android:textSize="@dimen/_16ssp"
+                            app:appfont="montserrat_semibold.ttf"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colorBlack"
+                            android:text="@string/sync_now"/>
+
+
+                    <com.sd.src.stepcounterapp.utils.CustomTextView
+                            android:id="@+id/tv_sync_date_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/_12ssp"
+                            app:appfont="montserrat_regular.ttf"
+                            android:textColor="@color/gray_text"
+                            android:text="dd/mm/yy , 00:00 AM"/>
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+            <com.sd.src.stepcounterapp.utils.CustomButton
+                    android:id="@+id/btnChangeTracker"
+                    android:layout_width="wrap_content"
+                    app:appButtonfont="montserrat_regular.ttf"
+                    android:textSize="@dimen/_12ssp"
+                    android:layout_height="wrap_content"
+                    android:text="Change Tracker"
+                    android:textColor="@color/white"
+                    android:textAllCaps="false"
+                    android:padding="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    android:background="@drawable/blue_background"
+                    android:layout_gravity="center_horizontal"/>
+
+            <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#000000"/>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:orientation="horizontal"
+                          android:padding="@dimen/_15sdp">
+
+                <ImageView android:layout_width="0dp"
+                           android:layout_height="match_parent"
+                           android:layout_weight="1"
+                           android:src="@drawable/notification"/>
+
+                <com.sd.src.stepcounterapp.utils.CustomTextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5"
+                        android:textSize="@dimen/_15ssp"
+                        android:layout_gravity="center_vertical"
+                        app:appfont="montserrat_regular.ttf"
+                        android:textColor="@color/colorBlack"
+                        android:text="@string/notification_setting"/>
+
+                <ImageView android:layout_width="0dp"
+                           android:layout_height="match_parent"
+                           android:layout_weight="1"
+                           android:src="@drawable/right_arrow"/>
+
+            </LinearLayout>
+            <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#000000"/>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:orientation="horizontal"
+                          android:padding="@dimen/_15sdp">
+
+
+                <ImageView android:layout_width="0dp"
+                           android:layout_height="match_parent"
+                           android:layout_weight="1"
+                           android:src="@drawable/privacy_policy"/>
+
+                <com.sd.src.stepcounterapp.utils.CustomTextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/_15ssp"
+                        android:layout_gravity="center_vertical"
+                        app:appfont="montserrat_regular.ttf"
+                        android:textColor="@color/colorBlack"
+                        android:layout_weight="5"
+                        android:text="@string/privacy"/>
+
+
+                <ImageView android:layout_width="0dp"
+                           android:layout_height="match_parent"
+                           android:layout_weight="1"
+                           android:src="@drawable/right_arrow"/>
+            </LinearLayout>
+            <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#000000"/>
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:orientation="horizontal"
+                          android:padding="@dimen/_15sdp">
+
+
+                <ImageView android:layout_width="0dp"
+                           android:layout_height="match_parent"
+                           android:layout_weight="1"
+                           android:src="@drawable/terms_of_service"/>
+
+                <com.sd.src.stepcounterapp.utils.CustomTextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5"
+                        android:textSize="@dimen/_15ssp"
+                        android:layout_gravity="center_vertical"
+                        app:appfont="montserrat_regular.ttf"
+                        android:textColor="@color/colorBlack"
+                        android:text="@string/terms_of_service"/>
+
+
+                <ImageView android:layout_width="0dp"
+                           android:layout_height="match_parent"
+                           android:layout_weight="1"
+                           android:src="@drawable/right_arrow"/>
+            </LinearLayout>
+            <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#000000"/>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

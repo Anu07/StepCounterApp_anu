@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto" android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <ScrollView
+            android:layout_width="match_parent"
+             android:fillViewport="true"
+            android:layout_height="match_parent">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+            <com.mikhaellopez.circularimageview.CircularImageView
+                    android:id="@+id/profileImg"
+                    android:layout_width="@dimen/_100sdp"
+                    android:src="@drawable/nouser"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="@dimen/_30sdp"
+                    android:layout_marginLeft="@dimen/_30sdp"
+                    android:layout_marginTop="@dimen/_50sdp"
+                    app:civ_border="true"
+                    app:civ_border_color="@color/gradientColorStart"
+                    app:civ_border_width="@dimen/_2sdp"
+                    android:padding="@dimen/_2sdp"
+                    android:layout_height="@dimen/_100sdp"/>
+            <com.sd.src.stepcounterapp.utils.CustomTextView
+                    android:id="@+id/headerText2"
+                    android:layout_width="match_parent"
+                    app:layout_constraintTop_toBottomOf="@+id/appLogo"
+                    style="@style/headerTextStyle"
+                    android:text="@string/basic_info"
+                    android:gravity="left"
+                    app:appfont="montserrat_semibold.ttf"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+            <com.google.android.material.textfield.TextInputLayout style="@style/textLayoutStyle"
+                                                                   android:id="@+id/emailLayout"
+                                                                   android:layout_width="match_parent">
+
+                <com.sd.src.stepcounterapp.utils.CustomEditText android:id="@+id/emailTxt"
+                                                                android:hint="@string/hint_usrname"
+                                                                app:appEditfont="montserrat_regular.ttf"
+                                                                android:layout_width="match_parent"
+                                                                android:singleLine="true"
+                                                                android:imeOptions="actionNext"
+                                                                android:drawableRight="@drawable/ic_info_outline_black_24dp"
+                                                                android:layout_height="wrap_content"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout style="@style/textLayoutStyle"
+                                                                   android:id="@+id/mobileLayout"
+                                                                   android:layout_width="match_parent"
+                                                                   android:layout_height="wrap_content">
+
+                <com.sd.src.stepcounterapp.utils.CustomEditText
+                        android:id="@+id/mobileTxt"
+                        app:appEditfont="montserrat_regular.ttf"
+                        android:hint="@string/hint_firstname"
+                        android:singleLine="true"
+                        android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+                        android:layout_width="match_parent"
+                        android:imeOptions="actionNext"
+                        android:layout_height="wrap_content"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                    style="@style/textLayoutStyle"
+                    android:id="@+id/pwdLayout">
+
+                <com.sd.src.stepcounterapp.utils.CustomEditText
+                        android:id="@+id/pwdTxt"
+                        android:hint="@string/hint_lastname"
+                        android:singleLine="true"
+                        app:appEditfont="montserrat_regular.ttf"
+                        android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+                        android:layout_width="match_parent"
+                        android:imeOptions="actionNext"
+                        android:layout_height="wrap_content"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                    style="@style/textLayoutStyle"
+                    android:id="@+id/dobLayout">
+
+                <com.sd.src.stepcounterapp.utils.CustomEditText
+                        android:id="@+id/dobTxt"
+                        android:hint="@string/hint_dob"
+                        android:layout_width="match_parent"
+                        android:clickable="true"
+                        android:singleLine="true"
+                        android:inputType="text"
+                        android:imeOptions="actionDone"
+                        app:appEditfont="montserrat_regular.ttf"
+                        android:drawableRight="@drawable/calendar"
+                        android:layout_height="wrap_content"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.sd.src.stepcounterapp.utils.CustomButton
+                    android:layout_width="match_parent"
+                    android:id="@+id/saveBttn"
+                    android:text="@string/save_continue"
+                    app:appButtonfont="montserrat_medium.ttf"
+                    app:layout_constraintTop_toBottomOf="@+id/privacyPolicyChck"
+                    style="@style/BttnStyle"
+                    android:textAllCaps="true"
+                    android:textSize="@dimen/_15sdp"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+
+    </ScrollView>
+
+
+</LinearLayout>

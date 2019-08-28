@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent" xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical">
+
+    <com.sd.src.stepcounterapp.utils.CustomTextView android:layout_width="match_parent"
+                                                    android:id="@+id/noAvlbl"
+                                                    app:appfont="montserrat_medium.ttf"
+                                                    android:textSize="@dimen/_15ssp"
+                                                    android:gravity="center"
+                                                    android:layout_gravity="center"
+                                                    android:visibility="gone"
+                                                    android:text="No device available nearby"
+                                                    android:layout_height="match_parent"/>
+
+    <ListView
+            android:id="@+id/lv_device"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1.0"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:cacheColorHint="@android:color/transparent"
+            android:divider="#333333"
+            android:dividerHeight="1dp" />
+
+</LinearLayout>

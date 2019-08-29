@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.fragments.MyChallengeFragment
+import com.sd.src.stepcounterapp.fragments.MyRedeemedRewardsFragment
 import com.sd.src.stepcounterapp.fragments.ProfileFragment
 import com.sd.src.stepcounterapp.network.RetrofitClient
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
@@ -77,6 +78,10 @@ class MyProfileActivity : BaseActivity<ProfileViewModel>() {
 
         lin_my_challenges.setOnClickListener {
             openFragment(MyChallengeFragment.newInstance(this))
+        }
+
+        lin_redeemed_rewards.setOnClickListener {
+            openFragment(MyRedeemedRewardsFragment.newInstance(this))
         }
     }
 

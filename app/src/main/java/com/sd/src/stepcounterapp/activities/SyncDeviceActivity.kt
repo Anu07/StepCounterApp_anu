@@ -10,11 +10,11 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.adapter.RecyclerSyncGridAdapter
-import com.sd.src.stepcounterapp.model.rewards.Data
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import com.sd.src.stepcounterapp.viewModels.BaseViewModel
 import com.sd.src.stepcounterapp.viewModels.BaseViewModelFactory
 import kotlinx.android.synthetic.main.activity_select_syncsdk.*
+import com.sd.src.stepcounterapp.model.rewards.Data
 
 
 class SyncDeviceActivity : BaseActivity<BaseViewModel>(),

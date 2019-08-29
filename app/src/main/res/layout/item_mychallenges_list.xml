@@ -4,15 +4,38 @@
         android:layout_width="match_parent" xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_margin="@dimen/_5sdp"
         android:layout_height="wrap_content">
+
     <LinearLayout android:orientation="vertical"
                   android:layout_width="match_parent"
                   android:layout_height="match_parent">
-        <ImageView
-                android:id="@+id/img_challenge"
+
+        <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/forest"/>
+                android:layout_height="wrap_content">
+
+
+            <ImageView
+                    android:id="@+id/img_challenge"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/forest"/>
+
+            <com.sd.src.stepcounterapp.utils.CustomTextView
+                    android:layout_width="wrap_content"
+                    android:id="@+id/expTxt"
+                    tools:text="Expiry : dd mmm,yyyy"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:textSize="@dimen/_16sdp"
+                    android:textColor="@color/colorBlack"
+                    app:appfont="montserrat_regular.ttf"
+                    android:textAlignment="textStart"
+                    android:visibility="gone"
+                    android:layout_height="wrap_content"/>
+
+
+
+        </RelativeLayout>
         <com.sd.src.stepcounterapp.utils.CustomTextView
                 android:layout_width="match_parent"
                 android:id="@+id/titleTxt"
@@ -31,6 +54,18 @@
                 android:textSize="@dimen/_12sdp"
                 android:textColor="@color/colorBlack"
                 app:appfont="montserrat_regular.ttf"
+                android:textAlignment="textStart"
+                android:layout_height="wrap_content"/>
+
+        <com.sd.src.stepcounterapp.utils.CustomTextView
+                android:layout_width="match_parent"
+                android:id="@+id/tokenTxt"
+                tools:text="00 TKS"
+                android:visibility="gone"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:textSize="@dimen/_12sdp"
+                android:textColor="@color/gray_text"
+                app:appfont="montserrat_light.ttf"
                 android:textAlignment="textStart"
                 android:layout_height="wrap_content"/>
 

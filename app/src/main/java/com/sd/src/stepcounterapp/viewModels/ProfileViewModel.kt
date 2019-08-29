@@ -11,6 +11,7 @@ import com.sd.src.stepcounterapp.model.challenge.MyChallengeResponse
 import com.sd.src.stepcounterapp.model.generic.BasicRequest
 import com.sd.src.stepcounterapp.model.profile.ProfileResponse
 import com.sd.src.stepcounterapp.model.profile.UpdateProfileRequest
+import com.sd.src.stepcounterapp.model.rewards.MyRedeemedResponse
 import com.sd.src.stepcounterapp.model.syncDevice.FetchDeviceDataRequest
 import com.sd.src.stepcounterapp.model.updateresponse.UpdateProfileResponse
 import com.sd.src.stepcounterapp.network.RetrofitClient
@@ -23,6 +24,7 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
     private var mProfileResponse: MutableLiveData<ProfileResponse>? = null
     private var mUpdateResponse: MutableLiveData<UpdateProfileResponse>? = null
     private var mMyChallengeResponse: MutableLiveData<MyChallengeResponse>? = null
+    private var mMyRedeemedResponse: MutableLiveData<MyRedeemedResponse>? = null
 
 
     val call = RetrofitClient.instance
@@ -49,6 +51,12 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
         return mMyChallengeResponse as MutableLiveData<MyChallengeResponse>
     }
 
+    fun getMyRedeemedResponse(): MutableLiveData<MyRedeemedResponse> {
+        if (mMyRedeemedResponse == null) {
+            mMyRedeemedResponse = MutableLiveData()
+        }
+        return mMyRedeemedResponse as MutableLiveData<MyRedeemedResponse>
+    }
 
 
     fun getProfileData() {
@@ -90,6 +98,22 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
 
             override fun onResponse(call: Call<MyChallengeResponse>, response: Response<MyChallengeResponse>) {
                 mMyChallengeResponse!!.value = response.body()
+            }
+
+        })
+    }
+
+
+    fun getRedeemRewards() {
+        call!!.getMyRedeemedRewards(BasicRequest(SharedPreferencesManager.getUserId(AppApplication.applicationContext()))).enqueue(object :
+            Callback<MyRedeemedResponse> {
+            override fun onFailure(call: Call<MyRedeemedResponse>, t: Throwable) {
+                Log.v("retrofit", "call failed" + t)
+                Toast.makeText(AppApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
+            }
+
+            override fun onResponse(call: Call<MyRedeemedResponse>, response: Response<MyRedeemedResponse>) {
+                mMyRedeemedResponse!!.value = response.body()
             }
 
         })

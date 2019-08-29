@@ -23,12 +23,13 @@ import kotlinx.android.synthetic.main.activity_rewards_category_selection.*
 class RewardsCategorySelectionActivity : BaseActivity<SignInViewModel>(),
     RecyclerGridAdapter.ItemListener {
 
-
     override fun onItemClick(item: Data, position: Int) {
-        if ( categoriesList.data[position].selectedItem && !selectedCategories!!.contains(item.name))
-            selectedCategories!!.add(categoriesList.data[position].name)
 
-    }
+        if ( categoriesList.data[position].selectedItem && !selectedCategories!!.contains(item.name))
+            selectedCategories!!.add(categoriesList.data[position].name)    }
+
+
+
 
     private lateinit var adapter: RecyclerGridAdapter
     override val layoutId: Int

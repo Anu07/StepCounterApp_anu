@@ -18,6 +18,7 @@ import com.sd.src.stepcounterapp.model.marketplace.PopularProducts
 import com.sd.src.stepcounterapp.model.profile.ProfileResponse
 import com.sd.src.stepcounterapp.model.profile.UpdateProfileRequest
 import com.sd.src.stepcounterapp.model.rewards.AddRewardsRequestObject
+import com.sd.src.stepcounterapp.model.rewards.MyRedeemedResponse
 import com.sd.src.stepcounterapp.model.rewards.RewardsCategoriesResponse
 import com.sd.src.stepcounterapp.model.survey.SurveyListResponse
 import com.sd.src.stepcounterapp.model.syncDevice.FetchDeviceDataRequest
@@ -172,5 +173,9 @@ interface ApiInterface {
     ): Call<MyChallengeResponse>
 
 
+    @POST("api/myredeemed")
+    fun getMyRedeemedRewards(
+        @Body body: BasicRequest
+    ): Call<MyRedeemedResponse>
 
 }

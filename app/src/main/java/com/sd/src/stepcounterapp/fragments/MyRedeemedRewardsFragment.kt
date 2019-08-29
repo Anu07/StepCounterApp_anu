@@ -12,29 +12,30 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sd.src.stepcounterapp.R
-import com.sd.src.stepcounterapp.adapter.MyChallengeAdapter
+import com.sd.src.stepcounterapp.adapter.MyRedeemedRewardsAdapter
 import com.sd.src.stepcounterapp.model.challenge.MyChallengeResponse
 import com.sd.src.stepcounterapp.model.profile.Data
+import com.sd.src.stepcounterapp.model.rewards.MyRedeemedResponse
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import com.sd.src.stepcounterapp.viewModels.ProfileViewModel
 import kotlinx.android.synthetic.main.list_challenges.*
 
-class MyChallengeFragment : BaseFragment() {
+class MyRedeemedRewardsFragment : BaseFragment() {
 
     private lateinit var mProfileViewModel: ProfileViewModel
     private var userData: Data? = null
 
-    private lateinit var myChallengeAdapter: MyChallengeAdapter
+    private lateinit var myRedeemedRewardsAdapter: MyRedeemedRewardsAdapter
 
     companion object {
         @SuppressLint("StaticFieldLeak")
-        lateinit var instance: MyChallengeFragment
+        lateinit var instance: MyRedeemedRewardsFragment
 
         @SuppressLint("StaticFieldLeak")
         lateinit var mContext: Context
 
-        fun newInstance(context: Context): MyChallengeFragment {
-            instance = MyChallengeFragment()
+        fun newInstance(context: Context): MyRedeemedRewardsFragment {
+            instance = MyRedeemedRewardsFragment()
             mContext = context
             return instance
         }
@@ -51,15 +52,14 @@ class MyChallengeFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mProfileViewModel = ViewModelProviders.of(activity!!).get(ProfileViewModel::class.java)
-        userData = SharedPreferencesManager.getUpdatedUserObject(MyChallengeFragment.mContext)
-
+        userData = SharedPreferencesManager.getUpdatedUserObject(MyRedeemedRewardsFragment.mContext)
         //  Picasso.get().load(RetrofitClient.IMG_URL + userData?.image).placeholder(R.drawable.nouser).into(img_nav_header)
        // firstNameEd.setText(userData!!.firstName.toString())
       //  lastNameEd.setText(userData!!.lastName.toString())
 
-        mProfileViewModel.getMyChallenge()
+        mProfileViewModel.getRedeemRewards()
 
-        mProfileViewModel.getMyChallengeResponse().observe(this, androidx.lifecycle.Observer { mData ->
+        mProfileViewModel.getMyRedeemedResponse().observe(this, androidx.lifecycle.Observer { mData ->
         //  showPopupProgressSpinner(true)
             if (mData.status == 200) {
                 Toast.makeText(activity, "Shown successfully", Toast.LENGTH_LONG).show()
@@ -71,11 +71,11 @@ class MyChallengeFragment : BaseFragment() {
 
     }
 
-    private fun setAdapter(mData: MyChallengeResponse) {
+    private fun setAdapter(mData: MyRedeemedResponse) {
      //   showPopupProgressSpinner(false)
         list_mychallenges.layoutManager = LinearLayoutManager(mContext)
-        myChallengeAdapter = MyChallengeAdapter(mContext, mData)
-        list_mychallenges.adapter = myChallengeAdapter
+        myRedeemedRewardsAdapter = MyRedeemedRewardsAdapter(mContext, mData)
+        list_mychallenges.adapter = myRedeemedRewardsAdapter
     }
 
 }

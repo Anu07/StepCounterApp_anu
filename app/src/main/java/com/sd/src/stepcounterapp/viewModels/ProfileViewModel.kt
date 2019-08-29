@@ -84,7 +84,7 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
         call!!.getMyChallenges(BasicRequest(SharedPreferencesManager.getUserId(AppApplication.applicationContext()))).enqueue(object :
             Callback<MyChallengeResponse> {
             override fun onFailure(call: Call<MyChallengeResponse>, t: Throwable) {
-                Log.v("retrofit", "call failed")
+                Log.v("retrofit", "call failed" + t)
                 Toast.makeText(AppApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
             }
 

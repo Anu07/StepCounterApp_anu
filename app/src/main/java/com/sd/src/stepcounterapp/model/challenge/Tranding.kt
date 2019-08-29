@@ -4,79 +4,80 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 data class Tranding(
-    @SerializedName("__v")
-    @Expose
-    val __v: Int,
 
-    @SerializedName("_id")
-    @Expose
-    val _id: String,
+@SerializedName("department")
+@Expose
+val department: String,
 
-    @SerializedName("adminId")
-    @Expose
-    val adminId: String,
+@SerializedName("description")
+@Expose
+val description: String,
 
-    @SerializedName("bonusPoint1")
-    @Expose
-    val bonusPoint1: Int,
+@SerializedName("updatedAt")
+@Expose
+val updatedAt: String,
 
-    @SerializedName("bonusPoint2")
-    @Expose
-    val bonusPoint2: Int,
+@SerializedName("joinedIn")
+@Expose
+val joinedIn: Int,
 
-    @SerializedName("bonusPoint3")
-    @Expose
-    val bonusPoint3: Int,
+@SerializedName("shortDesc")
+@Expose
+val shortDesc: String,
 
-    @SerializedName("department")
-    @Expose
-    val department: String,
+@SerializedName("is_deleted")
+@Expose
+val is_deleted: Boolean,
 
-    @SerializedName("description")
-    @Expose
-    val description: String,
+@SerializedName("startDateTime")
+@Expose
+val startDateTime: String,
 
-    @SerializedName("duration")
-    @Expose
-    val duration: Int,
+@SerializedName("bonusPoint2")
+@Expose
+val bonusPoint2: Int,
 
-    @SerializedName("image")
-    @Expose
-    val image: String,
+@SerializedName("bonusPoint1")
+@Expose
+val bonusPoint1: Int,
 
-    @SerializedName("is_active")
-    @Expose
-    val is_active: Boolean,
+@SerializedName("__v")
+@Expose
+val __v: Int,
 
-    @SerializedName("is_deleted")
-    @Expose
-    val is_deleted: Boolean,
+@SerializedName("bonusPoint3")
+@Expose
+val bonusPoint3: Int,
 
-    @SerializedName("joinedIn")
-    @Expose
-    val joinedIn: Int,
+@SerializedName("name")
+@Expose
+val name: String,
 
-    @SerializedName("name")
-    @Expose
-    val name: String,
+@SerializedName("image")
+@Expose
+val image: String,
 
-    @SerializedName("points")
-    @Expose
-    val points: Int,
+@SerializedName("adminId")
+@Expose
+val adminId: String,
 
-    @SerializedName("shortDesc")
-    @Expose
-    val shortDesc: String,
+@SerializedName("_id")
+@Expose
+val _id: String,
 
-    @SerializedName("startDateTime")
-    @Expose
-    val startDateTime: String,
+@SerializedName("duration")
+@Expose
+val duration: Int,
 
-    @SerializedName("steps")
-    @Expose
-    val steps: Int,
+@SerializedName("points")
+@Expose
+val points: Int,
 
-    @SerializedName("updatedAt")
-    @Expose
-    val updatedAt: String
+@SerializedName("steps")
+@Expose
+val steps: Int,
+
+@SerializedName("is_active")
+@Expose
+val is_active: Boolean
 )

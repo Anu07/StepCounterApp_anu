@@ -4,51 +4,49 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 data class MyChallengeData(
+
     @SerializedName("_id")
     @Expose
     val _id: String,
 
-    @SerializedName("bonusPoint1")
+    @SerializedName("userId")
     @Expose
-    val bonusPoint1: Int,
+    val userId: String,
 
-    @SerializedName("bonusPoint2")
+    @SerializedName("challengeId")
     @Expose
-    val bonusPoint2: Int,
+    val challengeId: String,
 
-    @SerializedName("bonusPoint3")
+    @SerializedName("joinedAt")
     @Expose
-    val bonusPoint3: Int,
+    val joinedAt: String,
 
-    @SerializedName("description")
+    @SerializedName("__v")
     @Expose
-    val description: String,
+    val __v: Int,
 
-    @SerializedName("duration")
+    @SerializedName("stopAt")
     @Expose
-    val duration: Int,
+    val stopAt: String,
 
-    @SerializedName("image")
+    @SerializedName("is_stop")
     @Expose
-    val image: String,
+    val is_stop: Boolean,
 
-    @SerializedName("name")
+    @SerializedName("completedAt")
     @Expose
-    val name: String,
+    val completedAt: String,
 
-    @SerializedName("points")
+    @SerializedName("is_completed")
     @Expose
-    val points: Int,
+    val is_completed: String,
 
-    @SerializedName("shortDesc")
+    @SerializedName("invitationId")
     @Expose
-    val shortDesc: String,
+    val invitationId: Int,
 
-    @SerializedName("startDateTime")
-    @Expose
-    val startDateTime: String,
 
-    @SerializedName("steps")
+    @SerializedName("challenge")
     @Expose
-    val steps: Int
+    val challenge:Tranding
 )

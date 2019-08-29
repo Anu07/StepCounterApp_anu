@@ -19,27 +19,26 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_my_profile.*
 import kotlinx.android.synthetic.main.black_crosstitlebar.*
 
-
 class MyProfileActivity : BaseActivity<ProfileViewModel>() {
     override val layoutId: Int
         get() = R.layout.activity_my_profile
 
-
     override val viewModel: ProfileViewModel
-
 
         get() = ViewModelProviders.of(
             this,
-            BaseViewModelFactory { ProfileViewModel(application) }).get(ProfileViewModel::class.java)
+            BaseViewModelFactory { ProfileViewModel(application) })
+            .get(ProfileViewModel::class.java)
+
     private var profileFragment: ProfileFragment? = null
+
     override
     val context: Context
         get() = this@MyProfileActivity
+
     lateinit var fragmentTransaction: FragmentTransaction
 
-
     override fun onCreate() {
-
         lastUpdtd.text =
             "Last updated: " + (SharedPreferencesManager.getString(this@MyProfileActivity, SYNCDATE)?.split("T")?.get(0)
                 ?: "Not available")
@@ -51,7 +50,6 @@ class MyProfileActivity : BaseActivity<ProfileViewModel>() {
                     Picasso.get().load(RetrofitClient.IMG_URL + mResponse.data.image).placeholder(R.drawable.nouser)
                         .resize(200, 200)
                         .into(profileImg)
-
                 }
                 bmiVal.text = String.format("%.3f", mResponse.data.bmi)
             }
@@ -78,16 +76,13 @@ class MyProfileActivity : BaseActivity<ProfileViewModel>() {
         }
 
         lin_my_challenges.setOnClickListener {
-
             openFragment(MyChallengeFragment.newInstance(this))
         }
     }
 
-
     /**
      * To open fragment
      */
-
     private fun openFragment(fragment: Fragment) {
         val fragmentManager = supportFragmentManager
         val transaction = fragmentManager.beginTransaction()
@@ -102,5 +97,4 @@ class MyProfileActivity : BaseActivity<ProfileViewModel>() {
         Log.i("Test", "Result")
         this.profileFragment?.onActivityResult(requestCode, resultCode, data)
     }
-
 }

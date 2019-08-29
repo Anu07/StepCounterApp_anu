@@ -29,12 +29,12 @@ class MyChallengeAdapter(mContext: Context?, mData: MyChallengeResponse) :
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        holder.textView.text = mData.data.get(position).name
-        holder.textShort.text = mData.data.get(position).description
+       holder.textView.text = mData.data.get(position).challenge.name
+       holder.textShort.text = mData.data.get(position).challenge.shortDesc
        /* holder.imageView.setOnClickListener {
             mListener!!.onItemClick(position, item)
         }*/
-        Picasso.get().load(RetrofitClient.IMG_URL + "" +  mData.data.get(position).image)
+        Picasso.get().load(RetrofitClient.IMG_URL + "" +  mData.data.get(position).challenge.image)
             .into(holder.imageView)
 
     }

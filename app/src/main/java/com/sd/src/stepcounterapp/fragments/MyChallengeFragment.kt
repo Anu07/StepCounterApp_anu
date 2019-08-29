@@ -53,8 +53,7 @@ class MyChallengeFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         mProfileViewModel = ViewModelProviders.of(activity!!).get(ProfileViewModel::class.java)
         userData = SharedPreferencesManager.getUpdatedUserObject(MyChallengeFragment.mContext)
-      //  Picasso.get().load(RetrofitClient.IMG_URL + userData?.image).placeholder(R.drawable.nouser).into(img_nav_header)
-
+        //  Picasso.get().load(RetrofitClient.IMG_URL + userData?.image).placeholder(R.drawable.nouser).into(img_nav_header)
        // firstNameEd.setText(userData!!.firstName.toString())
       //  lastNameEd.setText(userData!!.lastName.toString())
 
@@ -74,7 +73,6 @@ class MyChallengeFragment : BaseFragment() {
 
     private fun setAdapter(mData: MyChallengeResponse) {
      //   showPopupProgressSpinner(false)
-
         list_mychallenges.layoutManager = LinearLayoutManager(mContext)
         myChallengeAdapter = MyChallengeAdapter(mContext, mData)
         list_mychallenges.adapter = myChallengeAdapter

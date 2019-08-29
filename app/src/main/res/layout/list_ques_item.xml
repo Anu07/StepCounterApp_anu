@@ -3,8 +3,8 @@
               xmlns:app="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_margin="@dimen/_10sdp"
-              android:layout_height="match_parent">
+              android:layout_margin="@dimen/_5sdp"
+              android:layout_height="wrap_content">
 
     <com.sd.src.stepcounterapp.utils.CustomTextView
             android:id="@+id/quesText"
@@ -16,7 +16,6 @@
             android:layout_marginLeft="@dimen/_5sdp"
             android:layout_marginRight="@dimen/_5sdp"
             android:layout_marginBottom="@dimen/_5sdp"
-            android:layout_marginTop="@dimen/_5sdp"
             android:layout_height="wrap_content"/>
 
     <androidx.cardview.widget.CardView
@@ -26,7 +25,7 @@
             android:layout_margin="@dimen/_5sdp"
             android:layout_height="wrap_content">
 
-        <RadioGroup
+        <RadioGroup android:id="@+id/answerGroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
             <RadioButton android:id="@+id/option_1"

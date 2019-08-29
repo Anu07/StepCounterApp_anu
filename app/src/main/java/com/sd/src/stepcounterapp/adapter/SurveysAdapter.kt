@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.model.survey.Data
@@ -32,8 +33,18 @@ class SurveysAdapter(
         holder.textEarnToken.text = item!!.earningToken.toString()
         var date = item!!.expireOn.split("T")[0]
         holder.textSurvey.text = date
+        if(item!!.attempted){
+            holder.textStart.setBackgroundResource(R.drawable.gray_fill_circle)
+        }else{
+            holder.textStart.setBackgroundResource(R.drawable.blue_fill_circle)
+        }
+
         holder.textStart.setOnClickListener {
-            mListener.onItemClick(position)
+            if(!item!!.attempted){
+                mListener.onItemClick(position)
+            }else{
+                Toast.makeText(mContext,"You have already taken this survey", Toast.LENGTH_LONG).show()
+            }
         }
     }
 

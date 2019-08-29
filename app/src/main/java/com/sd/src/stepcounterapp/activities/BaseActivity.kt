@@ -143,12 +143,9 @@ abstract class BaseActivity<V : AndroidViewModel> : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-
-        if (getCurrentActivityName().equals("com.sd.src.stepcounterapp.activities.MyProfileActivity")) {
-            super.onBackPressed()
-        } else if (supportFragmentManager.backStackEntryCount > 0) {
+        if (supportFragmentManager.backStackEntryCount > 0) {
             supportFragmentManager.popBackStack()
-        } else if (!doubleBackToExitPressedOnce) {
+        } else if (getCurrentActivityName().equals("com.sd.src.stepcounterapp.activities.LandingActivity") && !doubleBackToExitPressedOnce) {
             this.doubleBackToExitPressedOnce = true
             Toast.makeText(this, "Please click BACK again to exit.", Toast.LENGTH_SHORT).show()
 

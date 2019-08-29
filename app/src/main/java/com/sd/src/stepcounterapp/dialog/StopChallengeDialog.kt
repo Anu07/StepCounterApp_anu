@@ -34,6 +34,10 @@ class StopChallengeDialog(context: Context, themeResId: Int, private val LayoutI
         }
     }
 
+    fun dismissDialog(){
+        dismiss()
+    }
+
 
     override fun clickIndex(pos: Int) {
         dismiss()

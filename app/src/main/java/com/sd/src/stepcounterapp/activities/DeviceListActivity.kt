@@ -156,14 +156,14 @@ class DeviceListActivity : Basefit(), AdapterView.OnItemClickListener, MokoScanD
                     if (lastestSteps == null || lastestSteps!!.isEmpty()) {
                         return
                     }
-                    /*for (step in lastestSteps!!) {
+                    for (step in lastestSteps!!) {
 
                         Toast.makeText(
                             this@DeviceListActivity,
                             "Total steps taken till now: " + step.count,
                             Toast.LENGTH_LONG
                         ).show()
-                    }*/
+                    }
                     SharedPreferencesManager.saveSyncObject(this@DeviceListActivity, lastestSteps)
                     gotoDeviceconnctd()
                 }

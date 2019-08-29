@@ -40,7 +40,7 @@ class RecyclerGridAdapter(
             mListener!!.onItemClick(item,position)
         }
         Picasso.get().load(RetrofitClient.IMG_URL + "" + item.image).placeholder(R.drawable.placeholder)
-            .into(holder.imageView)
+            .resize(200,200).into(holder.imageView)
 
     }
 

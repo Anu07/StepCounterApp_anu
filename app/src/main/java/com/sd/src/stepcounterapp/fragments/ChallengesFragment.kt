@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -22,10 +23,8 @@ import com.sd.src.stepcounterapp.adapter.ChallengeTrendingAdapter
 import com.sd.src.stepcounterapp.adapter.SlidingFeaturedChallengeImageAdapter
 import com.sd.src.stepcounterapp.dialog.ChallengesDialog
 import com.sd.src.stepcounterapp.dialog.StopChallengeDialog
-import com.sd.src.stepcounterapp.model.challenge.ChallengeResponse
-import com.sd.src.stepcounterapp.model.challenge.Data
-import com.sd.src.stepcounterapp.model.challenge.Featured
-import com.sd.src.stepcounterapp.model.challenge.Trending
+import com.sd.src.stepcounterapp.model.challenge.*
+import com.sd.src.stepcounterapp.model.challenge.ChallengeTakenResponse.StartChallengeResponse
 import com.sd.src.stepcounterapp.model.generic.BasicRequest
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import com.sd.src.stepcounterapp.viewModels.ChallengeViewModel
@@ -34,21 +33,65 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class ChallengesFragment : Fragment(), ChallengeAdapter.ItemClickListener {
-
-    override fun onItemClick(pos: Int, item: Data) {
-        val dialog =
-            ChallengesDialog(mContext, item, R.style.pullBottomfromTop, R.layout.dialog_challenges,
-                object : ChallengesDialog.StartInterface {
-                    override fun onStart(data: Data) {
-                        mViewModel.startChallenge(data)
-                    }
-                })
-        dialog.show()
+class ChallengesFragment : Fragment(), ChallengeAdapter.ItemClickListener ,SlidingFeaturedChallengeImageAdapter.ItemSlideListener,
+    ChallengeTrendingAdapter.ItemTrendClickListener{
+    override fun onImageSlider(position: Int, img: Data) {
+        Challengedialog = ChallengesDialog(mContext, img as Data, R.style.pullBottomfromTop, R.layout.dialog_challenges,
+            object : ChallengesDialog.StartInterface {
+                override fun onStart(img: Data) {
+                    mViewModel.startChallenge(img)
+                }
+            })
+        Challengedialog!!.show()
     }
 
-    private  var mFeaturedChallengeCategory: MutableList<Featured> =  mutableListOf()
-    private lateinit var mTrendChallengeCategory: MutableList<Trending>
+    override fun onTrendItemClick(pos: Int, item: Data) {
+        Challengedialog = ChallengesDialog(mContext, mChallengeCategory[pos], R.style.pullBottomfromTop, R.layout.dialog_challenges,
+            object : ChallengesDialog.StartInterface {
+                override fun onStart(data: Data) {
+                    mViewModel.startChallenge(data)
+                }
+            })
+        Challengedialog!!.show()
+
+    }
+
+    override fun onItemClick(pos: Int, item: Data) {
+
+        Challengedialog = ChallengesDialog(mContext, mChallengeCategory[pos], R.style.pullBottomfromTop, R.layout.dialog_challenges,
+            object : ChallengesDialog.StartInterface {
+                override fun onStart(data: Data) {
+                    mViewModel.startChallenge(data)
+                }
+            })
+        Challengedialog!!.show()
+    }
+
+    private fun sendRequestObject(data: Data): Challenge {
+        return Challenge(
+            data.image,
+            data.is_active,
+            data.description,
+            data.steps,
+            data.points,
+            data.duration,
+            data.bonusPoint3,
+            data.bonusPoint2,
+            data.bonusPoint1,
+            data.startDateTime,
+            data.is_deleted,
+            data.__v,
+            data.adminId,
+            data.name,
+            data.shortDesc,
+            data._id,
+            data.department,
+            data.updatedAt
+        )
+    }
+
+    private var mFeaturedChallengeCategory: MutableList<Data> = mutableListOf()
+    private lateinit var mTrendChallengeCategory: MutableList<Data>
     private lateinit var mTrendingChallengesAdapter: ChallengeTrendingAdapter
     private lateinit var mChallengesAdapter: ChallengeAdapter
     private lateinit var mChallengeCategory: MutableList<Data>
@@ -57,7 +100,8 @@ class ChallengesFragment : Fragment(), ChallengeAdapter.ItemClickListener {
     private val ImagesArray: ArrayList<Int>? = ArrayList()
     lateinit var rewardsViewPager: ViewPager
     private lateinit var mViewModel: ChallengeViewModel
-
+    var dialog: ChallengesDialog? = null
+    lateinit var Challengedialog: ChallengesDialog
     companion object {
         @SuppressLint("StaticFieldLeak")
         lateinit var instance: ChallengesFragment
@@ -88,12 +132,7 @@ class ChallengesFragment : Fragment(), ChallengeAdapter.ItemClickListener {
                         setChallengeAdapter()
                         var mActiveList = mChallenge.ongoing
                         if (mActiveList.isNotEmpty()) {
-                            llStartChallenges.visibility = View.VISIBLE
-                            ongoingchallengeName.text = mActiveList[0].name
-                            ongoingChallengeDetail.text = "Duration: "+mActiveList[0].duration
-                            stopchallengeBttn.setOnClickListener {
-                                mViewModel.stopchallenges(mActiveList[0]._id)
-                            }
+                            showOngoingChallenge(mActiveList)
                         } else {
                             llStartChallenges.visibility = View.GONE
                         }
@@ -120,16 +159,37 @@ class ChallengesFragment : Fragment(), ChallengeAdapter.ItemClickListener {
                     txtNoTrending.visibility = View.VISIBLE
                 }
             })
+
+        mViewModel.getStartChallengeObject().observe(this, Observer<StartChallengeResponse> { mData ->
+            if(Challengedialog!=null && Challengedialog!!.isShowing){
+                Challengedialog!!.dismiss()
+            }
+            if (mData!=null && mData.status == 200) {
+                mViewModel.getchallenges(BasicRequest(SharedPreferencesManager.getUserId(mContext), ""))
+            }else if(mData==null){
+
+                Toast.makeText(mContext,"There is another challenge already started.",Toast.LENGTH_LONG).show()
+            }
+        })
         llStartChallenges.setOnClickListener {
             StopChallengeDialog(mContext, R.style.pullBottomfromTop, R.layout.dialog_stop_challenges).show()
         }
 
     }
 
-    private fun setFeaturedChallengeSliderAdapter(mFeaturedNewChallengeCategory: MutableList<Featured>) {
+    private fun showOngoingChallenge(mActiveList: MutableList<Data>) {
+        llStartChallenges.visibility = View.VISIBLE
+        ongoingchallengeName.text = mActiveList[0].name
+        ongoingChallengeDetail.text = "Duration: " + mActiveList[0].endDateTime.split("T")[0]
+        stopchallengeBttn.setOnClickListener {
+            mViewModel.stopchallenges(mActiveList[0]._id)
+        }
+    }
 
-        Log.i("new ","list"+mFeaturedNewChallengeCategory.size)
-        rewardsViewPager.adapter = SlidingFeaturedChallengeImageAdapter(mContext, mFeaturedNewChallengeCategory)
+    private fun setFeaturedChallengeSliderAdapter(mFeaturedNewChallengeCategory: MutableList<Data>) {
+
+        Log.i("new ", "list" + mFeaturedNewChallengeCategory.size)
+        rewardsViewPager.adapter = SlidingFeaturedChallengeImageAdapter(mContext, mFeaturedNewChallengeCategory,this)
 
     }
 
@@ -142,8 +202,11 @@ class ChallengesFragment : Fragment(), ChallengeAdapter.ItemClickListener {
         super.onViewCreated(view, savedInstanceState)
         rewardsViewPager = view.findViewById(R.id.rewardsViewPager)
         leaderBttn.setOnClickListener {
-            startActivity(Intent(mContext,LeaderboardActivity::class.java))
+            startActivity(Intent(mContext, LeaderboardActivity::class.java))
         }
+
+
+
         init()
     }
 
@@ -154,7 +217,7 @@ class ChallengesFragment : Fragment(), ChallengeAdapter.ItemClickListener {
         for (i in 0 until IMAGES.size)
             ImagesArray!!.add(IMAGES[i])
 
-        rewardsViewPager.adapter = SlidingFeaturedChallengeImageAdapter(mContext, mFeaturedChallengeCategory)
+        rewardsViewPager.adapter = SlidingFeaturedChallengeImageAdapter(mContext, mFeaturedChallengeCategory,this)
 
 
         NUM_PAGES = IMAGES.size
@@ -197,7 +260,7 @@ class ChallengesFragment : Fragment(), ChallengeAdapter.ItemClickListener {
     private fun setTrendingChallengeAdapter() {
         var gridLayoutManager = GridLayoutManager(mContext, 2, RecyclerView.VERTICAL, false)
         trendchallengesList.layoutManager = gridLayoutManager
-        mTrendingChallengesAdapter = ChallengeTrendingAdapter(mContext, mTrendChallengeCategory)
+        mTrendingChallengesAdapter = ChallengeTrendingAdapter(mContext, mTrendChallengeCategory,this)
         trendchallengesList.adapter = mTrendingChallengesAdapter
         setTrendingView()
     }

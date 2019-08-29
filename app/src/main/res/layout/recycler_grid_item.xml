@@ -5,41 +5,38 @@
         android:orientation="vertical"
         android:layout_width="wrap_content"
         android:id="@+id/cdMain"
-        app:cardCornerRadius="@dimen/_10ssp"
+        app:cardPreventCornerOverlap="false"
+        app:cardElevation="0dp"
+        app:cardMaxElevation="0dp"
+        app:cardCornerRadius="@dimen/_5ssp"
         android:layout_margin="@dimen/_5sdp"
         android:layout_height="wrap_content">
-    <FrameLayout android:layout_width="150dp"
+    <FrameLayout android:layout_width="200dp"
                  android:layout_height="wrap_content">
-        <LinearLayout android:orientation="vertical"
-                      android:id="@+id/coverImg"
-                      android:layout_width="150dp"
-                      android:layout_height="150dp">
+        <FrameLayout android:orientation="vertical"
+                     android:id="@+id/coverImg"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content">
             <ImageView
                     android:id="@+id/imgChallenge"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:layout_constraintLeft_toLeftOf="@id/coverImg"
-                    app:layout_constraintRight_toRightOf="@id/coverImg"
-                    app:layout_constraintTop_toTopOf="@id/coverImg"
+                    android:layout_height="170dp"
                     android:layout_centerVertical="true"
                     android:layout_centerHorizontal="true"
                     android:cropToPadding="true"
                     android:scaleType="fitXY"
-                    android:foreground="@drawable/img_ovrlay_slider"
+                    android:adjustViewBounds="true"
                     android:layout_gravity="fill_vertical"
-                    app:layout_constraintBottom_toBottomOf="@id/coverImg"
                     android:src="@drawable/placeholder"
-                    app:layout_constraintStart_toStartOf="@id/coverImg"
-                    app:layout_constraintEnd_toEndOf="@id/coverImg"
             />
 
-
-        </LinearLayout>
+        </FrameLayout>
         <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
+                android:background="@color/trans_gray_text"
                 android:layout_gravity="bottom"
-                android:layout_marginBottom="@dimen/_7sdp"
+                android:layout_marginBottom="@dimen/_2sdp"
                 android:layout_height="wrap_content">
             <com.sd.src.stepcounterapp.utils.CustomTextView
                     android:id="@+id/txtChallengeName"
@@ -48,10 +45,9 @@
                     android:ellipsize="end"
                     android:gravity="center_horizontal"
                     android:maxLines="1"
-                    tools:text = "test"
+                    tools:text="test"
                     android:textColor="@color/white"
-                    android:inputType="textCapWords"
-                    android:capitalize="words"
+                    android:inputType="textCapSentences"
                     android:textSize="@dimen/_12ssp"
                     app:appfont="montserrat_semibold.ttf"/>
 
@@ -62,12 +58,12 @@
                     android:maxLines="1"
                     android:ellipsize="end"
                     android:gravity="center_horizontal"
-                    android:text = "test"
+                    android:text="test"
                     android:layout_marginRight="@dimen/_5sdp"
                     android:layout_marginLeft="@dimen/_5sdp"
                     android:singleLine="true"
                     android:textColor="@color/border_color"
-                    android:inputType="textCapWords"
+                    android:inputType="textCapSentences"
                     android:textSize="@dimen/_12ssp"
                     app:appfont="montserrat_regular.ttf"/>
 

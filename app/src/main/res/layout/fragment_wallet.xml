@@ -538,7 +538,7 @@
                         android:textAllCaps="true"
                         android:drawableRight="@drawable/ic_info_grey"
                         android:visibility="visible"
-                        android:text="REDEEMED"
+                        android:text="PURCHASED"
                         android:drawablePadding="@dimen/_10sdp"
                         android:layout_height="wrap_content"
                         android:textColor="@color/colorBlack"

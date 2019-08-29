@@ -47,8 +47,13 @@ class MarketPlaceCategoryAdapter(
                 holder.txtTokenFirst.text = products.token.toString()
 
                 Log.i("flag cat", "" + position + products.wishlist)
-
+                if(products.wishlist){
+                    holder.wishListView.setImageResource(R.drawable.wishlist_fill)
+                }else{
+                    holder.wishListView.setImageResource(R.drawable.featured)
+                }
                 holder.wishListView.setOnClickListener {
+                    holder.wishListView.setImageResource(R.drawable.wishlist_fill)
                     wisListener.onWish(position, products)
                 }
             }

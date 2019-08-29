@@ -49,7 +49,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class HayatechFragment : Fragment() {
+class HayatechFragment : BaseFragment() {
 
     companion object {
         @SuppressLint("StaticFieldLeak")
@@ -89,6 +89,7 @@ class HayatechFragment : Fragment() {
         mViewModel = ViewModelProviders.of(activity!!).get(DeviceViewModel::class.java)
         circular_progress.setProgressTextAdapter(PatternProgressTextAdapter())
         setStepsText()
+        showPopupProgressSpinner(true)
         mViewModel.fetchSyncData(
             if (txtGraphFilter.text.toString().equals(WEEKLY, ignoreCase = true)) {
                 FetchDeviceDataRequest(WEEKLY, SharedPreferencesManager.getUserId(mContext))
@@ -103,6 +104,7 @@ class HayatechFragment : Fragment() {
             })
         mViewModel.getDashResponse().observe(this,
             Observer<DashboardResponse> { mDashResponse ->
+                showPopupProgressSpinner(false)
                 mDataList = mDashResponse.data
                 steps.text = (mDashResponse.data.activity.sumBy { it.steps }).toString()
                 totalstepsCount.text = mDashResponse.data.todayToken.toString()
@@ -111,7 +113,9 @@ class HayatechFragment : Fragment() {
                 totl_dist.text = mDashResponse.data.totalUserDistance.toString()
                 totl_dist_suffix.text = "Km"
                 tokensVal.text = mDashResponse.data.totalUserToken.toString()
-                SharedPreferencesManager.setString(mContext, mDashResponse.data.lastUpdated,SYNCDATE)
+                if(mDashResponse.data.lastUpdated != null){
+                    SharedPreferencesManager.setString(mContext, mDashResponse.data.lastUpdated,SYNCDATE)
+                }
                 setBarChart("STEPS")
             })
 

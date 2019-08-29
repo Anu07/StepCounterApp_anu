@@ -86,8 +86,9 @@
                 android:background="@color/white"
                 android:weightSum="2"
                 android:padding="@dimen/_5sdp"
+                android:gravity="bottom"
                 android:layout_gravity="bottom"
-                android:layout_height="wrap_content">
+                android:layout_height="80dp">
 
             <com.sd.src.stepcounterapp.utils.CustomButton
                     android:id="@+id/savebutton"
@@ -123,7 +124,7 @@
                 android:layout_width="match_parent"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:background="@color/colorbg"
-                android:layout_height="wrap_content"/>
+                android:layout_height="400dp"/>
 
 
     </FrameLayout>

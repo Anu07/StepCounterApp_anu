@@ -1,10 +1,10 @@
-package com.sd.src.stepcounterapp.model.challenge;
+package com.sd.src.stepcounterapp.model.challenge.ChallengeTakenResponse;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 /**
  * Awesome Pojo Generator
  * */
-public class Featured{
+public class Challenge{
   @SerializedName("image")
   @Expose
   private String image;
@@ -23,45 +23,33 @@ public class Featured{
   @SerializedName("points")
   @Expose
   private Integer points;
-    
-    public String getEndDateTime() {
-        return endDateTime;
-    }
-    
-    public void setEndDateTime(String endDateTime) {
-        this.endDateTime = endDateTime;
-    }
-    
-    @SerializedName("endDateTime")
-    @Expose
-    private String endDateTime;
   @SerializedName("bonusPoint3")
   @Expose
   private Integer bonusPoint3;
   @SerializedName("bonusPoint2")
   @Expose
   private Integer bonusPoint2;
-  @SerializedName("bonusPoint1")
-  @Expose
-  private Integer bonusPoint1;
-  @SerializedName("is_deleted")
-  @Expose
-  private Boolean is_deleted;
   @SerializedName("startDateTime")
   @Expose
   private String startDateTime;
+  @SerializedName("is_deleted")
+  @Expose
+  private Boolean is_deleted;
+  @SerializedName("bonusPoint1")
+  @Expose
+  private Integer bonusPoint1;
   @SerializedName("joinedIn")
   @Expose
   private Integer joinedIn;
   @SerializedName("__v")
   @Expose
   private Integer __v;
-  @SerializedName("adminId")
-  @Expose
-  private String adminId;
   @SerializedName("name")
   @Expose
   private String name;
+  @SerializedName("adminId")
+  @Expose
+  private String adminId;
   @SerializedName("shortDesc")
   @Expose
   private String shortDesc;
@@ -125,11 +113,11 @@ public class Featured{
   public Integer getBonusPoint2(){
    return bonusPoint2;
   }
-  public void setBonusPoint1(Integer bonusPoint1){
-   this.bonusPoint1=bonusPoint1;
+  public void setStartDateTime(String startDateTime){
+   this.startDateTime=startDateTime;
   }
-  public Integer getBonusPoint1(){
-   return bonusPoint1;
+  public String getStartDateTime(){
+   return startDateTime;
   }
   public void setIs_deleted(Boolean is_deleted){
    this.is_deleted=is_deleted;
@@ -137,11 +125,11 @@ public class Featured{
   public Boolean getIs_deleted(){
    return is_deleted;
   }
-  public void setStartDateTime(String startDateTime){
-   this.startDateTime=startDateTime;
+  public void setBonusPoint1(Integer bonusPoint1){
+   this.bonusPoint1=bonusPoint1;
   }
-  public String getStartDateTime(){
-   return startDateTime;
+  public Integer getBonusPoint1(){
+   return bonusPoint1;
   }
   public void setJoinedIn(Integer joinedIn){
    this.joinedIn=joinedIn;
@@ -155,17 +143,17 @@ public class Featured{
   public Integer get__v(){
    return __v;
   }
-  public void setAdminId(String adminId){
-   this.adminId=adminId;
-  }
-  public String getAdminId(){
-   return adminId;
-  }
   public void setName(String name){
    this.name=name;
   }
   public String getName(){
    return name;
+  }
+  public void setAdminId(String adminId){
+   this.adminId=adminId;
+  }
+  public String getAdminId(){
+   return adminId;
   }
   public void setShortDesc(String shortDesc){
    this.shortDesc=shortDesc;

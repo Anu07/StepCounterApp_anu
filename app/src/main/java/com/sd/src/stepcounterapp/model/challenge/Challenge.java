@@ -4,16 +4,13 @@ import com.google.gson.annotations.SerializedName;
 /**
  * Awesome Pojo Generator
  * */
-public class Featured{
+public class Challenge{
   @SerializedName("image")
   @Expose
   private String image;
   @SerializedName("is_active")
   @Expose
   private Boolean is_active;
-  @SerializedName("addedBy")
-  @Expose
-  private String addedBy;
   @SerializedName("description")
   @Expose
   private String description;
@@ -23,18 +20,9 @@ public class Featured{
   @SerializedName("points")
   @Expose
   private Integer points;
-    
-    public String getEndDateTime() {
-        return endDateTime;
-    }
-    
-    public void setEndDateTime(String endDateTime) {
-        this.endDateTime = endDateTime;
-    }
-    
-    @SerializedName("endDateTime")
-    @Expose
-    private String endDateTime;
+  @SerializedName("duration")
+  @Expose
+  private Integer duration;
   @SerializedName("bonusPoint3")
   @Expose
   private Integer bonusPoint3;
@@ -44,15 +32,12 @@ public class Featured{
   @SerializedName("bonusPoint1")
   @Expose
   private Integer bonusPoint1;
-  @SerializedName("is_deleted")
-  @Expose
-  private Boolean is_deleted;
   @SerializedName("startDateTime")
   @Expose
   private String startDateTime;
-  @SerializedName("joinedIn")
+  @SerializedName("is_deleted")
   @Expose
-  private Integer joinedIn;
+  private Boolean is_deleted;
   @SerializedName("__v")
   @Expose
   private Integer __v;
@@ -71,13 +56,32 @@ public class Featured{
   @SerializedName("department")
   @Expose
   private String department;
-  @SerializedName("is_featured")
-  @Expose
-  private Boolean is_featured;
   @SerializedName("updatedAt")
   @Expose
   private String updatedAt;
-  public void setImage(String image){
+    
+    public Challenge(String image, Boolean is_active, String description, Integer steps, Integer points, Integer duration, Integer bonusPoint3, Integer bonusPoint2, Integer bonusPoint1, String startDateTime, Boolean is_deleted, Integer __v, String adminId, String name, String shortDesc, String _id, String department, String updatedAt) {
+        this.image = image;
+        this.is_active = is_active;
+        this.description = description;
+        this.steps = steps;
+        this.points = points;
+        this.duration = duration;
+        this.bonusPoint3 = bonusPoint3;
+        this.bonusPoint2 = bonusPoint2;
+        this.bonusPoint1 = bonusPoint1;
+        this.startDateTime = startDateTime;
+        this.is_deleted = is_deleted;
+        this.__v = __v;
+        this.adminId = adminId;
+        this.name = name;
+        this.shortDesc = shortDesc;
+        this._id = _id;
+        this.department = department;
+        this.updatedAt = updatedAt;
+    }
+    
+    public void setImage(String image){
    this.image=image;
   }
   public String getImage(){
@@ -88,12 +92,6 @@ public class Featured{
   }
   public Boolean getIs_active(){
    return is_active;
-  }
-  public void setAddedBy(String addedBy){
-   this.addedBy=addedBy;
-  }
-  public String getAddedBy(){
-   return addedBy;
   }
   public void setDescription(String description){
    this.description=description;
@@ -113,6 +111,12 @@ public class Featured{
   public Integer getPoints(){
    return points;
   }
+  public void setDuration(Integer duration){
+   this.duration=duration;
+  }
+  public Integer getDuration(){
+   return duration;
+  }
   public void setBonusPoint3(Integer bonusPoint3){
    this.bonusPoint3=bonusPoint3;
   }
@@ -131,23 +135,17 @@ public class Featured{
   public Integer getBonusPoint1(){
    return bonusPoint1;
   }
-  public void setIs_deleted(Boolean is_deleted){
-   this.is_deleted=is_deleted;
-  }
-  public Boolean getIs_deleted(){
-   return is_deleted;
-  }
   public void setStartDateTime(String startDateTime){
    this.startDateTime=startDateTime;
   }
   public String getStartDateTime(){
    return startDateTime;
   }
-  public void setJoinedIn(Integer joinedIn){
-   this.joinedIn=joinedIn;
+  public void setIs_deleted(Boolean is_deleted){
+   this.is_deleted=is_deleted;
   }
-  public Integer getJoinedIn(){
-   return joinedIn;
+  public Boolean getIs_deleted(){
+   return is_deleted;
   }
   public void set__v(Integer __v){
    this.__v=__v;
@@ -184,12 +182,6 @@ public class Featured{
   }
   public String getDepartment(){
    return department;
-  }
-  public void setIs_featured(Boolean is_featured){
-   this.is_featured=is_featured;
-  }
-  public Boolean getIs_featured(){
-   return is_featured;
   }
   public void setUpdatedAt(String updatedAt){
    this.updatedAt=updatedAt;

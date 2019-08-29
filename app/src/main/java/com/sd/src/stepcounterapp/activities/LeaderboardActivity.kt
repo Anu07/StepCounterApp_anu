@@ -4,12 +4,14 @@ import android.content.Context
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.sd.src.stepcounterapp.AppApplication
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.adapter.LeaderboardAdapter
 import com.sd.src.stepcounterapp.fragments.SurveysFragment
 import com.sd.src.stepcounterapp.model.leaderboard.Challenge
-import com.sd.src.stepcounterapp.model.leaderboard.General
+import com.sd.src.stepcounterapp.model.leaderboard.LeaderBoardRequest
 import com.sd.src.stepcounterapp.utils.ItemClickGlobalListner
+import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import com.sd.src.stepcounterapp.viewModels.BaseViewModelFactory
 import com.sd.src.stepcounterapp.viewModels.LeaderboardViewModel
 import com.squareup.picasso.Picasso
@@ -56,9 +58,12 @@ class LeaderboardActivity : BaseActivity<LeaderboardViewModel>(), ItemClickGloba
 
     }
 
+
+//    leaderboardType => general / challenge
+
     override fun initListeners() {
         showPopupProgressSpinner(true)
-        mViewModel!!.getLeaderboard()
+        mViewModel!!.getLeaderboard(LeaderBoardRequest(SharedPreferencesManager.getUserId(AppApplication.applicationContext()),"general"))
     }
 
 

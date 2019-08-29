@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,7 +30,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class SurveysFragment : Fragment(),ItemClickGlobalListner {
+class SurveysFragment : BaseFragment(),ItemClickGlobalListner {
     override fun onItemClick(pos: Int) {
         swapFragment(mData[pos])
     }
@@ -69,6 +70,7 @@ class SurveysFragment : Fragment(),ItemClickGlobalListner {
         mViewModel = ViewModelProviders.of(activity!!).get(SurveyViewModel::class.java)
         mViewModel.getSurveyList().observe(this,
             Observer<SurveyListResponse> { mData ->
+                showPopupProgressSpinner(false)
                 if (mData != null) {
                     if (mData.data!!.size > 0) {
                         this.mData.addAll(mData.data)
@@ -82,6 +84,7 @@ class SurveysFragment : Fragment(),ItemClickGlobalListner {
                 }
             })
 
+        showPopupProgressSpinner(true)
         mViewModel.hitSurveyListApi()
 
         setSurveyAdapter()
@@ -126,6 +129,11 @@ class SurveysFragment : Fragment(),ItemClickGlobalListner {
         rvSurveys.layoutManager = LinearLayoutManager(mContext)
         mSurveyAdapter = SurveysAdapter(mContext, mData,this)
         rvSurveys.adapter = mSurveyAdapter
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.i("Herer","")
     }
 
 

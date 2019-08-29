@@ -6,10 +6,9 @@ import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.sd.src.stepcounterapp.AppApplication
-import com.sd.src.stepcounterapp.model.generic.BasicRequest
+import com.sd.src.stepcounterapp.model.leaderboard.LeaderBoardRequest
 import com.sd.src.stepcounterapp.model.leaderboard.LeaderBoardResponse
 import com.sd.src.stepcounterapp.network.RetrofitClient
-import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -28,8 +27,8 @@ class LeaderboardViewModel(application: Application) : AndroidViewModel(applicat
     }
 
 
-    fun getLeaderboard() {
-        call!!.getLeaderboard(BasicRequest(SharedPreferencesManager.getUserId(AppApplication.applicationContext()))).enqueue(object : Callback<LeaderBoardResponse> {
+    fun getLeaderboard(leaderBoardRequest: LeaderBoardRequest) {
+        call!!.getLeaderboard(leaderBoardRequest).enqueue(object : Callback<LeaderBoardResponse> {
 
             override fun onFailure(call: Call<LeaderBoardResponse>?, t: Throwable?) {
                 Log.v("retrofit", "call failed")

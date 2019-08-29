@@ -1,6 +1,7 @@
-package com.sd.src.stepcounterapp.model.profile;
+package com.sd.src.stepcounterapp.model.bmi;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
 /**
  * Awesome Pojo Generator
  * */
@@ -14,21 +15,12 @@ public class Data{
   @SerializedName("gender")
   @Expose
   private String gender;
-    
-    public int getMobile() {
-        return mobile;
-    }
-    
-    public void setMobile(int mobile) {
-        this.mobile = mobile;
-    }
-    
-    @SerializedName("mobile")
+  @SerializedName("basicFlag")
   @Expose
-  private int mobile;
+  private Boolean basicFlag;
   @SerializedName("weight")
   @Expose
-  private Float weight;
+  private Double weight;
   @SerializedName("firstName")
   @Expose
   private String firstName;
@@ -41,15 +33,12 @@ public class Data{
   @SerializedName("dob")
   @Expose
   private String dob;
-  @SerializedName("company")
-  @Expose
-  private String company;
   @SerializedName("_id")
   @Expose
   private String _id;
-  @SerializedName("department")
+  @SerializedName("rewardFlag")
   @Expose
-  private String department;
+  private Boolean rewardFlag;
   @SerializedName("email")
   @Expose
   private String email;
@@ -61,7 +50,7 @@ public class Data{
   private Double bmi;
   @SerializedName("height")
   @Expose
-  private Float height;
+  private Integer height;
   public void setLastName(String lastName){
    this.lastName=lastName;
   }
@@ -80,11 +69,11 @@ public class Data{
   public String getGender(){
    return gender;
   }
-  public void setWeight(Float weight){
-   this.weight=weight;
+  public void setBasicFlag(Boolean basicFlag){
+   this.basicFlag=basicFlag;
   }
-  public Float getWeight(){
-   return weight;
+  public Boolean getBasicFlag(){
+   return basicFlag;
   }
   public void setFirstName(String firstName){
    this.firstName=firstName;
@@ -110,23 +99,17 @@ public class Data{
   public String getDob(){
    return dob;
   }
-  public void setCompany(String company){
-   this.company=company;
-  }
-  public String getCompany(){
-   return company;
-  }
   public void set_id(String _id){
    this._id=_id;
   }
   public String get_id(){
    return _id;
   }
-  public void setDepartment(String department){
-   this.department=department;
+  public void setRewardFlag(Boolean rewardFlag){
+   this.rewardFlag=rewardFlag;
   }
-  public String getDepartment(){
-   return department;
+  public Boolean getRewardFlag(){
+   return rewardFlag;
   }
   public void setEmail(String email){
    this.email=email;
@@ -140,16 +123,26 @@ public class Data{
   public String getUsername(){
    return username;
   }
-  public void setBmi(Double bmi){
-   this.bmi=bmi;
-  }
-  public Double getBmi(){
-   return bmi;
-  }
-  public void setHeight(Float height){
+  public void setHeight(Integer height){
    this.height=height;
   }
-  public Float getHeight(){
+  public Integer getHeight(){
    return height;
   }
+    
+    public Double getWeight() {
+        return weight;
+    }
+    
+    public void setWeight(Double weight) {
+        this.weight = weight;
+    }
+    
+    public Double getBmi() {
+        return bmi;
+    }
+    
+    public void setBmi(Double bmi) {
+        this.bmi = bmi;
+    }
 }

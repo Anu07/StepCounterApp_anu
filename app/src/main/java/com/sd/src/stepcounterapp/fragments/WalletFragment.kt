@@ -88,7 +88,7 @@ class WalletFragment : Fragment() {
                     }
 
                     if (mData.data!!.redeemed != null && mData.data!!.redeemed!!.size > 0) {
-                        mDataReedemList = (mData.data?.redeemed as ArrayList<Redeemed>?)!!
+                        mDataReedemList = (mData.data?.purchased as ArrayList<Redeemed>?)!!
                         setReedemListAdapter()
                         setRedeemListView()
 

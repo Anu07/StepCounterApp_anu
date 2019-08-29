@@ -29,6 +29,18 @@ public class Data {
 	@Expose
 	private String username;
 	
+	public Data(String firstName, String lastName, String image, String dob, String _id, String email, String username, Boolean basicFlag, Boolean rewardFlag) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.image = image;
+		this.dob = dob;
+		this._id = _id;
+		this.email = email;
+		this.username = username;
+		this.basicFlag = basicFlag;
+		this.rewardFlag = rewardFlag;
+	}
+	
 	
 	public Boolean getBasicFlag() {
 		return basicFlag;

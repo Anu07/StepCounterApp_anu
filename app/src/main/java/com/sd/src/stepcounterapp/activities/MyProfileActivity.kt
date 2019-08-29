@@ -18,6 +18,8 @@ import kotlinx.android.synthetic.main.activity_my_profile.*
 import kotlinx.android.synthetic.main.black_crosstitlebar.*
 
 
+
+
 class MyProfileActivity : BaseActivity<ProfileViewModel>() {
     override val layoutId: Int
         get() = R.layout.activity_my_profile
@@ -37,7 +39,6 @@ class MyProfileActivity : BaseActivity<ProfileViewModel>() {
         lastUpdtd.text =
             "Last updated: " + (SharedPreferencesManager.getString(this@MyProfileActivity, SYNCDATE)?.split("T")?.get(0)
                 ?: "Not available")
-        fragmentTransaction = supportFragmentManager.beginTransaction()
         mViewModel!!.getProfileResponse().observe(this, Observer { mResponse ->
             showPopupProgressSpinner(false)
             if (mResponse.data != null) {
@@ -48,7 +49,7 @@ class MyProfileActivity : BaseActivity<ProfileViewModel>() {
                         .into(profileImg)
 
                 }
-                bmiVal.text = mResponse.data.bmi.toString()
+                bmiVal.text = String.format("%.3f", mResponse.data.bmi)
             }
         })
         profileFragment = ProfileFragment.newInstance(this)
@@ -77,18 +78,14 @@ class MyProfileActivity : BaseActivity<ProfileViewModel>() {
     }
 
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-    }
-
-
     /**
      * To open fragment
      */
 
     private fun openFragment() {
+        fragmentTransaction = supportFragmentManager.beginTransaction()
         fragmentTransaction.add(R.id.editcontainer, ProfileFragment.newInstance(this))
-        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.addToBackStack("edit")
         fragmentTransaction.commit()
     }
 
@@ -96,6 +93,20 @@ class MyProfileActivity : BaseActivity<ProfileViewModel>() {
         super.onActivityResult(requestCode, resultCode, data)
         Log.i("Test", "Result")
         this.profileFragment?.onActivityResult(requestCode, resultCode, data)
+    }
+
+    override fun onBackPressed() {
+        if(isFragmentPresent("edit")){
+            fragmentManager!!.popBackStackImmediate()
+        }else{
+            super.onBackPressed()
+        }
+    }
+
+
+    private fun isFragmentPresent(tag: String): Boolean {
+        val frag = supportFragmentManager.findFragmentByTag(tag)
+        return frag is ProfileFragment
     }
 
 }

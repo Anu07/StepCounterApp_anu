@@ -298,6 +298,7 @@ class ProfileFragment : BaseFragment(), View.OnClickListener {
             if (mData.status == 200) {
                 Toast.makeText(activity, "Profile updated successfully", Toast.LENGTH_LONG).show()
                 fragmentManager!!.popBackStackImmediate()
+//                fragmentManager!!.executePendingTransactions()
             }
         })
 
@@ -480,14 +481,6 @@ class ProfileFragment : BaseFragment(), View.OnClickListener {
         mViewModel!!.uploadImage(requestUserID, getFiletoServer())
     }
 
-
-    fun getRealPathFromURI(contentUri: Uri): String {
-        val proj = arrayOf(MediaStore.Audio.Media.DATA)
-        val cursor = activity?.managedQuery(contentUri, proj, null, null, null)
-        val column_index = cursor?.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)
-        cursor?.moveToFirst()
-        return cursor?.getString(column_index!!)!!
-    }
 
     /**
      * request body for image

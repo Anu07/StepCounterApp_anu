@@ -3,11 +3,15 @@ package com.sd.src.stepcounterapp.network
 import com.sd.src.stepcounterapp.model.BaseModel
 import com.sd.src.stepcounterapp.model.BasicInfoRequestObject
 import com.sd.src.stepcounterapp.model.DeviceResponse.DashboardResponse
+import com.sd.src.stepcounterapp.model.bmi.BMIinfoResponse
 import com.sd.src.stepcounterapp.model.challenge.ChallengeResponse
+import com.sd.src.stepcounterapp.model.challenge.ChallengeStartRequestModel
+import com.sd.src.stepcounterapp.model.challenge.ChallengeTakenResponse.StartChallengeResponse
 import com.sd.src.stepcounterapp.model.challenge.Data
 import com.sd.src.stepcounterapp.model.generic.BasicInfoResponse
 import com.sd.src.stepcounterapp.model.generic.BasicRequest
 import com.sd.src.stepcounterapp.model.image.ImageResponse
+import com.sd.src.stepcounterapp.model.leaderboard.LeaderBoardRequest
 import com.sd.src.stepcounterapp.model.leaderboard.LeaderBoardResponse
 import com.sd.src.stepcounterapp.model.login.LoginResponseJ
 import com.sd.src.stepcounterapp.model.loginrequest.LoginRequestObject
@@ -19,6 +23,7 @@ import com.sd.src.stepcounterapp.model.profile.UpdateProfileRequest
 import com.sd.src.stepcounterapp.model.rewards.AddRewardsRequestObject
 import com.sd.src.stepcounterapp.model.rewards.RewardsCategoriesResponse
 import com.sd.src.stepcounterapp.model.survey.SurveyListResponse
+import com.sd.src.stepcounterapp.model.survey.surveyrequest.SurveystartRequestModel
 import com.sd.src.stepcounterapp.model.syncDevice.FetchDeviceDataRequest
 import com.sd.src.stepcounterapp.model.syncDevice.SyncRequest
 import com.sd.src.stepcounterapp.model.transactionhistory.TransactionHistoryModel
@@ -49,7 +54,7 @@ interface ApiInterface {
     @PUT("api/add_basic_info")
     fun add_basic_info(
         @Body body: BasicInfoRequestObject
-    ): Call<BasicInfoResponse>
+    ): Call<BMIinfoResponse>
 
     @PUT("api/profile")
     fun update_profile(
@@ -134,22 +139,22 @@ interface ApiInterface {
     ): Call<BaseModel>
 
     @POST("/api/join_challenge")
-    fun startChallenge(@Body body: Data): Call<BaseModel>
+    fun startChallenge(@Body body: ChallengeStartRequestModel): Call<StartChallengeResponse>
 
     @POST("api/steps_to_token")
     fun steps_to_token(@Body body: BasicRequest): Call<TokenModel>
 
-    @GET("api/survey")
-    fun getsurvey(): Call<SurveyListResponse>
+    @POST("api/survey")
+    fun getsurvey(@Body body: BasicRequest): Call<SurveyListResponse>
 
     @POST("api/attend_survey")
-    fun takesurvey(): Call<BasicInfoResponse>
+    fun takesurvey(@Body body: SurveystartRequestModel): Call<BasicInfoResponse>
 
     @POST("/api/wallet")
     fun wallet(@Body body: BasicRequest): Call<WalletModel>
 
     @POST("/api/leaderboard")
-    fun getLeaderboard(@Body body: BasicRequest): Call<LeaderBoardResponse>
+    fun getLeaderboard(@Body body: LeaderBoardRequest): Call<LeaderBoardResponse>
 
 
 

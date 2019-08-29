@@ -45,9 +45,9 @@ class ChallengesDialog(
         Picasso.get().load(RetrofitClient.IMG_URL+mData.image).into(challengeImg)
         txtName.text = mData.name
         txtDepartment.text = mData.department
-        txtStartDate.text = mData.startDateTime
-//        txtEndDate.text = mData.
-//        txtParticipants.text = mData.
+        txtStartDate.text = mData.startDateTime.split("T")[0]
+        txtEndDate.text = ""
+        txtParticipants.text = mData.joinedIn.toString()
     }
 
 

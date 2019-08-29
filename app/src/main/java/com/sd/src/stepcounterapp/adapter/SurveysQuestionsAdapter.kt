@@ -5,13 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
+import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.model.survey.Products
 
+
 class SurveysQuestionsAdapter(
     mContext: Context,
+    var mListener: AnswerListener,
     var mValues: ArrayList<Products>
 ) :
     RecyclerView.Adapter<SurveysQuestionsAdapter.ViewHolder>() {
@@ -29,6 +32,10 @@ class SurveysQuestionsAdapter(
         holder.opt2.text =  mValues[position].option2
         holder.opt3.text =  mValues[position].option3
         holder.opt4.text =  mValues[position].option4
+        holder.ansGroup.setOnCheckedChangeListener { group, checkedId ->
+            val radio: RadioButton = group.findViewById(checkedId)
+            mListener.onAnswer(position,radio.text.toString())
+        }
     }
 
 
@@ -38,10 +45,12 @@ class SurveysQuestionsAdapter(
         var opt2: RadioButton
         var opt3: RadioButton
         var opt4: RadioButton
+        var ansGroup: RadioGroup
 
         internal lateinit var item: com.sd.src.stepcounterapp.model.challenge.Data
 
         init {
+            ansGroup = v.findViewById(R.id.answerGroup) as RadioGroup
             textView = v.findViewById<View>(R.id.quesText) as TextView
             opt1 = v.findViewById<View>(R.id.option_1) as RadioButton
             opt2 = v.findViewById<View>(R.id.option_2) as RadioButton
@@ -50,5 +59,9 @@ class SurveysQuestionsAdapter(
         }
     }
 
+
+    interface AnswerListener{
+        fun onAnswer(pos: Int, value : String)
+    }
 
 }

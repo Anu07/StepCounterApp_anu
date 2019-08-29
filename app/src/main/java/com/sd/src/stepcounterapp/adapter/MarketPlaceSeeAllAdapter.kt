@@ -41,6 +41,7 @@ class MarketPlaceSeeAllAdapter(var mData: ArrayList<MarketResponse.Products>,var
         }
 
         holder.wishListView.setOnClickListener {
+           holder.wishListView.setImageResource(R.drawable.wishlist_fill)
             mListener.onItemwishlisted(position,  mData[position])
         }
 

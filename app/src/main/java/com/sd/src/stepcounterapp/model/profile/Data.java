@@ -15,17 +15,18 @@ public class Data{
   @Expose
   private String gender;
     
-    public int getMobile() {
+    
+    public long getMobile() {
         return mobile;
     }
     
-    public void setMobile(int mobile) {
+    public void setMobile(long mobile) {
         this.mobile = mobile;
     }
     
     @SerializedName("mobile")
   @Expose
-  private int mobile;
+  private long mobile;
   @SerializedName("weight")
   @Expose
   private Float weight;

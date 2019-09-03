@@ -7,7 +7,9 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.sd.src.stepcounterapp.AppApplication
 import com.sd.src.stepcounterapp.fragments.HayatechFragment
+import com.sd.src.stepcounterapp.model.generic.BasicInfoResponse
 import com.sd.src.stepcounterapp.model.generic.BasicRequest
+import com.sd.src.stepcounterapp.model.redeemnow.RedeemRequest
 import com.sd.src.stepcounterapp.model.wallet.TokenModel
 import com.sd.src.stepcounterapp.model.wallet.WalletModel
 import com.sd.src.stepcounterapp.network.RetrofitClient
@@ -18,6 +20,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class WalletViewModel(application: Application) : AndroidViewModel(application) {
+    private var mPurchaseResponse: MutableLiveData<BasicInfoResponse>?= null
     val call = RetrofitClient.instance
 
     private var mTokenModel: MutableLiveData<TokenModel>? = null
@@ -28,6 +31,13 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
             mTokenModel = MutableLiveData()
         }
         return mTokenModel as MutableLiveData<TokenModel>
+    }
+
+    fun getPurchase(): MutableLiveData<BasicInfoResponse> {
+        if (mPurchaseResponse == null) {
+            mPurchaseResponse = MutableLiveData()
+        }
+        return mPurchaseResponse as MutableLiveData<BasicInfoResponse>
     }
 
     fun getWalletData(): MutableLiveData<WalletModel> {
@@ -74,6 +84,21 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
                     model.message = "Invalid request"
                     mWalletModel!!.value = model
                     LoadingDialog.getLoader().dismissLoader()
+                }
+            }
+        })
+    }
+
+    fun hitPurchaseApi(request: RedeemRequest) {
+        call!!.redeemNow(request).enqueue(object : Callback<BasicInfoResponse> {
+            override fun onFailure(call: Call<BasicInfoResponse>?, t: Throwable?) {
+                Log.v("retrofit", "call failed")
+                Toast.makeText(AppApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
+            }
+
+            override fun onResponse(call: Call<BasicInfoResponse>?, response: Response<BasicInfoResponse>?) {
+                if (response!!.code() == 200) {
+                    mPurchaseResponse!!.value = response.body()
                 }
             }
         })

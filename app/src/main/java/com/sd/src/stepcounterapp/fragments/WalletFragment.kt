@@ -2,28 +2,40 @@ package com.sd.src.stepcounterapp.fragments
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sd.src.stepcounterapp.R
+import com.sd.src.stepcounterapp.activities.LandingActivity
 import com.sd.src.stepcounterapp.adapter.WalletRedeemListAdapter
 import com.sd.src.stepcounterapp.adapter.WalletWishListAdapter
+import com.sd.src.stepcounterapp.model.generic.BasicInfoResponse
+import com.sd.src.stepcounterapp.model.redeemnow.RedeemRequest
 import com.sd.src.stepcounterapp.model.wallet.Redeemed
 import com.sd.src.stepcounterapp.model.wallet.TokenModel
 import com.sd.src.stepcounterapp.model.wallet.WalletModel
 import com.sd.src.stepcounterapp.model.wallet.Wishlist
 import com.sd.src.stepcounterapp.network.RetrofitClient
+import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import com.sd.src.stepcounterapp.viewModels.WalletViewModel
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_wallet.*
+import kotlinx.android.synthetic.main.item_wallet_wish_list.*
 
-class WalletFragment : Fragment() {
+class WalletFragment : BaseFragment(),WalletWishListAdapter.PurchaseListener {
+    override fun onPurchaseNow(pos: Int) {
+        showPopupProgressSpinner(true)
+        mViewModel.hitPurchaseApi(RedeemRequest(mDataWishList[pos]._id.toString(),SharedPreferencesManager.getUserId(mContext)))
+    }
 
     companion object {
         @SuppressLint("StaticFieldLeak")
@@ -58,6 +70,15 @@ class WalletFragment : Fragment() {
                 if (mData.data != null) {
                     txtTokens.text = mData.data!!.totalEarntokens.toString()
                     txtSteps.text = mData.data!!.totalSteps.toString()
+                }
+            })
+
+        mViewModel.getPurchase().observe(this,
+            Observer<BasicInfoResponse> { mData ->
+                showPopupProgressSpinner(false)
+                if(mData!=null){
+                    Toast.makeText(mContext,"Product purchased successfully",Toast.LENGTH_LONG).show()
+                    mViewModel.hitWalletApi()
                 }
             })
 
@@ -148,9 +169,9 @@ class WalletFragment : Fragment() {
             }
         }
 
-      /*  historyView.setOnClickListener{
-            OpenFragment()
-        }*/
+        historyView.setOnClickListener{
+//            startActivity(Intent(mContext,LandingActivity::class.java))
+        }
 
     }
 
@@ -158,12 +179,13 @@ class WalletFragment : Fragment() {
 
     private fun setWishListAdapter() {
         rvWishList.layoutManager = LinearLayoutManager(mContext)
-        mWishListAdapter = WalletWishListAdapter(mDataWishList)
+        mWishListAdapter = WalletWishListAdapter(mDataWishList,this)
         rvWishList.adapter = mWishListAdapter
     }
 
     private fun setWishListView() {
-        if (mDataWishList.size > 0 && mDataWishList.size<3) {
+//        if (mDataWishList.size in 1..2) {
+        if(mDataWishList.isNotEmpty()){
             cdWishSecond.visibility = View.VISIBLE
             cdWishFirst.visibility = View.VISIBLE
 
@@ -171,6 +193,10 @@ class WalletFragment : Fragment() {
             txtShortDescFirst.text = mDataWishList[0].shortDesc
             txtTokenFirst.text = "${mDataWishList[0].token} TKS"
             Picasso.get().load(RetrofitClient.IMG_URL + "" + mDataWishList[0].image).into(imgProductFirst)
+            purchaseFirst.setOnClickListener {
+                showPopupProgressSpinner(true)
+                mViewModel.hitPurchaseApi(RedeemRequest(SharedPreferencesManager.getUserId(mContext),mDataWishList[0]._id.toString()))
+            }
 
             if (mDataWishList.size > 1) {
                 cdWishSecond.visibility = View.VISIBLE
@@ -178,12 +204,19 @@ class WalletFragment : Fragment() {
                 txtShortDescSecond.text = mDataWishList[1].shortDesc
                 txtTokenSecond.text = "${mDataWishList[1].token} TKS"
                 Picasso.get().load(RetrofitClient.IMG_URL + "" + mDataWishList[1].image).into(imgProductSecond)
+                purchaseSecond.setOnClickListener {
+                    showPopupProgressSpinner(true)
+                    mViewModel.hitPurchaseApi(RedeemRequest(SharedPreferencesManager.getUserId(mContext),mDataWishList[1]._id.toString()))
+                }
             } else {
                 cdWishSecond.visibility = View.GONE
             }
-        } else {
-            cdWishSecond.visibility = View.GONE
-            cdWishFirst.visibility = View.GONE
+            /*  } else {
+                  cdWishSecond.visibility = View.GONE
+                  cdWishFirst.visibility = View.GONE
+                  rvWishList.visibility = View.VISIBLE
+              }*/
+
         }
 
     }

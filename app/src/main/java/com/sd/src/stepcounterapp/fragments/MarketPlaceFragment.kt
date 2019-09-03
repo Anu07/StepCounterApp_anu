@@ -2,34 +2,36 @@ package com.sd.src.stepcounterapp.fragments
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.Dialog
 import android.content.Context
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.*
+import android.view.LayoutInflater
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sd.src.stepcounterapp.R
+import com.sd.src.stepcounterapp.activities.LandingActivity
 import com.sd.src.stepcounterapp.adapter.MarketPlaceCategoryAdapter
 import com.sd.src.stepcounterapp.adapter.MarketPlacePopularityAdapter
 import com.sd.src.stepcounterapp.adapter.MarketPlaceSeeAllAdapter
 import com.sd.src.stepcounterapp.dialog.FilterDialog
+import com.sd.src.stepcounterapp.dialog.MarketPlaceDialog
 import com.sd.src.stepcounterapp.interfaces.MarketPlaceClickInterface
 import com.sd.src.stepcounterapp.model.generic.BasicInfoResponse
 import com.sd.src.stepcounterapp.model.generic.BasicRequest
 import com.sd.src.stepcounterapp.model.marketplace.BasicSearchRequest
 import com.sd.src.stepcounterapp.model.marketplace.MarketResponse
 import com.sd.src.stepcounterapp.model.marketplace.PopularProducts
+import com.sd.src.stepcounterapp.model.redeemnow.RedeemRequest
 import com.sd.src.stepcounterapp.model.wishList.AddWishRequest
 import com.sd.src.stepcounterapp.model.wishList.Data
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
@@ -38,7 +40,25 @@ import kotlinx.android.synthetic.main.fragment_market_place.*
 
 
 class MarketPlaceFragment : BaseFragment(), MarketPlaceClickInterface, MarketPlaceCategoryAdapter.twoItemListener,
+    MarketPlaceCategoryAdapter.ClickMarketListener,
     MarketPlacePopularityAdapter.PopularInterface, MarketPlaceSeeAllAdapter.CategoryInterface {
+    override fun onClick(position: Int, mItem: MarketResponse.Products) {
+        marketDialog = MarketPlaceDialog(mContext, mItem, R.style.pullBottomfromTop, R.layout.dialog_marketplace,
+            object : MarketPlaceDialog.PurchaseInterface {
+                override fun onWishlist(data: MarketResponse.Products) {
+                    showPopupProgressSpinner(true)
+                    mViewModel.addWishList(AddWishRequest(SharedPreferencesManager.getUserId(context!!), mItem._id))
+                }
+
+                override fun onPurchase(data: MarketResponse.Products) {
+                    showPopupProgressSpinner(true)
+                    mViewModel.hitPurchaseApi(RedeemRequest(mItem._id, SharedPreferencesManager.getUserId(mContext)))
+
+                }
+            })
+        marketDialog!!.show()
+    }
+
     override fun onWish(position: Int, mItem: MarketResponse.Products) {
         if (!mItem.wishlist) {
             showPopupProgressSpinner(true)
@@ -86,7 +106,7 @@ class MarketPlaceFragment : BaseFragment(), MarketPlaceClickInterface, MarketPla
             llSeeAll.visibility = View.VISIBLE
             rvProduct.visibility = View.GONE
             if (mDataCategory[position].products.size > 0) {
-                mSeeAllAdapter = MarketPlaceSeeAllAdapter(mDataCategory[position].products, this)
+                mSeeAllAdapter = MarketPlaceSeeAllAdapter(mDataCategory[position].products, this,this)
                 rvSeeAll.adapter = mSeeAllAdapter
             }
         } else {
@@ -111,13 +131,8 @@ class MarketPlaceFragment : BaseFragment(), MarketPlaceClickInterface, MarketPla
         }
     }
 
+    private lateinit var marketDialog: MarketPlaceDialog
     private val mCartItemCount: Int = 0
-    internal lateinit var callback: FragmentClick
-
-    fun FragmentClickListener(callback: FragmentClick) {
-        this.callback = callback
-    }
-
     private var tabtype: Boolean = true
     private var mDataWish: ArrayList<Data> = ArrayList()
     private lateinit var mViewModel: MarketPlaceViewModel
@@ -133,6 +148,23 @@ class MarketPlaceFragment : BaseFragment(), MarketPlaceClickInterface, MarketPla
         mViewModel.getCategoryApi(BasicRequest(SharedPreferencesManager.getUserId(mContext), "1"))
         mViewModel.getProductApi(BasicRequest(SharedPreferencesManager.getUserId(mContext), "1"))
 
+        mViewModel.getPurchase().observe(this,
+            Observer<BasicInfoResponse> { mData ->
+                showPopupProgressSpinner(false)
+                try {
+                    if(marketDialog!=null && marketDialog.isShowing){
+                        marketDialog.dismiss()
+                    }
+                } catch (e: Exception) {
+                }
+                if (mData != null) {
+                    Toast.makeText(WalletFragment.mContext, "Product purchased successfully", Toast.LENGTH_LONG).show()
+                    mViewModel.getCategoryApi(BasicRequest(SharedPreferencesManager.getUserId(mContext), "1"))
+                }
+            })
+
+
+
         mViewModel.getCategory().observe(this,
             Observer<MarketResponse> { mProduct ->
                 if (mProduct != null) {
@@ -140,7 +172,7 @@ class MarketPlaceFragment : BaseFragment(), MarketPlaceClickInterface, MarketPla
                         rvProduct.visibility = View.VISIBLE
                         noRec.visibility = View.GONE
                         mDataCategory = mProduct.data
-                        mCategoryAdapter = MarketPlaceCategoryAdapter(mDataCategory, mContext, this, this)
+                        mCategoryAdapter = MarketPlaceCategoryAdapter(mDataCategory, mContext, this, this, this)
                         rvProduct.adapter = mCategoryAdapter
                         txtCategoryName.text = mDataCategory[0].name
                     }
@@ -168,6 +200,12 @@ class MarketPlaceFragment : BaseFragment(), MarketPlaceClickInterface, MarketPla
         mViewModel.addWishList().observe(this,
             Observer<BasicInfoResponse> {
                 showPopupProgressSpinner(false)
+                try {
+                    if(marketDialog!=null && marketDialog.isShowing){
+                        marketDialog.dismiss()
+                    }
+                } catch (e: Exception) {
+                }
                 if (it != null) {
                     if (it.status == 200) {
                         mViewModel.getCategoryApi(BasicRequest(SharedPreferencesManager.getUserId(mContext), "1"))
@@ -212,8 +250,10 @@ class MarketPlaceFragment : BaseFragment(), MarketPlaceClickInterface, MarketPla
         }
 
         filter.setOnClickListener {
-            FilterDialog(mContext, R.style.pullBottomfromTop,
-                R.layout.dialog_filter).show()
+            FilterDialog(
+                mContext, R.style.pullBottomfromTop,
+                R.layout.dialog_filter
+            ).show()
         }
 
 
@@ -265,7 +305,8 @@ class MarketPlaceFragment : BaseFragment(), MarketPlaceClickInterface, MarketPla
         })
 
         wishlist.setOnClickListener {
-            callback.onFragmentClick(2)
+            //            callback.onFragmentClick(2)
+            (mContext as LandingActivity).onFragmnet(2)
         }
     }
 
@@ -289,7 +330,7 @@ class MarketPlaceFragment : BaseFragment(), MarketPlaceClickInterface, MarketPla
 
     private fun setCategoryAdapter() {
         rvProduct.layoutManager = LinearLayoutManager(mContext)
-        mCategoryAdapter = MarketPlaceCategoryAdapter(mDataCategory, mContext, this, this)
+        mCategoryAdapter = MarketPlaceCategoryAdapter(mDataCategory, mContext, this, this, this)
         rvProduct.adapter = mCategoryAdapter
     }
 
@@ -332,11 +373,9 @@ class MarketPlaceFragment : BaseFragment(), MarketPlaceClickInterface, MarketPla
     }
 
 
-
-
-    interface FragmentClick {
-        fun onFragmentClick(pos:Int)
-    }
+//    interface FragmentClick {
+//        fun onFragmentClick(pos:Int)
+//    }
 
     /**
      * to setup wishlist badge count

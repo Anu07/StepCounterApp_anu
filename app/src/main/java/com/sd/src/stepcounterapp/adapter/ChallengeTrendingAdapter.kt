@@ -2,6 +2,7 @@ package com.sd.src.stepcounterapp.adapter
 
 import android.content.Context
 import android.os.Build
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,7 +29,7 @@ class ChallengeTrendingAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         this.item = mValues[position]
         holder.textView.text = item.name
-        holder.textShort.text = item.description
+        holder.textShort.text = Html.fromHtml(item.description)
         Picasso.get().load(RetrofitClient.IMG_URL + "" + item.image).placeholder(R.drawable.placeholder)
             .into(holder.imageView)
         holder.imageView.setOnClickListener {

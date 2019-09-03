@@ -20,6 +20,7 @@
                 android:textColor="@color/white"
                 android:paddingRight="@dimen/_2sdp"
                 android:paddingLeft="@dimen/_2sdp"
+                android:layout_marginLeft="@dimen/_7sdp"
                 android:background="@color/featured"
                 android:textSize="@dimen/_8ssp"
                 app:appfont="montserrat_medium.ttf"

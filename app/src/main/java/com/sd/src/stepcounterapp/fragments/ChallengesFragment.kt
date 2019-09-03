@@ -25,6 +25,7 @@ import com.sd.src.stepcounterapp.dialog.ChallengesDialog
 import com.sd.src.stepcounterapp.dialog.StopChallengeDialog
 import com.sd.src.stepcounterapp.model.challenge.*
 import com.sd.src.stepcounterapp.model.challenge.ChallengeTakenResponse.StartChallengeResponse
+import com.sd.src.stepcounterapp.model.generic.BasicInfoResponse
 import com.sd.src.stepcounterapp.model.generic.BasicRequest
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import com.sd.src.stepcounterapp.viewModels.ChallengeViewModel
@@ -36,7 +37,7 @@ import kotlin.collections.ArrayList
 class ChallengesFragment : Fragment(), ChallengeAdapter.ItemClickListener ,SlidingFeaturedChallengeImageAdapter.ItemSlideListener,
     ChallengeTrendingAdapter.ItemTrendClickListener{
     override fun onImageSlider(position: Int, img: Data) {
-        Challengedialog = ChallengesDialog(mContext, img as Data, R.style.pullBottomfromTop, R.layout.dialog_challenges,
+        Challengedialog = ChallengesDialog(mContext, img, R.style.pullBottomfromTop, R.layout.dialog_challenges,
             object : ChallengesDialog.StartInterface {
                 override fun onStart(img: Data) {
                     mViewModel.startChallenge(img)
@@ -92,6 +93,7 @@ class ChallengesFragment : Fragment(), ChallengeAdapter.ItemClickListener ,Slidi
 
     private var mFeaturedChallengeCategory: MutableList<Data> = mutableListOf()
     private lateinit var mTrendChallengeCategory: MutableList<Data>
+    var mActiveList: MutableList<Data> = mutableListOf()
     private lateinit var mTrendingChallengesAdapter: ChallengeTrendingAdapter
     private lateinit var mChallengesAdapter: ChallengeAdapter
     private lateinit var mChallengeCategory: MutableList<Data>
@@ -102,6 +104,8 @@ class ChallengesFragment : Fragment(), ChallengeAdapter.ItemClickListener ,Slidi
     private lateinit var mViewModel: ChallengeViewModel
     var dialog: ChallengesDialog? = null
     lateinit var Challengedialog: ChallengesDialog
+    lateinit var stopChallengedialog: StopChallengeDialog
+
     companion object {
         @SuppressLint("StaticFieldLeak")
         lateinit var instance: ChallengesFragment
@@ -127,10 +131,11 @@ class ChallengesFragment : Fragment(), ChallengeAdapter.ItemClickListener ,Slidi
         mViewModel.getChallengeObject().observe(this,
             Observer<ChallengeResponse> { mChallenge ->
                 if (mChallenge != null) {
+
                     if (mChallenge.data != null && mChallenge.trending.size > 0) {
                         mChallengeCategory = mChallenge.data
                         setChallengeAdapter()
-                        var mActiveList = mChallenge.ongoing
+                        mActiveList = mChallenge.ongoing
                         if (mActiveList.isNotEmpty()) {
                             showOngoingChallenge(mActiveList)
                         } else {
@@ -171,8 +176,24 @@ class ChallengesFragment : Fragment(), ChallengeAdapter.ItemClickListener ,Slidi
                 Toast.makeText(mContext,"There is another challenge already started.",Toast.LENGTH_LONG).show()
             }
         })
+
+        mViewModel.getStopChallengeObject().observe(this, Observer<BasicInfoResponse> { mData ->
+            if(stopChallengedialog!=null && stopChallengedialog!!.isShowing){
+                stopChallengedialog!!.dismiss()
+            }
+            if (mData!=null && mData.status == 200) {
+                Toast.makeText(mContext,"This challenge has been stopped.",Toast.LENGTH_LONG).show()
+                mViewModel.getchallenges(BasicRequest(SharedPreferencesManager.getUserId(mContext), ""))
+            }
+        })
         llStartChallenges.setOnClickListener {
-            StopChallengeDialog(mContext, R.style.pullBottomfromTop, R.layout.dialog_stop_challenges).show()
+            stopChallengedialog= StopChallengeDialog(mContext, R.style.pullBottomfromTop, R.layout.dialog_stop_challenges,mActiveList[0],
+                object : StopChallengeDialog.StopInterface {
+                    override fun onStop(data: Data) {
+                        mViewModel.stopchallenges(mActiveList[0]._id)
+                    }
+            })
+            stopChallengedialog.show()
         }
 
     }
@@ -181,9 +202,9 @@ class ChallengesFragment : Fragment(), ChallengeAdapter.ItemClickListener ,Slidi
         llStartChallenges.visibility = View.VISIBLE
         ongoingchallengeName.text = mActiveList[0].name
         ongoingChallengeDetail.text = "Duration: " + mActiveList[0].endDateTime.split("T")[0]
-        stopchallengeBttn.setOnClickListener {
+        /*stopchallengeBttn.setOnClickListener {
             mViewModel.stopchallenges(mActiveList[0]._id)
-        }
+        }*/
     }
 
     private fun setFeaturedChallengeSliderAdapter(mFeaturedNewChallengeCategory: MutableList<Data>) {
@@ -204,8 +225,6 @@ class ChallengesFragment : Fragment(), ChallengeAdapter.ItemClickListener ,Slidi
         leaderBttn.setOnClickListener {
             startActivity(Intent(mContext, LeaderboardActivity::class.java))
         }
-
-
 
         init()
     }

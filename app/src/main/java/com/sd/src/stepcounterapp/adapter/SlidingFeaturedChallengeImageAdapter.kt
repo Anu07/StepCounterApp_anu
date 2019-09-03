@@ -2,6 +2,7 @@ package com.sd.src.stepcounterapp.adapter
 
 import android.content.Context
 import android.os.Parcelable
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,7 +41,7 @@ class SlidingFeaturedChallengeImageAdapter(var context: Context, val images: Mut
 
         Picasso.get().load(RetrofitClient.IMG_URL+images[position].image).into(imageView)
         mainTitleView.text = images[position].name
-        mainSubTitleView.text = images[position].shortDesc
+        mainSubTitleView.text = Html.fromHtml(images[position].shortDesc)
         /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             imageView.foreground = context.getDrawable(R.drawable.img_ovrlay_slider)
         }*/

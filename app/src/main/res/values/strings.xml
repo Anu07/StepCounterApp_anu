@@ -77,6 +77,11 @@
         <item>100</item>
     </string-array>
 
+    <string-array name="leaderArray">
+        <item>General Leaderboard</item>
+        <item>Challenge Leaderboard</item>
+    </string-array>
+
     <string-array name="periodArray">
         <item>Today</item>
       <!--  <item>Weekly</item>

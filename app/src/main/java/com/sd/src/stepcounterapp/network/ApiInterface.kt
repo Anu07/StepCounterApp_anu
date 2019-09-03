@@ -7,7 +7,6 @@ import com.sd.src.stepcounterapp.model.bmi.BMIinfoResponse
 import com.sd.src.stepcounterapp.model.challenge.ChallengeResponse
 import com.sd.src.stepcounterapp.model.challenge.ChallengeStartRequestModel
 import com.sd.src.stepcounterapp.model.challenge.ChallengeTakenResponse.StartChallengeResponse
-import com.sd.src.stepcounterapp.model.challenge.Data
 import com.sd.src.stepcounterapp.model.generic.BasicInfoResponse
 import com.sd.src.stepcounterapp.model.generic.BasicRequest
 import com.sd.src.stepcounterapp.model.image.ImageResponse
@@ -20,6 +19,7 @@ import com.sd.src.stepcounterapp.model.marketplace.MarketResponse
 import com.sd.src.stepcounterapp.model.marketplace.PopularProducts
 import com.sd.src.stepcounterapp.model.profile.ProfileResponse
 import com.sd.src.stepcounterapp.model.profile.UpdateProfileRequest
+import com.sd.src.stepcounterapp.model.redeemnow.RedeemRequest
 import com.sd.src.stepcounterapp.model.rewards.AddRewardsRequestObject
 import com.sd.src.stepcounterapp.model.rewards.RewardsCategoriesResponse
 import com.sd.src.stepcounterapp.model.survey.SurveyListResponse
@@ -136,7 +136,7 @@ interface ApiInterface {
     fun stopChallenges(
         @Field("userId") userId: String,
         @Field("challengeId") challengeId: String
-    ): Call<BaseModel>
+    ): Call<BasicInfoResponse>
 
     @POST("/api/join_challenge")
     fun startChallenge(@Body body: ChallengeStartRequestModel): Call<StartChallengeResponse>
@@ -152,6 +152,10 @@ interface ApiInterface {
 
     @POST("/api/wallet")
     fun wallet(@Body body: BasicRequest): Call<WalletModel>
+
+    @POST("/api/redeem_now")
+    fun redeemNow(@Body body: RedeemRequest): Call<BasicInfoResponse>
+
 
     @POST("/api/leaderboard")
     fun getLeaderboard(@Body body: LeaderBoardRequest): Call<LeaderBoardResponse>

@@ -2,6 +2,7 @@ package com.sd.src.stepcounterapp.adapter
 
 import android.content.Context
 import android.os.Build
+import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -27,7 +28,7 @@ class ChallengeAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         item = mValues[position]
         holder.textView.text = item.name
-        holder.textShort.text = item.shortDesc
+        holder.textShort.text = Html.fromHtml(item.shortDesc)
         Log.i("item","name"+position +"!!!!!"+item.name)
         holder.imageView.setOnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

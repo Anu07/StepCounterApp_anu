@@ -17,6 +17,7 @@
                 android:layout_weight="1"
                 android:text="Diet &amp; Nutrition"
                 android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/_5sdp"
                 android:textColor="@color/colorBlack"
                 android:paddingTop="@dimen/_10sdp"
                 android:paddingStart="@dimen/_5sdp"
@@ -28,6 +29,8 @@
                 android:id="@+id/txtSeeAll"
                 android:layout_height="wrap_content"
                 android:text="See all"
+                android:visibility="gone"
+                android:paddingBottom="@dimen/_5sdp"
                 android:textColor="@color/gray_text"
                 android:paddingTop="@dimen/_10sdp"
                 android:paddingEnd="@dimen/_10sdp"
@@ -57,8 +60,10 @@
                     android:orientation="vertical"
                     android:layout_marginRight="@dimen/_3sdp"
                     android:layout_height="wrap_content">
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
+                        android:id="@+id/firstCatItem"
                         android:layout_height="wrap_content">
 
                     <ImageView

@@ -4,13 +4,16 @@ import com.google.gson.annotations.SerializedName;
 /**
  * Awesome Pojo Generator
  * */
-public class Challenge{
+public class Data{
+  @SerializedName("date")
+  @Expose
+  private String date;
   @SerializedName("image")
   @Expose
   private String image;
   @SerializedName("distance")
   @Expose
-  private Double distance;
+  private Float distance;
   @SerializedName("name")
   @Expose
   private String name;
@@ -20,16 +23,22 @@ public class Challenge{
   @SerializedName("steps")
   @Expose
   private Integer steps;
+  public void setDate(String date){
+   this.date=date;
+  }
+  public String getDate(){
+   return date;
+  }
   public void setImage(String image){
    this.image=image;
   }
   public String getImage(){
    return image;
   }
-  public void setDistance(Double distance){
+  public void setDistance(Float distance){
    this.distance=distance;
   }
-  public Double getDistance(){
+  public Float getDistance(){
    return distance;
   }
   public void setName(String name){

@@ -93,7 +93,6 @@ class SurveysFragment : BaseFragment(),ItemClickGlobalListner {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         init()
-
     }
 
 
@@ -131,10 +130,6 @@ class SurveysFragment : BaseFragment(),ItemClickGlobalListner {
         rvSurveys.adapter = mSurveyAdapter
     }
 
-    override fun onResume() {
-        super.onResume()
-        Log.i("Herer","")
-    }
 
 
     private fun swapFragment(data: Data) {

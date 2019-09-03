@@ -10,7 +10,7 @@ import com.sd.src.stepcounterapp.network.RetrofitClient
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_wallet_wish_list.view.*
 
-class WalletWishListAdapter(var mData: ArrayList<Wishlist>) :
+class WalletWishListAdapter(var mData: ArrayList<Wishlist>, var mListener: PurchaseListener) :
     RecyclerView.Adapter<WalletWishListAdapter.ViewHolder>() {
 
     override
@@ -26,6 +26,9 @@ class WalletWishListAdapter(var mData: ArrayList<Wishlist>) :
         holder.txtShortDesc.text = mData[position].shortDesc
         holder.txtToken.text = "${mData[position].token} TKS"
         Picasso.get().load(RetrofitClient.IMG_URL + "" + mData[position].image).into(holder.imgProduct)
+        holder.purchaseBttn.setOnClickListener {
+            mListener.onPurchaseNow(position)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -37,5 +40,11 @@ class WalletWishListAdapter(var mData: ArrayList<Wishlist>) :
         val txtProductName = itemView.txtProductName!!
         val txtShortDesc = itemView.txtShortDesc!!
         val txtToken = itemView.txtToken!!
+        val purchaseBttn = itemView.purchaseBttn!!
+    }
+
+
+    interface PurchaseListener{
+        fun onPurchaseNow(pos:Int)
     }
 }

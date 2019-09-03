@@ -52,16 +52,24 @@ import no.nordicsemi.android.dfu.DfuServiceListenerHelper
 import java.util.*
 
 
-class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback, View.OnClickListener,
-    MarketPlaceFragment.FragmentClick {
+class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback, View.OnClickListener{
+//
+//    override fun onFragmentClick(position: Int) {
+//        if (position == 2) {
+//            vpLanding.currentItem = 4
+//        } else if (position == 0) {
+//            vpLanding.currentItem = 2
+//        }
+//    }
 
-    override fun onFragmentClick(position: Int) {
+    fun onFragmnet(position: Int){
         if (position == 2) {
             vpLanding.currentItem = 4
         } else if (position == 0) {
             vpLanding.currentItem = 2
         }
     }
+
 
     private var deviceSynced: String? = ""
     private val FRAG_HAYATECH: Int = 0
@@ -122,7 +130,6 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
                 logoutUser()
             }
         }
-
         mAdapter = LandingPagerAdapter(supportFragmentManager)
         mAdapter.addFragment(HayatechFragment.newInstance(this@LandingActivity))
         mAdapter.addFragment(ChallengesFragment.newInstance(this@LandingActivity))
@@ -178,9 +185,12 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
             searchDevices()
         } else {
 
-            showGPSDisabledAlertToUser()
+            if(!manager.isProviderEnabled( LocationManager.GPS_PROVIDER )){
+                showGPSDisabledAlertToUser()
+            }else{
+                startActivity(Intent(this@LandingActivity, GuideActivity::class.java))
+            }
 
-            startActivity(Intent(this@LandingActivity, GuideActivity::class.java))
         }
 
     }
@@ -233,24 +243,23 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
         when (selected) {
             FRAG_HAYATECH -> {
                 imgHayatech.setImageResource(R.drawable.dashboard_s)
-//                txt_title.text = getString(R.string.hayatech)
+                txt_title.setImageResource(R.drawable.headerlogo)
             }
             FRAG_CHALLENGES -> {
                 imgChallenges.setImageResource(R.drawable.challenge_s)
-                txt_title.setImageResource(R.drawable.challenges_title)
-//                txt_title.text = getString(R.string.challenges)
+                txt_title.setImageResource(R.drawable.challenges_header)
             }
             FRAG_MARKET_PLACE -> {
                 imgMarketPalace.setImageResource(R.drawable.marketplace_s)
-//                txt_title.text = getString(R.string.marketplace)
+                txt_title.setImageResource(R.drawable.marketplace_header)
             }
             FRAG_SURVEY -> {
                 imgSurvey.setImageResource(R.drawable.survey_s)
-//                txt_title.text = getString(R.string.surveys)
+                txt_title.setImageResource(R.drawable.surveys_header)
             }
             FRAG_WALLET -> {
                 imgWallet.setImageResource(R.drawable.wallet_s)
-//                txt_title.text = getString(R.string.wallet)
+                txt_title.setImageResource(R.drawable.wallet_header)
             }
         }
         mSelected = selected
@@ -630,15 +639,9 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
     }
 
 
-    override fun onAttachFragment(fragment: Fragment) {
-        if (fragment is MarketPlaceFragment) {
-            fragment.FragmentClickListener(this)
-        }
-    }
-
     private fun openTransactionFragment() {
         mDrawerLayout.closeDrawer(GravityCompat.START)
-        var fragmentTransaction = supportFragmentManager.beginTransaction()
+        val fragmentTransaction = supportFragmentManager.beginTransaction()
         fragmentTransaction.add(R.id.container, TransactionHistoryFragment.newInstance(this@LandingActivity))
         fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()

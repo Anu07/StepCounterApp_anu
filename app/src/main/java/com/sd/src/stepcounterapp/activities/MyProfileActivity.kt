@@ -16,8 +16,9 @@ import com.sd.src.stepcounterapp.viewModels.ProfileViewModel
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_my_profile.*
 import kotlinx.android.synthetic.main.black_crosstitlebar.*
-
-
+import kotlinx.android.synthetic.main.black_crosstitlebar.img_back
+import kotlinx.android.synthetic.main.black_crosstitlebar.txt_title
+import kotlinx.android.synthetic.main.titlebar.*
 
 
 class MyProfileActivity : BaseActivity<ProfileViewModel>() {
@@ -35,7 +36,7 @@ class MyProfileActivity : BaseActivity<ProfileViewModel>() {
 
 
     override fun onCreate() {
-
+        txt_title.setImageResource(R.drawable.myprofile_header)
         lastUpdtd.text =
             "Last updated: " + (SharedPreferencesManager.getString(this@MyProfileActivity, SYNCDATE)?.split("T")?.get(0)
                 ?: "Not available")
@@ -49,7 +50,7 @@ class MyProfileActivity : BaseActivity<ProfileViewModel>() {
                         .into(profileImg)
 
                 }
-                bmiVal.text = String.format("%.3f", mResponse.data.bmi)
+                bmiVal.text = String.format("%.2f", mResponse.data.bmi)
             }
         })
         profileFragment = ProfileFragment.newInstance(this)

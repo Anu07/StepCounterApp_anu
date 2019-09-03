@@ -15,7 +15,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.fitpolo.support.entity.DailyStep
@@ -26,6 +25,7 @@ import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.sd.src.stepcounterapp.R
+import com.sd.src.stepcounterapp.activities.LandingActivity
 import com.sd.src.stepcounterapp.adapter.PatternProgressTextAdapter
 import com.sd.src.stepcounterapp.dialog.OptionDialog
 import com.sd.src.stepcounterapp.interfaces.InterfacesCall
@@ -64,18 +64,18 @@ class HayatechFragment : BaseFragment() {
             return instance
         }
     }
-    internal lateinit var callback: MarketPlaceFragment.FragmentClick
-
-    fun FragmentClickListener(callback: MarketPlaceFragment.FragmentClick) {
-        this.callback = callback
-    }
+//    internal lateinit var callback: MarketPlaceFragment.FragmentClick
+//
+//    fun FragmentClickListener(callback: MarketPlaceFragment.FragmentClick) {
+//        this.callback = callback
+//    }
 
     private var mDataList: Data? = Data()
     private lateinit var mViewModel: DeviceViewModel
     var optionArray = arrayListOf<OptionsModel>()
 
     var xAxis: XAxis? = null
-    private val mMonthListFormater = arrayOfNulls<String>(31)
+    private var mMonthListFormater = arrayOfNulls<String>(31)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_hayatech, container, false)
@@ -110,11 +110,11 @@ class HayatechFragment : BaseFragment() {
                 totalstepsCount.text = mDashResponse.data.todayToken.toString()
                 circular_progress.setProgress(mDashResponse.data.todayToken.toDouble(), 10.00)
                 company_rank_count.text = mDashResponse.data.companyRank.toString()
-                totl_dist.text = mDashResponse.data.totalUserDistance.toString()
+                totl_dist.text = String.format("%.2f", mDashResponse.data.totalUserDistance)
                 totl_dist_suffix.text = "Km"
                 tokensVal.text = mDashResponse.data.totalUserToken.toString()
-                if(mDashResponse.data.lastUpdated != null){
-                    SharedPreferencesManager.setString(mContext, mDashResponse.data.lastUpdated,SYNCDATE)
+                if (mDashResponse.data.lastUpdated != null) {
+                    SharedPreferencesManager.setString(mContext, mDashResponse.data.lastUpdated, SYNCDATE)
                 }
                 setBarChart("STEPS")
             })
@@ -164,7 +164,8 @@ class HayatechFragment : BaseFragment() {
         }
 
         spndTokens.setOnClickListener {
-            callback.onFragmentClick(0)
+            //            callback.onFragmentClick(0)
+            (mContext as LandingActivity).onFragmnet(0)
         }
 
         token_title.setOnClickListener {
@@ -182,7 +183,6 @@ class HayatechFragment : BaseFragment() {
             setBarChart("DISTANCE")
 
         }
-
     }
 
     private fun setFilterOptionArray() {
@@ -271,25 +271,17 @@ class HayatechFragment : BaseFragment() {
         var XAx = barchart.xAxis
         XAx.valueFormatter = xAxisFormatter
 
-
-        /* var yAxisFormatter = YAxisValueFormatter(barchart)
-           var YAx = barchart.axisLeft
-           YAx.valueFormatter = yAxisFormatter */
-
-        /* val l = barchart.legend
-           l.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
-           l.horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
-           l.orientation = Legend.LegendOrientation.HORIZONTAL
-           l.setDrawInside(false)
-           l.form = LegendForm.SQUARE
-           l.formSize = 9f
-           l.textSize = 11f
-           l.xEntrySpace = 4f*/
     }
 
+
+    fun resetBarChat(){
+        barchart.invalidate()
+//        mMonthListFormater= arrayOfNulls<String>(31)
+    }
     private fun setBarChart(format: String) {
         var weeklyData: ArrayList<BarEntry> = addDataFromServer(format)
         val bardataset = BarDataSet(weeklyData, "")
+        barchart.data = null
         bardataset.color = Color.parseColor("#FFFFFF")
         barchart.animateY(5000)
         val data = BarData(bardataset)
@@ -298,18 +290,11 @@ class HayatechFragment : BaseFragment() {
 
     private fun addDataFromServer(format: String): ArrayList<BarEntry> {
         val graphData = ArrayList<BarEntry>()
-        if(format == "STEPS") {
+        if (format == "STEPS") {
             if (txtGraphFilter.text.toString().equals(WEEKLY, ignoreCase = true)) {
                 if (mDataList!!.activity != null) {
-                    if (mDataList!!.activity.size > 7) {
-                        mDataList!!.activity.subList((mDataList!!.activity.size - 8), (mDataList!!.activity.size - 1))
-                            .forEachIndexed { index, element ->
-                                graphData.add(index, BarEntry(index.toFloat(), element.steps.toFloat()))
-                            }
-                    } else {
-                        mDataList!!.activity.forEachIndexed { index, element ->
-                            graphData.add(index, BarEntry(index.toFloat(), element.steps.toFloat()))
-                        }
+                    mDataList!!.activity.forEachIndexed { index, element ->
+                        graphData.add(index, BarEntry(index.toFloat(), element.steps.toFloat()))
                     }
                 }
             } else {
@@ -318,17 +303,17 @@ class HayatechFragment : BaseFragment() {
                         mDataList!!.activity.subList((mDataList!!.activity.size - 32), (mDataList!!.activity.size - 1))
                             .forEachIndexed { index, element ->
                                 graphData.add(index, BarEntry(index.toFloat(), element.steps.toFloat()))
-                                mMonthListFormater.set(index, element.date.toString())
+                                mMonthListFormater[index] = element.date.toString().replace("2019-","")
                             }
                     } else {
                         mDataList!!.activity.forEachIndexed { index, element ->
                             graphData.add(index, BarEntry(index.toFloat(), element.steps.toFloat()))
-                            mMonthListFormater.set(index, element.date.toString())
+                            mMonthListFormater[index] = element.date.toString().replace("2019-","")
                         }
                     }
                 }
             }
-        }else if(format == "TOKEN"){
+        } else if (format == "TOKEN") {
             if (txtGraphFilter.text.toString().equals(WEEKLY, ignoreCase = true)) {
                 if (mDataList!!.todayToken != null) {
                     if (mDataList!!.activity.size > 7) {
@@ -348,28 +333,21 @@ class HayatechFragment : BaseFragment() {
                         mDataList!!.activity.subList((mDataList!!.activity.size - 32), (mDataList!!.activity.size - 1))
                             .forEachIndexed { index, element ->
                                 graphData.add(index, BarEntry(index.toFloat(), element.token.toFloat()))
-                                mMonthListFormater.set(index, element.date.toString())
+                                mMonthListFormater.set(index, element.date.toString().replace("2019-",""))
                             }
                     } else {
                         mDataList!!.activity.forEachIndexed { index, element ->
                             graphData.add(index, BarEntry(index.toFloat(), element.token.toFloat()))
-                            mMonthListFormater.set(index, element.date.toString())
+                            mMonthListFormater.set(index, element.date.toString().replace("2019-",""))
                         }
                     }
                 }
             }
-        }else if(format == "DISTANCE"){
+        } else if (format == "DISTANCE") {
             if (txtGraphFilter.text.toString().equals(WEEKLY, ignoreCase = true)) {
                 if (mDataList!!.todayToken != null) {
-                    if (mDataList!!.activity.size > 7) {
-                        mDataList!!.activity.subList((mDataList!!.activity.size - 8), (mDataList!!.activity.size - 1))
-                            .forEachIndexed { index, element ->
-                                graphData.add(index, BarEntry(index.toFloat(), element.distance.toFloat()))
-                            }
-                    } else {
-                        mDataList!!.activity.forEachIndexed { index, element ->
-                            graphData.add(index, BarEntry(index.toFloat(), element.distance.toFloat()))
-                        }
+                    mDataList!!.activity.forEachIndexed { index, element ->
+                        graphData.add(index, BarEntry(index.toFloat(), element.distance.toFloat()))
                     }
                 }
             } else {
@@ -378,12 +356,12 @@ class HayatechFragment : BaseFragment() {
                         mDataList!!.activity.subList((mDataList!!.activity.size - 32), (mDataList!!.activity.size - 1))
                             .forEachIndexed { index, element ->
                                 graphData.add(index, BarEntry(index.toFloat(), element.distance.toFloat()))
-                                mMonthListFormater.set(index, element.date.toString())
+                                mMonthListFormater.set(index, element.date.toString().replace("2019-",""))
                             }
                     } else {
                         mDataList!!.activity.forEachIndexed { index, element ->
                             graphData.add(index, BarEntry(index.toFloat(), element.distance.toFloat()))
-                            mMonthListFormater.set(index, element.date.toString())
+                            mMonthListFormater.set(index, element.date.toString().replace("2019-",""))
                         }
                     }
                 }
@@ -394,15 +372,6 @@ class HayatechFragment : BaseFragment() {
     }
 
 
-    /**
-     * get day of week from date
-     */
-    fun dayFromDate(inputDate: String): String {
-        var format1 = SimpleDateFormat("yyyy-MM-dd")
-        var dt1: Date = format1.parse(inputDate)
-        var format2: DateFormat = SimpleDateFormat("EEEE")
-        return format2.format(dt1)
-    }
 
     fun setCurrentSteps(dailyStep: DailyStep) {
         if (dailyStep != null) {

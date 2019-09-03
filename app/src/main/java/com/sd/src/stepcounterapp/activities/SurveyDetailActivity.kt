@@ -43,6 +43,10 @@ class SurveyDetailActivity : BaseActivity<SurveyViewModel>(), SurveysQuestionsAd
 
     override fun onCreate() {
         mItemData = intent.getParcelableExtra("Data")
+        if(mItemData.attempted == true){
+            Toast.makeText(mContext,"You have already taken this survey", Toast.LENGTH_LONG).show()
+            finish()
+        }
         mData = mItemData.products as ArrayList<Products>
         surveyName.text = mItemData.name
         quesCount.text = mItemData.products.size.toString()
@@ -59,6 +63,7 @@ class SurveyDetailActivity : BaseActivity<SurveyViewModel>(), SurveysQuestionsAd
     override fun initListeners() {
         img_back.setOnClickListener {
             startActivity(Intent(this@SurveyDetailActivity, LandingActivity::class.java))
+            finish()
         }
         finishbutton.setOnClickListener {
             showPopupProgressSpinner(true)

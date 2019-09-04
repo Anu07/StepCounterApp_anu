@@ -6,6 +6,7 @@ import com.sd.src.stepcounterapp.model.DeviceResponse.DashboardResponse
 import com.sd.src.stepcounterapp.model.challenge.ChallengeResponse
 import com.sd.src.stepcounterapp.model.challenge.Data
 import com.sd.src.stepcounterapp.model.challenge.MyChallengeResponse
+import com.sd.src.stepcounterapp.model.contactUs.ContactUsRequest
 import com.sd.src.stepcounterapp.model.generic.BasicInfoResponse
 import com.sd.src.stepcounterapp.model.generic.BasicRequest
 import com.sd.src.stepcounterapp.model.image.ImageResponse
@@ -177,5 +178,13 @@ interface ApiInterface {
     fun getMyRedeemedRewards(
         @Body body: BasicRequest
     ): Call<MyRedeemedResponse>
+
+
+    @POST("api/contactus")
+    fun postcontactus(
+        @Body body: ContactUsRequest
+    ): Call<BasicInfoResponse>
+
+
 
 }

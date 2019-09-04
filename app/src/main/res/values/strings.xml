@@ -163,4 +163,8 @@
     <string name="today_18_jun_2019">Today. 18 Jun 2019</string>
     <string name="closing_tokens">Closing Tokens </string>
     <string name="transaction_id">Transaction ID</string>
+
+    <!-- CONTACT US FRAGMENT-->
+    <string name="kindly_get_in_touch">Kindly get in touch with us for new business opportunities generate inquiries and more.</string>
+    <string name="send_your_query">Send your query to us and we\'ll try to get back to you within 24 hours. </string>
 </resources>

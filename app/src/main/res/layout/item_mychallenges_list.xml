@@ -46,6 +46,7 @@
                 app:appfont="montserrat_semibold.ttf"
                 android:textAlignment="textStart"
                 android:layout_height="wrap_content"/>
+
         <com.sd.src.stepcounterapp.utils.CustomTextView
                 android:layout_width="match_parent"
                 android:id="@+id/subtitleTxt"

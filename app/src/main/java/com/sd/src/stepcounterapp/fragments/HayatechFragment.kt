@@ -111,6 +111,8 @@ class HayatechFragment : Fragment() {
                 totl_dist.text = mDashResponse.data.totalUserDistance.toString()
                 totl_dist_suffix.text = "Km"
                 tokensVal.text = mDashResponse.data.totalUserToken.toString()
+
+                if(mDashResponse.data.lastUpdated!=null)
                 SharedPreferencesManager.setString(mContext, mDashResponse.data.lastUpdated,SYNCDATE)
                 setBarChart("STEPS")
             })

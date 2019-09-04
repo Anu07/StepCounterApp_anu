@@ -115,6 +115,8 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
             when (position) {
                 0 -> openEditActivity()
                 1 -> openTransactionFragment()
+                2 -> openFAQFragment()
+                3 -> openContactUsFragment()
                 4 -> openFragment()
             }
 
@@ -128,7 +130,7 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
         mAdapter.addFragment(ChallengesFragment.newInstance(this@LandingActivity))
         mAdapter.addFragment(MarketPlaceFragment.newInstance(this@LandingActivity))
         mAdapter.addFragment(SurveysFragment.newInstance(this@LandingActivity))
-        mAdapter.addFragment(WalletFragment.newInstance(this@LandingActivity))
+     //   mAdapter.addFragment(WalletFragment.newInstance(this@LandingActivity))
 
         vpLanding.setPagingEnabled(false)
         vpLanding.adapter = mAdapter
@@ -640,6 +642,27 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
         mDrawerLayout.closeDrawer(GravityCompat.START)
         var fragmentTransaction = supportFragmentManager.beginTransaction()
         fragmentTransaction.add(R.id.container, TransactionHistoryFragment.newInstance(this@LandingActivity))
+        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()
+
+
+    }
+
+    private fun openFAQFragment() {
+        mDrawerLayout.closeDrawer(GravityCompat.START)
+        var fragmentTransaction = supportFragmentManager.beginTransaction()
+        fragmentTransaction.add(R.id.container, OpenFAQFragment.newInstance(this@LandingActivity))
+        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()
+
+
+    }
+
+
+    private fun openContactUsFragment() {
+        mDrawerLayout.closeDrawer(GravityCompat.START)
+        var fragmentTransaction = supportFragmentManager.beginTransaction()
+        fragmentTransaction.add(R.id.container, OpenContactUsFragment.newInstance(this@LandingActivity))
         fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()
 

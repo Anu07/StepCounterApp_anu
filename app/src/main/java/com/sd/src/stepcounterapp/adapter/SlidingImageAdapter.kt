@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.cardview.widget.CardView
 import androidx.viewpager.widget.PagerAdapter
 import com.sd.src.stepcounterapp.R
 
@@ -26,14 +25,17 @@ class SlidingImageAdapter(private val context: Context, private val IMAGES: Arra
 
     override fun instantiateItem(view: ViewGroup, position: Int): Any {
         val imageLayout = inflater.inflate(R.layout.sliding_img_layout, view, false)!!
-        val parentView = imageLayout!!.findViewById<CardView>(R.id.cardslideMain)
+
         val imageView = imageLayout!!
             .findViewById(R.id.image) as ImageView
 
 
         imageView.setImageResource(IMAGES[position])
 
-
+       /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            textSteps.foreground = context.getDrawable(R.drawable.img_ovrlay_slider)
+        }
+        */
         view.addView(imageLayout, 0)
 
         return imageLayout
@@ -51,5 +53,3 @@ class SlidingImageAdapter(private val context: Context, private val IMAGES: Arra
 
 
 }
-
-

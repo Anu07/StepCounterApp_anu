@@ -17,18 +17,9 @@ public class Data{
   @SerializedName("gender")
   @Expose
   private String gender;
-    
-    public long getMobile() {
-        return mobile;
-    }
-    
-    public void setMobile(long mobile) {
-        this.mobile = mobile;
-    }
-    
-    @SerializedName("mobile")
+  @SerializedName("mobile")
   @Expose
-  private long mobile;
+  private Integer mobile;
   @SerializedName("weight")
   @Expose
   private Float weight;
@@ -79,6 +70,12 @@ public class Data{
   }
   public String getGender(){
    return gender;
+  }
+  public void setMobile(Integer mobile){
+   this.mobile=mobile;
+  }
+  public Integer getMobile(){
+   return mobile;
   }
   public void setWeight(Float weight){
    this.weight=weight;

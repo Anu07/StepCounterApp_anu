@@ -91,7 +91,6 @@
                 android:paddingStart="@dimen/_15sdp"
                 android:paddingEnd="@dimen/_15sdp"
                 android:paddingTop="@dimen/_8sdp"
-                android:id="@+id/purchaseBttn"
                 android:paddingBottom="@dimen/_8sdp"
                 android:background="@drawable/transparent_black_stroke"
                 android:textColor="@color/colorBlack"
@@ -102,9 +101,7 @@
                 android:layout_marginStart="8dp"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginTop="16dp"
-                app:layout_constraintRight_toRightOf="parent"
-                android:layout_marginBottom="@dimen/_15sdp"
-                app:layout_constraintBottom_toBottomOf="@+id/imgProduct"/>
+                app:layout_constraintTop_toTopOf="@+id/imgProduct"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

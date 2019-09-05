@@ -6,39 +6,15 @@ import java.util.List;
  * Awesome Pojo Generator
  * */
 public class ChallengeResponse{
-    public List<Data> getTrending() {
-        return trending;
-    }
-    
-    public void setTrending(List<Data> trending) {
-        this.trending = trending;
-    }
-    
-    public List<Data> getFeatured() {
-        return featured;
-    }
-    
-    public void setFeatured(List<Data> featured) {
-        this.featured = featured;
-    }
-    
-    public List<Data> getOngoing() {
-        return ongoing;
-    }
-    
-    public void setOngoing(List<Data> ongoing) {
-        this.ongoing = ongoing;
-    }
-    
-    @SerializedName("trending")
+  @SerializedName("trending")
   @Expose
-  private List<Data> trending;
+  private List<Trending> trending;
   @SerializedName("featured")
   @Expose
-  private List<Data> featured;
+  private List<Featured> featured;
   @SerializedName("ongoing")
   @Expose
-  private List<Data> ongoing;
+  private List<Ongoing> ongoing;
   @SerializedName("data")
   @Expose
   private List<Data> data;
@@ -48,7 +24,24 @@ public class ChallengeResponse{
   @SerializedName("status")
   @Expose
   private Integer status;
- 
+  public void setTrending(List<Trending> trending){
+   this.trending=trending;
+  }
+  public List<Trending> getTrending(){
+   return trending;
+  }
+  public void setFeatured(List<Featured> featured){
+   this.featured=featured;
+  }
+  public List<Featured> getFeatured(){
+   return featured;
+  }
+  public void setOngoing(List<Ongoing> ongoing){
+   this.ongoing=ongoing;
+  }
+  public List<Ongoing> getOngoing(){
+   return ongoing;
+  }
   public void setData(List<Data> data){
    this.data=data;
   }

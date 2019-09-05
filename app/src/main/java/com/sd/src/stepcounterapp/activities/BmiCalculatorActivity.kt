@@ -18,8 +18,6 @@ import com.sd.src.stepcounterapp.adapter.PickerAdapter
 import com.sd.src.stepcounterapp.dialog.SelectCityDialog
 import com.sd.src.stepcounterapp.interfaces.InterfacesCall
 import com.sd.src.stepcounterapp.model.BasicInfoRequestObject
-import com.sd.src.stepcounterapp.model.login.Data
-import com.sd.src.stepcounterapp.model.login.LoginResponseJ
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import com.sd.src.stepcounterapp.viewModels.BaseViewModelFactory
 import com.sd.src.stepcounterapp.viewModels.SignInViewModel
@@ -151,30 +149,15 @@ class BmiCalculatorActivity : BaseActivity<SignInViewModel>(), View.OnClickListe
         kgs_wt.performClick()
         cms_ht.performClick()
 
-        viewModel.getBmiResponse()
+        viewModel.getBasicResponse()
             .observe(this, Observer { mUser ->
                 if (mUser.status == 200) {
                     if (intent.hasExtra("inApp")) {
                         finish()
                     } else {
-                        var responseLogin = LoginResponseJ()
-                        var loginData = Data(
-                            mUser.data.firstName,
-                            mUser.data.lastName,
-                            mUser.data.image,
-                            mUser.data.dob,
-                            mUser.data._id,
-                            mUser.data.email,
-                            mUser.data.username,
-                            mUser.data.basicFlag,
-                            mUser.data.rewardFlag
-                        )
-                        responseLogin.data = loginData
-                        SharedPreferencesManager.saveUserObject(this@BmiCalculatorActivity,responseLogin)
                         val intent = Intent(mContext, RewardsCategorySelectionActivity::class.java)
 //                      val options = ActivityOptions.makeSceneTransitionAnimation(this@SignInActivity)
                         startActivity(intent)
-                        finish()
                     }
 
 
@@ -185,10 +168,10 @@ class BmiCalculatorActivity : BaseActivity<SignInViewModel>(), View.OnClickListe
         if (intent.hasExtra("inApp")) {
             skipBttn.visibility = View.GONE
             if (SharedPreferencesManager.getUpdatedUserObject(this@BmiCalculatorActivity).gender.equals("Male", true)) {
-                isGenderClicked = false
+                isGenderClicked= false
                 selectGender(maleBttn)
             } else {
-                isGenderClicked = true
+                isGenderClicked= true
                 selectGender(femaleBttn)
             }
         }
@@ -309,7 +292,7 @@ class BmiCalculatorActivity : BaseActivity<SignInViewModel>(), View.OnClickListe
                                         weight.toFloat(),
                                         w,
                                         flooredheight,
-                                        h,
+                                        "Cms",          //TODO
                                         calcBMI(weight.toInt(), height).toDouble(),
                                         true
                                     )
@@ -342,7 +325,6 @@ class BmiCalculatorActivity : BaseActivity<SignInViewModel>(), View.OnClickListe
             val intent = Intent(mContext, RewardsCategorySelectionActivity::class.java)
 //                    val options = ActivityOptions.makeSceneTransitionAnimation(this@SignInActivity)
             startActivity(intent)
-            finish()
         }
 
     }

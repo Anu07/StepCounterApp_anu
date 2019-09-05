@@ -2,7 +2,6 @@ package com.sd.src.stepcounterapp.adapter
 
 import android.content.Context
 import android.os.Build
-import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +11,6 @@ import androidx.annotation.RequiresApi
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.sd.src.stepcounterapp.R
-import com.sd.src.stepcounterapp.model.challenge.Data
 import com.sd.src.stepcounterapp.model.challenge.Trending
 import com.sd.src.stepcounterapp.network.RetrofitClient
 import com.squareup.picasso.Picasso
@@ -20,8 +18,7 @@ import com.squareup.picasso.Picasso
 
 class ChallengeTrendingAdapter(
     internal var mContext: Context,
-    internal var mValues: MutableList<Data>,
-    protected var mListener: ItemTrendClickListener?
+    internal var mValues: MutableList<Trending>
 ) : RecyclerView.Adapter<ChallengeTrendingAdapter.ViewHolder>() {
 
 
@@ -29,16 +26,14 @@ class ChallengeTrendingAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         this.item = mValues[position]
         holder.textView.text = item.name
-        holder.textShort.text = Html.fromHtml(item.description)
+        holder.textShort.text = item.description
         Picasso.get().load(RetrofitClient.IMG_URL + "" + item.image).placeholder(R.drawable.placeholder)
             .into(holder.imageView)
-        holder.imageView.setOnClickListener {
-            mListener!!.onTrendItemClick(position,mValues[position])
-        }
+
     }
 
 
-    private lateinit var item: Data
+    private lateinit var item: Trending
 
     inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
 
@@ -69,10 +64,5 @@ class ChallengeTrendingAdapter(
     override fun getItemCount(): Int {
 
         return mValues.size
-    }
-
-
-    interface ItemTrendClickListener {
-        fun onTrendItemClick(pos:Int, item: Data)
     }
 }

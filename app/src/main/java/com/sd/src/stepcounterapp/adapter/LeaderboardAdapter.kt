@@ -7,18 +7,18 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.sd.src.stepcounterapp.R
-import com.sd.src.stepcounterapp.model.leaderboard.Data
+import com.sd.src.stepcounterapp.model.leaderboard.Challenge
 import com.sd.src.stepcounterapp.utils.ItemClickGlobalListner
 
 class LeaderboardAdapter(
     internal var context: Context,
-    mValues: ArrayList<Data>,
+    mValues: ArrayList<Challenge>,
     var mListener:ItemClickGlobalListner) :
     RecyclerView.Adapter<LeaderboardAdapter.ViewHolder>() {
 
-    private var mData: ArrayList<Data> = mValues
+    private var mData: ArrayList<Challenge> = mValues
     var mContext: Context = context
-    var item: Data? = null
+    var item: Challenge? = null
     override
     fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.leaderboard_list_item, parent, false)
@@ -38,7 +38,7 @@ class LeaderboardAdapter(
         return mData.size
     }
 
-    fun swap(mNewData: MutableList<Data>) {
+    fun swap(mNewData: MutableList<Challenge>) {
         if(this.mData.isNotEmpty()){
             mData.clear()
             mData.addAll(mNewData)
@@ -52,7 +52,7 @@ class LeaderboardAdapter(
         var textName: TextView
         var textSteps: TextView
 
-        internal lateinit var item: Data
+        internal lateinit var item: com.sd.src.stepcounterapp.model.challenge.Data
 
         init {
             textViewPosition = v.findViewById<View>(R.id.positionTxt) as TextView

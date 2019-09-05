@@ -1,23 +1,21 @@
 package com.sd.src.stepcounterapp.adapter
 
 import android.content.Context
+import android.os.Build
 import android.os.Parcelable
-import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.viewpager.widget.PagerAdapter
 import com.sd.src.stepcounterapp.R
-import com.sd.src.stepcounterapp.model.challenge.Data
 import com.sd.src.stepcounterapp.model.challenge.Featured
 import com.sd.src.stepcounterapp.network.RetrofitClient
 import com.squareup.picasso.Picasso
 
 
-class SlidingFeaturedChallengeImageAdapter(var context: Context, val images: MutableList<Data>, val listener: ItemSlideListener) : PagerAdapter() {
+class SlidingFeaturedChallengeImageAdapter(var context: Context, private val IMAGES: MutableList<Featured>) : PagerAdapter() {
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
 
@@ -26,12 +24,12 @@ class SlidingFeaturedChallengeImageAdapter(var context: Context, val images: Mut
     }
 
     override fun getCount(): Int {
-        return images.size
+        return IMAGES.size
     }
 
     override fun instantiateItem(view: ViewGroup, position: Int): Any {
         val imageLayout = inflater.inflate(R.layout.sliding_img_layout, view, false)!!
-        val parentLay = imageLayout!!.findViewById<CardView>(R.id.cardslideMain)
+
         val imageView = imageLayout!!
             .findViewById(R.id.image) as ImageView
         val mainTitleView = imageLayout!!
@@ -39,17 +37,13 @@ class SlidingFeaturedChallengeImageAdapter(var context: Context, val images: Mut
         val mainSubTitleView = imageLayout!!
             .findViewById(R.id.challengesSubTitle) as TextView
 
-        Picasso.get().load(RetrofitClient.IMG_URL+images[position].image).into(imageView)
-        mainTitleView.text = images[position].name
-        mainSubTitleView.text = Html.fromHtml(images[position].shortDesc)
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        Picasso.get().load(RetrofitClient.IMG_URL+IMAGES[position].image).into(imageView)
+        mainTitleView.text = IMAGES[position].name
+        mainSubTitleView.text = IMAGES[position].shortDesc
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             imageView.foreground = context.getDrawable(R.drawable.img_ovrlay_slider)
-        }*/
-        view.addView(imageLayout, 0)
-
-        parentLay.setOnClickListener {
-            listener.onImageSlider(position,images[position] )
         }
+        view.addView(imageLayout, 0)
 
         return imageLayout
     }
@@ -64,9 +58,5 @@ class SlidingFeaturedChallengeImageAdapter(var context: Context, val images: Mut
         return null
     }
 
-
-    interface ItemSlideListener {
-        fun onImageSlider(position: Int, img: Data)
-    }
 
 }

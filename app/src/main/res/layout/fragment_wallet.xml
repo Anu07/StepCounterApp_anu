@@ -377,7 +377,6 @@
                                     android:layout_height="wrap_content"
                                     android:text="@string/redeem_now"
                                     android:ellipsize="end"
-                                    android:id="@+id/purchaseFirst"
                                     android:maxLines="1"
                                     android:paddingStart="@dimen/_15sdp"
                                     android:paddingEnd="@dimen/_15sdp"
@@ -392,8 +391,7 @@
                                     android:layout_marginTop="@dimen/_14sdp"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
-                                     android:layout_marginBottom="@dimen/_20sdp"
-                                    app:layout_constraintBottom_toBottomOf="@+id/imgProductFirst"/>
+                                    app:layout_constraintTop_toTopOf="@+id/imgProductFirst"/>
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                     </androidx.cardview.widget.CardView>
@@ -487,7 +485,6 @@
                                     android:text="@string/redeem_now"
                                     android:ellipsize="end"
                                     android:maxLines="1"
-                                    android:id="@+id/purchaseSecond"
                                     android:paddingStart="@dimen/_15sdp"
                                     android:paddingEnd="@dimen/_15sdp" android:paddingTop="@dimen/_8sdp"
                                     android:paddingBottom="@dimen/_8sdp"
@@ -500,8 +497,7 @@
                                     android:layout_marginTop="@dimen/_14sdp"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
-                                    android:layout_marginBottom="@dimen/_20sdp"
-                                    app:layout_constraintBottom_toBottomOf="@+id/imgProductSecond"/>
+                                    app:layout_constraintTop_toTopOf="@+id/imgProductSecond"/>
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                     </androidx.cardview.widget.CardView>
@@ -543,7 +539,7 @@
                         android:textAllCaps="true"
                         android:drawableRight="@drawable/ic_info_grey"
                         android:visibility="visible"
-                        android:text="PURCHASED"
+                        android:text="REDEEMED"
                         android:drawablePadding="@dimen/_10sdp"
                         android:layout_height="wrap_content"
                         android:textColor="@color/colorBlack"

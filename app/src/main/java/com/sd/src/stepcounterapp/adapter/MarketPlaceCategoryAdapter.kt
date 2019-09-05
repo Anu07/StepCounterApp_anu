@@ -17,12 +17,10 @@ class MarketPlaceCategoryAdapter(
     categoryData: ArrayList<MarketResponse.Data>,
     var context: Context,
     click: MarketPlaceClickInterface,
-    var wisListener: twoItemListener,
-    var clckListener: ClickMarketListener
+    var wisListener: twoItemListener
 ) :
     RecyclerView.Adapter<MarketPlaceCategoryAdapter.ViewHolder>() {
 
-    private var clicked: Boolean = false
     private var mCategoryData: ArrayList<MarketResponse.Data> = categoryData
     var mContext: Context = context
     var itemClick: MarketPlaceClickInterface = click
@@ -36,61 +34,28 @@ class MarketPlaceCategoryAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        var mItem = mCategoryData[position]
-        holder.txtCategoryName.text = mItem.name
+        var mItem = mCategoryData[position].products
 
 //        Toast.makeText(mContext, mCategoryData[position].name, Toast.LENGTH_SHORT).show()
         if (mItem != null) {
-            Picasso.get().load(RetrofitClient.IMG_URL + "" + mItem.products[0].image).error(R.drawable.placeholder)
-                .into(holder.imgProductFirst)
-            holder.txtProductNameFirst.text = mItem.products[0].name
-            holder.txtShortDescFirst.text = mItem.products[0].shortDesc
-            holder.txtTokenFirst.text = mItem.products[0].token.toString()
-            holder.firstParentLay.setOnClickListener {
-                clckListener.onClick(position,mItem.products[0])
-            }
+            mItem.forEachIndexed { _, products ->
+                Picasso.get().load(RetrofitClient.IMG_URL + "" + products.image).error(R.drawable.placeholder)
+                    .into(holder.imgProductFirst)
+                holder.txtCategoryName.text =products.name
+                holder.txtProductNameFirst.text =products.name
+                holder.txtShortDescFirst.text = products.shortDesc
+                holder.txtTokenFirst.text = products.token.toString()
 
-            Log.i("flag cat", "" + mItem.products[0].wishlist)
+                Log.i("flag cat", "" + position + products.wishlist)
 
-            if (position <= 1 && mItem.products[position].wishlist) {
-                holder.wishListView.setImageResource(R.drawable.wishlist_fill)
-            } else {
-                holder.wishListView.setImageResource(R.drawable.featured)
-            }
-
-            holder.wishListView.setOnClickListener {
-                clicked = !clicked
-                checkWishListIcon(holder)
-                wisListener.onWish(position, mItem.products[position])
-            }
-
-            if (mItem.products.size >= 2) {
-                Picasso.get().load(RetrofitClient.IMG_URL + "" + mItem.products[1].image).error(R.drawable.placeholder)
-                    .into(holder.imgProductSecond)
-                holder.txtProductNameSecond.text = mItem.products[1].name
-                holder.txtShortDescSecond.text = mItem.products[1].shortDesc
-                holder.txtTokenSecond.text = mItem.products[1].token.toString()
-                Log.i("flag cat", "" + mItem.products[1].wishlist)
-                holder.cdSecond.visibility = View.VISIBLE
-                holder.txtSeeAll.visibility = View.VISIBLE
-                holder.secParentLay.setOnClickListener {
-                    clckListener.onClick(position,mItem.products[1])
-                }
-
-                holder.txtSeeAll.setOnClickListener {
-                    itemClick.onSeeAllClick(position)
+                holder.wishListView.setOnClickListener {
+                    wisListener.onWish(position, products)
                 }
             }
 
-
-        }
-    }
-
-    private fun checkWishListIcon(holder: ViewHolder) {
-        if (clicked) {
-            holder.wishListView.setImageResource(R.drawable.wishlist_fill)
         } else {
-            holder.wishListView.setImageResource(R.drawable.featured)
+            holder.txtSeeAll.visibility = View.GONE
+            holder.cdSecond.visibility = View.GONE
         }
     }
 
@@ -102,8 +67,7 @@ class MarketPlaceCategoryAdapter(
 
         val txtCategoryName = itemView.txtCategoryName!!
         val txtSeeAll = itemView.txtSeeAll!!
-        val firstParentLay = itemView.firstCatItem
-        val secParentLay = itemView.cdSecond
+
         val imgProductFirst = itemView.imgProductFirst!!
         val txtProductNameFirst = itemView.txtProductNameFirst!!
         val txtShortDescFirst = itemView.txtShortDescFirst!!
@@ -123,11 +87,6 @@ class MarketPlaceCategoryAdapter(
             mItem: MarketResponse.Products
         )
     }
-    interface ClickMarketListener {
-        fun onClick(
-            position: Int,
-            mItem: MarketResponse.Products
-        )
-    }
+
 
 }

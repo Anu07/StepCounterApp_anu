@@ -2,8 +2,6 @@ package com.sd.src.stepcounterapp.adapter
 
 import android.content.Context
 import android.os.Build
-import android.text.Html
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,26 +21,24 @@ class ChallengeAdapter(
     internal var mValues: MutableList<Data>,
     protected var mListener: ItemClickListener?
 ) : RecyclerView.Adapter<ChallengeAdapter.ViewHolder>() {
-    private lateinit var item: Data
 
+
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        item = mValues[position]
+        this.item = mValues[position]
         holder.textView.text = item.name
-        holder.textShort.text = Html.fromHtml(item.shortDesc)
-        Log.i("item","name"+position +"!!!!!"+item.name)
+        holder.textShort.text = item.shortDesc
         holder.imageView.setOnClickListener {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                holder.imageView.foreground = mContext.getDrawable(R.drawable.image_selected_overlay)
-            }
             mListener!!.onItemClick(position,item)
         }
-        Picasso.get().load(RetrofitClient.IMG_URL + "" + item.image).placeholder(R.drawable.placeholder).into(holder.imageView)
-       /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            holder.imageView.foreground = mContext.getDrawable(R.drawable.image_selected_overlay)
-        }*/
+        Picasso.get().load(RetrofitClient.IMG_URL + "" + item.image).placeholder(R.drawable.placeholder)
+            .into(holder.imageView)
+
     }
 
 
+    private var isClicked: Boolean = false
+    private lateinit var item: Data
 
     inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
 
@@ -50,6 +46,8 @@ class ChallengeAdapter(
         var textShort: TextView
         var imageView: ImageView
         var cdMain: CardView
+
+        internal lateinit var item: Data
 
         init {
             textView = v.findViewById<View>(R.id.txtChallengeName) as TextView

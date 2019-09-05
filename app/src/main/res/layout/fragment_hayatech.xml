@@ -217,7 +217,7 @@
                                 android:layout_height="wrap_content"
                                 android:id="@+id/totl_dist_suffix"
                                 app:appfont="montserrat_medium.ttf"
-                                android:textSize="@dimen/_14ssp"
+                                android:textSize="@dimen/_16ssp"
                                 android:layout_gravity="top|center"
                                 android:textColor="@color/colorBlack"
                                 tools:text="Km"
@@ -417,7 +417,6 @@
                             android:layout_gravity="top|right"
                             android:text="SPEND TOKENS"
                             android:textSize="@dimen/_10sdp"
-                            android:padding="@dimen/_5sdp"
                             android:layout_margin="@dimen/_5sdp"
                             android:id="@+id/spndTokens"
                             android:background="@drawable/full_border"/>

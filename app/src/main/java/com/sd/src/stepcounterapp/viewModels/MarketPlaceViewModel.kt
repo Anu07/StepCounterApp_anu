@@ -11,7 +11,6 @@ import com.sd.src.stepcounterapp.model.generic.BasicRequest
 import com.sd.src.stepcounterapp.model.marketplace.BasicSearchRequest
 import com.sd.src.stepcounterapp.model.marketplace.MarketResponse
 import com.sd.src.stepcounterapp.model.marketplace.PopularProducts
-import com.sd.src.stepcounterapp.model.redeemnow.RedeemRequest
 import com.sd.src.stepcounterapp.model.wishList.AddWishRequest
 import com.sd.src.stepcounterapp.model.wishList.GetWishListRequest
 import com.sd.src.stepcounterapp.model.wishList.WishListResponse
@@ -21,7 +20,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class MarketPlaceViewModel(application: Application) : AndroidViewModel(application) {
-    private var mPurchaseResponse: MutableLiveData<BasicInfoResponse>?= null
+
     val call = RetrofitClient.instance
 
     private var mProduct: MutableLiveData<MarketResponse>? = null
@@ -34,12 +33,7 @@ class MarketPlaceViewModel(application: Application) : AndroidViewModel(applicat
         }
         return mProduct as MutableLiveData<MarketResponse>
     }
-    fun getPurchase(): MutableLiveData<BasicInfoResponse> {
-        if (mPurchaseResponse == null) {
-            mPurchaseResponse = MutableLiveData()
-        }
-        return mPurchaseResponse as MutableLiveData<BasicInfoResponse>
-    }
+
 
     fun getPopularity(): MutableLiveData<PopularProducts> {
         if (mPopProduct == null) {
@@ -144,18 +138,5 @@ class MarketPlaceViewModel(application: Application) : AndroidViewModel(applicat
         })
     }
 
-    fun hitPurchaseApi(request: RedeemRequest) {
-        call!!.redeemNow(request).enqueue(object : Callback<BasicInfoResponse> {
-            override fun onFailure(call: Call<BasicInfoResponse>?, t: Throwable?) {
-                Log.v("retrofit", "call failed")
-                Toast.makeText(AppApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
-            }
 
-            override fun onResponse(call: Call<BasicInfoResponse>?, response: Response<BasicInfoResponse>?) {
-                if (response!!.code() == 200) {
-                    mPurchaseResponse!!.value = response.body()
-                }
-            }
-        })
-    }
 }

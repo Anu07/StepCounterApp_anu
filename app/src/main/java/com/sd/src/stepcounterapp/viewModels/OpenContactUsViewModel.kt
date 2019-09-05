@@ -13,6 +13,7 @@ import com.sd.src.stepcounterapp.model.generic.BasicInfoResponse
 import com.sd.src.stepcounterapp.model.generic.BasicRequest
 import com.sd.src.stepcounterapp.model.profile.ProfileResponse
 import com.sd.src.stepcounterapp.model.profile.UpdateProfileRequest
+import com.sd.src.stepcounterapp.model.rewards.AddRewardsRequestObject
 import com.sd.src.stepcounterapp.model.rewards.MyRedeemedResponse
 import com.sd.src.stepcounterapp.model.updateresponse.UpdateProfileResponse
 import com.sd.src.stepcounterapp.network.RetrofitClient
@@ -38,8 +39,8 @@ class OpenContactUsViewModel(application: Application) : AndroidViewModel(applic
 
 
 
-   /* fun postContactUs() {
-        call!!.postcontactus(ContactUsRequest(SharedPreferencesManager.getUserId(AppApplication.applicationContext()).toString())).enqueue(object : Callback<BasicInfoResponse> {
+   fun postContactUs(contactUsRequest :ContactUsRequest) {
+        call!!.postcontactus(contactUsRequest).enqueue(object : Callback<BasicInfoResponse> {
             override fun onFailure(call: Call<BasicInfoResponse>, t: Throwable) {
                 Log.v("retrofit", "call failed")
                 Toast.makeText(AppApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
@@ -47,10 +48,15 @@ class OpenContactUsViewModel(application: Application) : AndroidViewModel(applic
 
             override fun onResponse(call: Call<BasicInfoResponse>, response: Response<BasicInfoResponse>) {
                 mContactUsResponse!!.value = response.body()
+
+                if(response!!.code()!=400){
+                    mContactUsResponse!!.value = response!!.body()!!
+                }else{
+                    mContactUsResponse!!.value = BasicInfoResponse()
+                }
+
             }
 
         })
     }
-*/
-
 }

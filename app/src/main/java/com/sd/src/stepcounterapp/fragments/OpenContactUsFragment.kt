@@ -65,9 +65,7 @@ class OpenContactUsFragment : Fragment() {
             if (mData.status == 200) {
                 Toast.makeText(activity, mData.message, Toast.LENGTH_LONG).show()
                 //fragmentManager!!.popBackStackImmediate()
-
             }
         })
-
     }
 }

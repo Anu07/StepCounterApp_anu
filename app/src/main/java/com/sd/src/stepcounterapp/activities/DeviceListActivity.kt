@@ -29,6 +29,7 @@ import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager.SYNCDATE
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager.WEARABLEID
 import com.sd.src.stepcounterapp.utils.Utils
+import kotlinx.android.synthetic.main.scanbar.*
 import no.nordicsemi.android.dfu.DfuProgressListenerAdapter
 import no.nordicsemi.android.dfu.DfuServiceListenerHelper
 import java.text.SimpleDateFormat
@@ -156,14 +157,14 @@ class DeviceListActivity : Basefit(), AdapterView.OnItemClickListener, MokoScanD
                     if (lastestSteps == null || lastestSteps!!.isEmpty()) {
                         return
                     }
-                    for (step in lastestSteps!!) {
+                 /*   for (step in lastestSteps!!) {
 
                         Toast.makeText(
                             this@DeviceListActivity,
-                            "Total steps taken till now: " + step.count,
+                            "Total steps taken till now: " + lastestSteps!![lastestSteps!!.size - 1].count,
                             Toast.LENGTH_LONG
                         ).show()
-                    }
+                    }*/
                     SharedPreferencesManager.saveSyncObject(this@DeviceListActivity, lastestSteps)
                     gotoDeviceconnctd()
                 }
@@ -225,6 +226,12 @@ class DeviceListActivity : Basefit(), AdapterView.OnItemClickListener, MokoScanD
         mAdapter!!.setItems(mDatas)
         lvDevice!!.adapter = mAdapter
         lvDevice!!.onItemClickListener = this
+        img_scan.setOnClickListener {
+            searchDevices()
+        }
+        img_close.setOnClickListener {
+            finish()
+        }
         searchDevices()
     }
 

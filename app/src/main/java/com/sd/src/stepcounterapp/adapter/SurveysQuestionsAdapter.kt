@@ -4,18 +4,18 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RadioButton
-import android.widget.RadioGroup
-import android.widget.TextView
+import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.sd.src.stepcounterapp.R
-import com.sd.src.stepcounterapp.model.survey.Products
+import com.sd.src.stepcounterapp.model.survey.Datum
+import com.sd.src.stepcounterapp.model.survey.Question
+import android.graphics.Typeface
 
 
 class SurveysQuestionsAdapter(
-    mContext: Context,
+    var mContext: Context,
     var mListener: AnswerListener,
-    var mValues: ArrayList<Products>
+    var mValues: ArrayList<Question>
 ) :
     RecyclerView.Adapter<SurveysQuestionsAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -28,35 +28,28 @@ class SurveysQuestionsAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.textView.text = mValues[position].question
-        holder.opt1.text =  mValues[position].option1
-        holder.opt2.text =  mValues[position].option2
-        holder.opt3.text =  mValues[position].option3
-        holder.opt4.text =  mValues[position].option4
-        holder.ansGroup.setOnCheckedChangeListener { group, checkedId ->
-            val radio: RadioButton = group.findViewById(checkedId)
-            mListener.onAnswer(position,radio.text.toString())
+        mValues[position].options.forEachIndexed { index, option ->
+            var chck = CheckBox(holder.itemView.context)
+            chck.text = mValues[position].options[index].label
+            val font = Typeface.createFromAsset(mContext.assets, "fonts/montserrat_regular.ttf")
+            chck.typeface = font
+            holder.optionsLayout.addView(chck)
+            chck.setOnCheckedChangeListener { _, isChecked ->
+                if(isChecked)
+                    mListener.onAnswer(position,option._id)
+            }
         }
+
     }
 
 
     inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
-        var textView: TextView
-        var opt1: RadioButton
-        var opt2: RadioButton
-        var opt3: RadioButton
-        var opt4: RadioButton
-        var ansGroup: RadioGroup
+        var textView: TextView = v.findViewById<View>(R.id.quesText) as TextView
+        var optionsLayout: LinearLayout = v.findViewById(R.id.optionsview) as LinearLayout
 
-        internal lateinit var item: com.sd.src.stepcounterapp.model.challenge.Data
 
-        init {
-            ansGroup = v.findViewById(R.id.answerGroup) as RadioGroup
-            textView = v.findViewById<View>(R.id.quesText) as TextView
-            opt1 = v.findViewById<View>(R.id.option_1) as RadioButton
-            opt2 = v.findViewById<View>(R.id.option_2) as RadioButton
-            opt3 = v.findViewById<View>(R.id.option_3) as RadioButton
-            opt4 = v.findViewById<View>(R.id.option_4) as RadioButton
-        }
+        internal lateinit var item: Datum
+
     }
 
 

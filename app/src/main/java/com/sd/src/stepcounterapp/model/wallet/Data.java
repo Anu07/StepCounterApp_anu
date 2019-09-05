@@ -1,114 +1,35 @@
+
 package com.sd.src.stepcounterapp.model.wallet;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
-
-/**
- * Awesome Pojo Generator
- * {
- * "status": 200,
- * "message": "Success",
- * "data": {
- * "totalEarnings": 7004,
- * "updatedAt": "2019-08-10T11:20:07.950Z",
- * "steps": 9856,
- * "days": 7,
- * "totalGenerated": 6,
- * "wishlist": [],
- * "redeemed": [],
- * }
- * }
- */
+@SuppressWarnings("unused")
 public class Data {
-	@SerializedName("totalEarnings")
-	@Expose
-	private Integer totalEarnings;
-	@SerializedName("totalGenerated")
-	@Expose
-	private Integer totalGenerated;
-	@SerializedName("redeemed")
-	@Expose
-	private List<Redeemed> redeemed;
-	
-	public List<Redeemed> getPurchased() {
-		return purchased;
-	}
-	
-	public void setPurchased(List<Redeemed> purchased) {
-		this.purchased = purchased;
-	}
-	
-	@SerializedName("purchased")
-	@Expose
-	private List<Redeemed> purchased;
-	@SerializedName("wishlist")
-	@Expose
-	private List<Wishlist> wishlist;
-	@SerializedName("days")
-	@Expose
-	private Integer days;
-	@SerializedName("steps")
-	@Expose
-	private Integer steps;
-	@SerializedName("updatedAt")
-	@Expose
-	private String updatedAt;
-	
-	public void setTotalEarnings(Integer totalEarnings) {
-		this.totalEarnings = totalEarnings;
-	}
-	
-	public Integer getTotalEarnings() {
-		return totalEarnings;
-	}
-	
-	public void setTotalGenerated(Integer totalGenerated) {
-		this.totalGenerated = totalGenerated;
-	}
-	
-	public Integer getTotalGenerated() {
-		return totalGenerated;
-	}
-	
-	public void setRedeemed(List<Redeemed> redeemed) {
-		this.redeemed = redeemed;
-	}
-	
-	public List<Redeemed> getRedeemed() {
-		return redeemed;
-	}
-	
-	public void setWishlist(List<Wishlist> wishlist) {
-		this.wishlist = wishlist;
-	}
-	
-	public List<Wishlist> getWishlist() {
-		return wishlist;
-	}
-	
-	public void setDays(Integer days) {
-		this.days = days;
-	}
-	
-	public Integer getDays() {
-		return days;
-	}
-	
-	public void setSteps(Integer steps) {
-		this.steps = steps;
-	}
-	
-	public Integer getSteps() {
-		return steps;
-	}
-	
-	public void setUpdatedAt(String updatedAt) {
-		this.updatedAt = updatedAt;
-	}
-	
-	public String getUpdatedAt() {
-		return updatedAt;
-	}
+
+    private String lastUpdated;
+    private long remainingSteps;
+    private long totalEarnings;
+    
+    public String getLastUpdated() {
+        return lastUpdated;
+    }
+    
+    public void setLastUpdated(String lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
+    
+    public long getRemainingSteps() {
+        return remainingSteps;
+    }
+    
+    public void setRemainingSteps(long remainingSteps) {
+        this.remainingSteps = remainingSteps;
+    }
+    
+    public long getTotalEarnings() {
+        return totalEarnings;
+    }
+    
+    public void setTotalEarnings(long totalEarnings) {
+        this.totalEarnings = totalEarnings;
+    }
 }

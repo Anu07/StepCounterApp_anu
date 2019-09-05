@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.adapter.RecyclerSyncGridAdapter
-import com.sd.src.stepcounterapp.model.rewards.Data
+import com.sd.src.stepcounterapp.model.syncDevice.SyncDeviceSelectionArray
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import com.sd.src.stepcounterapp.viewModels.BaseViewModel
 import com.sd.src.stepcounterapp.viewModels.BaseViewModelFactory
@@ -19,8 +19,18 @@ import kotlinx.android.synthetic.main.activity_select_syncsdk.*
 
 class SyncDeviceActivity : BaseActivity<BaseViewModel>(),
     RecyclerSyncGridAdapter.ItemListener {
-    override fun onItemClick(item: Data) {
+    override fun onItemClick(pos: Int, item: SyncDeviceSelectionArray?) {
+        populateData()
+        adapter.swapData(updateItem(pos))
+    }
 
+    private fun updateItem(position:Int): Array<SyncDeviceSelectionArray?> {
+        dataArray.forEachIndexed { index, _ ->
+            if(position== index){
+                dataArray[position]?.selected = !dataArray[position]?.selected!!
+            }
+        }
+        return dataArray
     }
 
     private lateinit var adapter: RecyclerSyncGridAdapter
@@ -33,9 +43,17 @@ class SyncDeviceActivity : BaseActivity<BaseViewModel>(),
     override val context: Context
         get() = this@SyncDeviceActivity
     val numbers: IntArray =
-        intArrayOf(R.drawable.hayatech_fitness, R.drawable.applewatch, R.drawable.polar, R.drawable.strava)
+        intArrayOf(
+            R.drawable.hayatech_fitness,
+            R.drawable.fitbit_logo_transparent,
+            R.drawable.garmin_logo,
+            R.drawable.applewatch,
+            R.drawable.polar,
+            R.drawable.strava
+        )
     private lateinit var gridLayoutManager: GridLayoutManager
     var recyclerView: RecyclerView? = null
+    private var dataArray = arrayOfNulls<SyncDeviceSelectionArray>(numbers.size)
 
     internal var gps_enabled = false
     internal var network_enabled = false
@@ -46,14 +64,13 @@ class SyncDeviceActivity : BaseActivity<BaseViewModel>(),
         gridLayoutManager = GridLayoutManager(this, 2)
         recyclerView!!.layoutManager = gridLayoutManager
         var user = SharedPreferencesManager.getUserObject(this@SyncDeviceActivity)
-        headerTextwelcome.text = "Welcome "+user.data.firstName+"!"
+        headerTextwelcome.text = "Welcome " + user.data.firstName + "!"
         var lm = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
         gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER)
         network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
 
-
-        adapter = RecyclerSyncGridAdapter(this, numbers, this)
+        adapter = RecyclerSyncGridAdapter(this, populateData(), this)
         recyclerView!!.adapter = adapter
 
         skipBttn.setOnClickListener {
@@ -74,6 +91,13 @@ class SyncDeviceActivity : BaseActivity<BaseViewModel>(),
 
         }
 
+    }
+
+    private fun populateData(): Array<SyncDeviceSelectionArray?> {
+        for (i in numbers.indices) {
+            dataArray[i] = SyncDeviceSelectionArray(mContext.getDrawable(numbers[i]), "", false)
+        }
+        return dataArray
     }
 
     private fun showGPSDisabledAlertToUser() {

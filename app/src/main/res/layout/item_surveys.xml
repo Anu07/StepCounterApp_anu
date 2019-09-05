@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
         android:orientation="horizontal"
+        android:layout_marginBottom="@dimen/_2sdp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -35,10 +36,13 @@
                 android:id="@+id/txtSurveysName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Lifestyle Quiz"
+                tools:text="Lifestyle Quiz"
                 android:ellipsize="end"
+                android:capitalize="words"
+                android:inputType="textCapSentences"
                 android:layout_marginBottom="@dimen/_5sdp"
                 android:maxLines="1"
+                android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "
                 android:textColor="@color/arrow_color"
                 android:textSize="@dimen/_12ssp"
                 app:appfont="montserrat_regular.ttf"/>
@@ -150,10 +154,11 @@
             app:layout_constraintBottom_toBottomOf="parent"/>
 
     <View android:layout_width="0dp" android:layout_height="@dimen/_1sdp"
-          android:background="@color/gray_text"
+          android:background="@color/a8a8a8"
           app:layout_constraintBottom_toBottomOf="parent"
           app:layout_constraintStart_toStartOf="@+id/linearLayout"
-          app:layout_constraintTop_toBottomOf="@+id/linearLayout" android:layout_marginTop="16dp"
-          android:layout_marginBottom="8dp" app:layout_constraintEnd_toEndOf="parent"/>
+          app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+          android:layout_marginTop="@dimen/_5sdp"
+          app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

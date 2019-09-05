@@ -1,7 +1,7 @@
 package com.sd.src.stepcounterapp.model.survey.surveyrequest;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.sd.src.stepcounterapp.model.survey.Data;
+import com.sd.src.stepcounterapp.model.survey.Datum;
 
 import java.util.List;
 /**
@@ -56,12 +56,12 @@ public class SurveystartRequestModel{
   private List<UserAnswer> userAnswer;
   @SerializedName("survey")
   @Expose
-  private Data survey;
+  private Datum survey;
   @SerializedName("userId")
   @Expose
   private String userId;
     
-    public SurveystartRequestModel(String surveyId, List<UserAnswer> userAnswer, Data survey, String userId) {
+    public SurveystartRequestModel(String surveyId, List<UserAnswer> userAnswer, Datum survey, String userId) {
         this.surveyId = surveyId;
         this.userAnswer = userAnswer;
         this.survey = survey;
@@ -80,10 +80,10 @@ public class SurveystartRequestModel{
   public List<UserAnswer> getUserAnswer(){
    return userAnswer;
   }
-  public void setSurvey(Data survey){
+  public void setSurvey(Datum survey){
    this.survey=survey;
   }
-  public Data getSurvey(){
+  public Datum getSurvey(){
    return survey;
   }
   public void setUserId(String userId){

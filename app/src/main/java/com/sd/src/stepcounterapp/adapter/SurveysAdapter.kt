@@ -8,18 +8,21 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.sd.src.stepcounterapp.R
-import com.sd.src.stepcounterapp.model.survey.Data
+import com.sd.src.stepcounterapp.model.survey.Datum
 import com.sd.src.stepcounterapp.utils.ItemClickGlobalListner
+import android.text.InputType
+import com.google.android.gms.common.internal.service.Common
+
 
 class SurveysAdapter(
     internal var context: Context,
-     mValues: ArrayList<Data>,
+     mValues: ArrayList<Datum>,
     var mListener:ItemClickGlobalListner) :
     RecyclerView.Adapter<SurveysAdapter.ViewHolder>() {
 
-    private var mData: ArrayList<Data> = mValues
+    private var mData: ArrayList<Datum> = mValues
     var mContext: Context = context
-    var item: Data? = null
+    var item: Datum? = null
     override
     fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.item_surveys, parent, false)
@@ -28,19 +31,19 @@ class SurveysAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         this.item = mData[position]
-        holder.textView.text = item!!.name
-        holder.textQues.text = item!!.products.size.toString()
-        holder.textEarnToken.text = item!!.earningToken.toString()
+        holder.textView.text = item!!.name.capitalize()
+        holder.textQues.text = item!!.questions.size.toString().capitalize()
+        holder.textEarnToken.text = item!!.earningToken.toString().capitalize()
         var date = item!!.expireOn.split("T")[0]
         holder.textSurvey.text = date
-        if(item!!.attempted){
+        if(item!!.answered){
             holder.textStart.setBackgroundResource(R.drawable.gray_fill_circle)
         }else{
             holder.textStart.setBackgroundResource(R.drawable.blue_fill_circle)
         }
 
         holder.textStart.setOnClickListener {
-            if(!item!!.attempted){
+            if(!item!!.answered){
                 mListener.onItemClick(position)
             }else{
                 Toast.makeText(mContext,"You have already taken this survey", Toast.LENGTH_LONG).show()
@@ -52,7 +55,7 @@ class SurveysAdapter(
         return mData.size
     }
 
-    fun swap(mNewData: MutableList<Data>) {
+    fun swap(mNewData: MutableList<Datum>) {
         if(this.mData.isNotEmpty()){
             mData.clear()
             mData.addAll(mNewData)

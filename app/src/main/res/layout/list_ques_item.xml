@@ -18,38 +18,14 @@
             android:layout_marginBottom="@dimen/_5sdp"
             android:layout_height="wrap_content"/>
 
-    <androidx.cardview.widget.CardView
+    <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:id="@+id/optionsview"
             android:background="@color/white"
             android:layout_margin="@dimen/_5sdp"
             android:layout_height="wrap_content">
 
-        <RadioGroup android:id="@+id/answerGroup"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            <RadioButton android:id="@+id/option_1"
-                         android:buttonTint="@color/blue_txt"
-                         android:layout_width="match_parent"
-                         android:layout_margin="@dimen/_5sdp"
-                         android:layout_height="wrap_content"/>
-            <RadioButton android:id="@+id/option_2"
-                         android:buttonTint="@color/blue_txt"
-                         android:layout_width="match_parent"
-                         android:layout_margin="@dimen/_5sdp"
-                         android:layout_height="wrap_content"/>
-            <RadioButton android:id="@+id/option_3"
-                         android:buttonTint="@color/blue_txt"
-                         android:layout_margin="@dimen/_5sdp"
-                         android:layout_width="match_parent"
-                         android:layout_height="wrap_content"/>
-            <RadioButton android:id="@+id/option_4"
-                         android:buttonTint="@color/blue_txt"
-                         android:layout_margin="@dimen/_5sdp"
-                         android:layout_width="match_parent"
-                         android:layout_height="wrap_content"/>
-        </RadioGroup>
 
-
-    </androidx.cardview.widget.CardView>
+    </LinearLayout>
 </LinearLayout>

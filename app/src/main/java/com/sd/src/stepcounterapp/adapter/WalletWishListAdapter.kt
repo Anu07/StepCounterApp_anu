@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.sd.src.stepcounterapp.R
-import com.sd.src.stepcounterapp.model.wallet.Wishlist
+import com.sd.src.stepcounterapp.model.wallet.walletDetailResponse.Wishlist
 import com.sd.src.stepcounterapp.network.RetrofitClient
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_wallet_wish_list.view.*
@@ -29,6 +29,9 @@ class WalletWishListAdapter(var mData: ArrayList<Wishlist>, var mListener: Purch
         holder.purchaseBttn.setOnClickListener {
             mListener.onPurchaseNow(position)
         }
+        holder.imgDeleteWish.setOnClickListener {
+            mListener.onDelete(position)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -41,10 +44,12 @@ class WalletWishListAdapter(var mData: ArrayList<Wishlist>, var mListener: Purch
         val txtShortDesc = itemView.txtShortDesc!!
         val txtToken = itemView.txtToken!!
         val purchaseBttn = itemView.purchaseBttn!!
+        val imgDeleteWish = itemView.imgDeleteWish!!
     }
 
 
     interface PurchaseListener{
         fun onPurchaseNow(pos:Int)
+        fun onDelete(pos:Int)
     }
 }

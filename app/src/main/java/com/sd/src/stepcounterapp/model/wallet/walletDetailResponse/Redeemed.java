@@ -1,10 +1,11 @@
-package com.sd.src.stepcounterapp.model.wallet;
+package com.sd.src.stepcounterapp.model.wallet.walletDetailResponse;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
 /**
  * Awesome Pojo Generator
  * */
-public class Wishlist{
+public class Redeemed {
   @SerializedName("image")
   @Expose
   private String image;
@@ -14,12 +15,12 @@ public class Wishlist{
   @SerializedName("name")
   @Expose
   private String name;
-  @SerializedName("vendorId")
-  @Expose
-  private String vendorId;
   @SerializedName("description")
   @Expose
   private String description;
+  @SerializedName("redeemedAt")
+  @Expose
+  private String redeemedAt;
   @SerializedName("shortDesc")
   @Expose
   private String shortDesc;
@@ -47,17 +48,17 @@ public class Wishlist{
   public String getName(){
    return name;
   }
-  public void setVendorId(String vendorId){
-   this.vendorId=vendorId;
-  }
-  public String getVendorId(){
-   return vendorId;
-  }
   public void setDescription(String description){
    this.description=description;
   }
   public String getDescription(){
    return description;
+  }
+  public void setRedeemedAt(String redeemedAt){
+   this.redeemedAt=redeemedAt;
+  }
+  public String getRedeemedAt(){
+   return redeemedAt;
   }
   public void setShortDesc(String shortDesc){
    this.shortDesc=shortDesc;

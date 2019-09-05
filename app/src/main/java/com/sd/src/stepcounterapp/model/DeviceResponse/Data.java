@@ -33,6 +33,18 @@ public class Data {
 	@SerializedName("totalUserToken")
 	@Expose
 	private Integer totalUserToken;
+	
+	public Integer getTotalUserSteps() {
+		return totalUserSteps;
+	}
+	
+	public void setTotalUserSteps(Integer totalUserSteps) {
+		this.totalUserSteps = totalUserSteps;
+	}
+	
+	@SerializedName("totalUserSteps")
+	@Expose
+	private Integer totalUserSteps;
 	@SerializedName("todayToken")
 	@Expose
 	private Integer todayToken;

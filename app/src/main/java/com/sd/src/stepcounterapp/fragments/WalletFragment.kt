@@ -2,36 +2,37 @@ package com.sd.src.stepcounterapp.fragments
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sd.src.stepcounterapp.R
-import com.sd.src.stepcounterapp.activities.LandingActivity
 import com.sd.src.stepcounterapp.adapter.WalletRedeemListAdapter
 import com.sd.src.stepcounterapp.adapter.WalletWishListAdapter
 import com.sd.src.stepcounterapp.model.generic.BasicInfoResponse
 import com.sd.src.stepcounterapp.model.redeemnow.RedeemRequest
-import com.sd.src.stepcounterapp.model.wallet.Redeemed
-import com.sd.src.stepcounterapp.model.wallet.TokenModel
-import com.sd.src.stepcounterapp.model.wallet.WalletModel
-import com.sd.src.stepcounterapp.model.wallet.Wishlist
+import com.sd.src.stepcounterapp.model.wallet.*
+import com.sd.src.stepcounterapp.model.wallet.walletDetailResponse.Purchased
+import com.sd.src.stepcounterapp.model.wallet.walletDetailResponse.Redeemed
+import com.sd.src.stepcounterapp.model.wallet.walletDetailResponse.WalletModel
+import com.sd.src.stepcounterapp.model.wallet.walletDetailResponse.Wishlist
 import com.sd.src.stepcounterapp.network.RetrofitClient
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import com.sd.src.stepcounterapp.viewModels.WalletViewModel
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_wallet.*
-import kotlinx.android.synthetic.main.item_wallet_wish_list.*
 
 class WalletFragment : BaseFragment(),WalletWishListAdapter.PurchaseListener {
+    override fun onDelete(pos: Int) {
+        showPopupProgressSpinner(true)
+        mViewModel.hitDeleteApi(RedeemRequest(mDataWishList[pos]._id.toString(),SharedPreferencesManager.getUserId(mContext)))    }
+
     override fun onPurchaseNow(pos: Int) {
         showPopupProgressSpinner(true)
         mViewModel.hitPurchaseApi(RedeemRequest(mDataWishList[pos]._id.toString(),SharedPreferencesManager.getUserId(mContext)))
@@ -55,7 +56,7 @@ class WalletFragment : BaseFragment(),WalletWishListAdapter.PurchaseListener {
     lateinit var mWishListAdapter: WalletWishListAdapter
     lateinit var mRedeemListAdapter: WalletRedeemListAdapter
     private var mDataWishList: ArrayList<Wishlist> = ArrayList()
-    private var mDataReedemList: ArrayList<Redeemed> = ArrayList()
+    private var mDataReedemList: ArrayList<Purchased> = ArrayList()
     private lateinit var mViewModel: WalletViewModel
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_wallet, container, false)
@@ -65,12 +66,24 @@ class WalletFragment : BaseFragment(),WalletWishListAdapter.PurchaseListener {
         super.onViewCreated(view, savedInstanceState)
         mViewModel = ViewModelProviders.of(activity!!).get(WalletViewModel::class.java)
 
+
+//        {"status":200,"message":"Success","data":{"totalEarnings":27,"remainingSteps":104,"lastUpdated":"2019-09-05T09:34:23.420Z"}}
         mViewModel.getStepToken().observe(this,
             Observer<TokenModel> { mData ->
+                showPopupProgressSpinner(false)
                 if (mData.data != null) {
-                    txtTokens.text = mData.data!!.totalEarntokens.toString()
-                    txtSteps.text = mData.data!!.totalSteps.toString()
+                    txtTokens.text = mData.data!!.totalEarnings.toString()
+                    txtSteps.text = mData.data!!.remainingSteps.toString()
+                }else{
+                    Toast.makeText(mContext,mData.message,Toast.LENGTH_LONG).show()
                 }
+            })
+
+        mViewModel.getDeleteResponse().observe(this,
+            Observer<BasicInfoResponse> { mData ->
+                showPopupProgressSpinner(false)
+                Toast.makeText(mContext,mData.message,Toast.LENGTH_LONG).show()
+                mViewModel.hitWalletApi()
             })
 
         mViewModel.getPurchase().observe(this,
@@ -85,7 +98,7 @@ class WalletFragment : BaseFragment(),WalletWishListAdapter.PurchaseListener {
         mViewModel.getWalletData().observe(this,
             Observer<WalletModel> { mData ->
                 if (mData != null || mData?.data != null) {
-                    txtTokens.text = mData.data?.totalGenerated.toString()
+                    txtTokens.text = mData?.data.totalGenerated.toString()
                     txtSteps.text = mData.data?.steps.toString()
                     tokensVal.text = mData.data?.totalEarnings.toString()
 
@@ -108,8 +121,8 @@ class WalletFragment : BaseFragment(),WalletWishListAdapter.PurchaseListener {
                         txtNoWishList.visibility = View.VISIBLE
                     }
 
-                    if (mData.data!!.redeemed != null && mData.data!!.redeemed!!.size > 0) {
-                        mDataReedemList = (mData.data?.purchased as ArrayList<Redeemed>?)!!
+                    if (mData.data!!.purchased != null && mData.data!!.purchased!!.size > 0) {
+                        mDataReedemList = (mData.data?.purchased as ArrayList<Purchased>?)!!
                         setReedemListAdapter()
                         setRedeemListView()
 
@@ -142,7 +155,7 @@ class WalletFragment : BaseFragment(),WalletWishListAdapter.PurchaseListener {
 
             })
 
-        mViewModel.setTokensFromSteps()
+//        mViewModel.setTokensFromSteps()
         mViewModel.hitWalletApi()
 
         txtWishSeeAll.setOnClickListener {
@@ -169,8 +182,20 @@ class WalletFragment : BaseFragment(),WalletWishListAdapter.PurchaseListener {
             }
         }
 
+        imgDeleteFirst.setOnClickListener {
+            onDelete(0)
+        }
+        imgDeleteSecond.setOnClickListener {
+            onDelete(1)
+        }
+
         historyView.setOnClickListener{
-//            startActivity(Intent(mContext,LandingActivity::class.java))
+            openFragment()
+        }
+
+        convertTokens.setOnClickListener {
+            showPopupProgressSpinner(true)
+            mViewModel.setTokensFromSteps()
         }
 
     }
@@ -195,7 +220,7 @@ class WalletFragment : BaseFragment(),WalletWishListAdapter.PurchaseListener {
             Picasso.get().load(RetrofitClient.IMG_URL + "" + mDataWishList[0].image).into(imgProductFirst)
             purchaseFirst.setOnClickListener {
                 showPopupProgressSpinner(true)
-                mViewModel.hitPurchaseApi(RedeemRequest(SharedPreferencesManager.getUserId(mContext),mDataWishList[0]._id.toString()))
+                mViewModel.hitPurchaseApi(RedeemRequest(mDataWishList[0]._id.toString(),SharedPreferencesManager.getUserId(mContext)))
             }
 
             if (mDataWishList.size > 1) {
@@ -206,7 +231,7 @@ class WalletFragment : BaseFragment(),WalletWishListAdapter.PurchaseListener {
                 Picasso.get().load(RetrofitClient.IMG_URL + "" + mDataWishList[1].image).into(imgProductSecond)
                 purchaseSecond.setOnClickListener {
                     showPopupProgressSpinner(true)
-                    mViewModel.hitPurchaseApi(RedeemRequest(SharedPreferencesManager.getUserId(mContext),mDataWishList[1]._id.toString()))
+                    mViewModel.hitPurchaseApi(RedeemRequest(mDataWishList[1]._id.toString(),SharedPreferencesManager.getUserId(mContext)))
                 }
             } else {
                 cdWishSecond.visibility = View.GONE
@@ -247,6 +272,16 @@ class WalletFragment : BaseFragment(),WalletWishListAdapter.PurchaseListener {
             cdRedeemSecond.visibility = View.GONE
             cdRedeemFirst.visibility = View.GONE
         }
+    }
+
+
+    private fun openFragment() {
+        var fragmentTransaction = getFragmentManager()?.beginTransaction()
+        fragmentTransaction?.add(R.id.container, TransactionHistoryFragment.newInstance(mContext))
+        fragmentTransaction?.addToBackStack(null)
+        fragmentTransaction?.commit()
+
+
     }
 
 }

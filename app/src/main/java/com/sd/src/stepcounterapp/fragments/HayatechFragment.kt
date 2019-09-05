@@ -14,7 +14,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.fitpolo.support.entity.DailyStep
@@ -43,10 +42,6 @@ import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager.SYNCDATE
 import com.sd.src.stepcounterapp.viewModels.DeviceViewModel
 import kotlinx.android.synthetic.main.fragment_hayatech.*
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.collections.ArrayList
 
 
 class HayatechFragment : BaseFragment() {
@@ -73,7 +68,7 @@ class HayatechFragment : BaseFragment() {
     private var mDataList: Data? = Data()
     private lateinit var mViewModel: DeviceViewModel
     var optionArray = arrayListOf<OptionsModel>()
-
+    var android_id: String? = null
     var xAxis: XAxis? = null
     private var mMonthListFormater = arrayOfNulls<String>(31)
 
@@ -99,14 +94,15 @@ class HayatechFragment : BaseFragment() {
         )
         mViewModel.getSyncResponse().observe(this,
             Observer<BasicInfoResponse> { mResponse ->
-                Toast.makeText(activity, "Data synced successfully", Toast.LENGTH_LONG).show()
-
+                Log.i("Sync", "Data synced successfully")
+                callDashboard()
             })
         mViewModel.getDashResponse().observe(this,
             Observer<DashboardResponse> { mDashResponse ->
                 showPopupProgressSpinner(false)
                 mDataList = mDashResponse.data
-                steps.text = (mDashResponse.data.activity.sumBy { it.steps }).toString()
+                Log.i("total", "steps" + mDashResponse.data.totalUserSteps.toString())
+                steps.text = mDashResponse.data.totalUserSteps.toString()
                 totalstepsCount.text = mDashResponse.data.todayToken.toString()
                 circular_progress.setProgress(mDashResponse.data.todayToken.toDouble(), 10.00)
                 company_rank_count.text = mDashResponse.data.companyRank.toString()
@@ -115,12 +111,13 @@ class HayatechFragment : BaseFragment() {
                 tokensVal.text = mDashResponse.data.totalUserToken.toString()
                 if (mDashResponse.data.lastUpdated != null) {
                     SharedPreferencesManager.setString(mContext, mDashResponse.data.lastUpdated, SYNCDATE)
+//                    SharedPreferencesManager.saveSyncObject(mContext,syncDataFromServer())
                 }
                 setBarChart("STEPS")
             })
 
         if (SharedPreferencesManager.hasKey(mContext, "Wearable")) {
-            val android_id = Settings.Secure.getString(
+            android_id = Settings.Secure.getString(
                 mContext.contentResolver,
                 Settings.Secure.ANDROID_ID
             )
@@ -185,6 +182,7 @@ class HayatechFragment : BaseFragment() {
         }
     }
 
+
     private fun setFilterOptionArray() {
         optionArray.clear()
         if (txtGraphFilter.text.toString().equals(WEEKLY, true)) {
@@ -201,24 +199,30 @@ class HayatechFragment : BaseFragment() {
     }
 
 
-    private fun getActivityData(): java.util.ArrayList<Activity>? {
-        var list: ArrayList<DailyStep>? = SharedPreferencesManager.getSyncObject(mContext)
+    private fun getActivityData(): ArrayList<Activity>? {
         var activityList: ArrayList<Activity>? = ArrayList()
-        list!!.iterator().forEach {
-            activityList!!.add(
-                Activity(
-                    it.date,
-                    it.distance.toDouble(),
-                    it.duration.toInt(),
-                    it.count.toInt(),
-                    it.calories.toInt()
+        if(SharedPreferencesManager.hasKey(mContext,"Wearable")){
+        var list: ArrayList<DailyStep>? = SharedPreferencesManager.getSyncObject(mContext)
+            list!!.iterator().forEach {
+                activityList!!.add(
+                    Activity(
+                        it.date,
+                        it.distance.toDouble(),
+                        it.duration.toInt(),
+                        it.count.toInt(),
+                        it.calories.toInt()
+                    )
                 )
-            )
+            }
+            Log.i("Size", "list" + activityList!!.size)
         }
-        Log.i("Size", "list" + activityList!!.size)
+
         return activityList
     }
 
+    /**
+     * display health data from server
+     */
     private fun setStepsText() {
         val stepCount = SpannableString("" + circular_progress.progress)
         val spannable = SpannableString("TODAY")
@@ -274,15 +278,11 @@ class HayatechFragment : BaseFragment() {
     }
 
 
-    fun resetBarChat(){
-        barchart.invalidate()
-//        mMonthListFormater= arrayOfNulls<String>(31)
-    }
     private fun setBarChart(format: String) {
         var weeklyData: ArrayList<BarEntry> = addDataFromServer(format)
         val bardataset = BarDataSet(weeklyData, "")
         barchart.data = null
-        bardataset.color = Color.parseColor("#FFFFFF")
+        bardataset.color = Color.parseColor("#8DC540")
         barchart.animateY(5000)
         val data = BarData(bardataset)
         barchart.data = data
@@ -303,12 +303,12 @@ class HayatechFragment : BaseFragment() {
                         mDataList!!.activity.subList((mDataList!!.activity.size - 32), (mDataList!!.activity.size - 1))
                             .forEachIndexed { index, element ->
                                 graphData.add(index, BarEntry(index.toFloat(), element.steps.toFloat()))
-                                mMonthListFormater[index] = element.date.toString().replace("2019-","")
+                                mMonthListFormater[index] = element.date.toString().replace("2019-", "")
                             }
                     } else {
                         mDataList!!.activity.forEachIndexed { index, element ->
                             graphData.add(index, BarEntry(index.toFloat(), element.steps.toFloat()))
-                            mMonthListFormater[index] = element.date.toString().replace("2019-","")
+                            mMonthListFormater[index] = element.date.toString().replace("2019-", "")
                         }
                     }
                 }
@@ -333,12 +333,12 @@ class HayatechFragment : BaseFragment() {
                         mDataList!!.activity.subList((mDataList!!.activity.size - 32), (mDataList!!.activity.size - 1))
                             .forEachIndexed { index, element ->
                                 graphData.add(index, BarEntry(index.toFloat(), element.token.toFloat()))
-                                mMonthListFormater.set(index, element.date.toString().replace("2019-",""))
+                                mMonthListFormater.set(index, element.date.toString().replace("2019-", ""))
                             }
                     } else {
                         mDataList!!.activity.forEachIndexed { index, element ->
                             graphData.add(index, BarEntry(index.toFloat(), element.token.toFloat()))
-                            mMonthListFormater.set(index, element.date.toString().replace("2019-",""))
+                            mMonthListFormater.set(index, element.date.toString().replace("2019-", ""))
                         }
                     }
                 }
@@ -356,12 +356,12 @@ class HayatechFragment : BaseFragment() {
                         mDataList!!.activity.subList((mDataList!!.activity.size - 32), (mDataList!!.activity.size - 1))
                             .forEachIndexed { index, element ->
                                 graphData.add(index, BarEntry(index.toFloat(), element.distance.toFloat()))
-                                mMonthListFormater.set(index, element.date.toString().replace("2019-",""))
+                                mMonthListFormater.set(index, element.date.toString().replace("2019-", ""))
                             }
                     } else {
                         mDataList!!.activity.forEachIndexed { index, element ->
                             graphData.add(index, BarEntry(index.toFloat(), element.distance.toFloat()))
-                            mMonthListFormater.set(index, element.date.toString().replace("2019-",""))
+                            mMonthListFormater.set(index, element.date.toString().replace("2019-", ""))
                         }
                     }
                 }
@@ -372,18 +372,62 @@ class HayatechFragment : BaseFragment() {
     }
 
 
-
     fun setCurrentSteps(dailyStep: DailyStep) {
         if (dailyStep != null) {
             Log.e(
                 "Updating",
-                "steps" + ((mDataList!!.activity.sumBy { it.steps }) + dailyStep.count.toInt()).toString()
+                "steps" + dailyStep.count.toInt().toString()
             )
-            steps.text = ((mDataList!!.activity.sumBy { it.steps }) + dailyStep.count.toInt()).toString()
-            totl_dist.text = (mDataList!!.totalUserDistance + dailyStep.distance.toDouble()).toString()
+            if (steps != null && totl_dist != null)
+                steps.text = dailyStep.count.toInt().toString()
+            totl_dist.text = dailyStep.distance.toDouble().toString()
             totl_dist_suffix.text = "Km"
+
+            mViewModel.syncDevice(
+                SyncRequest(
+                    getLatestActivityData(dailyStep),
+                    SharedPreferencesManager.getUserId(mContext),
+                    android_id
+                )
+            )
         }
     }
 
 
+    /**
+     * get Latest data request array
+     */
+
+
+    private fun getLatestActivityData(dailyStep: DailyStep): ArrayList<Activity>? {
+        var activityList: ArrayList<Activity>? = ArrayList()
+        activityList!!.add(
+            Activity(
+                dailyStep.date,
+                dailyStep.distance.toDouble(),
+                dailyStep.duration.toInt(),
+                dailyStep.count.toInt(),
+                dailyStep.calories.toInt()
+            )
+        )
+        return activityList
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        mViewModel.syncDevice(
+            SyncRequest(
+                getActivityData(),
+                SharedPreferencesManager.getUserId(mContext),
+                android_id
+            )
+        )
+    }
+
+    fun callDashboard() {
+        mViewModel.fetchSyncData(
+            FetchDeviceDataRequest(WEEKLY, SharedPreferencesManager.getUserId(mContext))
+        )
+    }
 }

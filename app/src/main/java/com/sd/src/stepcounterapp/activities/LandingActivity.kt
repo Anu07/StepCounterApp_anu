@@ -34,10 +34,14 @@ import com.sd.src.stepcounterapp.AppConstants
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.adapter.LandingPagerAdapter
 import com.sd.src.stepcounterapp.fragments.*
+import com.sd.src.stepcounterapp.model.DeviceResponse.DashboardResponse
+import com.sd.src.stepcounterapp.model.generic.BasicInfoResponse
+import com.sd.src.stepcounterapp.model.syncDevice.FetchDeviceDataRequest
 import com.sd.src.stepcounterapp.model.syncDevice.SyncRequest
 import com.sd.src.stepcounterapp.network.RetrofitClient.IMG_URL
 import com.sd.src.stepcounterapp.service.DfuService
 import com.sd.src.stepcounterapp.service.MokoService
+import com.sd.src.stepcounterapp.utils.InterConsts
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager.WEARABLEID
 import com.sd.src.stepcounterapp.utils.Utils
@@ -50,6 +54,14 @@ import kotlinx.android.synthetic.main.titlebar.*
 import no.nordicsemi.android.dfu.DfuProgressListenerAdapter
 import no.nordicsemi.android.dfu.DfuServiceListenerHelper
 import java.util.*
+
+
+/**This class handles
+ * device connected or not check
+ *  syncing on resuming activity
+ *  steps count on step chnge listener
+ *
+ */
 
 
 class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback, View.OnClickListener{
@@ -139,13 +151,20 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
 
         vpLanding.setPagingEnabled(false)
         vpLanding.adapter = mAdapter
-        vpLanding.offscreenPageLimit = 4
+//        vpLanding.offscreenPageLimit = 4
 
         if (intent.hasExtra("surveyBack")) {
             vpLanding.currentItem = 3
         }
-        loadFragment(FRAG_HAYATECH)
+//        loadFragment(FRAG_HAYATECH)
         bindService(Intent(this, MokoService::class.java), mServiceConnection, Activity.BIND_AUTO_CREATE)
+        mViewModel?.getSyncResponse()?.observe(this,
+            androidx.lifecycle.Observer<BasicInfoResponse> {
+                showPopupProgressSpinner(false)
+//                HayatechFragment.instance.callDashboard()
+                loadFragment(FRAG_HAYATECH)     //loading fragment here to maintain the step count
+
+            })
 
     }
 
@@ -175,6 +194,10 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
         llSurvey.setOnClickListener(this@LandingActivity)
         llWallet.setOnClickListener(this@LandingActivity)
         img_nav.setOnClickListener(this@LandingActivity)
+        swipeLayout.setOnRefreshListener {
+            checkBluetoothGPSPermissions()
+            vpLanding.adapter = mAdapter
+        }
     }
 
     /**
@@ -336,19 +359,26 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
                         mDialog!!.dismiss()
                     }
 //                    Toast.makeText(this@LandingActivity, "Connect success", Toast.LENGTH_SHORT).show()
+                    notconnectedTxt.visibility = View.GONE
+                    swipeLayout.isEnabled = false
+
                     getLastestSteps()
                     openStepChangeListener()
+
                 }
                 if (MokoConstants.ACTION_CONN_STATUS_DISCONNECTED == intent.action) {
                     abortBroadcast()
                     if (MokoSupport.getInstance().isBluetoothOpen && MokoSupport.getInstance().reconnectCount > 0) {
-                        Toast.makeText(this@LandingActivity, "Connect failed", Toast.LENGTH_SHORT).show()
+//                        Toast.makeText(this@LandingActivity, "Connect failed", Toast.LENGTH_SHORT).show()
+                        notconnectedTxt.visibility = View.VISIBLE
                         return
                     }
                     if (!this@LandingActivity.isFinishing() && mDialog!!.isShowing) {
                         mDialog!!.dismiss()
                     }
-                    Toast.makeText(this@LandingActivity, "Connect failed", Toast.LENGTH_SHORT).show()
+                    notconnectedTxt.visibility = View.VISIBLE
+                    swipeLayout.isEnabled = false
+
                 }
                 if (BluetoothAdapter.ACTION_STATE_CHANGED == action) {
                     val blueState = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, 0)
@@ -358,7 +388,9 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
                 }
                 if (MokoConstants.ACTION_CONN_STATUS_DISCONNECTED == action) {
                     abortBroadcast()
-                    Toast.makeText(this@LandingActivity, "Connect failed", Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(this@LandingActivity, "Connect failed", Toast.LENGTH_SHORT).show()
+                    notconnectedTxt.visibility = View.VISIBLE
+                    swipeLayout.isEnabled = false
                     this@LandingActivity.finish()
                 }
                 if (MokoConstants.ACTION_ORDER_RESULT == action) {
@@ -369,7 +401,7 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
                     if (lastestSteps == null || lastestSteps!!.isEmpty()) {
                         return
                     }
-                    /* for (step in lastestSteps!!) {
+                     /*for (step in lastestSteps!!) {
                          Toast.makeText(
                              this@LandingActivity,
                              "Steps count " + lastestSteps!![lastestSteps!!.size - 1].count,
@@ -408,6 +440,7 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
                 HayatechFragment.mContext.contentResolver,
                 Settings.Secure.ANDROID_ID
             )
+            showPopupProgressSpinner(true)
             mViewModel!!.syncDevice(
                 SyncRequest(
                     getActivityData(),
@@ -483,11 +516,15 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
     }
 
     override fun onStopScan() {
-        if (!this@LandingActivity.isFinishing() && mDialog!!.isShowing) {
+        if (!this@LandingActivity.isFinishing && mDialog!!.isShowing) {
             mDialog!!.dismiss()
         }
         mDatas!!.clear()
         mDatas!!.addAll(deviceMap!!.values)
+
+        /*if(mDatas!!.size==0){
+            notconnectedTxt.visibility = View.VISIBLE
+        }*/
 
         mDatas!!.iterator().forEach {
             if (it.address == deviceSynced) {
@@ -648,5 +685,7 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
 
 
     }
+
+
 
 }

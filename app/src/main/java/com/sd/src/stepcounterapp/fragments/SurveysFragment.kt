@@ -5,11 +5,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,13 +16,11 @@ import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.activities.SurveyDetailActivity
 import com.sd.src.stepcounterapp.adapter.SlidingImageAdapter
 import com.sd.src.stepcounterapp.adapter.SurveysAdapter
-import com.sd.src.stepcounterapp.model.survey.Data
-import com.sd.src.stepcounterapp.model.survey.SurveyListResponse
+import com.sd.src.stepcounterapp.model.survey.Datum
+import com.sd.src.stepcounterapp.model.survey.SurveyResponse
 import com.sd.src.stepcounterapp.utils.ItemClickGlobalListner
 import com.sd.src.stepcounterapp.viewModels.SurveyViewModel
-import kotlinx.android.synthetic.main.fragment_rewardschallenges.*
 import kotlinx.android.synthetic.main.fragment_surveys.*
-import kotlinx.android.synthetic.main.fragment_surveys.rewardsViewPager
 import kotlinx.android.synthetic.main.fragment_surveys.spring_dots_indicator
 import java.util.*
 import kotlin.collections.ArrayList
@@ -55,7 +51,7 @@ class SurveysFragment : BaseFragment(),ItemClickGlobalListner {
     private lateinit var mViewModel: SurveyViewModel
     private val ImagesArray: ArrayList<Int>? = ArrayList()
     var rewardsViewPager: ViewPager? = null
-    private var mData: ArrayList<Data> = ArrayList()
+    private var mData: ArrayList<Datum> = ArrayList()
     private val IMAGES = arrayOf(R.drawable.slider_img, R.drawable.slider_img, R.drawable.slider_img)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -69,7 +65,7 @@ class SurveysFragment : BaseFragment(),ItemClickGlobalListner {
         super.onActivityCreated(savedInstanceState)
         mViewModel = ViewModelProviders.of(activity!!).get(SurveyViewModel::class.java)
         mViewModel.getSurveyList().observe(this,
-            Observer<SurveyListResponse> { mData ->
+            Observer<SurveyResponse> { mData ->
                 showPopupProgressSpinner(false)
                 if (mData != null) {
                     if (mData.data!!.size > 0) {
@@ -132,7 +128,7 @@ class SurveysFragment : BaseFragment(),ItemClickGlobalListner {
 
 
 
-    private fun swapFragment(data: Data) {
+    private fun swapFragment(data: Datum) {
      var intent = Intent(mContext, SurveyDetailActivity::class.java)
         intent.putExtra("Data",data)
         startActivity(intent)

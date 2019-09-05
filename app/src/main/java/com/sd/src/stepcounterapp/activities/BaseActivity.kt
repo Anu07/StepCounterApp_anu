@@ -68,6 +68,8 @@ abstract class BaseActivity<V : AndroidViewModel> : AppCompatActivity() {
         setContentView(layoutId)
         this.mContext = context
         this.mViewModel = if (mViewModel == null) viewModel else mViewModel
+        progressDialog = Dialog(this@BaseActivity)
+        progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         onCreate()
         initListeners()
     }
@@ -122,8 +124,7 @@ abstract class BaseActivity<V : AndroidViewModel> : AppCompatActivity() {
 
     fun showPopupProgressSpinner(isShowing: Boolean?) {
         if (isShowing == true) {
-            progressDialog = Dialog(this@BaseActivity)
-            progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+
             progressDialog.setContentView(R.layout.popup_progressbar)
             progressDialog.setCancelable(false)
             progressDialog.window.setBackgroundDrawable(

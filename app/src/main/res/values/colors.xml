@@ -35,5 +35,6 @@
     <color name="_707070">#707070</color>
     <color name="background_blue">#C4EAF3</color>
     <color name="darkgray_text">#535850</color>
-
+    <color name="cyanGreen">#00FF90</color>
+    <color name="scanTxtColor">#3366CC</color>
 </resources>

@@ -8,7 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import com.sd.src.stepcounterapp.AppApplication
 import com.sd.src.stepcounterapp.model.generic.BasicInfoResponse
 import com.sd.src.stepcounterapp.model.generic.BasicRequest
-import com.sd.src.stepcounterapp.model.survey.SurveyListResponse
+import com.sd.src.stepcounterapp.model.survey.SurveyResponse
 import com.sd.src.stepcounterapp.model.survey.surveyrequest.SurveystartRequestModel
 import com.sd.src.stepcounterapp.network.RetrofitClient
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
@@ -20,14 +20,14 @@ class SurveyViewModel(application: Application) : AndroidViewModel(application) 
 
     val call = RetrofitClient.instance
 
-    private var mSurveyList: MutableLiveData<SurveyListResponse>? = null
+    private var mSurveyList: MutableLiveData<SurveyResponse>? = null
     private var mSurveyAttend: MutableLiveData<BasicInfoResponse>? = null
 
-    fun getSurveyList(): MutableLiveData<SurveyListResponse> {
+    fun getSurveyList(): MutableLiveData<SurveyResponse> {
         if (mSurveyList == null) {
             mSurveyList = MutableLiveData()
         }
-        return mSurveyList as MutableLiveData<SurveyListResponse>
+        return mSurveyList as MutableLiveData<SurveyResponse>
     }
 
     fun takesurvey(): MutableLiveData<BasicInfoResponse> {
@@ -40,17 +40,17 @@ class SurveyViewModel(application: Application) : AndroidViewModel(application) 
     fun hitSurveyListApi() {
         call!!.getsurvey(BasicRequest(SharedPreferencesManager.getUserId(AppApplication.applicationContext())))
             .enqueue(object :
-                Callback<SurveyListResponse> {
-                override fun onFailure(call: Call<SurveyListResponse>?, t: Throwable?) {
+                Callback<SurveyResponse> {
+                override fun onFailure(call: Call<SurveyResponse>?, t: Throwable?) {
                     Log.v("retrofit", "call failed")
                     Toast.makeText(AppApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
                 }
 
-                override fun onResponse(call: Call<SurveyListResponse>?, response: Response<SurveyListResponse>?) {
+                override fun onResponse(call: Call<SurveyResponse>?, response: Response<SurveyResponse>?) {
                     if (response!!.code() == 200) {
-                        mSurveyList!!.value = response!!.body()!!
+                        mSurveyList!!.value = response?.body()!!
                     } else {
-                        var model = SurveyListResponse()
+                        var model = SurveyResponse()
                         model.message = "Invalid request"       //TODO
                         mSurveyList!!.value = model
                     }

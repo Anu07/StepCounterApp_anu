@@ -82,6 +82,7 @@
                     app:layout_constraintRight_toRightOf="parent"
                     android:layout_marginRight="@dimen/_10sdp"
                     android:layout_marginTop="@dimen/_50sdp"
+                    android:layout_marginBottom="@dimen/_20sdp"
                     app:layout_constraintBottom_toTopOf="@+id/cntnBttn"
                     android:layout_height="match_parent">
 

@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.adapter.SurveysQuestionsAdapter
 import com.sd.src.stepcounterapp.fragments.SurveysFragment
-import com.sd.src.stepcounterapp.model.survey.Data
-import com.sd.src.stepcounterapp.model.survey.Products
+import com.sd.src.stepcounterapp.model.survey.Datum
+import com.sd.src.stepcounterapp.model.survey.Question
 import com.sd.src.stepcounterapp.model.survey.surveyrequest.SurveystartRequestModel
 import com.sd.src.stepcounterapp.model.survey.surveyrequest.UserAnswer
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
@@ -32,10 +32,10 @@ class SurveyDetailActivity : BaseActivity<SurveyViewModel>(), SurveysQuestionsAd
             this,
             BaseViewModelFactory { SurveyViewModel(application) })
             .get(SurveyViewModel::class.java)
-    private var mData: ArrayList<Products> = ArrayList()
+    private var mData: ArrayList<Question> = ArrayList()
     private var mAnsData: ArrayList<String> = ArrayList()
     private lateinit var mSurveyAdapter: SurveysQuestionsAdapter
-    lateinit var mItemData: Data
+    lateinit var mItemData: Datum
     override val context: Context
         get() = this@SurveyDetailActivity
     lateinit var userAns: UserAnswer
@@ -43,13 +43,13 @@ class SurveyDetailActivity : BaseActivity<SurveyViewModel>(), SurveysQuestionsAd
 
     override fun onCreate() {
         mItemData = intent.getParcelableExtra("Data")
-        if(mItemData.attempted == true){
+        if(mItemData.answered == true){
             Toast.makeText(mContext,"You have already taken this survey", Toast.LENGTH_LONG).show()
             finish()
         }
-        mData = mItemData.products as ArrayList<Products>
-        surveyName.text = mItemData.name
-        quesCount.text = mItemData.products.size.toString()
+        mData = mItemData.questions as ArrayList<Question>
+        surveyName.text = mItemData.name.capitalize()
+        quesCount.text = mItemData.questions.size.toString().capitalize()
         expireDate.text = mItemData.expireOn.split("T")[0]
         setQuestionSurveyAdapter()
         mViewModel!!.takesurvey().observe(this, Observer { mData ->
@@ -83,11 +83,11 @@ class SurveyDetailActivity : BaseActivity<SurveyViewModel>(), SurveysQuestionsAd
     }
 
     private fun getanswersData(): ArrayList<UserAnswer> {
-        mItemData!!.products.forEachIndexed { index, element ->
+        mItemData!!.questions.forEachIndexed { index, element ->
             if (mAnsData[index].isNotEmpty()) {           //if mAns list has answer stored on that position
                 userAns = UserAnswer()
                 userAns.answer = mAnsData
-                userAns.id = mItemData.products.get(index).id
+                userAns.id = mItemData.questions.get(index)._id
                 Log.e("Answer and Id", "" + userAns.answer + "!!1" + userAns.id)
                 mUserAnswerData.add(userAns)
             }
@@ -97,8 +97,8 @@ class SurveyDetailActivity : BaseActivity<SurveyViewModel>(), SurveysQuestionsAd
 
 
     override fun onBackPressed() {
-//        super.onBackPressed()
-        startActivity(Intent(this@SurveyDetailActivity, LandingActivity::class.java).putExtra("surveyBack", ""))
+        super.onBackPressed()
+//        startActivity(Intent(this@SurveyDetailActivity, LandingActivity::class.java).putExtra("surveyBack", ""))
     }
 
 

@@ -6,12 +6,11 @@ import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.sd.src.stepcounterapp.AppApplication
-import com.sd.src.stepcounterapp.fragments.HayatechFragment
 import com.sd.src.stepcounterapp.model.generic.BasicInfoResponse
 import com.sd.src.stepcounterapp.model.generic.BasicRequest
 import com.sd.src.stepcounterapp.model.redeemnow.RedeemRequest
 import com.sd.src.stepcounterapp.model.wallet.TokenModel
-import com.sd.src.stepcounterapp.model.wallet.WalletModel
+import com.sd.src.stepcounterapp.model.wallet.walletDetailResponse.WalletModel
 import com.sd.src.stepcounterapp.network.RetrofitClient
 import com.sd.src.stepcounterapp.utils.LoadingDialog
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
@@ -20,6 +19,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class WalletViewModel(application: Application) : AndroidViewModel(application) {
+    private var mDelete: MutableLiveData<BasicInfoResponse>? = null
     private var mPurchaseResponse: MutableLiveData<BasicInfoResponse>?= null
     val call = RetrofitClient.instance
 
@@ -31,6 +31,14 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
             mTokenModel = MutableLiveData()
         }
         return mTokenModel as MutableLiveData<TokenModel>
+    }
+
+
+    fun getDeleteResponse(): MutableLiveData<BasicInfoResponse> {
+        if (mDelete == null) {
+            mDelete = MutableLiveData()
+        }
+        return mDelete as MutableLiveData<BasicInfoResponse>
     }
 
     fun getPurchase(): MutableLiveData<BasicInfoResponse> {
@@ -60,7 +68,7 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
                     mTokenModel!!.value = response.body()!!
                 } else {
                     var model = TokenModel()
-                    model.message = "Invalid request"
+                    model.message = "Insufficient steps"
                     mTokenModel!!.value = model
                 }
             }
@@ -81,7 +89,7 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
                     mWalletModel!!.value = response.body()!!
                 } else {
                     var model = WalletModel()
-                    model.message = "Invalid request"
+                    model.message = "Server error"
                     mWalletModel!!.value = model
                     LoadingDialog.getLoader().dismissLoader()
                 }
@@ -100,6 +108,20 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
                 if (response!!.code() == 200) {
                     mPurchaseResponse!!.value = response.body()
                 }
+            }
+        })
+    }
+
+    fun hitDeleteApi(redeemRequest: RedeemRequest) {
+        call!!.deleteWishList(redeemRequest).enqueue(object : Callback<BasicInfoResponse> {
+
+            override fun onFailure(call: Call<BasicInfoResponse>?, t: Throwable?) {
+                Log.v("retrofit", "call failed")
+                Toast.makeText(AppApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
+            }
+
+            override fun onResponse(call: Call<BasicInfoResponse>?, response: Response<BasicInfoResponse>?) {
+                mDelete!!.value = response!!.body()
             }
         })
     }

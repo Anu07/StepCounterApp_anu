@@ -1,6 +1,5 @@
 package com.sd.src.stepcounterapp.network
 
-import com.sd.src.stepcounterapp.model.BaseModel
 import com.sd.src.stepcounterapp.model.BasicInfoRequestObject
 import com.sd.src.stepcounterapp.model.DeviceResponse.DashboardResponse
 import com.sd.src.stepcounterapp.model.bmi.BMIinfoResponse
@@ -22,14 +21,14 @@ import com.sd.src.stepcounterapp.model.profile.UpdateProfileRequest
 import com.sd.src.stepcounterapp.model.redeemnow.RedeemRequest
 import com.sd.src.stepcounterapp.model.rewards.AddRewardsRequestObject
 import com.sd.src.stepcounterapp.model.rewards.RewardsCategoriesResponse
-import com.sd.src.stepcounterapp.model.survey.SurveyListResponse
+import com.sd.src.stepcounterapp.model.survey.SurveyResponse
 import com.sd.src.stepcounterapp.model.survey.surveyrequest.SurveystartRequestModel
 import com.sd.src.stepcounterapp.model.syncDevice.FetchDeviceDataRequest
 import com.sd.src.stepcounterapp.model.syncDevice.SyncRequest
 import com.sd.src.stepcounterapp.model.transactionhistory.TransactionHistoryModel
 import com.sd.src.stepcounterapp.model.updateresponse.UpdateProfileResponse
 import com.sd.src.stepcounterapp.model.wallet.TokenModel
-import com.sd.src.stepcounterapp.model.wallet.WalletModel
+import com.sd.src.stepcounterapp.model.wallet.walletDetailResponse.WalletModel
 import com.sd.src.stepcounterapp.model.wishList.AddWishRequest
 import com.sd.src.stepcounterapp.model.wishList.GetWishListRequest
 import com.sd.src.stepcounterapp.model.wishList.WishListResponse
@@ -115,6 +114,12 @@ interface ApiInterface {
     ): Call<BasicInfoResponse>
 
 
+    @PUT("api/wishlist")
+    fun deleteWishList(
+        @Body body: RedeemRequest
+    ): Call<BasicInfoResponse>
+
+
     @POST("api/activity")
     fun syncWeableData(
         @Body body: SyncRequest
@@ -145,7 +150,7 @@ interface ApiInterface {
     fun steps_to_token(@Body body: BasicRequest): Call<TokenModel>
 
     @POST("api/survey")
-    fun getsurvey(@Body body: BasicRequest): Call<SurveyListResponse>
+    fun getsurvey(@Body body: BasicRequest): Call<SurveyResponse>
 
     @POST("api/attend_survey")
     fun takesurvey(@Body body: SurveystartRequestModel): Call<BasicInfoResponse>
@@ -155,7 +160,6 @@ interface ApiInterface {
 
     @POST("/api/redeem_now")
     fun redeemNow(@Body body: RedeemRequest): Call<BasicInfoResponse>
-
 
     @POST("/api/leaderboard")
     fun getLeaderboard(@Body body: LeaderBoardRequest): Call<LeaderBoardResponse>

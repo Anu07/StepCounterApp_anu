@@ -5,12 +5,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.sd.src.stepcounterapp.R
-import com.sd.src.stepcounterapp.model.wallet.Redeemed
+import com.sd.src.stepcounterapp.model.wallet.walletDetailResponse.Purchased
+import com.sd.src.stepcounterapp.model.wallet.walletDetailResponse.Redeemed
 import com.sd.src.stepcounterapp.network.RetrofitClient
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_wallet_reedem_list.view.*
 
-class WalletRedeemListAdapter(var mData: ArrayList<Redeemed>) :
+class WalletRedeemListAdapter(var mData: ArrayList<Purchased>) :
     RecyclerView.Adapter<WalletRedeemListAdapter.ViewHolder>() {
 
     override

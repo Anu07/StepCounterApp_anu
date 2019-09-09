@@ -28,8 +28,8 @@ class ChallengeTrendingAdapter(
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         this.item = mValues[position]
-        holder.textView.text = item.name
-        holder.textShort.text = Html.fromHtml(item.description)
+        holder.textView.text = item.name.capitalize()
+        holder.textShort.text = Html.fromHtml(item.description.capitalize())
         Picasso.get().load(RetrofitClient.IMG_URL + "" + item.image).placeholder(R.drawable.placeholder)
             .into(holder.imageView)
         holder.imageView.setOnClickListener {
@@ -61,7 +61,7 @@ class ChallengeTrendingAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
-        val view = LayoutInflater.from(mContext).inflate(R.layout.recycler_grid_item, parent, false)
+        val view = LayoutInflater.from(mContext).inflate(R.layout.recycler_trend_grid_item, parent, false)
         return ViewHolder(view)
     }
 

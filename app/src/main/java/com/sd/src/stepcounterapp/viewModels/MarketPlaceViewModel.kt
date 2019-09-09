@@ -28,6 +28,7 @@ class MarketPlaceViewModel(application: Application) : AndroidViewModel(applicat
     private var mPopProduct: MutableLiveData<PopularProducts>? = null
     private var mWish: MutableLiveData<BasicInfoResponse>? = null
 
+    private var mRemoveWish: MutableLiveData<BasicInfoResponse>? = null
     fun getCategory(): MutableLiveData<MarketResponse> {
         if (mProduct == null) {
             mProduct = MutableLiveData()
@@ -53,6 +54,14 @@ class MarketPlaceViewModel(application: Application) : AndroidViewModel(applicat
             mWish = MutableLiveData()
         }
         return mWish as MutableLiveData<BasicInfoResponse>
+    }
+
+
+    fun removeWishList(): MutableLiveData<BasicInfoResponse> {
+        if (mRemoveWish == null) {
+            mRemoveWish = MutableLiveData()
+        }
+        return mRemoveWish as MutableLiveData<BasicInfoResponse>
     }
 
     fun getCategoryApi(request:BasicRequest) {
@@ -139,7 +148,7 @@ class MarketPlaceViewModel(application: Application) : AndroidViewModel(applicat
             }
 
             override fun onResponse(call: Call<BasicInfoResponse>?, response: Response<BasicInfoResponse>?) {
-                mWish!!.value = response!!.body()
+                mRemoveWish!!.value = response!!.body()
             }
         })
     }

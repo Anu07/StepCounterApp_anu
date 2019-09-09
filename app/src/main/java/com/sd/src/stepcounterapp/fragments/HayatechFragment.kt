@@ -43,6 +43,8 @@ import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager.SYNCDATE
 import com.sd.src.stepcounterapp.viewModels.DeviceViewModel
 import kotlinx.android.synthetic.main.fragment_hayatech.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class HayatechFragment : BaseFragment() {
@@ -395,7 +397,7 @@ class HayatechFragment : BaseFragment() {
                 "Updating",
                 "steps" + dailyStep.count.toInt().toString()
             )
-            if (steps != null && totl_dist != null){
+            if (steps != null && totl_dist != null) {
                 steps.text = dailyStep.count.toInt().toString()
                 totl_dist.text = dailyStep.distance.toDouble().toString()
                 totl_dist_suffix.text = "Km"
@@ -450,13 +452,24 @@ class HayatechFragment : BaseFragment() {
     }
 
     fun syncingWearableMsg(bool: Boolean) {
-        if(syncTxtMsg!=null){
-            if(bool){
+        if (syncTxtMsg != null) {
+            if (bool) {
                 syncTxtMsg.visibility = View.VISIBLE
-            }else{
+            } else {
                 syncTxtMsg.visibility = View.GONE
             }
         }
 
     }
+
+
+    /**
+     * day from a date
+     */
+    fun dayFromDate(date: String) {
+        var sCalendar = Calendar.getInstance()
+        var dayLongName = sCalendar!!.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
+        Log.e("Day","found"+dayLongName.toString())
+    }
+
 }

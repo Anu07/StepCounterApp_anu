@@ -149,6 +149,7 @@ class MarketPlaceFragment : BaseFragment(), MarketPlaceClickInterface, MarketPla
         }
     }
 
+    var count: Int? = 0
     private lateinit var marketDialog: MarketPlaceDialog
     private lateinit var marketPopDialog: MarketPopPlaceDialog
     private val mCartItemCount: Int = 0
@@ -179,7 +180,7 @@ class MarketPlaceFragment : BaseFragment(), MarketPlaceClickInterface, MarketPla
                 if (mData.status == 200) {
                     Toast.makeText(WalletFragment.mContext, "Product purchased successfully", Toast.LENGTH_LONG).show()
                     mViewModel.getCategoryApi(BasicRequest(SharedPreferencesManager.getUserId(mContext), "1"))
-                }else  if (mData.status == 400) {
+                } else if (mData.status == 400) {
                     Toast.makeText(WalletFragment.mContext, "Insufficient tokens", Toast.LENGTH_LONG).show()
                 }
             })
@@ -228,6 +229,42 @@ class MarketPlaceFragment : BaseFragment(), MarketPlaceClickInterface, MarketPla
                 }
                 if (it != null) {
                     if (it.status == 200) {
+
+
+                        count = count!! + 1
+
+                        SharedPreferencesManager.setInt(
+                            WalletFragment.mContext,
+                            SharedPreferencesManager.WISHCOUNT, count!!
+                        )
+
+
+
+                        cart_badge.text = count.toString()
+                        mViewModel.getCategoryApi(BasicRequest(SharedPreferencesManager.getUserId(mContext), "1"))
+                        mViewModel.getProductApi(BasicRequest(SharedPreferencesManager.getUserId(mContext), "1"))
+                    }
+                }
+            })
+
+        mViewModel.removeWishList().observe(this,
+            Observer<BasicInfoResponse> {
+                showPopupProgressSpinner(false)
+                try {
+                    if (marketDialog != null && marketDialog.isShowing) {
+                        marketDialog.dismiss()
+                    }
+                } catch (e: Exception) {
+                }
+                if (it != null) {
+                    if (it.status == 200) {
+
+                        count = count!! - 1
+                        SharedPreferencesManager.setInt(
+                            WalletFragment.mContext,
+                            SharedPreferencesManager.WISHCOUNT, count!!
+                        )
+                        cart_badge.text = count.toString()
                         mViewModel.getCategoryApi(BasicRequest(SharedPreferencesManager.getUserId(mContext), "1"))
                         mViewModel.getProductApi(BasicRequest(SharedPreferencesManager.getUserId(mContext), "1"))
                     }
@@ -326,7 +363,7 @@ class MarketPlaceFragment : BaseFragment(), MarketPlaceClickInterface, MarketPla
 
         wishlist.setOnClickListener {
             //            callback.onFragmentClick(2)
-            (mContext as LandingActivity).onFragmnet(2)
+            (mContext as LandingActivity).onFragmnet(4)
         }
     }
 
@@ -402,18 +439,21 @@ class MarketPlaceFragment : BaseFragment(), MarketPlaceClickInterface, MarketPla
      */
 
     fun setupBadge() {
-        if (cart_badge != null) {
-            if (mCartItemCount == 0) {
-                if (cart_badge.visibility != View.GONE) {
-                    cart_badge.visibility = View.GONE;
-                }
-            } else {
-                cart_badge.text = "1"
-                if (cart_badge.visibility != View.VISIBLE) {
-                    cart_badge.visibility = View.VISIBLE;
-                }
-            }
+        count = SharedPreferencesManager.getInt(
+            WalletFragment.mContext,
+            SharedPreferencesManager.WISHCOUNT
+        )
+        if (count == -1 || count == 0) {
+//                if (cart_badge.visibility != View.GONE) {
+            cart_badge.visibility = View.GONE
+//                }
+        } else {
+//                if (cart_badge.visibility != View.VISIBLE) {
+            cart_badge.visibility = View.VISIBLE
+            cart_badge.text = count.toString()
+
+//                }
         }
     }
-
 }
+

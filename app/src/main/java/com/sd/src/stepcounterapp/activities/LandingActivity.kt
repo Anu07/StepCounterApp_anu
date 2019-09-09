@@ -5,6 +5,7 @@ import android.app.ProgressDialog
 import android.bluetooth.BluetoothAdapter
 import android.content.*
 import android.location.LocationManager
+import android.os.Handler
 import android.os.IBinder
 import android.provider.Settings
 import android.util.Log
@@ -19,6 +20,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModelProviders
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.viewpager.widget.ViewPager
 import com.fitpolo.support.MokoConstants
 import com.fitpolo.support.MokoSupport
 import com.fitpolo.support.callback.MokoScanDeviceCallback
@@ -74,25 +76,23 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
     fun onFragmnet(position: Int){
         if (position == 2) {
             loadFragment( position)
-//            vpLanding.currentItem = 4
         } else if (position == 0) {         //to open marketplace
             loadFragment(position)
-//            vpLanding.currentItem = 2
         }else if (position == 1) {         //to open marketplace
             loadFragment(position)
-//            vpLanding.currentItem = 2
         }else if(position == 5 )  {
-            //leaderboard activity
             startActivity(Intent(this@LandingActivity, LeaderboardActivity::class.java))
         }else if(position == 6 )  {
-            //leaderboard activity
             openChangeFragment()
+        }else if(position == 4 )  {
+            loadFragment(position)
         }
     }
 
 
-
-
+    private var current: Int = 0
+    private lateinit var mHandler: Handler
+    private lateinit var mRunnable:Runnable
     private var deviceSynced: String? = ""
     private val FRAG_HAYATECH: Int = 0
     private val FRAG_CHALLENGES: Int = 1
@@ -163,7 +163,7 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
 
         vpLanding.setPagingEnabled(false)
         vpLanding.adapter = mAdapter
-        vpLanding.offscreenPageLimit = 4
+//        vpLanding.offscreenPageLimit = 4
 
         if (intent.hasExtra("surveyBack")) {
             vpLanding.currentItem = 3
@@ -177,6 +177,20 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
                 loadFragment(FRAG_HAYATECH)     //loading fragment here to maintain the step count
             })
 
+        vpLanding?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+
+            override fun onPageScrollStateChanged(state: Int) {
+            }
+
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+
+            }
+            override fun onPageSelected(position: Int) {
+                current = position
+            }
+
+        })
+        checkBluetoothGPSPermissions()
     }
 
     private fun openEditActivity() {
@@ -212,11 +226,11 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
             if(!MokoSupport.getInstance().isConnDevice(this@LandingActivity,SharedPreferencesManager.getString(this@LandingActivity,WEARABLEID))){
                 Log.e("disconnected","detected")
                 checkBluetoothGPSPermissions()
-                vpLanding.adapter = mAdapter
             }else{
                 getLastestSteps()
             }
         }
+
     }
 
     /**
@@ -344,6 +358,7 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
         MokoSupport.getInstance().disConnectBle()
         if(!MokoSupport.getInstance().isConnDevice(this@LandingActivity,SharedPreferencesManager.getString(this@LandingActivity,WEARABLEID))){
             Log.e("disconnect","success")
+            Toast.makeText(this@LandingActivity, "Device disconnected successfully", Toast.LENGTH_LONG).show()
         }
     }
 
@@ -387,7 +402,7 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
                     }
 //                    Toast.makeText(this@LandingActivity, "Connect success", Toast.LENGTH_SHORT).show()
                     notconnectedTxt.visibility = View.GONE
-                    swipeLayout.isEnabled = false
+                    dismissSwipe()
                     HayatechFragment.instance.syncingWearableMsg(false)
 
                     getLastestSteps()
@@ -405,7 +420,7 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
                         mDialog!!.dismiss()
                     }
                     notconnectedTxt.visibility = View.VISIBLE
-                    swipeLayout.isEnabled = false
+                    dismissSwipe()
                     HayatechFragment.instance.syncingWearableMsg(false)
 
                 }
@@ -414,12 +429,13 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
                     when (blueState) {
                         BluetoothAdapter.STATE_TURNING_OFF, BluetoothAdapter.STATE_OFF -> this@LandingActivity.finish()
                     }
+                    dismissSwipe()
                 }
                 if (MokoConstants.ACTION_CONN_STATUS_DISCONNECTED == action) {
                     abortBroadcast()
 //                    Toast.makeText(this@LandingActivity, "Connect failed", Toast.LENGTH_SHORT).show()
                     notconnectedTxt.visibility = View.VISIBLE
-                    swipeLayout.isEnabled = false
+                    dismissSwipe()
                     HayatechFragment.instance.syncingWearableMsg(false)
                     this@LandingActivity.finish()
                 }
@@ -441,13 +457,17 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
                     HayatechFragment.instance.syncingWearableMsg(false)
                     SharedPreferencesManager.saveSyncObject(this@LandingActivity, lastestSteps)
                     updateDeviceData()
-                    swipeLayout.isEnabled = false
+                    dismissSwipe()
                 }
                 if (MokoConstants.ACTION_ORDER_TIMEOUT == action) {
                     Toast.makeText(this@LandingActivity, "Timeout", Toast.LENGTH_SHORT).show()
+                    dismissSwipe()
+
                 }
                 if (MokoConstants.ACTION_ORDER_FINISH == action) {
 //                    Toast.makeText(this@LandingActivity, "Success", Toast.LENGTH_SHORT).show()
+
+                    dismissSwipe()
 
                 }
                 if (MokoConstants.ACTION_CURRENT_DATA == action) {
@@ -459,12 +479,26 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
                             LogModule.i(dailyStep.toString())
                             HayatechFragment.instance.syncingWearableMsg(false)
                             HayatechFragment.instance.setCurrentSteps(dailyStep)
+                            dismissSwipe()
                         }
                     }
                 }
             }
 
         }
+    }
+
+    /**
+     * To dismiss swipe refresh
+     */
+
+
+    private fun dismissSwipe() {
+        if(swipeLayout.isRefreshing){
+            swipeLayout.isRefreshing = false
+            vpLanding.adapter = mAdapter
+        }
+
     }
 
     private fun updateDeviceData() {
@@ -750,3 +784,4 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
     }
 
 }
+

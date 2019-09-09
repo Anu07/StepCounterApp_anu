@@ -24,6 +24,7 @@ import com.sd.src.stepcounterapp.model.wallet.walletDetailResponse.WalletModel
 import com.sd.src.stepcounterapp.model.wallet.walletDetailResponse.Wishlist
 import com.sd.src.stepcounterapp.network.RetrofitClient
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
+import com.sd.src.stepcounterapp.utils.SharedPreferencesManager.WISHCOUNT
 import com.sd.src.stepcounterapp.viewModels.WalletViewModel
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_wallet.*
@@ -104,7 +105,7 @@ class WalletFragment : BaseFragment(),WalletWishListAdapter.PurchaseListener {
 
                     if (mData.data!!.wishlist != null && mData.data?.wishlist!!.size > 0) {
                         mDataWishList = (mData.data?.wishlist as ArrayList<Wishlist>?)!!
-
+                        SharedPreferencesManager.setInt(mContext,WISHCOUNT, mDataWishList.size)
                         setWishListAdapter()
                         setWishListView()
 

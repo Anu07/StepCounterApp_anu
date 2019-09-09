@@ -76,10 +76,6 @@
 
     </LinearLayout>
 
-    <ScrollView
-            android:layout_width="match_parent"
-            android:fillViewport="true"
-            android:layout_height="match_parent">
         <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -113,12 +109,11 @@
                     android:layout_width="match_parent"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:background="@color/colorbg"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="360dp"/>
 
 
         </RelativeLayout>
 
 
-    </ScrollView>
 
 </LinearLayout>

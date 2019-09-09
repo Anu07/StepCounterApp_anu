@@ -145,7 +145,9 @@ abstract class BaseActivity<V : AndroidViewModel> : AppCompatActivity() {
 
     override fun onBackPressed() {
 
-        if (getCurrentActivityName().equals("com.sd.src.stepcounterapp.activities.MyProfileActivity")) {
+        if (getCurrentActivityName() == "com.sd.src.stepcounterapp.activities.MyProfileActivity") {
+            super.onBackPressed()
+        } else if (getCurrentActivityName() == "com.sd.src.stepcounterapp.activities.LeaderboardActivity") {
             super.onBackPressed()
         } else if (supportFragmentManager.backStackEntryCount > 0) {
             supportFragmentManager.popBackStack()

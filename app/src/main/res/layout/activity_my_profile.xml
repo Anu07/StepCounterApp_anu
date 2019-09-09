@@ -197,6 +197,7 @@
                               android:orientation="horizontal"
                               android:layout_gravity="center_vertical"
                               android:background="@color/white"
+                              android:id="@+id/lin_my_survey"
                               android:layout_marginTop="@dimen/_8sdp"
                               android:layout_marginBottom="@dimen/_18sdp"
                               android:padding="@dimen/_15sdp">

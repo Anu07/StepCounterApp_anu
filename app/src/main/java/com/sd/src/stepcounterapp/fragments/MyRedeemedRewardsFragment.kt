@@ -18,6 +18,7 @@ import com.sd.src.stepcounterapp.model.profile.Data
 import com.sd.src.stepcounterapp.model.rewards.MyRedeemedResponse
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import com.sd.src.stepcounterapp.viewModels.ProfileViewModel
+import kotlinx.android.synthetic.main.black_crosstitlebar.*
 import kotlinx.android.synthetic.main.list_challenges.*
 
 class MyRedeemedRewardsFragment : BaseFragment() {
@@ -52,18 +53,17 @@ class MyRedeemedRewardsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mProfileViewModel = ViewModelProviders.of(activity!!).get(ProfileViewModel::class.java)
-        userData = SharedPreferencesManager.getUpdatedUserObject(MyRedeemedRewardsFragment.mContext)
+        userData = SharedPreferencesManager.getUpdatedUserObject(mContext)
         //  Picasso.get().load(RetrofitClient.IMG_URL + userData?.image).placeholder(R.drawable.nouser).into(img_nav_header)
        // firstNameEd.setText(userData!!.firstName.toString())
       //  lastNameEd.setText(userData!!.lastName.toString())
+        txt_title.setImageResource(R.drawable.redeemed_header)
 
         mProfileViewModel.getRedeemRewards()
 
         mProfileViewModel.getMyRedeemedResponse().observe(this, androidx.lifecycle.Observer { mData ->
         //  showPopupProgressSpinner(true)
             if (mData.status == 200) {
-                Toast.makeText(activity, "Shown successfully", Toast.LENGTH_LONG).show()
-                //fragmentManager!!.popBackStackImmediate()
                 setAdapter(mData)
 
             }

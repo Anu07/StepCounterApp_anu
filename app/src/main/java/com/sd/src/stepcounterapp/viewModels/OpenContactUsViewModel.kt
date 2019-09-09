@@ -47,10 +47,8 @@ class OpenContactUsViewModel(application: Application) : AndroidViewModel(applic
             }
 
             override fun onResponse(call: Call<BasicInfoResponse>, response: Response<BasicInfoResponse>) {
-                mContactUsResponse!!.value = response.body()
-
-                if(response!!.code()!=400){
-                    mContactUsResponse!!.value = response!!.body()!!
+                if(response!!.body()!!.status == 200){
+                    mContactUsResponse!!.value = response.body()
                 }else{
                     mContactUsResponse!!.value = BasicInfoResponse()
                 }

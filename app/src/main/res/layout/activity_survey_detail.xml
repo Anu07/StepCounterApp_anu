@@ -76,42 +76,49 @@
 
     </LinearLayout>
 
-    <FrameLayout
+    <ScrollView
             android:layout_width="match_parent"
+            android:fillViewport="true"
             android:layout_height="match_parent">
-
-        <LinearLayout
+        <RelativeLayout
                 android:layout_width="match_parent"
-                android:orientation="horizontal"
-                android:background="@color/white"
-                android:padding="@dimen/_5sdp"
-                android:layout_gravity="bottom"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
 
-
-            <com.sd.src.stepcounterapp.utils.CustomButton
-                    android:id="@+id/finishbutton"
-                    android:background="@drawable/button_background"
+            <LinearLayout
                     android:layout_width="match_parent"
-                    android:textSize="@dimen/_15sdp"
-                    android:textColor="@color/white"
-                    android:layout_marginRight="@dimen/_10sdp"
-                    android:layout_marginLeft="@dimen/_5sdp"
-                    app:appButtonfont="montserrat_medium.ttf"
-                    android:layout_height="wrap_content"
-                    android:text="FINISH"
-            />
-        </LinearLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/quesList"
-                android:layout_width="match_parent"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:background="@color/colorbg"
-                android:layout_height="wrap_content"/>
+                    android:orientation="horizontal"
+                    android:background="@color/white"
+                    android:padding="@dimen/_5sdp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_gravity="bottom"
+                    android:layout_height="wrap_content">
 
 
-    </FrameLayout>
+                <com.sd.src.stepcounterapp.utils.CustomButton
+                        android:id="@+id/finishbutton"
+                        android:background="@drawable/button_background"
+                        android:layout_width="match_parent"
+                        android:textSize="@dimen/_15sdp"
+                        android:textColor="@color/white"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        app:appButtonfont="montserrat_medium.ttf"
+                        android:layout_height="wrap_content"
+                        android:text="FINISH"
+                />
+            </LinearLayout>
 
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/quesList"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:background="@color/colorbg"
+                    android:layout_height="match_parent"/>
+
+
+        </RelativeLayout>
+
+
+    </ScrollView>
 
 </LinearLayout>

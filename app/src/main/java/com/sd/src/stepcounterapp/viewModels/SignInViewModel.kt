@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.sd.src.stepcounterapp.AppApplication
 import com.sd.src.stepcounterapp.model.BasicInfoRequestObject
+import com.sd.src.stepcounterapp.model.bmi.BMIinfoResponse
 import com.sd.src.stepcounterapp.model.generic.BasicInfoResponse
 import com.sd.src.stepcounterapp.model.image.ImageResponse
 import com.sd.src.stepcounterapp.model.login.LoginResponseJ
@@ -28,6 +29,7 @@ class SignInViewModel(application: Application) : AndroidViewModel(application) 
     private var mUserModel: MutableLiveData<LoginResponseJ>? = null
     private var mResponseModel: MutableLiveData<LoginResponseJ>? = null
     private var mBasicResponseModel: MutableLiveData<BasicInfoResponse>? = null
+    private var mBmiResponseModel: MutableLiveData<BMIinfoResponse>? = null
     private var mImageResponseModel: MutableLiveData<ImageResponse>? = null
     private var mRewardsCategoriesResponseModel: MutableLiveData<RewardsCategoriesResponse>? = null
 
@@ -59,6 +61,14 @@ class SignInViewModel(application: Application) : AndroidViewModel(application) 
             mBasicResponseModel = MutableLiveData()
         }
         return mBasicResponseModel as MutableLiveData<BasicInfoResponse>
+    }
+
+
+    fun getBmiResponse(): MutableLiveData<BMIinfoResponse> {
+        if (mBmiResponseModel == null) {
+            mBmiResponseModel = MutableLiveData()
+        }
+        return mBmiResponseModel as MutableLiveData<BMIinfoResponse>
     }
 
     fun getImageResponse(): MutableLiveData<ImageResponse> {
@@ -106,14 +116,14 @@ class SignInViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     fun addBasicInfo(login: BasicInfoRequestObject) {
-        call!!.add_basic_info(login).enqueue(object : Callback<BasicInfoResponse> {
-            override fun onFailure(call: Call<BasicInfoResponse>?, t: Throwable?) {
+        call!!.add_basic_info(login).enqueue(object : Callback<BMIinfoResponse> {
+            override fun onFailure(call: Call<BMIinfoResponse>?, t: Throwable?) {
                 Log.v("retrofit", "call failed")
                 Toast.makeText(AppApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
             }
-            override fun onResponse(call: Call<BasicInfoResponse>?, response: Response<BasicInfoResponse>?) {
+            override fun onResponse(call: Call<BMIinfoResponse>?, response: Response<BMIinfoResponse>?) {
                if(response!!.code()!=400){
-                   mBasicResponseModel!!.value = response!!.body()!!
+                   mBmiResponseModel!!.value = response!!.body()!!
                }else{
                    Toast.makeText(AppApplication.applicationContext(), response.message(), Toast.LENGTH_LONG).show()
                }

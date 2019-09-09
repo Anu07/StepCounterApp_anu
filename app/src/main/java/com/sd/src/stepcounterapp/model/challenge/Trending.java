@@ -23,9 +23,6 @@ public class Trending{
   @SerializedName("points")
   @Expose
   private Integer points;
-  @SerializedName("duration")
-  @Expose
-  private Integer duration;
   @SerializedName("bonusPoint3")
   @Expose
   private Integer bonusPoint3;
@@ -41,6 +38,18 @@ public class Trending{
   @SerializedName("startDateTime")
   @Expose
   private String startDateTime;
+    
+    public String getEndDateTime() {
+        return endDateTime;
+    }
+    
+    public void setEndDateTime(String endDateTime) {
+        this.endDateTime = endDateTime;
+    }
+    
+    @SerializedName("endDateTime")
+    @Expose
+    private String endDateTime;
   @SerializedName("joinedIn")
   @Expose
   private Integer joinedIn;
@@ -103,12 +112,6 @@ public class Trending{
   }
   public Integer getPoints(){
    return points;
-  }
-  public void setDuration(Integer duration){
-   this.duration=duration;
-  }
-  public Integer getDuration(){
-   return duration;
   }
   public void setBonusPoint3(Integer bonusPoint3){
    this.bonusPoint3=bonusPoint3;

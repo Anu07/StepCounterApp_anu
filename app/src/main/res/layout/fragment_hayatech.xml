@@ -15,6 +15,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_marginTop="@dimen/_10sdp"
+                    android:id="@+id/progressLayout"
                     android:layout_height="wrap_content">
 
 
@@ -45,7 +46,7 @@
                         app:enableProgressAnimation="true"
                         android:layout_margin="@dimen/_10sdp"
                         app:layout_constraintTop_toBottomOf="@id/periodSpinner"
-                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintBottom_toTopOf="@id/syncTxtMsg"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
                         app:progressBackgroundColor="@color/border_color"
@@ -111,7 +112,23 @@
                             android:textColor="@color/gray_text"
                             android:textAlignment="center"/>
                 </LinearLayout>
-
+                <com.sd.src.stepcounterapp.utils.CustomTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:id="@+id/syncTxtMsg"
+                        app:appfont="montserrat_semibold.ttf"
+                        android:textSize="@dimen/_10sdp"
+                        android:textStyle="italic"
+                         android:visibility="gone"
+                        android:gravity="center"
+                        android:layout_margin="@dimen/_10sdp"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/progressLayout"
+                        android:text="Syncing with wearable....."
+                        android:textColor="@color/gray_text"
+                        android:textAlignment="center"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -119,6 +136,7 @@
             <LinearLayout android:layout_width="match_parent"
                           android:orientation="horizontal"
                           android:padding="@dimen/_10sdp"
+                          android:id="@+id/dashfacts"
                           android:weightSum="3"
                           android:layout_height="wrap_content">
                 <LinearLayout android:layout_width="0dp"

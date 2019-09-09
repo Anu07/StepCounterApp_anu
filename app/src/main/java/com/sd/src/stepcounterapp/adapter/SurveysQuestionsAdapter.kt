@@ -35,7 +35,6 @@ class SurveysQuestionsAdapter(
             chck.typeface = font
             holder.optionsLayout.addView(chck)
             chck.setOnCheckedChangeListener { _, isChecked ->
-                if(isChecked)
                     mListener.onAnswer(position,option._id)
             }
         }

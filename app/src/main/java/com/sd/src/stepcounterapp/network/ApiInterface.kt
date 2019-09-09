@@ -1,12 +1,13 @@
 package com.sd.src.stepcounterapp.network
 
-import com.sd.src.stepcounterapp.model.BaseModel
 import com.sd.src.stepcounterapp.model.BasicInfoRequestObject
 import com.sd.src.stepcounterapp.model.DeviceResponse.DashboardResponse
 import com.sd.src.stepcounterapp.model.bmi.BMIinfoResponse
 import com.sd.src.stepcounterapp.model.challenge.ChallengeResponse
 import com.sd.src.stepcounterapp.model.challenge.ChallengeStartRequestModel
 import com.sd.src.stepcounterapp.model.challenge.ChallengeTakenResponse.StartChallengeResponse
+import com.sd.src.stepcounterapp.model.challenge.MyChallengeResponse
+import com.sd.src.stepcounterapp.model.contactUs.ContactUsRequest
 import com.sd.src.stepcounterapp.model.generic.BasicInfoResponse
 import com.sd.src.stepcounterapp.model.generic.BasicRequest
 import com.sd.src.stepcounterapp.model.image.ImageResponse
@@ -21,15 +22,17 @@ import com.sd.src.stepcounterapp.model.profile.ProfileResponse
 import com.sd.src.stepcounterapp.model.profile.UpdateProfileRequest
 import com.sd.src.stepcounterapp.model.redeemnow.RedeemRequest
 import com.sd.src.stepcounterapp.model.rewards.AddRewardsRequestObject
+import com.sd.src.stepcounterapp.model.rewards.MyRedeemedResponse
 import com.sd.src.stepcounterapp.model.rewards.RewardsCategoriesResponse
-import com.sd.src.stepcounterapp.model.survey.SurveyListResponse
+import com.sd.src.stepcounterapp.model.survey.SurveyResponse
+import com.sd.src.stepcounterapp.model.survey.mysurvey.MySurveyResponse
 import com.sd.src.stepcounterapp.model.survey.surveyrequest.SurveystartRequestModel
 import com.sd.src.stepcounterapp.model.syncDevice.FetchDeviceDataRequest
 import com.sd.src.stepcounterapp.model.syncDevice.SyncRequest
 import com.sd.src.stepcounterapp.model.transactionhistory.TransactionHistoryModel
 import com.sd.src.stepcounterapp.model.updateresponse.UpdateProfileResponse
 import com.sd.src.stepcounterapp.model.wallet.TokenModel
-import com.sd.src.stepcounterapp.model.wallet.WalletModel
+import com.sd.src.stepcounterapp.model.wallet.walletDetailResponse.WalletModel
 import com.sd.src.stepcounterapp.model.wishList.AddWishRequest
 import com.sd.src.stepcounterapp.model.wishList.GetWishListRequest
 import com.sd.src.stepcounterapp.model.wishList.WishListResponse
@@ -40,6 +43,31 @@ import retrofit2.http.*
 
 
 interface ApiInterface {
+
+    @POST("api/user_challenges")
+    fun getMyChallenges(
+        @Body body: BasicRequest
+    ): Call<MyChallengeResponse>
+
+
+    @POST("api/myredeemed")
+    fun getMyRedeemedRewards(
+        @Body body: BasicRequest
+    ): Call<MyRedeemedResponse>
+
+
+
+    @POST("api/user_survey")
+    fun getMySurveys(
+        @Body body: BasicRequest
+    ): Call<MySurveyResponse>
+
+
+    @POST("api/contactus")
+    fun postcontactus(
+        @Body body: ContactUsRequest
+    ): Call<BasicInfoResponse>
+
 
     @POST("api/auth/login")
     fun authenticate_user(
@@ -115,6 +143,12 @@ interface ApiInterface {
     ): Call<BasicInfoResponse>
 
 
+    @PUT("api/wishlist")
+    fun deleteWishList(
+        @Body body: RedeemRequest
+    ): Call<BasicInfoResponse>
+
+
     @POST("api/activity")
     fun syncWeableData(
         @Body body: SyncRequest
@@ -145,7 +179,7 @@ interface ApiInterface {
     fun steps_to_token(@Body body: BasicRequest): Call<TokenModel>
 
     @POST("api/survey")
-    fun getsurvey(@Body body: BasicRequest): Call<SurveyListResponse>
+    fun getsurvey(@Body body: BasicRequest): Call<SurveyResponse>
 
     @POST("api/attend_survey")
     fun takesurvey(@Body body: SurveystartRequestModel): Call<BasicInfoResponse>
@@ -155,7 +189,6 @@ interface ApiInterface {
 
     @POST("/api/redeem_now")
     fun redeemNow(@Body body: RedeemRequest): Call<BasicInfoResponse>
-
 
     @POST("/api/leaderboard")
     fun getLeaderboard(@Body body: LeaderBoardRequest): Call<LeaderBoardResponse>
@@ -172,23 +205,11 @@ interface ApiInterface {
         @Body body: BasicRequest
     ): Call<TransactionHistoryModel>
 
-
-
-    @POST("api/user_challenges")
-    fun getMyChallenges(
-        @Body body: BasicRequest
-    ): Call<MyChallengeResponse>
-
-
-    @POST("api/myredeemed")
-    fun getMyRedeemedRewards(
-        @Body body: BasicRequest
-    ): Call<MyRedeemedResponse>
-
-
-    @POST("api/contactus")
-    fun postcontactus(
-        @Body body: ContactUsRequest
+    @POST("api/change_password")
+    fun change_password(
+        @Field("userId") userId: String,
+        @Field("oldPassword") oldPassword: String,
+        @Field("password") password: String
     ): Call<BasicInfoResponse>
 
 

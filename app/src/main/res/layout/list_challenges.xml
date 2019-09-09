@@ -2,16 +2,16 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
+              android:background="@color/gray_backGround"
               android:layout_height="match_parent"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
              android:orientation="vertical">
 
+    <include layout="@layout/black_crosstitlebar"/>
 
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/list_mychallenges"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/_20sdp"
            />
 
 </LinearLayout>

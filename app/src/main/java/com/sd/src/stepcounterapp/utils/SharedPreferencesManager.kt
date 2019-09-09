@@ -10,6 +10,9 @@ import com.sd.src.stepcounterapp.activities.SignInActivity
 import com.sd.src.stepcounterapp.model.login.LoginResponseJ
 import com.sd.src.stepcounterapp.model.profile.Data
 import java.util.*
+import android.R.id.edit
+
+
 
 
 object SharedPreferencesManager {
@@ -114,6 +117,13 @@ object SharedPreferencesManager {
 
     fun hasKey(context: Context,key:String): Boolean{
       return getSharedPreferences(context).contains(key)
+    }
+
+
+    fun removeKey(context: Context,key:String){
+        val editor = getSharedPreferences(context).edit()
+        editor.remove( key)
+        editor.apply()
     }
 
 }

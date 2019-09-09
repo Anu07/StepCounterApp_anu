@@ -69,43 +69,80 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"/>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
             <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/syncsCategory"
-                    app:layout_constraintTop_toTopOf="parent"
                     android:layout_width="match_parent"
                     android:layout_marginLeft="@dimen/_10sdp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
                     android:layout_marginRight="@dimen/_10sdp"
-                    android:layout_marginTop="@dimen/_50sdp"
-                    android:layout_marginBottom="@dimen/_20sdp"
-                    app:layout_constraintBottom_toTopOf="@+id/cntnBttn"
-                    android:layout_height="match_parent">
+                    android:layout_height="300dp"/>
 
-            </androidx.recyclerview.widget.RecyclerView>
-
+            <com.sd.src.stepcounterapp.utils.CustomTextView
+                    android:layout_width="wrap_content"
+                    android:text="Unlink Wearable"
+                    android:id="@+id/unlink"
+                    android:textColor="@color/gray_text"
+                    android:layout_below="@+id/syncsCategory"
+                    android:textSize="@dimen/_15sdp"
+                    android:padding="@dimen/_5sdp"
+                    android:layout_centerInParent="true"
+                    android:visibility="gone"
+                    android:drawablePadding="@dimen/_5sdp"
+                    android:gravity="center"
+                    android:drawableLeft="@drawable/unlink"
+                    android:layout_height="?actionBarSize"/>
             <com.sd.src.stepcounterapp.utils.CustomButton
                     android:id="@+id/cntnBttn"
                     android:text="Continue"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_14sdp"
-                    app:layout_constraintTop_toBottomOf="@id/syncsCategory"
-                    android:layout_marginBottom="@dimen/_50sdp"
+                    android:layout_marginBottom="@dimen/_15sdp"
                     android:background="@drawable/button_background"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_alignParentBottom="true"
                     android:layout_marginStart="12dp"
                     android:layout_marginEnd="12dp"/>
 
+            <LinearLayout android:orientation="horizontal"
+                          android:layout_width="match_parent"
+                          android:layout_marginBottom="@dimen/_15sdp"
+                          android:weightSum="2"
+                          android:gravity="center_vertical"
+                          android:layout_alignParentBottom="true"
+                          android:id="@+id/unlinkBttnsLay"
+                          android:visibility="gone"
+                          android:layout_height="wrap_content">
+                <com.sd.src.stepcounterapp.utils.CustomButton
+                        android:id="@+id/nBttn"
+                        android:text="No"
+                        android:textColor="@color/gray_text"
+                        android:textSize="@dimen/_14sdp"
+                        android:background="@drawable/full_border_bgray"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="@dimen/_10sdp"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:layout_height="wrap_content"/>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <com.sd.src.stepcounterapp.utils.CustomButton
+                        android:id="@+id/chgBttn"
+                        android:text="Change"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_14sdp"
+                        android:background="@drawable/button_background"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="@dimen/_10sdp"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+
+        </RelativeLayout>
 
     </LinearLayout>
 

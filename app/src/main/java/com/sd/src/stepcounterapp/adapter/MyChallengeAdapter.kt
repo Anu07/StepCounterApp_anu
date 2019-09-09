@@ -29,8 +29,8 @@ class MyChallengeAdapter(mContext: Context?, mData: MyChallengeResponse) :
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-       holder.textView.text = mData.data.get(position).challenge.name
-       holder.textShort.text = mData.data.get(position).challenge.shortDesc
+       holder.textView.text = mData.data[position].challenge.name
+       holder.textShort.text = mData.data[position].challenge.shortDesc
        /* holder.imageView.setOnClickListener {
             mListener!!.onItemClick(position, item)
         }*/

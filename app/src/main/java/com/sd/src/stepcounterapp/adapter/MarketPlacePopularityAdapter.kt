@@ -39,7 +39,7 @@ class MarketPlacePopularityAdapter(
         holder.txtProductName.text = mItem.name
         holder.txtShortDesc.text = mItem.shortDesc
         holder.txtToken.text = "${mItem.token} TKS"
-        Picasso.get().load(RetrofitClient.IMG_URL + "" + mItem.image).placeholder(R.drawable.image_overlay).into(holder.imgProduct)
+        Picasso.get().load(RetrofitClient.IMG_URL + "" + mItem.image).placeholder(R.drawable.image_overlay).resize(400,200).into(holder.imgProduct)
         Log.i("flag",""+mData[position].wishlist)
         if(mData[position].wishlist){
             holder.wishListView.setImageResource(R.drawable.wishlist_fill)
@@ -47,8 +47,13 @@ class MarketPlacePopularityAdapter(
             holder.wishListView.setImageResource(R.drawable.featured)
         }
         holder.wishListView.setOnClickListener {
+            holder.wishListView.setImageResource(R.drawable.wishlist_fill)
             mListener.onPopularItemwishlisted(position, mItem)
         }
+        holder.parentLay.setOnClickListener {
+            mListener.onPopClick(position,mItem)
+        }
+
     }
 
     override fun getItemCount(): Int {
@@ -61,11 +66,24 @@ class MarketPlacePopularityAdapter(
         val txtShortDesc = itemView.txtShortDesc!!
         val txtToken = itemView.txtToken!!
         val wishListView = itemView.wishBttnall!!
+        val parentLay = itemView.parentLaypop
     }
 
 
+    fun swap(mList: ArrayList<PopularProducts.Data>){
+        if(mData.size>0)
+            mData.clear()
+        mData  = mList
+        notifyDataSetChanged()
+    }
+
     interface PopularInterface{
         fun onPopularItemwishlisted(
+            position: Int,
+            mItem: PopularProducts.Data
+        )
+
+        fun onPopClick(
             position: Int,
             mItem: PopularProducts.Data
         )

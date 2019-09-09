@@ -107,6 +107,8 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
             override fun onResponse(call: Call<BasicInfoResponse>?, response: Response<BasicInfoResponse>?) {
                 if (response!!.code() == 200) {
                     mPurchaseResponse!!.value = response.body()
+                }else{
+                    mPurchaseResponse!!.value = BasicInfoResponse()
                 }
             }
         })

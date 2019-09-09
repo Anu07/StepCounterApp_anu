@@ -27,8 +27,12 @@ import kotlin.collections.ArrayList
 
 
 class SurveysFragment : BaseFragment(),ItemClickGlobalListner {
+    override fun onSlideItemClick(position: Int) {
+        swapFragment(ImagesArray?.get(position)!!)
+    }
+
     override fun onItemClick(pos: Int) {
-        swapFragment(mData[pos])
+        swapFragment(surveyArray?.get(pos))
     }
 
     companion object {
@@ -45,14 +49,16 @@ class SurveysFragment : BaseFragment(),ItemClickGlobalListner {
         }
     }
 
+    private lateinit var mSlideAdapter: SlidingImageAdapter
     private var currentPage: Int = -1
     private var NUM_PAGES: Int = 3
     lateinit var mSurveyAdapter: SurveysAdapter
     private lateinit var mViewModel: SurveyViewModel
-    private val ImagesArray: ArrayList<Int>? = ArrayList()
+    private var ImagesArray: ArrayList<Datum>? = ArrayList()
+    private var surveyArray: ArrayList<Datum>? = ArrayList()
+
     var rewardsViewPager: ViewPager? = null
     private var mData: ArrayList<Datum> = ArrayList()
-    private val IMAGES = arrayOf(R.drawable.slider_img, R.drawable.slider_img, R.drawable.slider_img)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val v =inflater.inflate(R.layout.fragment_surveys, container, false)
@@ -72,7 +78,12 @@ class SurveysFragment : BaseFragment(),ItemClickGlobalListner {
                         this.mData.addAll(mData.data)
                         rvSurveys.visibility = View.VISIBLE
                         norec.visibility = View.GONE
-                        mSurveyAdapter.swap(mData.data)
+                        surveyArray = mData.data as ArrayList<Datum>?
+                        mSurveyAdapter.swap(mData.data as ArrayList<Datum>)
+                        if(mData.featured.size>0){
+                            ImagesArray = mData.featured as ArrayList<Datum>?
+                            rewardsViewPager!!.adapter = SlidingImageAdapter(ChallengesFragment.mContext, (mData.featured as ArrayList<Datum>?)!!,this)
+                        }
                     }
                 } else {
                     rvSurveys.visibility = View.GONE
@@ -94,16 +105,11 @@ class SurveysFragment : BaseFragment(),ItemClickGlobalListner {
 
     private fun init() {
         spring_dots_indicator.setViewPager(rewardsViewPager)
-
-        for (i in 0 until IMAGES.size)
-            ImagesArray!!.add(IMAGES[i])
-
-        rewardsViewPager!!.adapter = SlidingImageAdapter(ChallengesFragment.mContext, ImagesArray!!)
-
-        val density = resources.displayMetrics.density
-
+        mSlideAdapter = SlidingImageAdapter(ChallengesFragment.mContext, ImagesArray!!,this)
+        rewardsViewPager!!.adapter = mSlideAdapter
 
         // Auto start of viewpager
+        if(ImagesArray!!.size>0){
         val handler = Handler()
         val Update = Runnable {
             if (currentPage == NUM_PAGES) {
@@ -111,12 +117,14 @@ class SurveysFragment : BaseFragment(),ItemClickGlobalListner {
             }
             rewardsViewPager!!.setCurrentItem(currentPage++, true)
         }
-        val swipeTimer = Timer()
-        swipeTimer.schedule(object : TimerTask() {
-            override fun run() {
-                handler.post(Update)
-            }
-        }, 3000, 3000)
+            val swipeTimer = Timer()
+            swipeTimer.schedule(object : TimerTask() {
+                override fun run() {
+                    handler.post(Update)
+                }
+            }, 3000, 3000)
+        }
+
     }
 
 
@@ -128,7 +136,7 @@ class SurveysFragment : BaseFragment(),ItemClickGlobalListner {
 
 
 
-    private fun swapFragment(data: Datum) {
+    private fun swapFragment(data: Datum?) {
      var intent = Intent(mContext, SurveyDetailActivity::class.java)
         intent.putExtra("Data",data)
         startActivity(intent)

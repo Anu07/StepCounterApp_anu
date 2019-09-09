@@ -3,12 +3,13 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
         android:orientation="vertical"
-        android:layout_width="wrap_content"
+        android:layout_width="180dp"
         android:id="@+id/cdMain"
         app:cardCornerRadius="@dimen/_10ssp"
         android:layout_margin="@dimen/_5sdp"
         android:layout_height="wrap_content">
     <FrameLayout android:layout_width="150dp"
+                 android:layout_gravity="center"
                  android:layout_height="wrap_content">
         <LinearLayout android:orientation="vertical"
                       android:id="@+id/coverImg"

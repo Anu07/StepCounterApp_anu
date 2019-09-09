@@ -12,6 +12,7 @@ import com.google.gson.Gson
 import com.sd.src.stepcounterapp.AppApplication
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.adapter.RecyclerGridAdapter
+import com.sd.src.stepcounterapp.model.login.LoginResponseJ
 import com.sd.src.stepcounterapp.model.rewards.AddRewardsRequestObject
 import com.sd.src.stepcounterapp.model.rewards.Data
 import com.sd.src.stepcounterapp.model.rewards.RewardsCategoriesResponse
@@ -23,13 +24,13 @@ import kotlinx.android.synthetic.main.activity_rewards_category_selection.*
 class RewardsCategorySelectionActivity : BaseActivity<SignInViewModel>(),
     RecyclerGridAdapter.ItemListener {
 
+
     override fun onItemClick(item: Data, position: Int) {
+        if ( categoriesList.data[position].selectedItem && !selectedCategories!!.contains(item.name)){
+            selectedCategories!!.add(categoriesList.data[position].name)
+        }
 
-        if ( categoriesList.data[position].selectedItem && !selectedCategories!!.contains(item.name))
-            selectedCategories!!.add(categoriesList.data[position].name)    }
-
-
-
+    }
 
     private lateinit var adapter: RecyclerGridAdapter
     override val layoutId: Int
@@ -64,6 +65,21 @@ class RewardsCategorySelectionActivity : BaseActivity<SignInViewModel>(),
         mViewModel!!.getBasicResponse().observe(this, Observer {mBaseModel->
             showPopupProgressSpinner(false)
             if (mBaseModel.status ==200) {
+                var mUser = SharedPreferencesManager.getUserObject(this@RewardsCategorySelectionActivity)
+                var responseLogin = LoginResponseJ()
+                var loginData = com.sd.src.stepcounterapp.model.login.Data(
+                    mUser.data.firstName,
+                    mUser.data.lastName,
+                    mUser.data.image,
+                    mUser.data.dob,
+                    mUser.data._id,
+                    mUser.data.email,
+                    mUser.data.username,
+                    mUser.data.basicFlag,
+                    true
+                )
+                responseLogin.data = loginData
+                SharedPreferencesManager.saveUserObject(this@RewardsCategorySelectionActivity,responseLogin)
                 goToSyncdevice()
             }else{
                 Toast.makeText(this@RewardsCategorySelectionActivity, "Error occurred",Toast.LENGTH_LONG).show()
@@ -87,6 +103,7 @@ class RewardsCategorySelectionActivity : BaseActivity<SignInViewModel>(),
         val intent = Intent(mContext, SyncDeviceActivity::class.java)
         //                    val options = ActivityOptions.makeSceneTransitionAnimation(this@SignInActivity)
         startActivity(intent)
+        finish()
     }
 
     override fun initListeners() {

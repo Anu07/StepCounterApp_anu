@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.adapter.SurveysQuestionsAdapter
+import com.sd.src.stepcounterapp.fragments.HayatechFragment
 import com.sd.src.stepcounterapp.fragments.SurveysFragment
 import com.sd.src.stepcounterapp.model.survey.Datum
 import com.sd.src.stepcounterapp.model.survey.Question
@@ -22,7 +23,11 @@ import kotlinx.android.synthetic.main.backtitlebar.*
 
 class SurveyDetailActivity : BaseActivity<SurveyViewModel>(), SurveysQuestionsAdapter.AnswerListener {
     override fun onAnswer(pos: Int, value: String) {
-        mAnsData.add(pos, value)
+        if(mAnsData.contains(value)){
+            mAnsData.remove(value)
+        }else{
+            mAnsData.add(pos, value)
+        }
     }
 
     override val layoutId: Int
@@ -53,6 +58,7 @@ class SurveyDetailActivity : BaseActivity<SurveyViewModel>(), SurveysQuestionsAd
         expireDate.text = mItemData.expireOn.split("T")[0]
         setQuestionSurveyAdapter()
         mViewModel!!.takesurvey().observe(this, Observer { mData ->
+            showPopupProgressSpinner(false)
             if (mData.status == 200) {
                 Toast.makeText(this@SurveyDetailActivity, "Survey submitted successfully", Toast.LENGTH_LONG).show()
                 finish()
@@ -62,23 +68,28 @@ class SurveyDetailActivity : BaseActivity<SurveyViewModel>(), SurveysQuestionsAd
 
     override fun initListeners() {
         img_back.setOnClickListener {
-            startActivity(Intent(this@SurveyDetailActivity, LandingActivity::class.java))
             finish()
+//            ( this@SurveyDetailActivity as LandingActivity).onFragmnet(0)
         }
         finishbutton.setOnClickListener {
-            showPopupProgressSpinner(true)
-            mViewModel!!.hitAttendSurveyApi(
-                SurveystartRequestModel(
-                    mItemData._id,
-                    getanswersData(),
-                    mItemData,
-                    SharedPreferencesManager.getUserId(this@SurveyDetailActivity)
+            if(mAnsData.isNotEmpty()){
+                showPopupProgressSpinner(true)
+                mViewModel!!.hitAttendSurveyApi(
+                    SurveystartRequestModel(
+                        mItemData._id,
+                        getanswersData(),
+                        mItemData,
+                        SharedPreferencesManager.getUserId(this@SurveyDetailActivity)
+                    )
                 )
-            )
+            }else{
+                Toast.makeText(this@SurveyDetailActivity, "Please select an answer", Toast.LENGTH_LONG).show()
+            }
+
         }
-        img_back.setOnClickListener{
+       /* img_back.setOnClickListener{
             onBackPressed()
-        }
+        }*/
 
     }
 

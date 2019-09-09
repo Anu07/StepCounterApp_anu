@@ -1,17 +1,21 @@
 package com.sd.src.stepcounterapp.adapter
 
 import android.content.Context
-import android.os.Build
 import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.viewpager.widget.PagerAdapter
 import com.sd.src.stepcounterapp.R
+import com.sd.src.stepcounterapp.model.survey.Datum
+import com.sd.src.stepcounterapp.utils.ItemClickGlobalListner
 
 
-class SlidingImageAdapter(private val context: Context, private val IMAGES: ArrayList<Int>) : PagerAdapter() {
+class SlidingImageAdapter(
+    private val context: Context, private var IMAGES: ArrayList<Datum>,
+    var mListener: ItemClickGlobalListner) : PagerAdapter() {
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
 
@@ -24,20 +28,19 @@ class SlidingImageAdapter(private val context: Context, private val IMAGES: Arra
     }
 
     override fun instantiateItem(view: ViewGroup, position: Int): Any {
-        val imageLayout = inflater.inflate(R.layout.sliding_img_layout, view, false)!!
+        val imageLayout = inflater.inflate(R.layout.sliding_survey_img_layout, view, false)!!
+        var surveyTitle = imageLayout.findViewById<TextView>(R.id.challengesTitle)
+        surveyTitle.text = IMAGES[position].name
 
-        val imageView = imageLayout!!
+        val imageView = imageLayout
             .findViewById(R.id.image) as ImageView
-
-
-        imageView.setImageResource(IMAGES[position])
-
-       /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            textSteps.foreground = context.getDrawable(R.drawable.img_ovrlay_slider)
-        }
-        */
+        imageView.setImageResource(R.drawable.survey_img)
+        imageView.requestLayout()
+        imageView.layoutParams.height = 500
         view.addView(imageLayout, 0)
-
+        imageLayout.setOnClickListener {
+            mListener.onSlideItemClick(position)
+        }
         return imageLayout
     }
 
@@ -52,4 +55,10 @@ class SlidingImageAdapter(private val context: Context, private val IMAGES: Arra
     }
 
 
+    fun swap(imagesNew: ArrayList<Datum>) {
+        if (IMAGES.size > 0)
+            IMAGES.clear()
+        IMAGES = imagesNew
+        notifyDataSetChanged()
+    }
 }

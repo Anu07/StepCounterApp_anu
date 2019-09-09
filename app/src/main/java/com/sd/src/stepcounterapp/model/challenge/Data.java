@@ -68,6 +68,18 @@ public class Data{
   @SerializedName("updatedAt")
   @Expose
   private String updatedAt;
+    
+    public String getEndDateTime() {
+        return endDateTime;
+    }
+    
+    public void setEndDateTime(String endDateTime) {
+        this.endDateTime = endDateTime;
+    }
+    
+    @SerializedName("endDateTime")
+    @Expose
+    private String endDateTime;
   public void setImage(String image){
    this.image=image;
   }

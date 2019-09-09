@@ -10,14 +10,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.model.survey.Datum
 import com.sd.src.stepcounterapp.utils.ItemClickGlobalListner
-import android.text.InputType
-import com.google.android.gms.common.internal.service.Common
 
 
 class SurveysAdapter(
     internal var context: Context,
-     mValues: ArrayList<Datum>,
-    var mListener:ItemClickGlobalListner) :
+    mValues: ArrayList<Datum>,
+    var mListener: ItemClickGlobalListner
+) :
     RecyclerView.Adapter<SurveysAdapter.ViewHolder>() {
 
     private var mData: ArrayList<Datum> = mValues
@@ -36,17 +35,17 @@ class SurveysAdapter(
         holder.textEarnToken.text = item!!.earningToken.toString().capitalize()
         var date = item!!.expireOn.split("T")[0]
         holder.textSurvey.text = date
-        if(item!!.answered){
+        if (item!!.answered) {
             holder.textStart.setBackgroundResource(R.drawable.gray_fill_circle)
-        }else{
+        } else {
             holder.textStart.setBackgroundResource(R.drawable.blue_fill_circle)
         }
 
         holder.textStart.setOnClickListener {
-            if(!item!!.answered){
+            if (!item!!.answered) {
                 mListener.onItemClick(position)
-            }else{
-                Toast.makeText(mContext,"You have already taken this survey", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(mContext, "You have already taken this survey", Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -55,11 +54,10 @@ class SurveysAdapter(
         return mData.size
     }
 
-    fun swap(mNewData: MutableList<Datum>) {
-        if(this.mData.isNotEmpty()){
-            mData.clear()
-            mData.addAll(mNewData)
-        }
+    fun swap(mNewData: ArrayList<Datum>) {
+        if (this.mData.isNotEmpty())
+                        mData.clear()
+        mData = mNewData
         notifyDataSetChanged()
     }
 
@@ -69,7 +67,7 @@ class SurveysAdapter(
         var textQues: TextView
         var textEarnToken: TextView
         var textSurvey: TextView
-        var textStart:TextView
+        var textStart: TextView
 
         internal lateinit var item: com.sd.src.stepcounterapp.model.challenge.Data
 

@@ -9,6 +9,11 @@ public class ContactUsRequest {
     @Expose
     private String userId;
 
+    public ContactUsRequest(String userId, String message) {
+        this.userId = userId;
+        this.message = message;
+    }
+
     public String getUserId() {
         return userId;
     }

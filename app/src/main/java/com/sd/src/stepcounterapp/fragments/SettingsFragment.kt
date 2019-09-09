@@ -2,6 +2,7 @@ package com.sd.src.stepcounterapp.fragments
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.sd.src.stepcounterapp.R
+import com.sd.src.stepcounterapp.activities.LandingActivity
+import com.sd.src.stepcounterapp.activities.SyncDeviceActivity
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager.SYNCDATE
 import com.sd.src.stepcounterapp.viewModels.MarketPlaceViewModel
@@ -45,9 +48,12 @@ class SettingsFragment: Fragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        tv_sync_date_time.text = "Last sync: "+SharedPreferencesManager.getString(mContext,SYNCDATE)
-        img_back.setOnClickListener {
-            activity!!.onBackPressed()
+        tv_sync_date_time.text = "Last sync: "+SharedPreferencesManager.getString(mContext,SYNCDATE)!!.split("T")[0]
+        btnChangeTracker.setOnClickListener {
+            startActivity(Intent(mContext,SyncDeviceActivity::class.java).putExtra("disconnect",true))
+        }
+        ll_change_password.setOnClickListener {
+            (mContext as LandingActivity).onFragmnet(6)
         }
     }
 

@@ -130,13 +130,13 @@ class DeviceListActivity : Basefit(), AdapterView.OnItemClickListener, MokoScanD
                 if (MokoConstants.ACTION_CONN_STATUS_DISCONNECTED == intent.action) {
                     abortBroadcast()
                     if (MokoSupport.getInstance().isBluetoothOpen && MokoSupport.getInstance().reconnectCount > 0) {
-                        Toast.makeText(this@DeviceListActivity, "Connect failed", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@DeviceListActivity, "Device disconnected", Toast.LENGTH_SHORT).show()
                         return
                     }
                     if (!this@DeviceListActivity.isFinishing() && mDialog!!.isShowing) {
                         mDialog!!.dismiss()
                     }
-                    Toast.makeText(this@DeviceListActivity, "Connect failed", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@DeviceListActivity, "Device disconnected", Toast.LENGTH_SHORT).show()
                 }
                 if (BluetoothAdapter.ACTION_STATE_CHANGED == action) {
                     val blueState = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, 0)
@@ -146,7 +146,7 @@ class DeviceListActivity : Basefit(), AdapterView.OnItemClickListener, MokoScanD
                 }
                 if (MokoConstants.ACTION_CONN_STATUS_DISCONNECTED == action) {
                     abortBroadcast()
-                    Toast.makeText(this@DeviceListActivity, "Connect failed", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@DeviceListActivity, "Device disconnected", Toast.LENGTH_SHORT).show()
                     this@DeviceListActivity.finish()
                 }
                 if (MokoConstants.ACTION_ORDER_RESULT == action) {

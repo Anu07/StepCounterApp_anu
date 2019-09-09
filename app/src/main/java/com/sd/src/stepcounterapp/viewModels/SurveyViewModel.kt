@@ -68,7 +68,11 @@ class SurveyViewModel(application: Application) : AndroidViewModel(application) 
             }
 
             override fun onResponse(call: Call<BasicInfoResponse>?, response: Response<BasicInfoResponse>?) {
-                mSurveyAttend!!.value = response!!.body()
+                if(response!!.body()!!.status == 200){
+                    mSurveyAttend!!.value = response!!.body()
+                }else{
+                    mSurveyAttend!!.value = BasicInfoResponse()
+                }
 
             }
         })

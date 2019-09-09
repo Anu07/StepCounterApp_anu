@@ -60,7 +60,7 @@ class BasicInfoActivity : BaseActivity<SignInViewModel>(), DatePickerDialog.OnDa
         hideKeyboard()
     }
 
-    private lateinit var croppedImage: File
+    private var croppedImage: File? = null
     private var mCalendar = Calendar.getInstance()
     var selectedImage: Uri? = null
     private lateinit var fileName: String
@@ -130,7 +130,7 @@ class BasicInfoActivity : BaseActivity<SignInViewModel>(), DatePickerDialog.OnDa
                     showPopupProgressSpinner(false)
 //                    Toast.makeText(this@BasicInfoActivity, "Details saved successfully", Toast.LENGTH_LONG).show()
                     val intent = Intent(mContext, BmiCalculatorActivity::class.java)
-                    intent.putExtra("email",emailTxt.text.toString())
+                    intent.putExtra("username",emailTxt.text.toString())
                     intent.putExtra("firstname",mobileTxt.text.toString())
                     intent.putExtra("lastname",pwdTxt.text.toString())
                     intent.putExtra("dob",dobTxt.text.toString())
@@ -363,7 +363,7 @@ class BasicInfoActivity : BaseActivity<SignInViewModel>(), DatePickerDialog.OnDa
         // add another part within the multipart request
         if (croppedImage != null) {
             var requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), croppedImage)
-            imageFileBody = createFormData("image", croppedImage.name, requestBody)
+            imageFileBody = createFormData("image", croppedImage!!.name, requestBody)
         }
         return imageFileBody!!
     }

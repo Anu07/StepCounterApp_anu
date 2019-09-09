@@ -4,14 +4,19 @@ import android.content.Context
 import android.content.Intent
 import android.location.LocationManager
 import android.provider.Settings
+import android.util.Log
+import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.fitpolo.support.MokoSupport
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.adapter.RecyclerSyncGridAdapter
 import com.sd.src.stepcounterapp.model.syncDevice.SyncDeviceSelectionArray
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
+import com.sd.src.stepcounterapp.utils.SharedPreferencesManager.WEARABLEID
 import com.sd.src.stepcounterapp.viewModels.BaseViewModel
 import com.sd.src.stepcounterapp.viewModels.BaseViewModelFactory
 import kotlinx.android.synthetic.main.activity_select_syncsdk.*
@@ -20,8 +25,13 @@ import kotlinx.android.synthetic.main.activity_select_syncsdk.*
 class SyncDeviceActivity : BaseActivity<BaseViewModel>(),
     RecyclerSyncGridAdapter.ItemListener {
     override fun onItemClick(pos: Int, item: SyncDeviceSelectionArray?) {
-        populateData()
-        adapter.swapData(updateItem(pos))
+        if(pos==0){
+            populateData()
+            adapter.swapData(updateItem(pos))
+        }else{
+            Toast.makeText(this@SyncDeviceActivity, "Please select Hayatech", Toast.LENGTH_LONG).show()
+        }
+
     }
 
     private fun updateItem(position:Int): Array<SyncDeviceSelectionArray?> {
@@ -72,6 +82,40 @@ class SyncDeviceActivity : BaseActivity<BaseViewModel>(),
 
         adapter = RecyclerSyncGridAdapter(this, populateData(), this)
         recyclerView!!.adapter = adapter
+
+        if(intent.hasExtra("disconnect")){
+            skipBttn.visibility= View.GONE
+            unlink.visibility = View.VISIBLE
+            cntnBttn.visibility = View.GONE
+            unlinkBttnsLay.visibility = View.VISIBLE
+            headerTextwelcome.visibility = View.GONE
+        }
+
+        unlink.setOnClickListener {
+            MokoSupport.getInstance().disConnectBle()
+            SharedPreferencesManager.removeKey(this@SyncDeviceActivity,"Wearable")
+            if(!MokoSupport.getInstance().isConnDevice(this@SyncDeviceActivity,SharedPreferencesManager.getString(this@SyncDeviceActivity,WEARABLEID))){
+                Log.e("disconnect","success")
+            }else{
+                MokoSupport.getInstance().disConnectBle()
+            }
+        }
+
+
+        nBttn.setOnClickListener {
+            finish()
+        }
+
+        chgBttn.setOnClickListener {
+            if (!gps_enabled && !network_enabled) {
+                showGPSDisabledAlertToUser()
+            } else if (gps_enabled && network_enabled) {
+                val intent = Intent(mContext, GuideActivity::class.java)
+//                    val options = ActivityOptions.makeSceneTransitionAnimation(this@SignInActivity)
+                startActivity(intent)
+            }
+        }
+
 
         skipBttn.setOnClickListener {
             val intent = Intent(mContext, LandingActivity::class.java)

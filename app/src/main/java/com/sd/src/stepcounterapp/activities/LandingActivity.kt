@@ -17,7 +17,6 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.fitpolo.support.MokoConstants
@@ -34,6 +33,7 @@ import com.sd.src.stepcounterapp.AppConstants
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.adapter.LandingPagerAdapter
 import com.sd.src.stepcounterapp.fragments.*
+import com.sd.src.stepcounterapp.model.generic.BasicInfoResponse
 import com.sd.src.stepcounterapp.model.syncDevice.SyncRequest
 import com.sd.src.stepcounterapp.network.RetrofitClient.IMG_URL
 import com.sd.src.stepcounterapp.service.DfuService
@@ -46,10 +46,19 @@ import com.sd.src.stepcounterapp.viewModels.DeviceViewModel
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_landing.*
 import kotlinx.android.synthetic.main.bottom_toolbar.*
+import kotlinx.android.synthetic.main.fragment_hayatech.*
 import kotlinx.android.synthetic.main.titlebar.*
 import no.nordicsemi.android.dfu.DfuProgressListenerAdapter
 import no.nordicsemi.android.dfu.DfuServiceListenerHelper
 import java.util.*
+
+
+/**This class handles
+ * device connected or not check
+ *  syncing on resuming activity
+ *  steps count on step chnge listener
+ *
+ */
 
 
 class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback, View.OnClickListener{
@@ -64,11 +73,24 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
 
     fun onFragmnet(position: Int){
         if (position == 2) {
-            vpLanding.currentItem = 4
-        } else if (position == 0) {
-            vpLanding.currentItem = 2
+            loadFragment( position)
+//            vpLanding.currentItem = 4
+        } else if (position == 0) {         //to open marketplace
+            loadFragment(position)
+//            vpLanding.currentItem = 2
+        }else if (position == 1) {         //to open marketplace
+            loadFragment(position)
+//            vpLanding.currentItem = 2
+        }else if(position == 5 )  {
+            //leaderboard activity
+            startActivity(Intent(this@LandingActivity, LeaderboardActivity::class.java))
+        }else if(position == 6 )  {
+            //leaderboard activity
+            openChangeFragment()
         }
     }
+
+
 
 
     private var deviceSynced: String? = ""
@@ -148,6 +170,12 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
         }
         loadFragment(FRAG_HAYATECH)
         bindService(Intent(this, MokoService::class.java), mServiceConnection, Activity.BIND_AUTO_CREATE)
+        mViewModel?.getSyncResponse()?.observe(this,
+            androidx.lifecycle.Observer<BasicInfoResponse> {
+                showPopupProgressSpinner(false)
+//                HayatechFragment.instance.callDashboard()
+                loadFragment(FRAG_HAYATECH)     //loading fragment here to maintain the step count
+            })
 
     }
 
@@ -161,8 +189,6 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
         fragmentTransaction.add(R.id.container, SettingsFragment.newInstance(this@LandingActivity))
         fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()
-
-
     }
 
     override fun initListeners() {
@@ -170,13 +196,27 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
             startActivity(Intent(this@LandingActivity, MyProfileActivity::class.java))
         }
         setNavHeader()
-        checkBluetoothGPSPermissions()
+        if(!MokoSupport.getInstance().isConnDevice(this@LandingActivity,SharedPreferencesManager.getString(this@LandingActivity,WEARABLEID))){
+            Log.e("disconnected","detected")
+            checkBluetoothGPSPermissions()
+        }else{
+            getLastestSteps()
+        }
         llHayatech.setOnClickListener(this@LandingActivity)
         llChallenges.setOnClickListener(this@LandingActivity)
         llMarketPalace.setOnClickListener(this@LandingActivity)
         llSurvey.setOnClickListener(this@LandingActivity)
         llWallet.setOnClickListener(this@LandingActivity)
         img_nav.setOnClickListener(this@LandingActivity)
+        swipeLayout.setOnRefreshListener {
+            if(!MokoSupport.getInstance().isConnDevice(this@LandingActivity,SharedPreferencesManager.getString(this@LandingActivity,WEARABLEID))){
+                Log.e("disconnected","detected")
+                checkBluetoothGPSPermissions()
+                vpLanding.adapter = mAdapter
+            }else{
+                getLastestSteps()
+            }
+        }
     }
 
     /**
@@ -190,7 +230,7 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
             if(!manager.isProviderEnabled( LocationManager.GPS_PROVIDER )){
                 showGPSDisabledAlertToUser()
             }else{
-                startActivity(Intent(this@LandingActivity, GuideActivity::class.java))
+                searchDevices()
             }
 
         }
@@ -289,15 +329,22 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
     fun logoutUser() {
         // Clearing all data from Shared Preferences
         val builder = AlertDialog.Builder(this@LandingActivity)
-        builder.setTitle(R.string.app_name)
-        builder.setIcon(R.mipmap.ic_launcher)
         builder.setMessage("Are you sure you want to logout?")
             .setCancelable(false)
-            .setPositiveButton("Yes") { dialog, id -> SharedPreferencesManager.logout(this@LandingActivity) }
+            .setPositiveButton("Yes") { dialog, id ->
+                disconnectBLE()
+                SharedPreferencesManager.logout(this@LandingActivity) }
             .setNegativeButton("No") { dialog, id -> dialog.cancel() }
         val alert = builder.create()
         alert.show()
 
+    }
+
+    private fun disconnectBLE() {
+        MokoSupport.getInstance().disConnectBle()
+        if(!MokoSupport.getInstance().isConnDevice(this@LandingActivity,SharedPreferencesManager.getString(this@LandingActivity,WEARABLEID))){
+            Log.e("disconnect","success")
+        }
     }
 
 
@@ -336,21 +383,31 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
                     abortBroadcast()
                     if (!this@LandingActivity.isFinishing() && mDialog!!.isShowing) {
                         mDialog!!.dismiss()
+
                     }
 //                    Toast.makeText(this@LandingActivity, "Connect success", Toast.LENGTH_SHORT).show()
+                    notconnectedTxt.visibility = View.GONE
+                    swipeLayout.isEnabled = false
+                    HayatechFragment.instance.syncingWearableMsg(false)
+
                     getLastestSteps()
                     openStepChangeListener()
+
                 }
                 if (MokoConstants.ACTION_CONN_STATUS_DISCONNECTED == intent.action) {
                     abortBroadcast()
                     if (MokoSupport.getInstance().isBluetoothOpen && MokoSupport.getInstance().reconnectCount > 0) {
-                        Toast.makeText(this@LandingActivity, "Connect failed", Toast.LENGTH_SHORT).show()
+//                        Toast.makeText(this@LandingActivity, "Connect failed", Toast.LENGTH_SHORT).show()
+                        notconnectedTxt.visibility = View.VISIBLE
                         return
                     }
                     if (!this@LandingActivity.isFinishing() && mDialog!!.isShowing) {
                         mDialog!!.dismiss()
                     }
-                    Toast.makeText(this@LandingActivity, "Connect failed", Toast.LENGTH_SHORT).show()
+                    notconnectedTxt.visibility = View.VISIBLE
+                    swipeLayout.isEnabled = false
+                    HayatechFragment.instance.syncingWearableMsg(false)
+
                 }
                 if (BluetoothAdapter.ACTION_STATE_CHANGED == action) {
                     val blueState = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, 0)
@@ -360,7 +417,10 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
                 }
                 if (MokoConstants.ACTION_CONN_STATUS_DISCONNECTED == action) {
                     abortBroadcast()
-                    Toast.makeText(this@LandingActivity, "Connect failed", Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(this@LandingActivity, "Connect failed", Toast.LENGTH_SHORT).show()
+                    notconnectedTxt.visibility = View.VISIBLE
+                    swipeLayout.isEnabled = false
+                    HayatechFragment.instance.syncingWearableMsg(false)
                     this@LandingActivity.finish()
                 }
                 if (MokoConstants.ACTION_ORDER_RESULT == action) {
@@ -371,15 +431,17 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
                     if (lastestSteps == null || lastestSteps!!.isEmpty()) {
                         return
                     }
-                    /* for (step in lastestSteps!!) {
+                     /*for (step in lastestSteps!!) {
                          Toast.makeText(
                              this@LandingActivity,
                              "Steps count " + lastestSteps!![lastestSteps!!.size - 1].count,
                              Toast.LENGTH_LONG
                          ).show()
                      }*/
+                    HayatechFragment.instance.syncingWearableMsg(false)
                     SharedPreferencesManager.saveSyncObject(this@LandingActivity, lastestSteps)
                     updateDeviceData()
+                    swipeLayout.isEnabled = false
                 }
                 if (MokoConstants.ACTION_ORDER_TIMEOUT == action) {
                     Toast.makeText(this@LandingActivity, "Timeout", Toast.LENGTH_SHORT).show()
@@ -395,6 +457,7 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
                         OrderEnum.Z_STEPS_CHANGES_LISTENER -> {
                             val dailyStep = MokoSupport.getInstance().dailyStep
                             LogModule.i(dailyStep.toString())
+                            HayatechFragment.instance.syncingWearableMsg(false)
                             HayatechFragment.instance.setCurrentSteps(dailyStep)
                         }
                     }
@@ -410,6 +473,7 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
                 HayatechFragment.mContext.contentResolver,
                 Settings.Secure.ANDROID_ID
             )
+            showPopupProgressSpinner(true)
             mViewModel!!.syncDevice(
                 SyncRequest(
                     getActivityData(),
@@ -488,6 +552,7 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
         if (!this@LandingActivity.isFinishing() && mDialog!!.isShowing) {
             mDialog!!.dismiss()
         }
+        HayatechFragment.instance.syncingWearableMsg(true)
         mDatas!!.clear()
         mDatas!!.addAll(deviceMap!!.values)
 
@@ -523,7 +588,12 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
     override fun onResume() {
         super.onResume()
         DfuServiceListenerHelper.registerProgressListener(this, mDfuProgressListener)
-        checkBluetoothGPSPermissions()
+        if(!MokoSupport.getInstance().isConnDevice(this@LandingActivity,SharedPreferencesManager.getString(this@LandingActivity,WEARABLEID))){
+            Log.e("disconnected","detected")
+            checkBluetoothGPSPermissions()
+        }else{
+                getLastestSteps()
+        }
         setNavHeader()
     }
 
@@ -670,6 +740,13 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
         fragmentTransaction.commit()
 
 
+    }
+
+    private fun openChangeFragment() {
+        var fragmentTransaction = supportFragmentManager.beginTransaction()
+        fragmentTransaction.add(R.id.container, ChangePasswordFragment.newInstance(this@LandingActivity))
+        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()
     }
 
 }

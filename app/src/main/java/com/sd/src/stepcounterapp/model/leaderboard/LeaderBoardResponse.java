@@ -6,29 +6,20 @@ import java.util.List;
  * Awesome Pojo Generator
  * */
 public class LeaderBoardResponse{
-  @SerializedName("general")
+  @SerializedName("data")
   @Expose
-  private List<General> general;
-  @SerializedName("challenge")
-  @Expose
-  private List<Challenge> challenge;
+  private List<Data> data;
   @SerializedName("message")
   @Expose
   private String message;
   @SerializedName("status")
   @Expose
   private Integer status;
-  public void setGeneral(List<General> general){
-   this.general=general;
+  public void setData(List<Data> data){
+   this.data=data;
   }
-  public List<General> getGeneral(){
-   return general;
-  }
-  public void setChallenge(List<Challenge> challenge){
-   this.challenge=challenge;
-  }
-  public List<Challenge> getChallenge(){
-   return challenge;
+  public List<Data> getData(){
+   return data;
   }
   public void setMessage(String message){
    this.message=message;

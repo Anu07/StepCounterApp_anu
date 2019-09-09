@@ -16,6 +16,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.fitpolo.support.MokoSupport
 import com.fitpolo.support.entity.DailyStep
 import com.github.mikephil.charting.components.LimitLine
 import com.github.mikephil.charting.components.XAxis
@@ -59,12 +60,14 @@ class HayatechFragment : BaseFragment() {
             return instance
         }
     }
-//    internal lateinit var callback: MarketPlaceFragment.FragmentClick
+
+    private var updating: Boolean = false
+    //    internal lateinit var callback: MarketPlaceFragment.FragmentClick
 //
 //    fun FragmentClickListener(callback: MarketPlaceFragment.FragmentClick) {
 //        this.callback = callback
 //    }
-
+    var activityList: ArrayList<Activity>? = null
     private var mDataList: Data? = Data()
     private lateinit var mViewModel: DeviceViewModel
     var optionArray = arrayListOf<OptionsModel>()
@@ -101,13 +104,22 @@ class HayatechFragment : BaseFragment() {
             Observer<DashboardResponse> { mDashResponse ->
                 showPopupProgressSpinner(false)
                 mDataList = mDashResponse.data
+                if (!updating || MokoSupport.getInstance().isConnDevice(
+                        mContext, SharedPreferencesManager.getString(
+                            mContext,
+                            SharedPreferencesManager.WEARABLEID
+                        )
+                    )
+                ) {
+                    steps.text = mDashResponse.data.totalUserSteps.toString()
+                    totalstepsCount.text = mDashResponse.data.todayToken.toString()
+                    totl_dist.text = String.format("%.2f", mDashResponse.data.totalUserDistance)
+                    totl_dist_suffix.text = "Km"
+                }
                 Log.i("total", "steps" + mDashResponse.data.totalUserSteps.toString())
-                steps.text = mDashResponse.data.totalUserSteps.toString()
-                totalstepsCount.text = mDashResponse.data.todayToken.toString()
+
                 circular_progress.setProgress(mDashResponse.data.todayToken.toDouble(), 10.00)
                 company_rank_count.text = mDashResponse.data.companyRank.toString()
-                totl_dist.text = String.format("%.2f", mDashResponse.data.totalUserDistance)
-                totl_dist_suffix.text = "Km"
                 tokensVal.text = mDashResponse.data.totalUserToken.toString()
                 if (mDashResponse.data.lastUpdated != null) {
                     SharedPreferencesManager.setString(mContext, mDashResponse.data.lastUpdated, SYNCDATE)
@@ -160,6 +172,10 @@ class HayatechFragment : BaseFragment() {
 
         }
 
+        leaderboardTxt.setOnClickListener {
+            (mContext as LandingActivity).onFragmnet(5)
+        }
+
         spndTokens.setOnClickListener {
             //            callback.onFragmentClick(0)
             (mContext as LandingActivity).onFragmnet(0)
@@ -200,9 +216,9 @@ class HayatechFragment : BaseFragment() {
 
 
     private fun getActivityData(): ArrayList<Activity>? {
-        var activityList: ArrayList<Activity>? = ArrayList()
-        if(SharedPreferencesManager.hasKey(mContext,"Wearable")){
-        var list: ArrayList<DailyStep>? = SharedPreferencesManager.getSyncObject(mContext)
+        activityList = ArrayList()
+        if (SharedPreferencesManager.hasKey(mContext, "Wearable")) {
+            var list: ArrayList<DailyStep>? = SharedPreferencesManager.getSyncObject(mContext)
             list!!.iterator().forEach {
                 activityList!!.add(
                     Activity(
@@ -374,14 +390,16 @@ class HayatechFragment : BaseFragment() {
 
     fun setCurrentSteps(dailyStep: DailyStep) {
         if (dailyStep != null) {
+            updating = true
             Log.e(
                 "Updating",
                 "steps" + dailyStep.count.toInt().toString()
             )
-            if (steps != null && totl_dist != null)
+            if (steps != null && totl_dist != null){
                 steps.text = dailyStep.count.toInt().toString()
-            totl_dist.text = dailyStep.distance.toDouble().toString()
-            totl_dist_suffix.text = "Km"
+                totl_dist.text = dailyStep.distance.toDouble().toString()
+                totl_dist_suffix.text = "Km"
+            }
 
             mViewModel.syncDevice(
                 SyncRequest(
@@ -429,5 +447,16 @@ class HayatechFragment : BaseFragment() {
         mViewModel.fetchSyncData(
             FetchDeviceDataRequest(WEEKLY, SharedPreferencesManager.getUserId(mContext))
         )
+    }
+
+    fun syncingWearableMsg(bool: Boolean) {
+        if(syncTxtMsg!=null){
+            if(bool){
+                syncTxtMsg.visibility = View.VISIBLE
+            }else{
+                syncTxtMsg.visibility = View.GONE
+            }
+        }
+
     }
 }

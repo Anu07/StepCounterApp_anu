@@ -16,6 +16,7 @@ import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import com.sd.src.stepcounterapp.viewModels.ProfileViewModel
 import kotlinx.android.synthetic.main.black_crosstitlebar.*
 import kotlinx.android.synthetic.main.list_challenges.*
+import kotlinx.android.synthetic.main.list_surveys.*
 
 class MySurveysFragment : BaseFragment() {
 
@@ -54,14 +55,14 @@ class MySurveysFragment : BaseFragment() {
        // firstNameEd.setText(userData!!.firstName.toString())
       //  lastNameEd.setText(userData!!.lastName.toString())
 
+        showPopupProgressSpinner(true)
         mProfileViewModel.getMySurveys()
         txt_title.setImageResource(R.drawable.mysurveys_header)
 //        txt_title.setImageResource()
         mProfileViewModel.getSurveyResponse().observe(this, androidx.lifecycle.Observer { mData ->
-        //  showPopupProgressSpinner(true)
+          showPopupProgressSpinner(false)
             if (mData.status == 200) {
                 setAdapter(mData)
-
             }
         })
 
@@ -69,9 +70,9 @@ class MySurveysFragment : BaseFragment() {
 
     private fun setAdapter(mData: MySurveyResponse) {
      //   showPopupProgressSpinner(false)
-        list_mychallenges.layoutManager = LinearLayoutManager(mContext)
+        list_mysurveys.layoutManager = LinearLayoutManager(mContext)
         mySurveyAdapter = MySurveyAdapter(mContext, mData)
-        list_mychallenges.adapter = mySurveyAdapter
+        list_mysurveys.adapter = mySurveyAdapter
     }
 
 }

@@ -9,6 +9,7 @@ import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
 import android.content.Intent;
+import android.location.LocationManager;
 import android.os.Handler;
 import android.os.Message;
 import android.os.ParcelUuid;
@@ -160,9 +161,15 @@ public class MokoSupport implements MokoResponseCallback {
 
     private void stopScanDevice(MokoLeScanHandler mokoLeScanHandler, MokoScanDeviceCallback mokoScanDeviceCallback) {
         if (mokoLeScanHandler != null && mokoScanDeviceCallback != null) {
-            final BluetoothLeScannerCompat scanner = BluetoothLeScannerCompat.getScanner();
-            scanner.stopScan(mokoLeScanHandler);
-            mokoScanDeviceCallback.onStopScan();
+            if(turnOnBlueTooth()){
+                final BluetoothLeScannerCompat scanner = BluetoothLeScannerCompat.getScanner();
+                try {
+                    scanner.stopScan(mokoLeScanHandler);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                mokoScanDeviceCallback.onStopScan();
+            }
         }
     }
 
@@ -295,9 +302,12 @@ public class MokoSupport implements MokoResponseCallback {
      * @Description 判断是否已连接手环
      */
     public boolean isConnDevice(Context context, String address) {
-        BluetoothManager bluetoothManager = (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
-        int connState = bluetoothManager.getConnectionState(mBluetoothAdapter.getRemoteDevice(address), BluetoothProfile.GATT);
-        return connState == BluetoothProfile.STATE_CONNECTED;
+        if(turnOnBlueTooth() && address !=null){
+            BluetoothManager bluetoothManager = (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
+            int connState = bluetoothManager.getConnectionState(mBluetoothAdapter.getRemoteDevice(address), BluetoothProfile.GATT);
+            return connState == BluetoothProfile.STATE_CONNECTED;
+        }else return false;
+
     }
 
     /**
@@ -1205,4 +1215,16 @@ public class MokoSupport implements MokoResponseCallback {
         this.mSportsHeartRatesMap = sportsHeartRatesMap;
     }
 
+
+
+    private boolean turnOnBlueTooth() {
+        if (BluetoothAdapter.getDefaultAdapter().isEnabled() ) {
+            return true;
+        } else {
+            mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+            mBluetoothAdapter.enable();
+            return true;
+        }
+
+    }
 }

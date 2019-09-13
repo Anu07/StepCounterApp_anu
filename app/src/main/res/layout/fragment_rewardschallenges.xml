@@ -119,10 +119,10 @@
                                 android:ellipsize="end"
                                 android:layout_alignParentLeft="true"
                                 android:maxLines="1"
+                                android:text="Test now "
                                 android:textColor="@color/colorBlack"
                                 android:textSize="@dimen/_18ssp"
-                                android:paddingRight="@dimen/_15sdp"
-                                android:paddingLeft="@dimen/_15sdp"
+                                android:drawablePadding="@dimen/_10sdp"
                                 android:drawableRight="@drawable/info"
                                 app:appfont="montserrat_regular.ttf"/>
 
@@ -272,6 +272,7 @@
 
                 <RelativeLayout
                         android:layout_width="wrap_content"
+                        android:layout_marginBottom="?actionBarSize"
                         android:layout_height="wrap_content">
                     <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/trendchallengesList"

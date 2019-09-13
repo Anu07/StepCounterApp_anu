@@ -36,11 +36,13 @@ public class DayAxisValueFormatter extends ValueFormatter {
 	@Override
 	public String getFormattedValue(float value) {
 		int days = (int) value;
-		String array;
+		String array = "";
 		if(format.equalsIgnoreCase(InterConsts.MONTHLY)) {
 			array = mMonth[(int) value];
 		}else  {
-			array = mWeeks[(int) value];
+			if(value != 28.0){
+				array = mWeeks[(int) value];
+			}
 		}
 		
 		return array;

@@ -20,7 +20,7 @@
                 android:layout_margin="@dimen/_5sdp"
                 android:padding="@dimen/_8sdp"
                 android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_clear_white_24dp"/>
+                android:src="@drawable/ic_arrow_white_back"/>
 
         <!--  <ImageView
                   android:id="@+id/img_back"

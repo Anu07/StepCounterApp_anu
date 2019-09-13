@@ -3,15 +3,16 @@ package com.sd.src.stepcounterapp.fragments
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sd.src.stepcounterapp.R
+import com.sd.src.stepcounterapp.activities.LandingActivity
 import com.sd.src.stepcounterapp.adapter.sectionAdapter.TransactionHistoryAdapter
 import com.sd.src.stepcounterapp.model.generic.BasicRequest
 import com.sd.src.stepcounterapp.model.transactionhistory.TransactionHistoryModel
@@ -21,7 +22,7 @@ import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapt
 import kotlinx.android.synthetic.main.backtitlebar.*
 
 
-class TransactionHistoryFragment : Fragment() {
+class TransactionHistoryFragment : BaseFragment() {
 
     private lateinit var mViewModel: TransactionHistoryViewModel
 
@@ -85,9 +86,22 @@ class TransactionHistoryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         txt_title.setImageResource(R.drawable.history)
         img_back.setOnClickListener {
-            activity!!.onBackPressed()
+            fragmentManager!!.popBackStack()
         }
 
     }
+
+    override fun onDetach() {
+        super.onDetach()
+        Log.i("test", "Detach")
+        (HayatechFragment.mContext as LandingActivity).hideBottomLayout(false)
+    }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.i("test", "onDestroy")
+    }
+
 
 }

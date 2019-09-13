@@ -15,8 +15,10 @@ object RetrofitClient {
 
     //http://54.71.18.74:4575/api/auth/login
 
-    val BASE_URL = "http://54.71.18.74:4575/"
-    val IMG_URL = "http://54.71.18.74:4575"
+    val BASE_URL = "http://3.15.112.60:3000/"
+    //    val BASE_URL = "http://54.71.18.74:4575/"
+//    val IMG_URL = "http://54.71.18.74:4575"
+    val IMG_URL = "http://3.15.112.60:3000"
     private val CACHE_CONTROL = "Cache-Control"
     private var retrofit: Retrofit? = null
     private var retrofitGoogle: Retrofit? = null
@@ -68,7 +70,7 @@ object RetrofitClient {
         try {
             cache = Cache(
                 File(AppApplication.instance!!.cacheDir, "http-cache"),
-                (10*1024*1024).toLong()
+                (10 * 1024 * 1024).toLong()
             ) // 10 MB
         } catch (ignored: Exception) {
 

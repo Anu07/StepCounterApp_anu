@@ -20,6 +20,7 @@ import com.fitpolo.support.entity.DailyStep
 import com.fitpolo.support.entity.OrderTaskResponse
 import com.fitpolo.support.log.LogModule
 import com.fitpolo.support.task.ZReadStepTask
+import com.fitpolo.support.task.ZWriteSystemTimeTask
 import com.sd.src.stepcounterapp.AppConstants
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.adapter.DeviceAdapter
@@ -125,6 +126,7 @@ class DeviceListActivity : Basefit(), AdapterView.OnItemClickListener, MokoScanD
                         mDialog!!.dismiss()
                     }
                     Toast.makeText(this@DeviceListActivity, "Connect success", Toast.LENGTH_SHORT).show()
+                    updateDeviceTime()
                     getLastestSteps()
                 }
                 if (MokoConstants.ACTION_CONN_STATUS_DISCONNECTED == intent.action) {
@@ -179,11 +181,16 @@ class DeviceListActivity : Basefit(), AdapterView.OnItemClickListener, MokoScanD
         }
     }
 
+    private fun updateDeviceTime() {
+        setSystemTime()
+    }
+
     private fun gotoDeviceconnctd() {
         val intent = Intent(this@DeviceListActivity, DeviceConnctdActivity::class.java)
         //                    val options = ActivityOptions.makeSceneTransitionAnimation(this@SignInActivity)
         intent.putExtra("Steps", lastestSteps?.get(lastestSteps!!.size - 1)!!.count)
         startActivity(intent)
+        finish()
     }
 
     private val mServiceConnection = object : ServiceConnection {
@@ -260,7 +267,7 @@ class DeviceListActivity : Basefit(), AdapterView.OnItemClickListener, MokoScanD
     override fun onStartScan() {
         deviceMap!!.clear()
         mDialog!!.setMessage("Scanning...")
-        mDialog!!.show()
+         mDialog!!.show()
     }
 
     override fun onScanDevice(device: BleDevice) {
@@ -351,5 +358,15 @@ class DeviceListActivity : Basefit(), AdapterView.OnItemClickListener, MokoScanD
         var df: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd")
         return df.format(c)
     }
+
+    /**
+     * Set system time from device
+     */
+
+
+    fun setSystemTime() {
+        MokoSupport.getInstance().sendOrder(ZWriteSystemTimeTask(mService))
+    }
+
 
 }

@@ -99,7 +99,7 @@
 
         <com.sd.src.stepcounterapp.utils.CustomButton
                 android:id="@+id/btnPurchaseStart"
-                android:text="@string/redeem_now"
+                android:text="@string/purchase_now"
                 android:layout_width="0dp"
                 android:layout_weight="1.7"
                 android:layout_marginLeft="@dimen/_5sdp"

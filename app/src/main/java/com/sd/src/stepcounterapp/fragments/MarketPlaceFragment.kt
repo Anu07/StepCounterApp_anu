@@ -3,9 +3,11 @@ package com.sd.src.stepcounterapp.fragments
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -23,6 +25,7 @@ import com.sd.src.stepcounterapp.activities.LandingActivity
 import com.sd.src.stepcounterapp.adapter.MarketPlaceCategoryAdapter
 import com.sd.src.stepcounterapp.adapter.MarketPlacePopularityAdapter
 import com.sd.src.stepcounterapp.adapter.MarketPlaceSeeAllAdapter
+import com.sd.src.stepcounterapp.changeDateFormat
 import com.sd.src.stepcounterapp.dialog.FilterDialog
 import com.sd.src.stepcounterapp.dialog.MarketPlaceDialog
 import com.sd.src.stepcounterapp.dialog.MarketPopPlaceDialog
@@ -33,27 +36,53 @@ import com.sd.src.stepcounterapp.model.marketplace.BasicSearchRequest
 import com.sd.src.stepcounterapp.model.marketplace.MarketResponse
 import com.sd.src.stepcounterapp.model.marketplace.PopularProducts
 import com.sd.src.stepcounterapp.model.redeemnow.RedeemRequest
+import com.sd.src.stepcounterapp.model.wallet.walletDetailResponse.Purchased
+import com.sd.src.stepcounterapp.model.wallet.walletDetailResponse.WalletModel
+import com.sd.src.stepcounterapp.model.wallet.walletDetailResponse.Wishlist
 import com.sd.src.stepcounterapp.model.wishList.AddWishRequest
-import com.sd.src.stepcounterapp.model.wishList.Data
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
+import com.sd.src.stepcounterapp.utils.SharedPreferencesManager.EARNEDTOKENS
+import com.sd.src.stepcounterapp.utils.Utils
 import com.sd.src.stepcounterapp.viewModels.MarketPlaceViewModel
 import kotlinx.android.synthetic.main.fragment_market_place.*
+import kotlinx.android.synthetic.main.fragment_wallet.*
 
 
-class MarketPlaceFragment : BaseFragment(), MarketPlaceClickInterface, MarketPlaceCategoryAdapter.twoItemListener,
+class MarketPlaceFragment : BaseFragment(), FilterDialog.MarketFilterInterface, MarketPlaceClickInterface,
+    MarketPlaceCategoryAdapter.twoItemListener,
     MarketPlaceCategoryAdapter.ClickMarketListener,
     MarketPlacePopularityAdapter.PopularInterface, MarketPlaceSeeAllAdapter.CategoryInterface {
+
+
+    override fun onCategoryList(queryCat: String) {
+        mViewModel.getSearchCategoryApi(
+            BasicSearchRequest(
+                SharedPreferencesManager.getUserId(mContext),
+                queryCat
+            )
+        )
+    }
+
     override fun onPopClick(position: Int, mItem: PopularProducts.Data) {
         marketPopDialog = MarketPopPlaceDialog(mContext, mItem, R.style.pullBottomfromTop, R.layout.dialog_marketplace,
             object : MarketPopPlaceDialog.PurchaseInterface {
                 override fun onWishlist(data: PopularProducts.Data) {
-                    showPopupProgressSpinner(true)
-                    mViewModel.addWishList(AddWishRequest(SharedPreferencesManager.getUserId(context!!), mItem._id))
+                    if (!data.wishlist) {
+                        showPopupProgressSpinner(true)
+                        mViewModel.addWishList(AddWishRequest(SharedPreferencesManager.getUserId(context!!), data._id))
+                    }else{
+                        showPopupProgressSpinner(true)
+                        mViewModel.removeWishList(AddWishRequest(SharedPreferencesManager.getUserId(context!!), data._id))
+                    }
                 }
-
                 override fun onPurchase(data: PopularProducts.Data) {
-                    showPopupProgressSpinner(true)
-                    mViewModel.hitPurchaseApi(RedeemRequest(mItem._id, SharedPreferencesManager.getUserId(mContext)))
+                    if(mItem.quantity>0){
+                        showPopupProgressSpinner(true)
+                        mViewModel.hitPurchaseApi(RedeemRequest(mItem._id, SharedPreferencesManager.getUserId(mContext)))
+                    }else{
+                        Toast.makeText(mContext,  "This product has been out of stock, please try another product.", Toast.LENGTH_LONG).show()
+                    }
+
 
                 }
             })
@@ -64,13 +93,23 @@ class MarketPlaceFragment : BaseFragment(), MarketPlaceClickInterface, MarketPla
         marketDialog = MarketPlaceDialog(mContext, mItem, R.style.pullBottomfromTop, R.layout.dialog_marketplace,
             object : MarketPlaceDialog.PurchaseInterface {
                 override fun onWishlist(data: MarketResponse.Products) {
-                    showPopupProgressSpinner(true)
-                    mViewModel.addWishList(AddWishRequest(SharedPreferencesManager.getUserId(context!!), mItem._id))
+                    if (!data.wishlist) {
+                        showPopupProgressSpinner(true)
+                        mViewModel.addWishList(AddWishRequest(SharedPreferencesManager.getUserId(context!!), data._id))
+                    }else{
+                        showPopupProgressSpinner(true)
+                        mViewModel.removeWishList(AddWishRequest(SharedPreferencesManager.getUserId(context!!), data._id))
+                    }
+
                 }
 
                 override fun onPurchase(data: MarketResponse.Products) {
-                    showPopupProgressSpinner(true)
-                    mViewModel.hitPurchaseApi(RedeemRequest(mItem._id, SharedPreferencesManager.getUserId(mContext)))
+                    if(mItem.quantity>0){
+                        showPopupProgressSpinner(true)
+                        mViewModel.hitPurchaseApi(RedeemRequest(mItem._id, SharedPreferencesManager.getUserId(mContext)))
+                    }else{
+                        Toast.makeText(mContext,  "This product has been out of stock, please try another product.", Toast.LENGTH_LONG).show()
+                    }
 
                 }
             })
@@ -94,7 +133,6 @@ class MarketPlaceFragment : BaseFragment(), MarketPlaceClickInterface, MarketPla
             mViewModel.addWishList(AddWishRequest(SharedPreferencesManager.getUserId(context!!), mItem._id))
         } else {
             showPopupProgressSpinner(true)
-
             mViewModel.removeWishList(AddWishRequest(SharedPreferencesManager.getUserId(context!!), mItem._id))
         }
     }
@@ -148,13 +186,12 @@ class MarketPlaceFragment : BaseFragment(), MarketPlaceClickInterface, MarketPla
             return instance
         }
     }
-
+    lateinit var filterdial: FilterDialog
+    private val mCategoryNameList: ArrayList<String> = ArrayList()
     var count: Int? = 0
     private lateinit var marketDialog: MarketPlaceDialog
     private lateinit var marketPopDialog: MarketPopPlaceDialog
-    private val mCartItemCount: Int = 0
     private var tabtype: Boolean = true
-    private var mDataWish: ArrayList<Data> = ArrayList()
     private lateinit var mViewModel: MarketPlaceViewModel
     lateinit var mCategoryAdapter: MarketPlaceCategoryAdapter
     lateinit var mPopularityAdapter: MarketPlacePopularityAdapter
@@ -175,6 +212,9 @@ class MarketPlaceFragment : BaseFragment(), MarketPlaceClickInterface, MarketPla
                     if (marketDialog != null && marketDialog.isShowing) {
                         marketDialog.dismiss()
                     }
+                    if (marketPopDialog != null && marketPopDialog.isShowing) {
+                        marketPopDialog.dismiss()
+                    }
                 } catch (e: Exception) {
                 }
                 if (mData.status == 200) {
@@ -186,14 +226,39 @@ class MarketPlaceFragment : BaseFragment(), MarketPlaceClickInterface, MarketPla
             })
 
 
+        mViewModel.getWalletData().observe(this,
+            Observer<WalletModel> { mData ->
+                SharedPreferencesManager.setInt(
+                    WalletFragment.mContext,
+                    SharedPreferencesManager.WISHCOUNT, mData.data?.wishlist!!.size)
+                count = SharedPreferencesManager.getInt(
+                    mContext,
+                    SharedPreferencesManager.WISHCOUNT
+                )
+                SharedPreferencesManager.setString(mContext,mData.data.totalEarnings.toString(),EARNEDTOKENS)
+                setupBadge()
+                setUpTokens()
+            })
+
+
+        mViewModel.hitWalletApi()
 
         mViewModel.getCategory().observe(this,
             Observer<MarketResponse> { mProduct ->
+                try {
+                    if(filterdial!= null && filterdial.isShowing){
+                        filterdial.dismiss()
+                    }
+                } catch (e: Exception) {
+                    Log.e("Dialog","Filter"+e.message)
+                }
+
                 if (mProduct != null) {
                     if (mProduct.data.size > 0) {
                         rvProduct.visibility = View.VISIBLE
                         noRec.visibility = View.GONE
                         mDataCategory = mProduct.data
+                        getCategoryNameList(mDataCategory)
                         mCategoryAdapter.swap(mDataCategory)
                         if (mDataCategory.size > 0)
                             txtCategoryName.text = mDataCategory[0].name
@@ -220,29 +285,24 @@ class MarketPlaceFragment : BaseFragment(), MarketPlaceClickInterface, MarketPla
             })
         mViewModel.addWishList().observe(this,
             Observer<BasicInfoResponse> {
-                showPopupProgressSpinner(false)
+                try {
+                    showPopupProgressSpinner(false)
+                } catch (e: Exception) {
+                }
                 try {
                     if (marketDialog != null && marketDialog.isShowing) {
                         marketDialog.dismiss()
+                    }
+                    if (marketPopDialog != null && marketPopDialog.isShowing) {
+                        marketPopDialog.dismiss()
                     }
                 } catch (e: Exception) {
                 }
                 if (it != null) {
                     if (it.status == 200) {
-
-
-                        count = count!! + 1
-
-                        SharedPreferencesManager.setInt(
-                            WalletFragment.mContext,
-                            SharedPreferencesManager.WISHCOUNT, count!!
-                        )
-
-
-
-                        cart_badge.text = count.toString()
                         mViewModel.getCategoryApi(BasicRequest(SharedPreferencesManager.getUserId(mContext), "1"))
                         mViewModel.getProductApi(BasicRequest(SharedPreferencesManager.getUserId(mContext), "1"))
+                        mViewModel.hitWalletApi()
                     }
                 }
             })
@@ -254,22 +314,30 @@ class MarketPlaceFragment : BaseFragment(), MarketPlaceClickInterface, MarketPla
                     if (marketDialog != null && marketDialog.isShowing) {
                         marketDialog.dismiss()
                     }
+                    if (marketPopDialog != null && marketPopDialog.isShowing) {
+                        marketPopDialog.dismiss()
+                    }
                 } catch (e: Exception) {
                 }
                 if (it != null) {
                     if (it.status == 200) {
-
-                        count = count!! - 1
-                        SharedPreferencesManager.setInt(
-                            WalletFragment.mContext,
-                            SharedPreferencesManager.WISHCOUNT, count!!
-                        )
-                        cart_badge.text = count.toString()
+                        mViewModel.hitWalletApi()
                         mViewModel.getCategoryApi(BasicRequest(SharedPreferencesManager.getUserId(mContext), "1"))
                         mViewModel.getProductApi(BasicRequest(SharedPreferencesManager.getUserId(mContext), "1"))
                     }
                 }
             })
+
+
+    }
+
+    private fun getCategoryNameList(mDataCategory: java.util.ArrayList<MarketResponse.Data>) {
+
+        mDataCategory.forEach {
+            if(!mCategoryNameList.contains(it.name)){
+                mCategoryNameList.add(it.name)
+            }
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -282,6 +350,7 @@ class MarketPlaceFragment : BaseFragment(), MarketPlaceClickInterface, MarketPla
         setCategoryAdapter()
         setPopularityAdapter()
         setSeeAllAdapter()
+        setUpTokens()
         setupBadge()
 
         txtSeeAll.setOnClickListener {
@@ -307,10 +376,12 @@ class MarketPlaceFragment : BaseFragment(), MarketPlaceClickInterface, MarketPla
         }
 
         filter.setOnClickListener {
-            FilterDialog(
+            filterdial = FilterDialog(
                 mContext, R.style.pullBottomfromTop,
-                R.layout.dialog_filter
-            ).show()
+                R.layout.dialog_filter, this,
+                mCategoryNameList
+            )
+            filterdial.show()
         }
 
 
@@ -364,6 +435,37 @@ class MarketPlaceFragment : BaseFragment(), MarketPlaceClickInterface, MarketPla
         wishlist.setOnClickListener {
             //            callback.onFragmentClick(2)
             (mContext as LandingActivity).onFragmnet(4)
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            rvProduct.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+                (mContext as LandingActivity).disableSwipe(true)
+
+            }
+        }
+
+        topLayout.setOnTouchListener(object : View.OnTouchListener {
+            override fun onTouch(p0: View?, ev: MotionEvent?): Boolean {
+                if (ev!!.action == MotionEvent.ACTION_DOWN){
+                    (mContext as LandingActivity).disableSwipe(false)
+                }else if (ev!!.action == MotionEvent.ACTION_UP){
+                    //no need
+                }
+
+                return true
+            }
+        })
+
+    }
+
+    /**
+     * set earned tokens
+     */
+
+    private fun setUpTokens() {
+        if(SharedPreferencesManager.hasKey(mContext,EARNEDTOKENS)){
+            tokenVal.text = SharedPreferencesManager.getString(mContext,EARNEDTOKENS)
+        }else{
+            tokenVal.text = ""
         }
     }
 
@@ -439,10 +541,7 @@ class MarketPlaceFragment : BaseFragment(), MarketPlaceClickInterface, MarketPla
      */
 
     fun setupBadge() {
-        count = SharedPreferencesManager.getInt(
-            WalletFragment.mContext,
-            SharedPreferencesManager.WISHCOUNT
-        )
+
         if (count == -1 || count == 0) {
 //                if (cart_badge.visibility != View.GONE) {
             cart_badge.visibility = View.GONE

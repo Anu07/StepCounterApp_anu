@@ -7,6 +7,7 @@ import com.sd.src.stepcounterapp.model.challenge.ChallengeResponse
 import com.sd.src.stepcounterapp.model.challenge.ChallengeStartRequestModel
 import com.sd.src.stepcounterapp.model.challenge.ChallengeTakenResponse.StartChallengeResponse
 import com.sd.src.stepcounterapp.model.challenge.MyChallengeResponse
+import com.sd.src.stepcounterapp.model.changepwd.ChangePasswordRequest
 import com.sd.src.stepcounterapp.model.contactUs.ContactUsRequest
 import com.sd.src.stepcounterapp.model.generic.BasicInfoResponse
 import com.sd.src.stepcounterapp.model.generic.BasicRequest
@@ -18,6 +19,9 @@ import com.sd.src.stepcounterapp.model.loginrequest.LoginRequestObject
 import com.sd.src.stepcounterapp.model.marketplace.BasicSearchRequest
 import com.sd.src.stepcounterapp.model.marketplace.MarketResponse
 import com.sd.src.stepcounterapp.model.marketplace.PopularProducts
+import com.sd.src.stepcounterapp.model.notification.NotificationResponse
+import com.sd.src.stepcounterapp.model.notificatyionlist.NotificationListResponse
+import com.sd.src.stepcounterapp.model.privacy.PrivacyResponse
 import com.sd.src.stepcounterapp.model.profile.ProfileResponse
 import com.sd.src.stepcounterapp.model.profile.UpdateProfileRequest
 import com.sd.src.stepcounterapp.model.redeemnow.RedeemRequest
@@ -200,6 +204,12 @@ interface ApiInterface {
         @Body body: BasicRequest
     ): Call<ProfileResponse>
 
+
+    @POST("api/notification_setting")
+    fun notificationSettings(
+        @Body body: BasicRequest
+    ): Call<NotificationResponse>
+
     @POST("api/my_transactions")
     fun getTransactionHistory(
         @Body body: BasicRequest
@@ -207,11 +217,20 @@ interface ApiInterface {
 
     @POST("api/change_password")
     fun change_password(
-        @Field("userId") userId: String,
-        @Field("oldPassword") oldPassword: String,
-        @Field("password") password: String
+        @Body body: ChangePasswordRequest
     ): Call<BasicInfoResponse>
 
 
+    @GET("api/pages/privacy_policy")
+    fun getPrivacyPolicy(): Call<PrivacyResponse>
+
+    @GET("api/pages/terms_conditions")
+    fun gettnc(): Call<PrivacyResponse>
+
+
+    @POST("api/notifications")
+    fun getNotificationList(
+        @Body body: BasicRequest
+    ): Call<NotificationListResponse>
 
 }

@@ -26,23 +26,21 @@ class LeaderboardAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if(position>2){
             this.item = mData[position]
-            holder.textViewPosition.text = position.toString()      //list displays leadrebaord from position 3
+            holder.textViewPosition.text = (position+4).toString()      //list displays leadrebaord from position 3
             holder.textName.text = item!!.name.toString()
             holder.textSteps.text = item!!.steps.toString()
-        }
     }
 
     override fun getItemCount(): Int {
         return mData.size
     }
 
-    fun swap(mNewData: MutableList<Data>) {
-        if(this.mData.isNotEmpty()){
+    fun swap(mNewData: ArrayList<Data>) {
+        if(mData.size>0){
             mData.clear()
-            mData.addAll(mNewData)
         }
+        mData.addAll(mNewData)
         notifyDataSetChanged()
     }
 

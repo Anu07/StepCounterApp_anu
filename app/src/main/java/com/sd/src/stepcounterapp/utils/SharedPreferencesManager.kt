@@ -15,13 +15,17 @@ import java.util.*
 object SharedPreferencesManager {
 
     private val APP_SETTINGS = "APP_SETTINGS"
-
+    val FIREBASETOKEN = "FirebaseToken"
+    val GA_NOTIFY = "goal_achieved"
+    val NSA_NOTIFY = "new_survey_added"
+    val NC_NOTIFY = "new_challenge"
 
     // properties
     private val USERID = "userId"
     val SYNCDATE = "syncDate"
     val WEARABLEID = "wearableId"
     val WISHCOUNT = "wishbadge"
+    val EARNEDTOKENS = "earnedTokens"
     private fun getSharedPreferences(context: Context): SharedPreferences {
         return context.getSharedPreferences(APP_SETTINGS, Context.MODE_PRIVATE)
     }
@@ -41,9 +45,16 @@ object SharedPreferencesManager {
         editor.putString(Key, newValue)
         editor.commit()
     }
-
+    fun setBoolean(context: Context, newValue: Boolean, Key: String) {
+        val editor = getSharedPreferences(context).edit()
+        editor.putBoolean(Key, newValue)
+        editor.commit()
+    }
     fun getString(context: Context, Key: String): String? {
         return getSharedPreferences(context).getString(Key, null)
+    }
+    fun getBoolean(context: Context, Key: String): Boolean {
+        return getSharedPreferences(context).getBoolean(Key, false)
     }
 
 

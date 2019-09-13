@@ -30,8 +30,8 @@ class MyRedeemedRewardsAdapter(mContext: Context?, mData: MyRedeemedResponse) :
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-       holder.textView.text = mData.data.get(position).name
-       holder.textShort.text = Html.fromHtml(mData.data.get(position).description)
+       holder.textView.text = mData.data.get(position).name.capitalize()
+       holder.textShort.text = Html.fromHtml(mData.data.get(position).description.capitalize())
         holder.tokenTxt.visibility = View.VISIBLE
         holder.tokenTxt.text = mData.data.get(position).token.toString() + " TKS"
        /* holder.imageView.setOnClickListener {

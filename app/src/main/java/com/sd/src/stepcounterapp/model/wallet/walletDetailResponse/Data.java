@@ -1,6 +1,9 @@
 
 package com.sd.src.stepcounterapp.model.wallet.walletDetailResponse;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 @SuppressWarnings("unused")
@@ -23,7 +26,18 @@ public class Data {
     private long totalGenerated;
     private String updatedAt;
     private List<Wishlist> wishlist;
-    
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    @SerializedName("quantity")
+    @Expose
+    private Integer quantity;
     public long getDays() {
         return days;
     }

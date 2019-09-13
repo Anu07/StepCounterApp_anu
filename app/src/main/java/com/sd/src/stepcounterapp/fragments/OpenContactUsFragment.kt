@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Build
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,14 +13,16 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.sd.src.stepcounterapp.R
+import com.sd.src.stepcounterapp.activities.LandingActivity
 import com.sd.src.stepcounterapp.model.contactUs.ContactUsRequest
 import com.sd.src.stepcounterapp.model.login.LoginResponseJ
 import com.sd.src.stepcounterapp.model.profile.Data
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import com.sd.src.stepcounterapp.viewModels.OpenContactUsViewModel
+import kotlinx.android.synthetic.main.backtitlebar.*
 import kotlinx.android.synthetic.main.open_contact_us_fragment.*
 
-class OpenContactUsFragment : Fragment() {
+class OpenContactUsFragment : BaseFragment() {
 
     private lateinit var viewModel: OpenContactUsViewModel
     private var userData: LoginResponseJ? = null
@@ -55,7 +58,9 @@ class OpenContactUsFragment : Fragment() {
         viewModel = ViewModelProviders.of(activity!!).get(OpenContactUsViewModel::class.java)
 
         userData = SharedPreferencesManager.getUserObject(mContext)
-
+        img_back.setOnClickListener {
+            fragmentManager!!.popBackStack()
+        }
         send_contact_us.setOnClickListener {
             if(message.toString().isNotEmpty()){
 
@@ -74,4 +79,11 @@ class OpenContactUsFragment : Fragment() {
             }
         })
     }
+
+    override fun onDetach() {
+        super.onDetach()
+        Log.i("test","Detach")
+        (HayatechFragment.mContext as LandingActivity).hideBottomLayout(false)
+    }
+
 }

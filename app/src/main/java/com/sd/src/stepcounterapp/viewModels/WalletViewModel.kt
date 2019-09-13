@@ -107,6 +107,11 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
             override fun onResponse(call: Call<BasicInfoResponse>?, response: Response<BasicInfoResponse>?) {
                 if (response!!.code() == 200) {
                     mPurchaseResponse!!.value = response.body()
+                }else if (response!!.code() == 400) {
+                    var basic = BasicInfoResponse()
+                    basic.status = 400
+                    basic.message = "This product has been out of stock, please try another product."
+                    mPurchaseResponse!!.value = basic
                 }else{
                     mPurchaseResponse!!.value = BasicInfoResponse()
                 }

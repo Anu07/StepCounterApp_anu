@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView
         xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
         android:orientation="vertical"
         android:layout_width="match_parent"
         app:cardCornerRadius="@dimen/_5ssp"
         android:layout_margin="@dimen/_5sdp"
+        android:id="@+id/redeemedParent"
         android:elevation="@dimen/_10ssp"
         android:layout_height="wrap_content">
 
@@ -26,9 +27,10 @@
             <com.sd.src.stepcounterapp.utils.CustomTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Expiry 5 June 2019"
+                    tools:text="Expiry 5 June 2019"
                     android:ellipsize="end"
                     android:maxLines="1"
+                    android:id="@+id/expiryText"
                     android:paddingStart="@dimen/_15sdp"
                     android:paddingEnd="@dimen/_15sdp"
                     android:paddingTop="@dimen/_8sdp"

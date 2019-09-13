@@ -8,6 +8,7 @@ import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,18 +22,21 @@ import com.sd.src.stepcounterapp.model.survey.SurveyResponse
 import com.sd.src.stepcounterapp.utils.ItemClickGlobalListner
 import com.sd.src.stepcounterapp.viewModels.SurveyViewModel
 import kotlinx.android.synthetic.main.fragment_surveys.*
-import kotlinx.android.synthetic.main.fragment_surveys.spring_dots_indicator
 import java.util.*
 import kotlin.collections.ArrayList
 
 
-class SurveysFragment : BaseFragment(),ItemClickGlobalListner {
+class SurveysFragment : BaseFragment(), ItemClickGlobalListner {
     override fun onSlideItemClick(position: Int) {
         swapFragment(ImagesArray?.get(position)!!)
     }
 
     override fun onItemClick(pos: Int) {
-        swapFragment(surveyArray?.get(pos))
+        if (!surveyArray?.get(pos)!!.answered) {
+            swapFragment(surveyArray?.get(pos))
+        } else {
+            Toast.makeText(mContext, "You have already taken this survey", Toast.LENGTH_LONG).show()
+        }
     }
 
     companion object {
@@ -61,7 +65,7 @@ class SurveysFragment : BaseFragment(),ItemClickGlobalListner {
     private var mData: ArrayList<Datum> = ArrayList()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val v =inflater.inflate(R.layout.fragment_surveys, container, false)
+        val v = inflater.inflate(R.layout.fragment_surveys, container, false)
         rewardsViewPager = v.findViewById(R.id.rewardsViewPager)
         return v
 
@@ -80,9 +84,13 @@ class SurveysFragment : BaseFragment(),ItemClickGlobalListner {
                         norec.visibility = View.GONE
                         surveyArray = mData.data as ArrayList<Datum>?
                         mSurveyAdapter.swap(mData.data as ArrayList<Datum>)
-                        if(mData.featured.size>0){
+                        if (mData.featured.size > 0) {
                             ImagesArray = mData.featured as ArrayList<Datum>?
-                            rewardsViewPager!!.adapter = SlidingImageAdapter(ChallengesFragment.mContext, (mData.featured as ArrayList<Datum>?)!!,this)
+                            rewardsViewPager!!.adapter = SlidingImageAdapter(
+                                ChallengesFragment.mContext,
+                                (mData.featured as ArrayList<Datum>?)!!,
+                                this
+                            )
                         }
                     }
                 } else {
@@ -105,18 +113,18 @@ class SurveysFragment : BaseFragment(),ItemClickGlobalListner {
 
     private fun init() {
         spring_dots_indicator.setViewPager(rewardsViewPager)
-        mSlideAdapter = SlidingImageAdapter(ChallengesFragment.mContext, ImagesArray!!,this)
+        mSlideAdapter = SlidingImageAdapter(ChallengesFragment.mContext, ImagesArray!!, this)
         rewardsViewPager!!.adapter = mSlideAdapter
 
         // Auto start of viewpager
-        if(ImagesArray!!.size>0){
-        val handler = Handler()
-        val Update = Runnable {
-            if (currentPage == NUM_PAGES) {
-                currentPage = 0
+        if (ImagesArray!!.size > 0) {
+            val handler = Handler()
+            val Update = Runnable {
+                if (currentPage == NUM_PAGES) {
+                    currentPage = 0
+                }
+                rewardsViewPager!!.setCurrentItem(currentPage++, true)
             }
-            rewardsViewPager!!.setCurrentItem(currentPage++, true)
-        }
             val swipeTimer = Timer()
             swipeTimer.schedule(object : TimerTask() {
                 override fun run() {
@@ -130,17 +138,22 @@ class SurveysFragment : BaseFragment(),ItemClickGlobalListner {
 
     private fun setSurveyAdapter() {
         rvSurveys.layoutManager = LinearLayoutManager(mContext)
-        mSurveyAdapter = SurveysAdapter(mContext, mData,this)
+        mSurveyAdapter = SurveysAdapter(mContext, mData, this)
         rvSurveys.adapter = mSurveyAdapter
     }
 
 
-
     private fun swapFragment(data: Datum?) {
-     var intent = Intent(mContext, SurveyDetailActivity::class.java)
-        intent.putExtra("Data",data)
+        var intent = Intent(mContext, SurveyDetailActivity::class.java)
+        intent.putExtra("Data", data)
         startActivity(intent)
     }
+
+    fun notifyData() {
+        if (mViewModel != null)
+            mViewModel.hitSurveyListApi()
+    }
+
 
 }
 

@@ -62,6 +62,19 @@ public class PopularProducts{
         @SerializedName("token")
         @Expose
         private Integer token;
+
+        public Integer getQuantity() {
+            return quantity;
+        }
+
+        public void setQuantity(Integer quantity) {
+            this.quantity = quantity;
+        }
+
+        @SerializedName("quantity")
+        @Expose
+        private Integer quantity;
+
         public void setImage(String image){
             this.image=image;
         }

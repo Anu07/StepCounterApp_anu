@@ -20,7 +20,6 @@
             <FrameLayout
                     android:id="@+id/container"
                     android:layout_width="match_parent"
-                    android:layout_marginBottom="?actionBarSize"
                     android:layout_height="match_parent">
 
 
@@ -39,7 +38,7 @@
                         android:padding="@dimen/_2sdp"
                         android:layout_marginBottom="@dimen/_10sdp"
                         android:layout_marginTop="?actionBarSize"
-                        android:text="Device is not connected.."
+                        android:text="@string/device_is_not_connected"
                         android:layout_height="wrap_content"/>
                 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 
@@ -62,7 +61,7 @@
                     android:id="@+id/bottom_bar"
                     layout="@layout/bottom_toolbar"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="?actionBarSize"
                     android:layout_alignParentBottom="true"/>
 
         </RelativeLayout>

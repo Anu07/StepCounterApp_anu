@@ -4,7 +4,7 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android'
 apply plugin: "androidx.navigation.safeargs"
 apply plugin: 'kotlin-android-extensions'
-
+apply plugin: 'com.google.gms.google-services'
 apply plugin: 'io.fabric'
 
 android {
@@ -136,6 +136,7 @@ dependencies {
     //firebase
     // Check for v11.4.2 or higher
     implementation 'com.google.firebase:firebase-core:17.1.0'
+    implementation 'com.google.firebase:firebase-messaging:20.0.0'
 
     // (Recommended) Add Analytics
     implementation 'com.google.firebase:firebase-analytics:17.1.0'

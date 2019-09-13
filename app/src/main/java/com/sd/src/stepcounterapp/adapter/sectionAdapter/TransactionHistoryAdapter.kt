@@ -9,6 +9,7 @@ import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.changeDateFormat
 import com.sd.src.stepcounterapp.model.transactionhistory.TransactionEntry
 import com.sd.src.stepcounterapp.setFirstCapWord
+import com.sd.src.stepcounterapp.utils.Utils
 import com.wajahatkarim3.easyvalidation.core.view_ktx.contains
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionParameters
 import io.github.luizgrp.sectionedrecyclerviewadapter.StatelessSection
@@ -59,8 +60,8 @@ class TransactionHistoryAdapter(val context: Context, val date: String, val list
             itemHolder.currentTransaction.text = ""
         }
 
-        data.date?.let {
-            itemHolder.time.text = changeDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", "HH:mm", it)
+        data.createdAt?.let {
+            itemHolder.time.text = Utils.getTimefromISOTime(it)
         } ?: run {
             itemHolder.time.text = ""
         }
@@ -80,7 +81,7 @@ class TransactionHistoryAdapter(val context: Context, val date: String, val list
     override fun onBindHeaderViewHolder(holder: RecyclerView.ViewHolder?) {
         val headerHolder = holder as HeaderViewHolder?
 
-        headerHolder?.dateTxt?.text = changeDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", "dd MMM yyyy", date)
+        headerHolder?.dateTxt?.text = changeDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", "dd MMM, yyyy", date)
     }
 
     internal inner class HeaderViewHolder(view: View) : RecyclerView.ViewHolder(view) {

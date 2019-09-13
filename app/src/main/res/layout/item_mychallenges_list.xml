@@ -22,7 +22,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="150dp"
                     android:scaleType="fitXY"
-                    android:src="@drawable/forest"/>
+                    android:src="@drawable/survey_img"/>
 
             <com.sd.src.stepcounterapp.utils.CustomTextView
                     android:layout_width="wrap_content"
@@ -45,6 +45,7 @@
                 android:layout_marginLeft="@dimen/_10sdp"
                 android:textSize="@dimen/_16sdp"
                 android:textColor="@color/blue_txt"
+                android:layout_marginRight="@dimen/_10sdp"
                 app:appfont="montserrat_semibold.ttf"
                 android:textAlignment="textStart"
                 android:layout_height="wrap_content"/>
@@ -57,6 +58,8 @@
                 android:textSize="@dimen/_12sdp"
                 android:textColor="@color/colorBlack"
                 app:appfont="montserrat_regular.ttf"
+                android:maxLines="3"
+                 android:layout_marginRight="@dimen/_10sdp"
                 android:textAlignment="textStart"
                 android:layout_height="wrap_content"/>
 
@@ -64,10 +67,12 @@
                 android:layout_width="match_parent"
                 android:id="@+id/tokenTxt"
                 tools:text="00 TKS"
-                android:visibility="gone"
+                android:visibility="invisible"
                 android:layout_marginLeft="@dimen/_10sdp"
                 android:textSize="@dimen/_12sdp"
                 android:textColor="@color/gray_text"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_10sdp"
                 app:appfont="montserrat_light.ttf"
                 android:textAlignment="textStart"
                 android:layout_height="wrap_content"/>

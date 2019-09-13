@@ -81,10 +81,9 @@ class SignInActivity : BaseActivity<SignInViewModel>() {
         }
 
         signBttn.setOnClickListener {
-            android_id = Secure.getString(
-                this@SignInActivity.contentResolver,
-                Secure.ANDROID_ID
-            )
+            android_id = SharedPreferencesManager.getString(AppApplication.applicationContext(),SharedPreferencesManager.FIREBASETOKEN)
+                .toString()
+
             Log.i("test Id", android_id)
 
             if (validate()) {

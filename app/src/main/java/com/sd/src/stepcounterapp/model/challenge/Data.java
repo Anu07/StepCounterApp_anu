@@ -68,7 +68,7 @@ public class Data{
   @SerializedName("updatedAt")
   @Expose
   private String updatedAt;
-    
+
     public String getEndDateTime() {
         return endDateTime;
     }
@@ -80,6 +80,12 @@ public class Data{
     @SerializedName("endDateTime")
     @Expose
     private String endDateTime;
+
+
+    @SerializedName("challengeType")
+    @Expose
+    private String challengeType;
+
   public void setImage(String image){
    this.image=image;
   }

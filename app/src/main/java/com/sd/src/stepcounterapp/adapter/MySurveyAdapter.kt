@@ -27,8 +27,8 @@ class MySurveyAdapter(mContext: Context?, mData: MySurveyResponse) :
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-       holder.textView.text = mData.data[position].survey.toString()
-       holder.textShort.text = mData.data[position].survey.toString()
+       holder.textView.text = mData.data[0].survey[position].name.capitalize()
+       holder.textShort.text = "Earned Tokens: "+mData.data[0].survey[position].earningToken.toString().capitalize()
        /* holder.imageView.setOnClickListener {
             mListener!!.onItemClick(position, item)
         }*/
@@ -66,7 +66,7 @@ class MySurveyAdapter(mContext: Context?, mData: MySurveyResponse) :
 
     override fun getItemCount(): Int {
 
-        return mData.data.size
+        return mData.data[0].survey.size
     }
 
 

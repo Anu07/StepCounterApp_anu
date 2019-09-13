@@ -110,7 +110,7 @@
         <com.sd.src.stepcounterapp.utils.CustomTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Total Participants"
+                android:text="Reward Tokens: "
                 android:ellipsize="end"
                 android:textColor="@color/gray_text"
                 android:maxLines="1"
@@ -118,7 +118,36 @@
                 app:appfont="montserrat_regular.ttf"/>
 
         <com.sd.src.stepcounterapp.utils.CustomTextView
-                android:id="@+id/txtParticipants"
+                android:id="@+id/rewardTokens"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:text="22"
+                android:ellipsize="end"
+                android:textColor="@color/colorBlack"
+                android:maxLines="1"
+                android:textSize="@dimen/_12ssp"
+                app:appfont="montserrat_semibold.ttf"/>
+    </LinearLayout>
+
+
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_marginBottom="@dimen/_5sdp"
+                  android:orientation="horizontal">
+
+        <com.sd.src.stepcounterapp.utils.CustomTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Target Steps: "
+                android:ellipsize="end"
+                android:textColor="@color/gray_text"
+                android:maxLines="1"
+                android:textSize="@dimen/_12ssp"
+                app:appfont="montserrat_regular.ttf"/>
+
+        <com.sd.src.stepcounterapp.utils.CustomTextView
+                android:id="@+id/txtSteps"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_5sdp"

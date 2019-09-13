@@ -1,5 +1,6 @@
 package com.fitpolo.support.task;
 
+import android.widget.Toast;
 import com.fitpolo.support.MokoSupport;
 import com.fitpolo.support.callback.MokoOrderTaskCallback;
 import com.fitpolo.support.entity.OrderEnum;
@@ -72,7 +73,11 @@ public abstract class OrderTask {
             if (orderStatus != OrderTask.ORDER_STATUS_SUCCESS) {
                 if (timeoutPreTask()) {
                     MokoSupport.getInstance().pollTask();
-                    callback.onOrderTimeout(response);
+                    try {
+                        callback.onOrderTimeout(response);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     MokoSupport.getInstance().executeTask(callback);
                 }
             }

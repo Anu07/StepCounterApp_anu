@@ -2,8 +2,6 @@ package com.sd.src.stepcounterapp.activities
 
 import android.content.Context
 import android.view.View
-import android.widget.AdapterView
-import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
@@ -20,14 +18,26 @@ import com.sd.src.stepcounterapp.model.leaderboard.LeaderBoardRequest
 import com.sd.src.stepcounterapp.network.RetrofitClient
 import com.sd.src.stepcounterapp.utils.ItemClickGlobalListner
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
+import com.sd.src.stepcounterapp.utils.SpinnerInteractionListener
 import com.sd.src.stepcounterapp.viewModels.BaseViewModelFactory
 import com.sd.src.stepcounterapp.viewModels.LeaderboardViewModel
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_leaderboard.*
 import kotlinx.android.synthetic.main.crosstitlebar.*
+import kotlinx.android.synthetic.main.fragment_wallet.*
 
 
-class LeaderboardActivity : BaseActivity<LeaderboardViewModel>(), ItemClickGlobalListner {
+class LeaderboardActivity : BaseActivity<LeaderboardViewModel>(), ItemClickGlobalListner,
+    SpinnerInteractionListener.ClickSpinnerItem {
+    override fun onSpinSelected(pos: Int) {
+        mViewModel!!.getLeaderboard(
+            LeaderBoardRequest(
+                pos.toString(),
+                SharedPreferencesManager.getUserId(AppApplication.applicationContext())
+            )
+        )
+    }
+
     override fun onSlideItemClick(position: Int) {
 
     }
@@ -36,22 +46,29 @@ class LeaderboardActivity : BaseActivity<LeaderboardViewModel>(), ItemClickGloba
 
     }
 
+    private var mainList: ArrayList<Data>? = ArrayList()
     private var mChallengeDataList: ArrayList<Data> = ArrayList()
     private lateinit var mLeaderAdapter: LeaderboardAdapter
     override val layoutId: Int
         get() = R.layout.activity_leaderboard
+
     override val viewModel: LeaderboardViewModel
-        get() = ViewModelProviders.of(
-            this,
+        get() = ViewModelProviders.of(this,
             BaseViewModelFactory { LeaderboardViewModel(application) }).get(LeaderboardViewModel::class.java)
+
     override val context: Context
         get() = this@LeaderboardActivity
-
+    private var userIsInteracting: Boolean = false
+    lateinit var adapter: ArrayAdapter<String>
 
     override fun onCreate() {
         setLeaderboardAdapter()
-
-        if(intent.hasExtra(INTENT_PARAM)){
+        var leaderselection: Spinner = findViewById(R.id.leaderselection)
+        adapter = ArrayAdapter(this, R.layout.spinner_item, addEntriesToDropDown())
+        leaderselection.adapter = adapter
+        if (intent.hasExtra(INTENT_PARAM)) {
+            leaderselection.setSelection(1)
+            ag_steps_msg.visibility = View.GONE
             showPopupProgressSpinner(true)
             mViewModel!!.getLeaderboard(
                 LeaderBoardRequest(
@@ -59,11 +76,13 @@ class LeaderboardActivity : BaseActivity<LeaderboardViewModel>(), ItemClickGloba
                     SharedPreferencesManager.getUserId(AppApplication.applicationContext())
                 )
             )
-        }else{
+        } else {
+            leaderselection.setSelection(0)
+            ag_steps_msg.visibility = View.VISIBLE
             showPopupProgressSpinner(true)
             mViewModel!!.getLeaderboard(
                 LeaderBoardRequest(
-                    getSelectedItem(),
+                    "0",
                     SharedPreferencesManager.getUserId(AppApplication.applicationContext())
                 )
             )
@@ -72,40 +91,65 @@ class LeaderboardActivity : BaseActivity<LeaderboardViewModel>(), ItemClickGloba
         mViewModel!!.getLeaderboardResponse().observe(this, Observer { mData ->
             showPopupProgressSpinner(false)
             if (mData != null) {
-                if(mData.data!= null && mData.data[0].name!=null){
-                    firstLayout.visibility= View.VISIBLE
-                    Picasso.get().load(RetrofitClient.IMG_URL+mData.data[0].image).error(R.drawable.nouser).into(firstImg)
+                if (mData.data != null && mData.data[0].name != null) {
+                    if(mData.data.size>3){
+                        rvleaderboard.visibility = View.VISIBLE
+                    }else{
+                        rvleaderboard.visibility = View.GONE
+                    }
+                    mainList = mData.data as ArrayList<Data>?
+                    firstLayout.visibility = View.VISIBLE
+                    Picasso.get().load(RetrofitClient.IMG_URL + mData.data[0].image).error(R.drawable.nouser).placeholder(R.drawable.nouser)
+                        .into(firstImg)
                     firstName.text = mData.data[0].name
                     firstSteps.text = mData.data[0].steps.toString()
+                    if (mData.data.size >= 2) {
+                        if (mData.data.size >= 3) {
+                            ThirdPosition.visibility = View.VISIBLE
+                            thirdName.text = mData.data[2].name
+                            thirdSteps.text = mData.data[2].steps.toString()
+                        } else {
+                            ThirdPosition.visibility = View.VISIBLE
+                            thirdName.text = "NA"
+                            thirdSteps.text = "0 steps"
+                        }
 
-                    if (mData.data.size > 2) {
+
                         secondPosition.visibility = View.VISIBLE
                         secName.text = mData.data[1].name
                         secSteps.text = mData.data[1].steps.toString()
                     }
 
-                    if (mData.data.size > 3) {
-                        ThirdPosition.visibility = View.VISIBLE
-                        thirdName.text = mData.data[2].name
-                        thirdSteps.text = mData.data[2].steps.toString()
+                    if (mainList!!.size > 2) {
+                        if(mainList!!.size>4){
+                            mChallengeDataList = ArrayList(mainList?.subList(3, mainList!!.lastIndex))
+                        }else if(mainList!!.size>3){
+                            mChallengeDataList.add(mainList!![3])
+                        }
+                        mLeaderAdapter.swap(mChallengeDataList)
                     }
 
-                    mChallengeDataList = mData.data as ArrayList<Data>
-                    setLeaderboardAdapter()
-                }else{
-                    Toast.makeText(this@LeaderboardActivity,"No records found", Toast.LENGTH_LONG).show()
+                } else {
+                    Toast.makeText(this@LeaderboardActivity, "No records found", Toast.LENGTH_LONG).show()
+                    mLeaderAdapter.swap(ArrayList())
+                    firstImg.setImageResource(R.drawable.nouser)
+                    firstName.text ="NA"
+                    firstSteps.text ="0 steps"
+                    secondPosition.visibility = View.INVISIBLE
+                    ThirdPosition.visibility = View.INVISIBLE
                 }
 
             }
 
 
-            var leaderselection = findViewById<Spinner>(R.id.leaderselection)
-            val adapter = ArrayAdapter<String>(this, R.layout.spinner_item, addEntriesToDropDown())
-            leaderselection.adapter = adapter
-
         })
 
 
+    }
+
+    override fun onUserInteraction() {
+        super.onUserInteraction()
+        userIsInteracting = true
     }
 
 
@@ -118,34 +162,15 @@ class LeaderboardActivity : BaseActivity<LeaderboardViewModel>(), ItemClickGloba
 
         titleTxt.visibility = View.VISIBLE
         txt_title.visibility = View.GONE
-        /* drop_downImg.setOnClickListener {
-             leaderselection.performClick()
-         }*/
-
-        leaderselection.onItemSelectedListener = object : OnItemSelectedListener {
-            override fun onItemSelected(parentView: AdapterView<*>, selectedItemView: View?, position: Int, id: Long) {
-                mViewModel!!.getLeaderboard(
-                    LeaderBoardRequest(
-                        position.toString(),
-                        SharedPreferencesManager.getUserId(AppApplication.applicationContext())
-                    )
-                )
-            }
-
-            override fun onNothingSelected(parentView: AdapterView<*>) {
-                // your code here
-            }
-
-        }
-
+        val listener = SpinnerInteractionListener(this)
+        leaderselection.setOnTouchListener(listener)
+        leaderselection.onItemSelectedListener = listener
 
         img_back.setOnClickListener {
             onBackPressed()
         }
-    }
 
-    private fun getSelectedItem(): String? {
-        return if(leaderselection.selectedItemPosition == 0) "general" else "challenge"
+
     }
 
 
@@ -153,6 +178,7 @@ class LeaderboardActivity : BaseActivity<LeaderboardViewModel>(), ItemClickGloba
         rvleaderboard.layoutManager = LinearLayoutManager(SurveysFragment.mContext)
         mLeaderAdapter = LeaderboardAdapter(SurveysFragment.mContext, mChallengeDataList, this)
         rvleaderboard.adapter = mLeaderAdapter
+
     }
 
 }

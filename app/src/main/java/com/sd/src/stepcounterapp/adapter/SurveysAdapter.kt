@@ -8,6 +8,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.sd.src.stepcounterapp.R
+import com.sd.src.stepcounterapp.changeDateFormat
 import com.sd.src.stepcounterapp.model.survey.Datum
 import com.sd.src.stepcounterapp.utils.ItemClickGlobalListner
 
@@ -33,7 +34,7 @@ class SurveysAdapter(
         holder.textView.text = item!!.name.capitalize()
         holder.textQues.text = item!!.questions.size.toString().capitalize()
         holder.textEarnToken.text = item!!.earningToken.toString().capitalize()
-        var date = item!!.expireOn.split("T")[0]
+        var date = changeDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", "dd MMM, yyyy", item!!.expireOn)
         holder.textSurvey.text = date
         if (item!!.answered) {
             holder.textStart.setBackgroundResource(R.drawable.gray_fill_circle)
@@ -42,11 +43,8 @@ class SurveysAdapter(
         }
 
         holder.textStart.setOnClickListener {
-            if (!item!!.answered) {
                 mListener.onItemClick(position)
-            } else {
-                Toast.makeText(mContext, "You have already taken this survey", Toast.LENGTH_LONG).show()
-            }
+
         }
     }
 

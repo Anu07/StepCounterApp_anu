@@ -47,7 +47,7 @@
                         android:layout_marginLeft="@dimen/_10sdp"
                         android:layout_marginRight="@dimen/_10sdp"
                         android:layout_marginTop="@dimen/_220sdp"
-                        android:layout_height="match_parent"/>
+                        android:layout_height="400dp"/>
 
                 <FrameLayout android:layout_width="match_parent"
                              android:layout_height="wrap_content">
@@ -94,7 +94,7 @@
                                       android:layout_height="@dimen/_115sdp">
                             <LinearLayout android:layout_width="0dp"
                                           android:id="@+id/secondPosition"
-                                          android:visibility="gone"
+                                          android:visibility="invisible"
                                           android:layout_weight="1"
                                           android:gravity="center_vertical|center_horizontal"
                                           android:orientation="vertical"
@@ -114,6 +114,7 @@
                                         tools:text="Abeer Bader"
                                         android:id="@+id/secName"
                                         android:textSize="@dimen/_10ssp"
+                                        android:gravity="center"
                                         android:layout_marginLeft="@dimen/_5sdp"
                                         android:layout_marginRight="@dimen/_5sdp"
                                         android:layout_marginTop="@dimen/_5sdp"
@@ -130,7 +131,7 @@
                             </LinearLayout>
                             <LinearLayout android:layout_width="0dp"
                                           android:layout_weight="1"
-                                          android:visibility="gone"
+                                          android:visibility="invisible"
                                           android:id="@+id/firstLayout"
                                           android:gravity="center_vertical|center_horizontal"
                                           android:orientation="vertical"
@@ -139,26 +140,27 @@
                                         android:id="@+id/firstImg"
                                         app:civ_border_width="@dimen/_2sdp"
                                         app:civ_border_color="@color/green_txt"
-                                        android:layout_width="100dp"
+                                        android:layout_width="80dp"
                                         android:textColor="@color/white"
                                         android:textSize="@dimen/_15ssp"
                                         android:background="@drawable/circle_bg_trans"
-                                        android:layout_height="100dp"/>
+                                        android:layout_height="80dp"/>
                                 <com.sd.src.stepcounterapp.utils.CustomTextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        tools:text="Ahmed Saleh"
+                                        android:text="Ahmed Saleh"
                                         android:textSize="@dimen/_13ssp"
                                         android:layout_marginLeft="@dimen/_5sdp"
                                         android:layout_marginRight="@dimen/_5sdp"
                                         android:layout_marginTop="@dimen/_5sdp"
                                         android:textColor="@color/white"
+                                        android:gravity="center"
                                         android:id="@+id/firstName"
                                         app:appfont="montserrat_regular.ttf"/>
                                 <com.sd.src.stepcounterapp.utils.CustomTextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        tools:text="11800 Steps"
+                                        android:text="11800 Steps"
                                         android:id="@+id/firstSteps"
                                         android:textSize="@dimen/_11ssp"
                                         android:textColor="@color/white"
@@ -169,7 +171,7 @@
                                     android:layout_weight="1"
                                     android:layout_marginTop="@dimen/_5sdp"
                                     android:id="@+id/ThirdPosition"
-                                    android:visibility="gone"
+                                    android:visibility="invisible"
                                     android:gravity="center_vertical|center_horizontal"
                                     android:orientation="vertical"
                                     android:layout_height="match_parent">
@@ -187,6 +189,7 @@
                                         tools:text="Abeer Bader"
                                         android:id="@+id/thirdName"
                                         android:textSize="@dimen/_10ssp"
+                                        android:gravity="center"
                                         android:layout_marginLeft="@dimen/_5sdp"
                                         android:layout_marginRight="@dimen/_5sdp"
                                         android:layout_marginTop="@dimen/_5sdp"
@@ -205,6 +208,19 @@
                     </FrameLayout>
                 </FrameLayout>
             </FrameLayout>
+
+            <com.sd.src.stepcounterapp.utils.CustomTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/_15ssp"
+                     android:visibility="visible"
+                    android:id="@+id/ag_steps_msg"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:gravity="center_horizontal"
+                    android:text="Average Daily Steps"
+                    android:textColor="@color/gray_text"
+                    android:layout_gravity="bottom"
+                    app:appfont="montserrat_regular.ttf"/>
 
         </LinearLayout>
 

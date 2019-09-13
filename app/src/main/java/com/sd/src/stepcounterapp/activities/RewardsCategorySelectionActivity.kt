@@ -27,7 +27,7 @@ class RewardsCategorySelectionActivity : BaseActivity<SignInViewModel>(),
 
     override fun onItemClick(item: Data, position: Int) {
         if ( categoriesList.data[position].selectedItem && !selectedCategories!!.contains(item.name)){
-            selectedCategories!!.add(categoriesList.data[position].name)
+            selectedCategories!!.add(categoriesList.data[position]._id)
         }
 
     }

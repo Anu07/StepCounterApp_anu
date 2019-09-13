@@ -47,7 +47,7 @@ class MarketPlaceCategoryAdapter(
                 .into(holder.imgProductFirst)
             holder.txtProductNameFirst.text = mItem.products[0].name
             holder.txtShortDescFirst.text = mItem.products[0].shortDesc
-            holder.txtTokenFirst.text = mItem.products[0].token.toString()
+            holder.txtTokenFirst.text = mItem.products[0].token.toString()+" TKS"
             holder.firstParentLay.setOnClickListener {
                 clckListener.onClick(position,mItem.products[0])
             }
@@ -71,7 +71,7 @@ class MarketPlaceCategoryAdapter(
                     .into(holder.imgProductSecond)
                 holder.txtProductNameSecond.text = mItem.products[1].name
                 holder.txtShortDescSecond.text = mItem.products[1].shortDesc
-                holder.txtTokenSecond.text = mItem.products[1].token.toString()
+                holder.txtTokenSecond.text = mItem.products[1].token.toString()+" TKS"
                 Log.i("flag cat", "" + mItem.products[1].wishlist)
                 holder.cdSecond.visibility = View.VISIBLE
                 holder.txtSeeAll.visibility = View.VISIBLE

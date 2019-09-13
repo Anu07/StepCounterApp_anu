@@ -91,9 +91,26 @@ class ChallengeViewModel(application: Application) : AndroidViewModel(applicatio
                 }
 
                 override fun onResponse(call: Call<StartChallengeResponse>?, response: Response<StartChallengeResponse>?) {
-                    Toast.makeText(AppApplication.applicationContext(), response!!.message(), Toast.LENGTH_LONG)
-                        .show()
-                    mStartChallenge!!.value = response!!.body()
+                    when {
+                        response!!.code() == 200 -> {
+                            Toast.makeText(AppApplication.applicationContext(), response!!.message(), Toast.LENGTH_LONG)
+                                .show()
+                            mStartChallenge!!.value = response!!.body()
+                        }
+                        response!!.code() == 401 -> {
+                            Toast.makeText(AppApplication.applicationContext(),"There is an ongoing challenge already.", Toast.LENGTH_LONG)
+                                .show()
+                            mStartChallenge!!.value = StartChallengeResponse()
+                        }
+                        else -> {
+                            var startRespo = StartChallengeResponse()
+                            startRespo.status = 400
+                            startRespo.message = "You have already joined this challenge."
+                            mStartChallenge!!.value = startRespo
+                        }
+                    }
+
+
                 }
             })
     }

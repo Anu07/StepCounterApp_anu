@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
+import android.os.Handler
 import android.provider.Settings
 import android.text.Spannable
 import android.text.SpannableString
@@ -63,6 +64,8 @@ class HayatechFragment : BaseFragment() {
         }
     }
 
+    lateinit var updater: Runnable
+    private var updatedList: ArrayList<Activity> = ArrayList()
     private var updating: Boolean = false
     //    internal lateinit var callback: MarketPlaceFragment.FragmentClick
 //
@@ -75,6 +78,7 @@ class HayatechFragment : BaseFragment() {
     var optionArray = arrayListOf<OptionsModel>()
     var android_id: String? = null
     var xAxis: XAxis? = null
+    private var mWeekListFormater = arrayOfNulls<String>(7)
     private var mMonthListFormater = arrayOfNulls<String>(31)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -105,6 +109,7 @@ class HayatechFragment : BaseFragment() {
         mViewModel.getDashResponse().observe(this,
             Observer<DashboardResponse> { mDashResponse ->
                 showPopupProgressSpinner(false)
+
                 mDataList = mDashResponse.data
                 if (!updating || MokoSupport.getInstance().isConnDevice(
                         mContext, SharedPreferencesManager.getString(
@@ -115,19 +120,33 @@ class HayatechFragment : BaseFragment() {
                 ) {
                     steps.text = mDashResponse.data.totalUserSteps.toString()
                     totalstepsCount.text = mDashResponse.data.todayToken.toString()
-                    totl_dist.text = String.format("%.2f", mDashResponse.data.totalUserDistance)
+                    totl_dist.text = mDashResponse.data.totalUserDistance.toString()
                     totl_dist_suffix.text = "Km"
                 }
+                WalletFragment.instance.setUpdatedSteps(mDashResponse.data.totalUserSteps.toString())
                 Log.i("total", "steps" + mDashResponse.data.totalUserSteps.toString())
-
-                circular_progress.setProgress(mDashResponse.data.todayToken.toDouble(), 10.00)
+                if(mDashResponse.data.closestToken.toString() != "0"){
+                    wishListCloseLayout.visibility = View.VISIBLE
+                    wishlistTxt.text =
+                        "You are only " + mDashResponse.data.closestToken + " Tokens away from an item on your wish list! Keep walking!"
+                }else{
+                    wishListCloseLayout.visibility= View.GONE
+                }
+                               circular_progress.setProgress(mDashResponse.data.todayToken.toDouble(), 10.00)
                 company_rank_count.text = mDashResponse.data.companyRank.toString()
                 tokensVal.text = mDashResponse.data.totalUserToken.toString()
+                SharedPreferencesManager.setString(
+                    mContext, mDashResponse.data.totalUserToken.toString(),
+                    SharedPreferencesManager.EARNEDTOKENS
+                )
+
                 if (mDashResponse.data.lastUpdated != null) {
                     SharedPreferencesManager.setString(mContext, mDashResponse.data.lastUpdated, SYNCDATE)
 //                    SharedPreferencesManager.saveSyncObject(mContext,syncDataFromServer())
                 }
+
                 setBarChart("STEPS")
+
             })
 
         if (SharedPreferencesManager.hasKey(mContext, "Wearable")) {
@@ -174,7 +193,7 @@ class HayatechFragment : BaseFragment() {
 
         }
 
-        leaderboardTxt.setOnClickListener {
+        leaderDash.setOnClickListener {
             (mContext as LandingActivity).onFragmnet(5)
         }
 
@@ -198,6 +217,22 @@ class HayatechFragment : BaseFragment() {
             setBarChart("DISTANCE")
 
         }
+        spndTokens.setOnClickListener {
+            //            callback.onFragmentClick(0)
+            (mContext as LandingActivity).onFragmnet(2)
+        }
+//        startSyncTimer()
+        /* if (!MokoSupport.getInstance().isConnDevice(
+                 mContext, SharedPreferencesManager.getString(
+                     mContext,
+                     SharedPreferencesManager.WEARABLEID
+                 )
+             )
+         ) {
+ //            startSyncTimer()
+         }*/
+
+
     }
 
 
@@ -219,9 +254,22 @@ class HayatechFragment : BaseFragment() {
 
     private fun getActivityData(): ArrayList<Activity>? {
         activityList = ArrayList()
+        var newList: ArrayList<DailyStep>? = ArrayList()
+
         if (SharedPreferencesManager.hasKey(mContext, "Wearable")) {
             var list: ArrayList<DailyStep>? = SharedPreferencesManager.getSyncObject(mContext)
-            list!!.iterator().forEach {
+            if (SharedPreferencesManager.hasKey(mContext, SYNCDATE)) {
+                var lastSyncDate = SharedPreferencesManager.getString(mContext, SYNCDATE)!!.split("T")[0]
+                list?.forEachIndexed { index, _ ->
+                    if (list[index].date == lastSyncDate) {
+                        newList?.addAll(list.subList(index, list.lastIndex))
+                    }
+                }
+            } else {
+                newList=list
+            }
+
+            newList!!.iterator().forEach {
                 activityList!!.add(
                     Activity(
                         it.date,
@@ -234,7 +282,6 @@ class HayatechFragment : BaseFragment() {
             }
             Log.i("Size", "list" + activityList!!.size)
         }
-
         return activityList
     }
 
@@ -284,7 +331,7 @@ class HayatechFragment : BaseFragment() {
 
         var xAxisFormatter: DayAxisValueFormatter =
             if (txtGraphFilter.text.toString().equals(WEEKLY, ignoreCase = true)) {
-                DayAxisValueFormatter(barchart, WEEKLY)
+                DayAxisValueFormatter(barchart, WEEKLY,mWeekListFormater)
             } else {
                 DayAxisValueFormatter(barchart, MONTHLY, mMonthListFormater)
             }
@@ -297,13 +344,15 @@ class HayatechFragment : BaseFragment() {
 
 
     private fun setBarChart(format: String) {
-        var weeklyData: ArrayList<BarEntry> = addDataFromServer(format)
-        val bardataset = BarDataSet(weeklyData, "")
-        barchart.data = null
-        bardataset.color = Color.parseColor("#8DC540")
-        barchart.animateY(5000)
-        val data = BarData(bardataset)
-        barchart.data = data
+        if (mDataList!!.activity != null) {
+            var weeklyData: ArrayList<BarEntry> = addDataFromServer(format)
+            val bardataset = BarDataSet(weeklyData, "")
+            barchart.data = null
+            bardataset.color = Color.parseColor("#8DC540")
+            barchart.animateY(5000)
+            val data = BarData(bardataset)
+            barchart.data = data
+        }
     }
 
     private fun addDataFromServer(format: String): ArrayList<BarEntry> {
@@ -399,25 +448,65 @@ class HayatechFragment : BaseFragment() {
             )
             if (steps != null && totl_dist != null) {
                 steps.text = dailyStep.count.toInt().toString()
-                totl_dist.text = dailyStep.distance.toDouble().toString()
+                totl_dist.text = dailyStep.distance.toString()
                 totl_dist_suffix.text = "Km"
             }
-
-            mViewModel.syncDevice(
-                SyncRequest(
-                    getLatestActivityData(dailyStep),
-                    SharedPreferencesManager.getUserId(mContext),
-                    android_id
+            try {
+                mViewModel.syncDevice(
+                    SyncRequest(
+                        getLatestActivityData(dailyStep),
+                        SharedPreferencesManager.getUserId(mContext),
+                        android_id
+                    )
                 )
-            )
+            } catch (e: Exception) {
+                Log.e("Exception","Msg"+e.message)
+            }
         }
     }
 
 
     /**
+     * Start timer for updating graph every 3 secs
+     */
+    private fun startSyncTimer() {
+        var timerHandler = Handler()
+
+        updater = Runnable {
+            setBarChart("STEPS")
+            timerHandler.postDelayed(updater, 5000)
+        }
+        timerHandler.post(updater)
+    }
+
+
+    /*  private fun startSyncTimer() {
+          var timer = Timer()
+          timer.scheduleAtFixedRate(timerTask {
+              mViewModel.syncDevice(
+                  SyncRequest(
+                      getLatestActivityData(dailyStep),
+                      SharedPreferencesManager.getUserId(mContext),
+                      android_id
+                  )
+              )
+          }, 0L, 5000)
+
+      }*/
+
+
+    /**
      * get Latest data request array
      */
-
+    /*private fun getLatestActivityDataObject(dailyStep: DailyStep): Activity {
+        return Activity(
+            dailyStep.date,
+            dailyStep.distance.toDouble(),
+            dailyStep.duration.toInt(),
+            dailyStep.count.toInt(),
+            dailyStep.calories.toInt()
+        )
+    }*/
 
     private fun getLatestActivityData(dailyStep: DailyStep): ArrayList<Activity>? {
         var activityList: ArrayList<Activity>? = ArrayList()
@@ -432,7 +521,6 @@ class HayatechFragment : BaseFragment() {
         )
         return activityList
     }
-
 
     override fun onResume() {
         super.onResume()
@@ -469,7 +557,7 @@ class HayatechFragment : BaseFragment() {
     fun dayFromDate(date: String) {
         var sCalendar = Calendar.getInstance()
         var dayLongName = sCalendar!!.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
-        Log.e("Day","found"+dayLongName.toString())
+        Log.e("Day", "found" + dayLongName.toString())
     }
 
 }

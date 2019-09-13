@@ -4,10 +4,9 @@
               android:orientation="vertical"
               android:background="@color/colorbg"
               android:layout_width="match_parent"
-               android:layout_marginTop="?actionBarSize"
               android:layout_height="match_parent">
 
-    <!--<include layout="@layout/backtitlebar"/>-->
+    <include layout="@layout/backtitlebar"/>
 
 
     <com.sd.src.stepcounterapp.utils.CustomTextView

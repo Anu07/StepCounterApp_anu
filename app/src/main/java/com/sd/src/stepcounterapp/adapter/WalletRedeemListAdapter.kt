@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.model.wallet.walletDetailResponse.Purchased
-import com.sd.src.stepcounterapp.model.wallet.walletDetailResponse.Redeemed
 import com.sd.src.stepcounterapp.network.RetrofitClient
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_wallet_reedem_list.view.*
@@ -26,8 +25,11 @@ class WalletRedeemListAdapter(var mData: ArrayList<Purchased>) :
         holder.txtProductName.text = mData[position].name
         holder.txtShortDesc.text = mData[position].shortDesc
         holder.txtToken.text = "${mData[position].token} TKS"
-
         Picasso.get().load(RetrofitClient.IMG_URL + "" + mData[position].image).into(holder.imgProduct)
+        holder.redeemedParent.setOnClickListener {
+
+        }
+
     }
 
     override fun getItemCount(): Int {
@@ -39,5 +41,10 @@ class WalletRedeemListAdapter(var mData: ArrayList<Purchased>) :
         val txtProductName = itemView.txtProductName!!
         val txtShortDesc = itemView.txtShortDesc!!
         val txtToken = itemView.txtToken!!
+        val redeemedParent = itemView.redeemedParent!!
+    }
+
+    interface RedeemListener{
+        fun onRedeem(pos: Int)
     }
 }

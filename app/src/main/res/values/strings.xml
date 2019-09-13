@@ -176,4 +176,12 @@
     <string name="old_pass">Old Password</string>
     <string name="new_pass">New Password</string>
     <string name="confirm_pass">Confirm Password</string>
+    <string name="category">Category</string>
+    <string name="all">All</string>
+    <string name="points">Points</string>
+    <string name="available">Available</string>
+    <string name="device_is_not_connected">Device is not connected..</string>
+    <string name="new_challenge">New Challenge</string>
+    <string name="goal_achieved">Goal Achieved</string>
+    <string name="a_new_survey_available">A New Survey Available</string>
 </resources>

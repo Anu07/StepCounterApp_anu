@@ -12,10 +12,13 @@ import com.sd.src.stepcounterapp.model.marketplace.BasicSearchRequest
 import com.sd.src.stepcounterapp.model.marketplace.MarketResponse
 import com.sd.src.stepcounterapp.model.marketplace.PopularProducts
 import com.sd.src.stepcounterapp.model.redeemnow.RedeemRequest
+import com.sd.src.stepcounterapp.model.wallet.walletDetailResponse.WalletModel
 import com.sd.src.stepcounterapp.model.wishList.AddWishRequest
 import com.sd.src.stepcounterapp.model.wishList.GetWishListRequest
 import com.sd.src.stepcounterapp.model.wishList.WishListResponse
 import com.sd.src.stepcounterapp.network.RetrofitClient
+import com.sd.src.stepcounterapp.utils.LoadingDialog
+import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,6 +26,7 @@ import retrofit2.Response
 class MarketPlaceViewModel(application: Application) : AndroidViewModel(application) {
     private var mPurchaseResponse: MutableLiveData<BasicInfoResponse>?= null
     val call = RetrofitClient.instance
+    private var mWalletModel: MutableLiveData<WalletModel>? = null
 
     private var mProduct: MutableLiveData<MarketResponse>? = null
     private var mPopProduct: MutableLiveData<PopularProducts>? = null
@@ -122,6 +126,36 @@ class MarketPlaceViewModel(application: Application) : AndroidViewModel(applicat
         })
     }
 
+    fun getWalletData(): MutableLiveData<WalletModel> {
+        if (mWalletModel == null) {
+            mWalletModel = MutableLiveData()
+        }
+        return mWalletModel as MutableLiveData<WalletModel>
+    }
+
+
+    fun hitWalletApi() {
+        call!!.wallet(BasicRequest(SharedPreferencesManager.getUserId(getApplication())!!)).enqueue(object : Callback<WalletModel> {
+            override fun onFailure(call: Call<WalletModel>?, t: Throwable?) {
+                Log.v("retrofit", "call failed")
+                Toast.makeText(AppApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
+                mWalletModel!!.value = null
+                LoadingDialog.getLoader().dismissLoader()
+            }
+
+            override fun onResponse(call: Call<WalletModel>?, response: Response<WalletModel>?) {
+                if (response!!.code() == 200) {
+                    LoadingDialog.getLoader().dismissLoader()
+                    mWalletModel!!.value = response.body()!!
+                } else {
+                    var model = WalletModel()
+                    model.message = "Server error"
+                    mWalletModel!!.value = model
+                    LoadingDialog.getLoader().dismissLoader()
+                }
+            }
+        })
+    }
 
 
     fun addWishList(body:AddWishRequest) {
@@ -166,7 +200,7 @@ class MarketPlaceViewModel(application: Application) : AndroidViewModel(applicat
                 }else{
                     var binfo = BasicInfoResponse()
                     binfo.status =400
-                    binfo.message = "Insufficient tokens"
+                    binfo.message = "Unavailable"
                     mPurchaseResponse!!.value = binfo
                 }
             }

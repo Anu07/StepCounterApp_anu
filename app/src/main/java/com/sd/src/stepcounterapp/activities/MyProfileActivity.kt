@@ -8,10 +8,7 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.sd.src.stepcounterapp.R
-import com.sd.src.stepcounterapp.fragments.MyChallengeFragment
-import com.sd.src.stepcounterapp.fragments.MyRedeemedRewardsFragment
-import com.sd.src.stepcounterapp.fragments.MySurveysFragment
-import com.sd.src.stepcounterapp.fragments.ProfileFragment
+import com.sd.src.stepcounterapp.fragments.*
 import com.sd.src.stepcounterapp.network.RetrofitClient
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager.SYNCDATE
@@ -49,6 +46,8 @@ class MyProfileActivity : BaseActivity<ProfileViewModel>() {
             if (mResponse.data != null) {
                 SharedPreferencesManager.saveUpdatedUserObject(this@MyProfileActivity, mResponse.data)
                 if (mResponse.data.image.isNotEmpty()) {
+                    SharedPreferencesManager.setString(this@MyProfileActivity,RetrofitClient.IMG_URL + mResponse.data.image,"userImage")
+//                    LandingActivity.updateUserImage(RetrofitClient.IMG_URL + mResponse.data.image)
                     Picasso.get().load(RetrofitClient.IMG_URL + mResponse.data.image).placeholder(R.drawable.nouser)
                         .resize(200, 200)
                         .into(profileImg)

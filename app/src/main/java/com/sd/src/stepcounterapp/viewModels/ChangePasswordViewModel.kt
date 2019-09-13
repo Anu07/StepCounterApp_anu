@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.gson.JsonElement
 import com.sd.src.stepcounterapp.AppApplication
+import com.sd.src.stepcounterapp.model.changepwd.ChangePasswordRequest
 import com.sd.src.stepcounterapp.model.generic.BasicInfoResponse
 import com.sd.src.stepcounterapp.network.RetrofitClient
 import retrofit2.Call
@@ -24,11 +25,11 @@ class ChangePasswordViewModel : ViewModel() {
         return changePasswordResponse as MutableLiveData<BasicInfoResponse>
     }
 
-    fun changePassword(userId: String?, trim: String, trim1: String) {
-        call!!.change_password(userId!!, trim, trim1).enqueue(object :
+    fun changePassword(userId: String?, oldPwd: String, newPwd: String) {
+        call!!.change_password(ChangePasswordRequest(userId!!, oldPwd, newPwd)).enqueue(object :
             Callback<BasicInfoResponse> {
             override fun onFailure(call: Call<BasicInfoResponse>, t: Throwable) {
-                Log.v("retrofit", "call failed" + t)
+                Log.v("retrofit", "call failed$t")
                 Toast.makeText(
                     AppApplication.applicationContext(),
                     "Server error",

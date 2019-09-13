@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.adapter.SurveysQuestionsAdapter
 import com.sd.src.stepcounterapp.fragments.HayatechFragment
+import com.sd.src.stepcounterapp.fragments.MarketPlaceFragment
 import com.sd.src.stepcounterapp.fragments.SurveysFragment
 import com.sd.src.stepcounterapp.model.survey.Datum
 import com.sd.src.stepcounterapp.model.survey.Question
@@ -60,7 +61,8 @@ class SurveyDetailActivity : BaseActivity<SurveyViewModel>(), SurveysQuestionsAd
         mViewModel!!.takesurvey().observe(this, Observer { mData ->
             showPopupProgressSpinner(false)
             if (mData.status == 200) {
-                Toast.makeText(this@SurveyDetailActivity, "Survey submitted successfully", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@SurveyDetailActivity, "You have earned "+mItemData.earningToken+" tokens for completing your survey.", Toast.LENGTH_LONG).show()
+                SurveysFragment.instance.notifyData()
                 finish()
             }
         })

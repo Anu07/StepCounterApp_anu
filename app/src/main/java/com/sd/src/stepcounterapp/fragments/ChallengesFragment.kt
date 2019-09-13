@@ -21,6 +21,7 @@ import com.sd.src.stepcounterapp.activities.LeaderboardActivity
 import com.sd.src.stepcounterapp.adapter.ChallengeAdapter
 import com.sd.src.stepcounterapp.adapter.ChallengeTrendingAdapter
 import com.sd.src.stepcounterapp.adapter.SlidingFeaturedChallengeImageAdapter
+import com.sd.src.stepcounterapp.changeDateFormat
 import com.sd.src.stepcounterapp.dialog.ChallengesDialog
 import com.sd.src.stepcounterapp.dialog.StopChallengeDialog
 import com.sd.src.stepcounterapp.model.challenge.*
@@ -28,6 +29,7 @@ import com.sd.src.stepcounterapp.model.challenge.ChallengeTakenResponse.StartCha
 import com.sd.src.stepcounterapp.model.generic.BasicInfoResponse
 import com.sd.src.stepcounterapp.model.generic.BasicRequest
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
+import com.sd.src.stepcounterapp.utils.Utils
 import com.sd.src.stepcounterapp.viewModels.ChallengeViewModel
 import kotlinx.android.synthetic.main.fragment_rewardschallenges.*
 import java.util.*
@@ -171,8 +173,7 @@ class ChallengesFragment : Fragment(), ChallengeAdapter.ItemClickListener ,Slidi
             }
             if (mData!=null && mData.status == 200) {
                 mViewModel.getchallenges(BasicRequest(SharedPreferencesManager.getUserId(mContext), ""))
-            }else if(mData==null){
-
+            }else if(mData.status == 400){
                 Toast.makeText(mContext,"There is another challenge already started.",Toast.LENGTH_LONG).show()
             }
         })
@@ -186,7 +187,7 @@ class ChallengesFragment : Fragment(), ChallengeAdapter.ItemClickListener ,Slidi
                 mViewModel.getchallenges(BasicRequest(SharedPreferencesManager.getUserId(mContext), ""))
             }
         })
-        llStartChallenges.setOnClickListener {
+        stopchallengeBttn.setOnClickListener {
             stopChallengedialog= StopChallengeDialog(mContext, R.style.pullBottomfromTop, R.layout.dialog_stop_challenges,mActiveList[0],
                 object : StopChallengeDialog.StopInterface {
                     override fun onStop(data: Data) {
@@ -204,9 +205,9 @@ class ChallengesFragment : Fragment(), ChallengeAdapter.ItemClickListener ,Slidi
 
     private fun showOngoingChallenge(mActiveList: MutableList<Data>) {
         llStartChallenges.visibility = View.VISIBLE
-        ongoingchallengeName.text = mActiveList[0].name
-        ongoingChallengeDetail.text = "Duration: " + mActiveList[0].endDateTime.split("T")[0]
-        /*stopchallengeBttn.setOnClickListener {
+        ongoingchallengeName.text = mActiveList[0].name.capitalize()
+        ongoingChallengeDetail.text = "End Date: " + changeDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", "dd MMM, yyyy", mActiveList[0].endDateTime)+" | "+ Utils.getTimefromISOTime( mActiveList[0].endDateTime)
+       /* stopchallengeBttn.setOnClickListener {
             mViewModel.stopchallenges(mActiveList[0]._id)
         }*/
     }
@@ -227,7 +228,7 @@ class ChallengesFragment : Fragment(), ChallengeAdapter.ItemClickListener ,Slidi
         super.onViewCreated(view, savedInstanceState)
         rewardsViewPager = view.findViewById(R.id.rewardsViewPager)
         leaderBttn.setOnClickListener {
-            startActivity(Intent(mContext, LeaderboardActivity::class.java))
+            startActivity(Intent(mContext, LeaderboardActivity::class.java).putExtra(INTENT_PARAM,1))
         }
 
         init()

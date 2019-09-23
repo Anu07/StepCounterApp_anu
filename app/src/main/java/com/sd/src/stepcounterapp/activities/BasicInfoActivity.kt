@@ -3,12 +3,9 @@ package com.sd.src.stepcounterapp.activities
 import android.Manifest
 import android.app.Activity
 import android.app.DatePickerDialog
-import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
 import android.net.Uri
-import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.MotionEvent
@@ -24,19 +21,16 @@ import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
-import com.sd.src.stepcounterapp.AppApplication
+import com.sd.src.stepcounterapp.HayaTechApplication
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import com.sd.src.stepcounterapp.viewModels.BaseViewModelFactory
 import com.sd.src.stepcounterapp.viewModels.SignInViewModel
-import com.squareup.picasso.Picasso
 import com.theartofdev.edmodo.cropper.CropImage
 import com.wajahatkarim3.easyvalidation.core.view_ktx.nonEmpty
 import kotlinx.android.synthetic.main.activity_basic_info.*
 import kotlinx.android.synthetic.main.activity_basic_info.dobTxt
-import kotlinx.android.synthetic.main.fragment_profile.*
 import okhttp3.MediaType
-import okhttp3.MultipartBody
 import okhttp3.MultipartBody.Part
 import okhttp3.MultipartBody.Part.createFormData
 import okhttp3.RequestBody
@@ -90,7 +84,7 @@ class BasicInfoActivity : BaseActivity<SignInViewModel>(), DatePickerDialog.OnDa
                     showPopupProgressSpinner(false)
 //                    Toast.makeText(this@BasicInfoActivity, "Details saved successfully", Toast.LENGTH_LONG).show()
 
-                    if (AppApplication.hasNetwork()) {
+                    if (HayaTechApplication.hasNetwork()) {
                         // add another part within the multipart request
                         if (croppedImage != null) {
                             showPopupProgressSpinner(true)
@@ -182,7 +176,7 @@ class BasicInfoActivity : BaseActivity<SignInViewModel>(), DatePickerDialog.OnDa
 
         saveBttn.setOnClickListener {
             if (validate()) {
-                if (AppApplication.hasNetwork()) {
+                if (HayaTechApplication.hasNetwork()) {
                     showPopupProgressSpinner(true)
                     mViewModel!!.checkAvailability(
                         emailTxt.text.toString()

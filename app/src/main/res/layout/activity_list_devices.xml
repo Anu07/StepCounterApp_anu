@@ -19,14 +19,19 @@
             android:text="No device available nearby"
             android:layout_height="match_parent"/>
 
-    <ListView
+    <GridView
             android:id="@+id/lv_device"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1.0"
             android:padding="@dimen/_5sdp"
             android:divider="@android:color/transparent"
-            android:dividerHeight="5dp"
+            android:gravity="center"
+            android:columnWidth="180dp"
+            android:numColumns="2"
+            android:verticalSpacing="@dimen/_10sdp"
+            android:horizontalSpacing="@dimen/_5sdp"
+            android:stretchMode="spacingWidthUniform"
             android:layout_marginTop="@dimen/_20sdp"
             android:cacheColorHint="@android:color/transparent"/>
 

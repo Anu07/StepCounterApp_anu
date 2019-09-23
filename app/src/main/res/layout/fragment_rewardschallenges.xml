@@ -26,7 +26,7 @@
                         android:layout_width="match_parent"
                         android:orientation="vertical"
                         android:background="@color/colorbg"
-                        android:layout_height="150dp">
+                        android:layout_height="@dimen/_150sdp">
 
                     <androidx.viewpager.widget.ViewPager
                             android:id="@+id/rewardsViewPager"
@@ -58,15 +58,15 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <Button android:id="@+id/leaderBttn"
+                <com.sd.src.stepcounterapp.utils.CustomButton
+                        android:id="@+id/leaderBttn"
                         android:text="@string/leaderboard"
                         android:layout_width="match_parent"
                         android:background="@drawable/full_border_blue"
                         android:layout_gravity="bottom"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_10sdp"
-                        android:layout_marginRight="@dimen/_5sdp"
-                        android:layout_marginLeft="@dimen/_5sdp"
+                        app:appButtonfont="montserrat_regular.ttf"
                         android:layout_marginBottom="@dimen/_8sdp"
                         android:textColor="@color/blue_txt"/>
 
@@ -82,7 +82,7 @@
                     android:layout_width="match_parent"
                     android:orientation="vertical"
                     android:layout_marginTop="@dimen/_10sdp"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:layout_height="wrap_content">
 
                 <com.sd.src.stepcounterapp.utils.CustomTextView
@@ -91,8 +91,6 @@
                         android:text="ONGOING CHALLENGES"
                         android:padding="@dimen/_2sdp"
                         android:textSize="@dimen/_15ssp"
-                        android:layout_marginLeft="@dimen/_2sdp"
-                        android:layout_marginRight="@dimen/_2sdp"
                         app:appfont="montserrat_medium.ttf"
                         android:layout_height="wrap_content"/>
 
@@ -116,16 +114,24 @@
                                 android:id="@+id/ongoingchallengeName"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:ellipsize="end"
+                                android:ellipsize="marquee"
+                                android:marqueeRepeatLimit="2"
+                                android:singleLine="true"
                                 android:layout_alignParentLeft="true"
-                                android:maxLines="1"
-                                android:text="Test now "
+                                tools:text="Test now "
+                                android:ems="8"
+                                android:gravity="center_vertical"
                                 android:textColor="@color/colorBlack"
                                 android:textSize="@dimen/_18ssp"
-                                android:drawablePadding="@dimen/_10sdp"
+                                android:drawablePadding="@dimen/_2sdp"
                                 android:drawableRight="@drawable/info"
                                 app:appfont="montserrat_regular.ttf"/>
 
+                        <View android:layout_width="match_parent"
+                              android:id="@+id/view"
+                              android:layout_toRightOf="@+id/ongoingchallengeName"
+                              android:layout_toLeftOf="@+id/stopchallengeBttn"
+                              android:layout_height="match_parent"/>
 
                         <androidx.appcompat.widget.AppCompatImageView
                                 android:id="@+id/stopchallengeBttn"
@@ -143,7 +149,7 @@
                     <com.sd.src.stepcounterapp.utils.CustomTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Duration : 30 Days"
+                            tools:text="Duration : 30 Days"
                             android:ellipsize="end"
                             android:id="@+id/ongoingChallengeDetail"
                             android:layout_marginBottom="@dimen/_5sdp"
@@ -182,6 +188,7 @@
                                 tools:text="29 DAYS LEFT"
                                 android:ellipsize="end"
                                 android:maxLines="1"
+                                android:id="@+id/daysLeft"
                                 android:layout_marginStart="@dimen/_5sdp"
                                 android:layout_weight="1"
                                 android:textColor="#A8A8A8"
@@ -217,8 +224,6 @@
                         android:layout_width="match_parent"
                         android:padding="@dimen/_2sdp"
                         android:textSize="@dimen/_15ssp"
-                        android:layout_marginLeft="@dimen/_2sdp"
-                        android:layout_marginRight="@dimen/_2sdp"
                         app:appfont="montserrat_medium.ttf"
                         android:layout_height="wrap_content"/>
 
@@ -229,6 +234,8 @@
                     <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/challengesList"
                             android:layout_width="match_parent"
+                            android:orientation="horizontal"
+                            android:nestedScrollingEnabled="false"
                             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                             android:layout_height="wrap_content">
 

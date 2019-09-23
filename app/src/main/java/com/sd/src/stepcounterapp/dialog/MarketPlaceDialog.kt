@@ -15,6 +15,8 @@ import kotlinx.android.synthetic.main.dialog_challenges.challengeImg
 import kotlinx.android.synthetic.main.dialog_challenges.txtDepartment
 import kotlinx.android.synthetic.main.dialog_challenges.txtName
 import kotlinx.android.synthetic.main.dialog_marketplace.*
+import kotlinx.android.synthetic.main.vendor_view.*
+import kotlinx.android.synthetic.main.vendor_view.view.*
 
 class MarketPlaceDialog(
     context: Context,
@@ -47,10 +49,16 @@ class MarketPlaceDialog(
 
     fun setData() {
         Picasso.get().load(RetrofitClient.IMG_URL+mData.image).into(challengeImg)
-        txtName.text = mData.name
-        txtDepartment.text = mData.shortDesc
+        txtName.text = mData.name.capitalize()
+        txtDepartment.text = mData.shortDesc.capitalize()
         txtToken.text = mData.token.toString()+" TKS"
-        txtDetailLong.text = Html.fromHtml(mData.description)
+        txtDetailLong.text = Html.fromHtml(mData.description.capitalize())
+        vendorDetail.text = Html.fromHtml(mData.vendors.description)
+        Picasso.get().load(RetrofitClient.IMG_URL+mData.vendors.image).placeholder(R.drawable.placeholder).resize(150,150).into(vendorIcon)
+        vendorEmail.text = mData.vendors.email
+        vendorWeb.text = mData.vendors.websiteUrl
+        Picasso.get().load(RetrofitClient.IMG_URL+mData.vendors.image).placeholder(R.drawable.placeholder).resize(150,150).into(vendorLogo)
+
         clicked = mData.wishlist
         if(clicked){
             wishlistImg.setImageResource(R.drawable.wishlist_fill)

@@ -41,7 +41,7 @@ public class DayAxisValueFormatter extends ValueFormatter {
 			array = mMonth[(int) value];
 		}else  {
 			if(value != 28.0){
-				array = mWeeks[(int) value];
+				array = mMonth[(int) value];
 			}
 		}
 		

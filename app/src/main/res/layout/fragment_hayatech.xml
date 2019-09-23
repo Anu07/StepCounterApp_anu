@@ -23,7 +23,7 @@
 
 
                 <androidx.appcompat.widget.AppCompatSpinner
-                        android:layout_width="wrap_content"
+                        android:layout_width="100dp"
                         android:id="@+id/periodSpinner"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
@@ -331,6 +331,12 @@
                             android:layout_weight="0.9"
                             android:id="@+id/distance"
                             style="@style/textLayoutStyle"
+                            android:ellipsize="marquee"
+                             android:singleLine="true"
+                            android:marqueeRepeatLimit="3"
+                            android:scrollHorizontally="true"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
                             android:textSize="@dimen/_13ssp"
                             android:textColor="@color/gray_text"
                             app:appfont="montserrat_medium.ttf"
@@ -340,11 +346,15 @@
                 <com.github.mikephil.charting.charts.BarChart
                         android:id="@+id/barchart"
                         android:layout_width="match_parent"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:layout_marginRight="@dimen/_5sdp"
                         android:layout_height="300dp"/>
 
                 <LinearLayout
                         android:layout_width="match_parent"
                         android:orientation="horizontal"
+                        android:layout_marginRight="@dimen/_5sdp"
+                         android:layout_marginLeft="@dimen/_20sdp"
                         android:layout_height="wrap_content">
 
 

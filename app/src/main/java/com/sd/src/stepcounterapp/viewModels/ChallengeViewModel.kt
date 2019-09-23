@@ -5,9 +5,8 @@ import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.sd.src.stepcounterapp.AppApplication
+import com.sd.src.stepcounterapp.HayaTechApplication
 import com.sd.src.stepcounterapp.fragments.ChallengesFragment
-import com.sd.src.stepcounterapp.model.BaseModel
 import com.sd.src.stepcounterapp.model.challenge.ChallengeResponse
 import com.sd.src.stepcounterapp.model.challenge.ChallengeStartRequestModel
 import com.sd.src.stepcounterapp.model.challenge.ChallengeTakenResponse.StartChallengeResponse
@@ -29,26 +28,19 @@ class ChallengeViewModel(application: Application) : AndroidViewModel(applicatio
     private var mStopChallenge: MutableLiveData<BasicInfoResponse>? = null
 
     fun getChallengeObject(): MutableLiveData<ChallengeResponse> {
-        if (mChallengeProduct == null) {
             mChallengeProduct = MutableLiveData()
-        }
         return mChallengeProduct as MutableLiveData<ChallengeResponse>
     }
 
 
     fun getStartChallengeObject(): MutableLiveData<StartChallengeResponse> {
-        if (mStartChallenge == null) {
             mStartChallenge = MutableLiveData()
-        }
         return mStartChallenge as MutableLiveData<StartChallengeResponse>
     }
 
 
-
     fun getStopChallengeObject(): MutableLiveData<BasicInfoResponse> {
-        if (mStopChallenge == null) {
             mStopChallenge = MutableLiveData()
-        }
         return mStopChallenge as MutableLiveData<BasicInfoResponse>
     }
 
@@ -57,12 +49,18 @@ class ChallengeViewModel(application: Application) : AndroidViewModel(applicatio
         call!!.getChallenges(request).enqueue(object : Callback<ChallengeResponse> {
             override fun onFailure(call: Call<ChallengeResponse>?, t: Throwable?) {
                 Log.v("retrofit", "call failed")
-                Toast.makeText(AppApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
+                Toast.makeText(HayaTechApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
                 mChallengeProduct!!.value = null
             }
 
             override fun onResponse(call: Call<ChallengeResponse>?, response: Response<ChallengeResponse>?) {
-                mChallengeProduct!!.value = response!!.body()
+                if (response!!.body()!!.status == 405) {
+                    Toast.makeText(HayaTechApplication.applicationContext(), "User doesn't exist", Toast.LENGTH_LONG)
+                        .show()
+                    mChallengeProduct!!.value = ChallengeResponse()
+                } else if (response!!.body()!!.status == 200) {
+                    mChallengeProduct!!.value = response!!.body()
+                }
             }
         })
     }
@@ -72,35 +70,60 @@ class ChallengeViewModel(application: Application) : AndroidViewModel(applicatio
             .enqueue(object : Callback<BasicInfoResponse> {
                 override fun onFailure(call: Call<BasicInfoResponse>?, t: Throwable?) {
                     Log.v("retrofit", "call failed")
-                    Toast.makeText(AppApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
+                    Toast.makeText(HayaTechApplication.applicationContext(), "Some error occurred", Toast.LENGTH_LONG).show()
                 }
 
                 override fun onResponse(call: Call<BasicInfoResponse>?, response: Response<BasicInfoResponse>?) {
-                    mStopChallenge!!.value = response!!.body()
-                    getchallenges(BasicRequest(SharedPreferencesManager.getUserId(ChallengesFragment.mContext), ""))
+                    if (response!!.code() == 405) {
+                        Toast.makeText(HayaTechApplication.applicationContext(), "User doesn't exist", Toast.LENGTH_LONG)
+                            .show()
+                        HayaTechApplication.instance!!.logoutUser()
+                    } else if (response!!.body()!!.status == 200) {
+                        mStopChallenge!!.value = response!!.body()
+                        getchallenges(BasicRequest(SharedPreferencesManager.getUserId(ChallengesFragment.mContext), ""))
+                    } else if (response!!.body()!!.status == 400) {
+                        mStopChallenge!!.value = BasicInfoResponse()
+                    }
+
                 }
             })
     }
 
     fun startChallenge(data: Data) {
-        call!!.startChallenge(ChallengeStartRequestModel(data._id,data,SharedPreferencesManager.getUserId(AppApplication.applicationContext())))
+        call!!.startChallenge(
+            ChallengeStartRequestModel(
+                data._id,
+                data,
+                SharedPreferencesManager.getUserId(HayaTechApplication.applicationContext())
+            )
+        )
             .enqueue(object : Callback<StartChallengeResponse> {
                 override fun onFailure(call: Call<StartChallengeResponse>?, t: Throwable?) {
                     Log.v("retrofit", "call failed")
-                    Toast.makeText(AppApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
+                    Toast.makeText(HayaTechApplication.applicationContext(), "Some error occurred", Toast.LENGTH_LONG).show()
                 }
 
-                override fun onResponse(call: Call<StartChallengeResponse>?, response: Response<StartChallengeResponse>?) {
+                override fun onResponse(
+                    call: Call<StartChallengeResponse>?,
+                    response: Response<StartChallengeResponse>?
+                ) {
                     when {
                         response!!.code() == 200 -> {
-                            Toast.makeText(AppApplication.applicationContext(), response!!.message(), Toast.LENGTH_LONG)
-                                .show()
                             mStartChallenge!!.value = response!!.body()
                         }
                         response!!.code() == 401 -> {
-                            Toast.makeText(AppApplication.applicationContext(),"There is an ongoing challenge already.", Toast.LENGTH_LONG)
+                            Toast.makeText(
+                                HayaTechApplication.applicationContext(),
+                                "There is an ongoing challenge already.",
+                                Toast.LENGTH_LONG
+                            )
                                 .show()
                             mStartChallenge!!.value = StartChallengeResponse()
+                        }
+                        response!!.code() == 405 -> {
+                                Toast.makeText(HayaTechApplication.applicationContext(), "User doesn't exist", Toast.LENGTH_LONG)
+                                    .show()
+                                HayaTechApplication.instance!!.logoutUser()
                         }
                         else -> {
                             var startRespo = StartChallengeResponse()

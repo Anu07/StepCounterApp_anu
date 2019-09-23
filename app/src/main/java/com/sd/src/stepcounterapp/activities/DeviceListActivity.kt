@@ -6,10 +6,11 @@ import android.bluetooth.BluetoothAdapter
 import android.content.*
 import android.os.Bundle
 import android.os.IBinder
+import android.util.Log
 import android.view.View
 import android.view.Window
 import android.widget.AdapterView
-import android.widget.ListView
+import android.widget.GridView
 import android.widget.Toast
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.fitpolo.support.MokoConstants
@@ -27,7 +28,6 @@ import com.sd.src.stepcounterapp.adapter.DeviceAdapter
 import com.sd.src.stepcounterapp.service.DfuService
 import com.sd.src.stepcounterapp.service.MokoService
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
-import com.sd.src.stepcounterapp.utils.SharedPreferencesManager.SYNCDATE
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager.WEARABLEID
 import com.sd.src.stepcounterapp.utils.Utils
 import kotlinx.android.synthetic.main.scanbar.*
@@ -45,7 +45,7 @@ import java.util.*
 
 class DeviceListActivity : Basefit(), AdapterView.OnItemClickListener, MokoScanDeviceCallback {
     private var deviceWearableId: String? = null
-    internal var lvDevice: ListView? = null
+    internal var lvDevice: GridView? = null
     private var mDeviceConnectCount: Int = 0
     private var mDatas: ArrayList<BleDevice>? = null
     private var mAdapter: DeviceAdapter? = null
@@ -126,8 +126,8 @@ class DeviceListActivity : Basefit(), AdapterView.OnItemClickListener, MokoScanD
                         mDialog!!.dismiss()
                     }
                     Toast.makeText(this@DeviceListActivity, "Connect success", Toast.LENGTH_SHORT).show()
-                    updateDeviceTime()
                     getLastestSteps()
+                    updateDeviceTime()
                 }
                 if (MokoConstants.ACTION_CONN_STATUS_DISCONNECTED == intent.action) {
                     abortBroadcast()
@@ -168,14 +168,14 @@ class DeviceListActivity : Basefit(), AdapterView.OnItemClickListener, MokoScanD
                         ).show()
                     }*/
                     SharedPreferencesManager.saveSyncObject(this@DeviceListActivity, lastestSteps)
-                    gotoDeviceconnctd()
                 }
                 if (MokoConstants.ACTION_ORDER_TIMEOUT == action) {
                     Toast.makeText(this@DeviceListActivity, "Timeout", Toast.LENGTH_SHORT).show()
                 }
                 if (MokoConstants.ACTION_ORDER_FINISH == action) {
-                    Toast.makeText(this@DeviceListActivity, "Success", Toast.LENGTH_SHORT).show()
-
+//                    Toast.makeText(this@DeviceListActivity, "Success", Toast.LENGTH_SHORT).show()
+                    Log.i("steps",""+lastestSteps)
+                    gotoDeviceconnctd()
                 }
             }
         }
@@ -230,7 +230,7 @@ class DeviceListActivity : Basefit(), AdapterView.OnItemClickListener, MokoScanD
         mDatas = ArrayList()
         deviceMap = HashMap()
         mAdapter = DeviceAdapter(this)
-        mAdapter!!.setItems(mDatas)
+        mAdapter!!.items = mDatas
         lvDevice!!.adapter = mAdapter
         lvDevice!!.onItemClickListener = this
         img_scan.setOnClickListener {

@@ -32,6 +32,10 @@ class WalletWishListAdapter(var mData: ArrayList<Wishlist>, var mListener: Purch
         holder.imgDeleteWish.setOnClickListener {
             mListener.onDelete(position)
         }
+        holder.parentWishLayout.setOnClickListener {
+            mListener.onWishClick(position)
+        }
+
     }
 
     override fun getItemCount(): Int {
@@ -45,11 +49,14 @@ class WalletWishListAdapter(var mData: ArrayList<Wishlist>, var mListener: Purch
         val txtToken = itemView.txtToken!!
         val purchaseBttn = itemView.purchaseBttn!!
         val imgDeleteWish = itemView.imgDeleteWish!!
+        val parentWishLayout =itemView.parentWishLayout!!
     }
 
 
     interface PurchaseListener{
         fun onPurchaseNow(pos:Int)
         fun onDelete(pos:Int)
+        fun onWishClick(pos:Int)
+
     }
 }

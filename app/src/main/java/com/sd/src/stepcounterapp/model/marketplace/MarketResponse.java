@@ -112,6 +112,18 @@ public class MarketResponse {
         @SerializedName("_id")
         @Expose
         private String _id;
+
+        public Vendor getVendors() {
+            return vendors;
+        }
+
+        public void setVendors(Vendor vendors) {
+            this.vendors = vendors;
+        }
+
+        @SerializedName("vendors")
+        @Expose
+        private Vendor vendors;
         @SerializedName("token")
         @Expose
         private Integer token;

@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.adapter.PickerAdapter
-import com.sd.src.stepcounterapp.dialog.SelectCityDialog
+import com.sd.src.stepcounterapp.dialog.BMIResultDialog
 import com.sd.src.stepcounterapp.interfaces.InterfacesCall
 import com.sd.src.stepcounterapp.model.BasicInfoRequestObject
 import com.sd.src.stepcounterapp.model.login.Data
@@ -25,6 +25,7 @@ import com.sd.src.stepcounterapp.viewModels.BaseViewModelFactory
 import com.sd.src.stepcounterapp.viewModels.SignInViewModel
 import kotlinx.android.synthetic.main.activity_bmi_calc.*
 import travel.ithaka.android.horizontalpickerlib.PickerLayoutManager
+import java.text.DecimalFormat
 
 
 class BmiCalculatorActivity : BaseActivity<SignInViewModel>(), View.OnClickListener {
@@ -272,7 +273,7 @@ class BmiCalculatorActivity : BaseActivity<SignInViewModel>(), View.OnClickListe
                 bundle.putFloat("bmi", calcBMI(weight.toInt(), height))
 
                 val dialog =
-                    SelectCityDialog(mContext,
+                    BMIResultDialog(mContext,
                         R.style.pullBottomfromTop,
                         R.layout.dialog_bmi_result,
                         ArrayList(),
@@ -289,9 +290,9 @@ class BmiCalculatorActivity : BaseActivity<SignInViewModel>(), View.OnClickListe
                                         SharedPreferencesManager.getUpdatedUserObject(this@BmiCalculatorActivity).lastName,
                                         SharedPreferencesManager.getUpdatedUserObject(this@BmiCalculatorActivity).dob,
                                         SharedPreferencesManager.getUpdatedUserObject(this@BmiCalculatorActivity).gender,
-                                        SharedPreferencesManager.getUpdatedUserObject(this@BmiCalculatorActivity).weight,
+                                        roundOffFloat(SharedPreferencesManager.getUpdatedUserObject(this@BmiCalculatorActivity).weight.toFloat()),
                                         SharedPreferencesManager.getUpdatedUserObject(this@BmiCalculatorActivity).weightType,
-                                        SharedPreferencesManager.getUpdatedUserObject(this@BmiCalculatorActivity).height,
+                                        roundOffFloat(SharedPreferencesManager.getUpdatedUserObject(this@BmiCalculatorActivity).height.toFloat()),
                                         SharedPreferencesManager.getUpdatedUserObject(this@BmiCalculatorActivity).heightType,          //TODO
                                         calcBMI(weight.toInt(), height).toDouble(),
                                         true
@@ -306,9 +307,9 @@ class BmiCalculatorActivity : BaseActivity<SignInViewModel>(), View.OnClickListe
                                         intent.getStringExtra("lastname"),
                                         intent.getStringExtra("dob"),
                                         gender,
-                                        weight.toFloat(),
+                                        roundOffFloat( weight.toFloat()),
                                         w,
-                                        flooredheight,
+                                        roundOffFloat( flooredheight),
                                         h,
                                         calcBMI(weight.toInt(), height).toDouble(),
                                         true
@@ -461,4 +462,9 @@ class BmiCalculatorActivity : BaseActivity<SignInViewModel>(), View.OnClickListe
             super.onBackPressed()
         }
     }
+
+    fun roundOffFloat(floatVal: Float) : Float{
+        return DecimalFormat("#.##").format(floatVal).toFloat()
+    }
+
 }

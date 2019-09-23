@@ -17,7 +17,6 @@
         <ImageView android:id="@+id/categoryImage"
                    android:scaleType="fitXY"
                    android:layout_width="match_parent"
-                   android:foreground="@drawable/image_overlay"
                    android:layout_height="match_parent"/>
         <com.sd.src.stepcounterapp.utils.CustomTextView
                 android:id="@+id/catName"

@@ -20,7 +20,7 @@
             <ImageView
                     android:id="@+id/imgProduct"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_160sdp"
+                    android:layout_height="@dimen/_200sdp"
                     android:src="@drawable/female"/>
             <ImageView
                     android:id="@+id/wishBttnall"

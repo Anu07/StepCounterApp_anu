@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.sd.src.stepcounterapp.R
+import com.sd.src.stepcounterapp.changeDateFormat
 import com.sd.src.stepcounterapp.fragments.*
 import com.sd.src.stepcounterapp.network.RetrofitClient
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
@@ -17,6 +18,10 @@ import com.sd.src.stepcounterapp.viewModels.ProfileViewModel
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_my_profile.*
 import kotlinx.android.synthetic.main.black_crosstitlebar.*
+import android.text.method.TextKeyListener.clear
+import androidx.lifecycle.ViewModel
+
+
 
 class MyProfileActivity : BaseActivity<ProfileViewModel>() {
     override val layoutId: Int
@@ -35,11 +40,11 @@ class MyProfileActivity : BaseActivity<ProfileViewModel>() {
     val context: Context
         get() = this@MyProfileActivity
 
-    lateinit var fragmentTransaction: FragmentTransaction
 
     override fun onCreate() {
         lastUpdtd.text =
-            "Last updated: " + (SharedPreferencesManager.getString(this@MyProfileActivity, SYNCDATE)?.split("T")?.get(0)
+            "Last updated: " + changeDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS",
+                "dd MMM, yyyy",SharedPreferencesManager.getString(this@MyProfileActivity, SYNCDATE)
                 ?: "Not available")
         mViewModel!!.getProfileResponse().observe(this, Observer { mResponse ->
             showPopupProgressSpinner(false)
@@ -52,7 +57,7 @@ class MyProfileActivity : BaseActivity<ProfileViewModel>() {
                         .resize(200, 200)
                         .into(profileImg)
                 }
-                bmiVal.text = String.format("%.3f", mResponse.data.bmi)
+                bmiVal.text = String.format("%.2f", mResponse.data.bmi)
             }
         })
         profileFragment = ProfileFragment.newInstance(this)
@@ -60,6 +65,10 @@ class MyProfileActivity : BaseActivity<ProfileViewModel>() {
 
     override fun onResume() {
         super.onResume()
+        mViewModel!!.getProfileData()
+    }
+
+    fun updateData(){
         mViewModel!!.getProfileData()
     }
 
@@ -73,7 +82,7 @@ class MyProfileActivity : BaseActivity<ProfileViewModel>() {
             super.onBackPressed()
         }
         editView.setOnClickListener {
-          openFragment(ProfileFragment.newInstance(this))
+          openFragment(ProfileFragment())
         }
 
         lin_my_challenges.setOnClickListener {
@@ -98,12 +107,8 @@ class MyProfileActivity : BaseActivity<ProfileViewModel>() {
         transaction.add(R.id.editcontainer, fragment)
         transaction.addToBackStack(null)
         transaction.commit()
-
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        Log.i("Test", "Result")
-        this.profileFragment?.onActivityResult(requestCode, resultCode, data)
-    }
+
+
 }

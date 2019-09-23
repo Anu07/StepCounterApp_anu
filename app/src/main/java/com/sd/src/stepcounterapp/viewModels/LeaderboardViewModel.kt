@@ -5,7 +5,8 @@ import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.sd.src.stepcounterapp.AppApplication
+import com.sd.src.stepcounterapp.HayaTechApplication
+import com.sd.src.stepcounterapp.model.DeviceResponse.DashboardResponse
 import com.sd.src.stepcounterapp.model.leaderboard.LeaderBoardRequest
 import com.sd.src.stepcounterapp.model.leaderboard.LeaderBoardResponse
 import com.sd.src.stepcounterapp.network.RetrofitClient
@@ -32,16 +33,20 @@ class LeaderboardViewModel(application: Application) : AndroidViewModel(applicat
 
             override fun onFailure(call: Call<LeaderBoardResponse>?, t: Throwable?) {
                 Log.v("retrofit", "call failed")
-                Toast.makeText(AppApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
+                Toast.makeText(HayaTechApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
             }
 
             override fun onResponse(call: Call<LeaderBoardResponse>?, response: Response<LeaderBoardResponse>?) {
                if(response!!.body()!!.status == 200){
-                    if(response!!.body()!!.data.isNotEmpty()){
+                   if(response!!.body()!!.data.isNotEmpty()){
                         mLeaderboard!!.value = response!!.body()
                     }else{
                         mLeaderboard!!.value = LeaderBoardResponse()
                     }
+               }else if (response!!.code() == 405) {
+                   Toast.makeText(HayaTechApplication.applicationContext(), "User doesn't exist", Toast.LENGTH_LONG)
+                       .show()
+                   HayaTechApplication.instance!!.logoutUser()
                }
             }
         })

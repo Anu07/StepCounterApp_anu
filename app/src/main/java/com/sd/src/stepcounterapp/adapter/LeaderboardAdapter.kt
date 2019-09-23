@@ -46,17 +46,11 @@ class LeaderboardAdapter(
 
     inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
 
-        var textViewPosition: TextView
-        var textName: TextView
-        var textSteps: TextView
+        var textViewPosition: TextView = v.findViewById<View>(R.id.positionTxt) as TextView
+        var textName: TextView = v.findViewById<View>(R.id.nameLeader) as TextView
+        var textSteps: TextView = v.findViewById<View>(R.id.stepsValTxt) as TextView
 
         internal lateinit var item: Data
-
-        init {
-            textViewPosition = v.findViewById<View>(R.id.positionTxt) as TextView
-            textName = v.findViewById<View>(R.id.nameLeader) as TextView
-            textSteps = v.findViewById<View>(R.id.stepsValTxt) as TextView
-        }
 
 
     }

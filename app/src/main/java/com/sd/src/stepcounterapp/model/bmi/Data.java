@@ -11,13 +11,13 @@ public class Data {
     private String email;
     private String firstName;
     private String gender;
-    private long height;
+    private double height;
     private String heightType;
     private String image;
     private String lastName;
     private Boolean rewardFlag;
     private String username;
-    private long weight;
+    private double weight;
     private String weightType;
 
     public String get_id() {
@@ -76,13 +76,7 @@ public class Data {
         this.gender = gender;
     }
 
-    public long getHeight() {
-        return height;
-    }
 
-    public void setHeight(long height) {
-        this.height = height;
-    }
 
     public String getHeightType() {
         return heightType;
@@ -124,13 +118,7 @@ public class Data {
         this.username = username;
     }
 
-    public long getWeight() {
-        return weight;
-    }
 
-    public void setWeight(long weight) {
-        this.weight = weight;
-    }
 
     public String getWeightType() {
         return weightType;
@@ -138,5 +126,21 @@ public class Data {
 
     public void setWeightType(String weightType) {
         this.weightType = weightType;
+    }
+
+    public double getHeight() {
+        return height;
+    }
+
+    public void setHeight(double height) {
+        this.height = height;
+    }
+
+    public double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(double weight) {
+        this.weight = weight;
     }
 }

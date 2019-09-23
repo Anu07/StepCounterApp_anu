@@ -73,6 +73,7 @@
                                 android:imeOptions="actionNext"
                                 android:singleLine="true"
                                 android:maxLength="20"
+                                android:editable="false"
                                 app:appEditfont="montserrat_regular.ttf"/>
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -91,6 +92,7 @@
                                 android:imeOptions="actionNext"
                                 android:singleLine="true"
                                 android:maxLength="20"
+                                android:editable="false"
                                 android:id="@+id/lastNameEd"
                                 app:appEditfont="montserrat_regular.ttf"/>
 
@@ -273,6 +275,28 @@
                     <com.google.android.material.textfield.TextInputLayout
                             style="@style/textLayoutStyle"
                             android:layout_width="match_parent"
+                            android:visibility="visible"
+                            android:layout_height="wrap_content"
+                            android:textColorHint="@color/blue_txt">
+
+                        <com.sd.src.stepcounterapp.utils.CustomEditText
+                                android:id="@+id/emailUser"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+                                android:imeOptions="actionNext"
+                                android:singleLine="true"
+                                android:hint="Email"
+                                android:enabled="false"
+                                android:editable="false"
+                                app:appEditfont="montserrat_regular.ttf"/>
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+
+                    <com.google.android.material.textfield.TextInputLayout
+                            style="@style/textLayoutStyle"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textColorHint="@color/blue_txt">
 
@@ -289,20 +313,46 @@
 
                     </com.google.android.material.textfield.TextInputLayout>
 
+
                     <com.google.android.material.textfield.TextInputLayout
                             style="@style/textLayoutStyle"
                             android:layout_width="match_parent"
-                            android:visibility="gone"
+                            android:visibility="visible"
                             android:layout_height="wrap_content"
                             android:textColorHint="@color/blue_txt">
 
                         <com.sd.src.stepcounterapp.utils.CustomEditText
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:id="@+id/companyName"
+                                android:hint="Company Name"
                                 android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-                                android:hint="@string/edit_cname"
                                 android:imeOptions="actionNext"
                                 android:singleLine="true"
+                                android:enabled="false"
+                                android:editable="false"
+                                app:appEditfont="montserrat_regular.ttf"/>
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+
+                    <com.google.android.material.textfield.TextInputLayout
+                            style="@style/textLayoutStyle"
+                            android:layout_width="match_parent"
+                            android:visibility="visible"
+                            android:layout_height="wrap_content"
+                            android:textColorHint="@color/blue_txt">
+
+                        <com.sd.src.stepcounterapp.utils.CustomEditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/departmentName"
+                                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+                                android:imeOptions="actionNext"
+                                android:singleLine="true"
+                                android:hint="Department Name"
+                                android:enabled="false"
+                                android:editable="false"
                                 app:appEditfont="montserrat_regular.ttf"/>
 
                     </com.google.android.material.textfield.TextInputLayout>

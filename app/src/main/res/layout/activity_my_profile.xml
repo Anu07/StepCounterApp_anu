@@ -74,6 +74,7 @@
                             android:layout_height="wrap_content"
                             android:textColor="@color/gray_text"
                             android:id="@+id/lastUpdtd"
+                            app:appfont="montserrat_light.ttf"
                             android:layout_marginHorizontal="@dimen/_14ssp"
                             android:hint="Last Updated"
                     />

@@ -4,8 +4,8 @@ import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.gson.JsonElement
-import com.sd.src.stepcounterapp.AppApplication
+import com.sd.src.stepcounterapp.HayaTechApplication
+import com.sd.src.stepcounterapp.model.challenge.ChallengeResponse
 import com.sd.src.stepcounterapp.model.changepwd.ChangePasswordRequest
 import com.sd.src.stepcounterapp.model.generic.BasicInfoResponse
 import com.sd.src.stepcounterapp.network.RetrofitClient
@@ -31,14 +31,20 @@ class ChangePasswordViewModel : ViewModel() {
             override fun onFailure(call: Call<BasicInfoResponse>, t: Throwable) {
                 Log.v("retrofit", "call failed$t")
                 Toast.makeText(
-                    AppApplication.applicationContext(),
+                    HayaTechApplication.applicationContext(),
                     "Server error",
                     Toast.LENGTH_LONG
                 ).show()
             }
 
             override fun onResponse(call: Call<BasicInfoResponse>, response: Response<BasicInfoResponse>) {
-                changePasswordResponse?.value = response.body()
+                if (response!!.code() == 405) {
+                    Toast.makeText(HayaTechApplication.applicationContext(), "User doesn't exist", Toast.LENGTH_LONG)
+                        .show()
+                    HayaTechApplication.instance!!.logoutUser()
+                }else if (response!!.body()!!.status == 200) {
+                    changePasswordResponse?.value = response.body()
+                }
             }
 
         })

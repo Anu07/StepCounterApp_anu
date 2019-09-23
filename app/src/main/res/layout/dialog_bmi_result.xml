@@ -47,15 +47,18 @@
                 android:layout_margin="@dimen/_10sdp"
                 android:layout_height="wrap_content"/>
         <com.sd.src.stepcounterapp.utils.CustomTextView
-                android:id="@+id/weightVal"
+                android:id="@+id/heightVal"
                 android:layout_width="wrap_content"
+                tools:text="175cms"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_marginBottom="@dimen/_10sdp"
+                android:layout_marginLeft="@dimen/_2sdp"
                 android:layout_marginRight="@dimen/_5sdp"
                 android:textSize="@dimen/_14sdp"
                 android:textColor="#323232"
                 app:appfont="montserrat_regular.ttf"
                 android:layout_height="wrap_content"/>
+
         <com.sd.src.stepcounterapp.utils.CustomTextView
                 android:id="@+id/heightTitle"
                 android:layout_width="wrap_content"
@@ -67,17 +70,18 @@
                 android:layout_marginBottom="@dimen/_10sdp"
                 android:layout_marginRight="@dimen/_3sdp"
                 android:layout_height="wrap_content"/>
+
         <com.sd.src.stepcounterapp.utils.CustomTextView
-                android:id="@+id/heightVal"
+                android:id="@+id/weightVal"
                 android:layout_width="wrap_content"
-                tools:text="175cms"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_marginBottom="@dimen/_10sdp"
-                android:layout_marginLeft="@dimen/_3sdp"
-                android:layout_marginRight="@dimen/_3sdp" android:textSize="@dimen/_14sdp"
+                android:layout_marginRight="@dimen/_5sdp"
+                android:textSize="@dimen/_14sdp"
                 android:textColor="#323232"
                 app:appfont="montserrat_regular.ttf"
                 android:layout_height="wrap_content"/>
+
 
     </LinearLayout>
 

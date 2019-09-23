@@ -20,8 +20,9 @@ public class AppConstants {
     public static final String EXTRA_CONN_COUNT = "extra_conn_count";
     public static final String EXTRA_USER_DATA = "extra_user_data";
     public static final String SIGN_COMPLETED = "signUpCompleted";
-    
-    
+    public static final String INTENT_FROMAPP = "inApplication";
+    public static final String INTENT_NOTIFICATION = "NotificationData";
+
     public static final int PERMISSION_REQUEST_CODE = 1;
 
 

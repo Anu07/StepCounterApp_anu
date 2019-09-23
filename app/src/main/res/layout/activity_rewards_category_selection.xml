@@ -57,6 +57,7 @@
                 app:layout_constraintStart_toStartOf="parent"/>
         <ScrollView
                 android:layout_width="match_parent"
+                android:fillViewport="true"
                 android:layout_height="match_parent">
             <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -68,7 +69,7 @@
                         android:layout_width="match_parent"
                         android:layout_marginBottom="@dimen/_15sdp"
                         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                        android:layout_height="wrap_content">
+                        android:layout_height="500dp">
 
                 </androidx.recyclerview.widget.RecyclerView>
 
@@ -80,8 +81,8 @@
                         android:textColor="@color/white"
                         android:textSize="@dimen/_15sdp"
                         android:textAllCaps="true"
-                        android:layout_marginTop="@dimen/_15sdp"
-                        android:layout_marginBottom="@dimen/_15sdp"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:layout_marginBottom="@dimen/_10sdp"
                         app:layout_constraintTop_toBottomOf="@+id/rewardsCategory"
                         android:background="@drawable/button_background"
                         app:layout_constraintBottom_toBottomOf="parent"

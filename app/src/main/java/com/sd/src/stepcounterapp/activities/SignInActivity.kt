@@ -3,21 +3,26 @@ package com.sd.src.stepcounterapp.activities
 import android.app.ActivityOptions
 import android.content.Context
 import android.content.Intent
-import android.provider.Settings.Secure
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.sd.src.stepcounterapp.AppApplication
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.iid.FirebaseInstanceId
+import com.sd.src.stepcounterapp.HayaTechApplication
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.model.login.LoginResponseJ
 import com.sd.src.stepcounterapp.model.loginrequest.LoginRequestObject
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
+import com.sd.src.stepcounterapp.utils.SharedPreferencesManager.FIREBASETOKEN
 import com.sd.src.stepcounterapp.viewModels.BaseViewModelFactory
 import com.sd.src.stepcounterapp.viewModels.SignInViewModel
 import com.wajahatkarim3.easyvalidation.core.view_ktx.nonEmpty
 import com.wajahatkarim3.easyvalidation.core.view_ktx.validEmail
+import kotlinx.android.synthetic.main.activity_forgot_password.*
 import kotlinx.android.synthetic.main.activity_signin.*
+import kotlinx.android.synthetic.main.activity_signin.emailTxt
+import kotlinx.android.synthetic.main.activity_signin.forgotTextView
 
 
 class SignInActivity : BaseActivity<SignInViewModel>() {
@@ -32,7 +37,24 @@ class SignInActivity : BaseActivity<SignInViewModel>() {
         get() = this@SignInActivity
 
     override fun onCreate() {
+        FirebaseInstanceId.getInstance().instanceId
+            .addOnCompleteListener(OnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    Log.w(HayaTechApplication.TAG, "getInstanceId failed", task.exception)
+                    return@OnCompleteListener
+                }
 
+                // Get new Instance ID token
+                val token = task.result?.token
+                Log.e("Token",""+token)
+                // Log and toast
+//                val msg = getString(R.string.msg_token_fmt, token)
+                Log.d(HayaTechApplication.TAG, token)
+                if (token != null) {
+                    SharedPreferencesManager.setString(HayaTechApplication.applicationContext(),token, FIREBASETOKEN)
+                }
+//                Toast.makeText(baseContext, token, Toast.LENGTH_SHORT).show()
+            })
         mViewModel!!.getUser().observe(this,
             Observer<LoginResponseJ> { loginUser ->
                 showPopupProgressSpinner(false)
@@ -81,17 +103,13 @@ class SignInActivity : BaseActivity<SignInViewModel>() {
         }
 
         signBttn.setOnClickListener {
-            android_id = SharedPreferencesManager.getString(AppApplication.applicationContext(),SharedPreferencesManager.FIREBASETOKEN)
-                .toString()
-
-            Log.i("test Id", android_id)
-
             if (validate()) {
-                if (AppApplication.hasNetwork()) {
+                if (HayaTechApplication.hasNetwork()) {
+                    Log.d("FCMToken", "token "+ FirebaseInstanceId.getInstance().token)
                     showPopupProgressSpinner(true)
                     mViewModel!!.setLoginData(
                         LoginRequestObject(
-                            android_id,
+                            SharedPreferencesManager.getString(this@SignInActivity,FIREBASETOKEN)!!,
                             "Android",
                             emailTxt.text.toString(),
                             pwdTxt.text.toString()
@@ -105,8 +123,13 @@ class SignInActivity : BaseActivity<SignInViewModel>() {
     }
 
     private fun validate(): Boolean {
-        if (!emailTxt.nonEmpty() || !emailTxt.text.toString().validEmail()) {
-            Toast.makeText(this@SignInActivity, resources.getString(R.string.email_error), Toast.LENGTH_LONG).show()
+        if (!emailTxt.nonEmpty() ) {
+            Toast.makeText(this@SignInActivity, resources.getString(R.string.email_empty), Toast.LENGTH_LONG)
+                .show()
+            return false
+        }else if(!emailTxt.text.toString().validEmail()){
+            Toast.makeText(this@SignInActivity, resources.getString(R.string.email_error), Toast.LENGTH_LONG)
+                .show()
             return false
         } else if (!pwdTxt.nonEmpty()) {
             Toast.makeText(this@SignInActivity, resources.getString(R.string.pwd_error), Toast.LENGTH_LONG).show()

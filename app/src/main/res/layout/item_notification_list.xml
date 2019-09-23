@@ -9,6 +9,7 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:padding="@dimen/_10sdp"
+            android:id="@+id/parentNotification"
             android:layout_height="match_parent">
 
         <com.mikhaellopez.circularimageview.CircularImageView
@@ -20,7 +21,7 @@
         <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:padding="@dimen/_10sdp"
+                android:padding="@dimen/_8sdp"
                 android:layout_gravity="center_vertical"
                 android:gravity="center_vertical"
                 android:layout_height="match_parent">
@@ -40,7 +41,7 @@
                     android:layout_width="match_parent"
                     android:id="@+id/notificationdate"
                     android:text="Today, 08:40pm"
-                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
                     android:textColor="@color/gray_text"
                     android:layout_height="wrap_content"/>
         </LinearLayout>

@@ -6,48 +6,30 @@
               android:layout_height="match_parent">
 
     <ScrollView android:layout_width="match_parent"
+                android:fillViewport="true"
                 android:layout_height="match_parent">
 
-        <LinearLayout android:layout_width="match_parent"
-                      android:layout_height="match_parent"
-                      android:orientation="vertical">
-            <!--<androidx.constraintlayout.widget.ConstraintLayout-->
-            <!--android:orientation="vertical"-->
-            <!--android:id="@+id/nodataview"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:visibility="visible"-->
-            <!--android:layout_gravity="center"-->
-            <!--android:layout_height="match_parent">-->
-
-
-            <!--<com.sd.src.stepcounterapp.utils.CustomTextView-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:text="No records available"-->
-            <!--android:textColor="@color/gray_text"-->
-            <!--android:textSize="@dimen/_15ssp"-->
-            <!--android:id="@+id/noRecordTxt"-->
-            <!--android:layout_gravity="center"-->
-            <!--app:layout_constraintLeft_toLeftOf="parent"-->
-            <!--app:layout_constraintRight_toRightOf="parent"-->
-            <!--app:layout_constraintTop_toTopOf="parent"-->
-            <!--app:layout_constraintBottom_toBottomOf="parent"-->
-            <!--android:gravity="center"-->
-            <!--android:layout_height="match_parent"/>-->
-            <!--</androidx.constraintlayout.widget.ConstraintLayout>-->
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
 
             <FrameLayout android:layout_width="match_parent"
+                         android:id="@+id/leaderboardList"
                          android:layout_height="match_parent">
 
+                    <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rvleaderboard"
+                            android:layout_width="match_parent"
+                            android:layout_gravity="bottom"
+                            android:background="@drawable/white_round_corners_full"
+                            android:layout_marginTop="@dimen/_220sdp"
+                            android:layout_marginLeft="@dimen/_10sdp"
+                            android:layout_marginRight="@dimen/_10sdp"
+                            android:layout_marginBottom="?actionBarSize"
+                            android:layout_height="match_parent"/>
 
-                <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rvleaderboard"
-                        android:layout_width="match_parent"
-                        android:layout_gravity="bottom"
-                        android:layout_marginLeft="@dimen/_10sdp"
-                        android:layout_marginRight="@dimen/_10sdp"
-                        android:layout_marginTop="@dimen/_220sdp"
-                        android:layout_height="400dp"/>
 
                 <FrameLayout android:layout_width="match_parent"
                              android:layout_height="wrap_content">
@@ -66,16 +48,16 @@
 
                         <FrameLayout android:layout_width="match_parent"
                                      android:layout_height="wrap_content">
-                            <Spinner android:layout_width="match_parent"
+                            <androidx.appcompat.widget.AppCompatSpinner android:layout_width="match_parent"
                                      android:id="@+id/leaderselection"
-                                     android:background="@drawable/full_round_border_white"
+                                     android:background="@drawable/white_round_corners_full"
                                      android:dropDownSelector="@drawable/ic_arrow_drop_down"
                                      android:paddingLeft="@dimen/_5sdp"
                                      android:layout_marginRight="@dimen/_10sdp"
                                      android:layout_marginLeft="@dimen/_10sdp"
                                      android:spinnerMode="dropdown"
                                      android:layout_height="@dimen/_30sdp">
-                            </Spinner>
+                            </androidx.appcompat.widget.AppCompatSpinner>
                             <ImageView
                                     android:layout_width="@dimen/_10sdp"
                                     android:layout_height="match_parent"
@@ -207,23 +189,25 @@
                         </LinearLayout>
                     </FrameLayout>
                 </FrameLayout>
+
+                <com.sd.src.stepcounterapp.utils.CustomTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/_12ssp"
+                        android:visibility="visible"
+                        android:id="@+id/ag_steps_msg"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:layout_marginBottom="@dimen/_20sdp"
+                        android:gravity="center_horizontal"
+                        android:text="Average Daily Steps"
+                        android:textColor="@color/gray_text"
+                        android:layout_gravity="bottom"
+                        app:appfont="montserrat_regular.ttf"/>
+
             </FrameLayout>
 
-            <com.sd.src.stepcounterapp.utils.CustomTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/_15ssp"
-                     android:visibility="visible"
-                    android:id="@+id/ag_steps_msg"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:gravity="center_horizontal"
-                    android:text="Average Daily Steps"
-                    android:textColor="@color/gray_text"
-                    android:layout_gravity="bottom"
-                    app:appfont="montserrat_regular.ttf"/>
 
-        </LinearLayout>
-
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
 

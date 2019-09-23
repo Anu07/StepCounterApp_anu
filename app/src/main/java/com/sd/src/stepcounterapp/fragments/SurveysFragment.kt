@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager.widget.ViewPager
 import com.sd.src.stepcounterapp.R
+import com.sd.src.stepcounterapp.activities.LandingActivity
 import com.sd.src.stepcounterapp.activities.SurveyDetailActivity
 import com.sd.src.stepcounterapp.adapter.SlidingImageAdapter
 import com.sd.src.stepcounterapp.adapter.SurveysAdapter
@@ -71,15 +72,14 @@ class SurveysFragment : BaseFragment(), ItemClickGlobalListner {
 
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         mViewModel = ViewModelProviders.of(activity!!).get(SurveyViewModel::class.java)
         mViewModel.getSurveyList().observe(this,
             Observer<SurveyResponse> { mData ->
                 showPopupProgressSpinner(false)
-                if (mData != null) {
+                if (mData != null && (mData.data!= null)) {
                     if (mData.data!!.size > 0) {
-                        this.mData.addAll(mData.data)
                         rvSurveys.visibility = View.VISIBLE
                         norec.visibility = View.GONE
                         surveyArray = mData.data as ArrayList<Datum>?
@@ -91,6 +91,7 @@ class SurveysFragment : BaseFragment(), ItemClickGlobalListner {
                                 (mData.featured as ArrayList<Datum>?)!!,
                                 this
                             )
+                            spring_dots_indicator.setViewPager(rewardsViewPager)
                         }
                     }
                 } else {
@@ -103,11 +104,8 @@ class SurveysFragment : BaseFragment(), ItemClickGlobalListner {
         mViewModel.hitSurveyListApi()
 
         setSurveyAdapter()
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         init()
+        (mContext as LandingActivity).showDisconnection(false)
     }
 
 

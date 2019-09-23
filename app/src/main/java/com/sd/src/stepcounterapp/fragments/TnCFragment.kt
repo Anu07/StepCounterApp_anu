@@ -9,7 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.sd.src.stepcounterapp.AppApplication
+import com.sd.src.stepcounterapp.HayaTechApplication
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.activities.LandingActivity
 import com.sd.src.stepcounterapp.model.privacy.PrivacyResponse
@@ -47,7 +47,7 @@ class TnCFragment : BaseFragment() {
             Callback<PrivacyResponse> {
             override fun onFailure(call: Call<PrivacyResponse>?, t: Throwable?) {
                 Log.v("retrofit", "call failed")
-                Toast.makeText(AppApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
+                Toast.makeText(HayaTechApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
             }
 
             override fun onResponse(call: Call<PrivacyResponse>?, response: Response<PrivacyResponse>?) {

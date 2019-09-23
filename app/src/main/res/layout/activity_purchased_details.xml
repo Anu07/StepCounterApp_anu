@@ -5,7 +5,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/ultragrey"
+        android:background="@color/white"
         tools:context=".activities.PurchasedDetails">
 
     <LinearLayout
@@ -36,7 +36,7 @@
                     android:id="@+id/txtCodValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="123456"/>
+                    tools:text="123456"/>
 
         </LinearLayout>
 
@@ -122,7 +122,7 @@
             app:layout_constraintTop_toBottomOf="@+id/viewDoted"/>
 
     <TextView
-            android:id="@+id/textView1"
+            android:id="@+id/addressDetails"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"

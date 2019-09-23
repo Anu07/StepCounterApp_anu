@@ -9,7 +9,8 @@ import android.os.Build
 import android.util.Log
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.sd.src.stepcounterapp.AppApplication.Companion.TAG
+import com.sd.src.stepcounterapp.HayaTechApplication
+import com.sd.src.stepcounterapp.HayaTechApplication.Companion.TAG
 import com.sd.src.stepcounterapp.R
 import org.json.JSONException
 import org.json.JSONObject
@@ -32,8 +33,8 @@ class MyFirebaseMessageService : FirebaseMessagingService() {
 
         try {
             Log.e("data", jsonObject.toString())
-            body = jsonObject.getString("message")
-            title = jsonObject.getString("Title")
+            body = jsonObject.getString("body")
+            title = jsonObject.getString("title")
             Log.e("body", body)
             Log.e("title", title)
         } catch (e: JSONException) {
@@ -43,6 +44,8 @@ class MyFirebaseMessageService : FirebaseMessagingService() {
             Log.e("body>>>", body + "")
         }
 
+        HayaTechApplication.notificationTitle=title
+        Log.e("body title test>>>", HayaTechApplication.notificationTitle + "")
 
         showNotification(title,body)
         // Check if message contains a notification payload.
@@ -54,7 +57,7 @@ class MyFirebaseMessageService : FirebaseMessagingService() {
         // message, here is where that should be initiated. See sendNotification method below.
     }
 
-    private fun showNotification(title: String, body: String) {
+    private fun showNotification(title: String?, body: String?) {
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val channelId = "hayatech_channel_id"
         val channelName = "Hayatech Channel"
@@ -69,6 +72,7 @@ class MyFirebaseMessageService : FirebaseMessagingService() {
             notificationChannel.vibrationPattern = longArrayOf(100, 200, 300, 400, 500, 400, 300, 200, 400)
             notificationManager.createNotificationChannel(notificationChannel)
         }
+        HayaTechApplication.notificationTitle= title.toString()
         val notification = Notification.Builder(this)
             .setContentTitle(title)
             .setContentText(body)

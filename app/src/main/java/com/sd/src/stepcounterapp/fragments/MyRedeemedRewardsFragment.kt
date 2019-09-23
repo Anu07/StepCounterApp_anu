@@ -64,7 +64,12 @@ class MyRedeemedRewardsFragment : BaseFragment() {
         mProfileViewModel.getMyRedeemedResponse().observe(this, androidx.lifecycle.Observer { mData ->
         //  showPopupProgressSpinner(true)
             if (mData.status == 200) {
-                setAdapter(mData)
+                if(mData.data.isEmpty()){
+                    noDataTxt.visibility = View.VISIBLE
+                }else{
+                    noDataTxt.visibility = View.GONE
+                    setAdapter(mData)
+                }
 
             }
         })

@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -13,28 +14,68 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.activities.LandingActivity
 import com.sd.src.stepcounterapp.activities.PurchasedDetails
 import com.sd.src.stepcounterapp.adapter.WalletRedeemListAdapter
 import com.sd.src.stepcounterapp.adapter.WalletWishListAdapter
 import com.sd.src.stepcounterapp.changeDateFormat
+import com.sd.src.stepcounterapp.convertToLocal
+import com.sd.src.stepcounterapp.dialog.WishListDialog
 import com.sd.src.stepcounterapp.model.generic.BasicInfoResponse
 import com.sd.src.stepcounterapp.model.redeemnow.RedeemRequest
 import com.sd.src.stepcounterapp.model.wallet.TokenModel
+import com.sd.src.stepcounterapp.model.wallet.purchase.PurchaseResponse
 import com.sd.src.stepcounterapp.model.wallet.walletDetailResponse.Purchased
 import com.sd.src.stepcounterapp.model.wallet.walletDetailResponse.WalletModel
 import com.sd.src.stepcounterapp.model.wallet.walletDetailResponse.Wishlist
+import com.sd.src.stepcounterapp.model.wishList.AddWishRequest
 import com.sd.src.stepcounterapp.network.RetrofitClient
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager.WISHCOUNT
-import com.sd.src.stepcounterapp.utils.Utils
 import com.sd.src.stepcounterapp.viewModels.WalletViewModel
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.activity_my_profile.*
 import kotlinx.android.synthetic.main.fragment_wallet.*
 
 class WalletFragment : BaseFragment(), WalletWishListAdapter.PurchaseListener, WalletRedeemListAdapter.RedeemListener {
+    override fun onWishClick(pos: Int) {
+        marketDialog =
+            WishListDialog(mContext, mDataWishList[pos], R.style.pullBottomfromTop, R.layout.dialog_marketplace,
+                object : WishListDialog.WishListInterface {
+                    override fun onWishlist(data: Wishlist) {
+                        showPopupProgressSpinner(true)
+                        mViewModel.removeWishList(
+                            AddWishRequest(
+                                SharedPreferencesManager.getUserId(context!!),
+                                data._id
+                            )
+                        )
+                    }
+
+                    override fun onPurchase(data: Wishlist) {
+                        if (data != null) {
+                            showPopupProgressSpinner(true)
+                            mViewModel.hitPurchaseApi(
+                                RedeemRequest(
+                                    data._id, SharedPreferencesManager.getUserId(
+                                        MarketPlaceFragment.mContext
+                                    )
+                                )
+                            )
+                        } else {
+                            Toast.makeText(
+                                MarketPlaceFragment.mContext,
+                                "This product has been out of stock, please try another product.",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+
+                    }
+                })
+        marketDialog!!.show()
+    }
+
     override fun onRedeem(position: Int) {
         startActivity(Intent(mContext, PurchasedDetails::class.java).putExtra(DEALDATA, mDataReedemList[position]))
     }
@@ -50,7 +91,7 @@ class WalletFragment : BaseFragment(), WalletWishListAdapter.PurchaseListener, W
     }
 
     override fun onPurchaseNow(pos: Int) {
-        if(mDataWishList[pos].quantity>0){
+        if (mDataWishList[pos].quantity > 0) {
             showPopupProgressSpinner(true)
             mViewModel.hitPurchaseApi(
                 RedeemRequest(
@@ -58,8 +99,12 @@ class WalletFragment : BaseFragment(), WalletWishListAdapter.PurchaseListener, W
                     SharedPreferencesManager.getUserId(mContext)
                 )
             )
-        }else{
-            Toast.makeText(MarketPlaceFragment.mContext,  "This product has been out of stock, please try another product.", Toast.LENGTH_LONG).show()
+        } else {
+            Toast.makeText(
+                MarketPlaceFragment.mContext,
+                "This product has been out of stock, please try another product.",
+                Toast.LENGTH_LONG
+            ).show()
         }
     }
 
@@ -81,6 +126,7 @@ class WalletFragment : BaseFragment(), WalletWishListAdapter.PurchaseListener, W
 
     }
 
+    lateinit var marketDialog: WishListDialog
     lateinit var mWishListAdapter: WalletWishListAdapter
     lateinit var mRedeemListAdapter: WalletRedeemListAdapter
     private var mDataWishList: ArrayList<Wishlist> = ArrayList()
@@ -91,19 +137,28 @@ class WalletFragment : BaseFragment(), WalletWishListAdapter.PurchaseListener, W
     }
 
 
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-        Log.i("test","attch")
-        try {
-            mViewModel.hitWalletApi()
-        } catch (e: Exception) {
-        }
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mViewModel = ViewModelProviders.of(activity!!).get(WalletViewModel::class.java)
 
+       mViewModel.removeWishList().observe(this,
+            Observer<BasicInfoResponse> {
+                showPopupProgressSpinner(false)
+                try {
+                    if (marketDialog != null && marketDialog.isShowing) {
+                        marketDialog.dismiss()
+                    }
+                    if (marketDialog != null && marketDialog.isShowing) {
+                        marketDialog.dismiss()
+                    }
+                } catch (e: Exception) {
+                }
+                if (it != null) {
+                    if (it.status == 200) {
+                        mViewModel.hitWalletApi()
+                    }
+                }
+            })
 
 //        {"status":200,"message":"Success","data":{"totalEarnings":27,"remainingSteps":104,"lastUpdated":"2019-09-05T09:34:23.420Z"}}
         mViewModel.getStepToken().observe(this,
@@ -115,8 +170,12 @@ class WalletFragment : BaseFragment(), WalletWishListAdapter.PurchaseListener, W
                 if (mData.data != null) {
                     txtTokens.text = mData.data!!.totalEarnings.toString()
                     txtSteps.text = mData.data!!.remainingSteps.toString()
-                    if(mData.data!!.lastUpdated!=null){
-                        txtUpdateTime.text = changeDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", "dd MMM, yyyy", mData.data!!.lastUpdated)+Utils.getTimefromISOTime(mData.data!!.lastUpdated)
+                    if (mData.data!!.lastUpdated != null) {
+                        txtUpdateTime.text = changeDateFormat(
+                            "yyyy-MM-dd'T'HH:mm:ss.SSS",
+                            "dd MMM, yyyy",
+                            mData.data!!.lastUpdated
+                        ) + convertToLocal(mData.data!!.lastUpdated)
                     }
                     mViewModel.hitWalletApi()
                 } else {
@@ -126,13 +185,23 @@ class WalletFragment : BaseFragment(), WalletWishListAdapter.PurchaseListener, W
 
         mViewModel.getDeleteResponse().observe(this,
             Observer<BasicInfoResponse> { mData ->
-                showPopupProgressSpinner(false)
+                try {
+                    showPopupProgressSpinner(false)
+                } catch (e: Exception) {
+                }
                 Toast.makeText(mContext, mData.message, Toast.LENGTH_LONG).show()
                 mViewModel.hitWalletApi()
             })
 
         mViewModel.getPurchase().observe(this,
-            Observer<BasicInfoResponse> { mData ->
+            Observer<PurchaseResponse> { mData ->
+                try {
+                    if (marketDialog != null) {
+                        marketDialog.dismiss()
+                    }
+                } catch (e: Exception) {
+                    Log.e("trace",e.message)
+                }
                 showPopupProgressSpinner(false)
                 if (mData != null) {
                     if (mData.status == 200) {
@@ -146,23 +215,34 @@ class WalletFragment : BaseFragment(), WalletWishListAdapter.PurchaseListener, W
 
         mViewModel.getWalletData().observe(this,
             Observer<WalletModel> { mData ->
-                if (mData != null || mData?.data != null) {
+                if (mData != null && mData?.data != null) {
                     txtTokens.text = mData?.data.totalGenerated.toString()
                     txtSteps.text = mData.data?.steps.toString()
                     tokensVal.text = mData.data?.totalEarnings.toString()
-                    if(mData.data!!.updatedAt!=null){
+                    if (mData.data!!.updatedAt != null) {
 //                        txtUpdateTime.text = Utils.formateDateFromstring("yyyy-MM-dd", "dd MMM, yyyy",mData.data!!.updatedAt.split("T")[0])
-                        txtUpdateTime.text = changeDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", "dd MMM, yyyy", mData.data!!.updatedAt) +" | "+Utils.getTimefromISOTime(mData.data!!.updatedAt)
+                        txtUpdateTime.text = changeDateFormat(
+                            "yyyy-MM-dd'T'HH:mm:ss.SSS",
+                            "dd MMM, yyyy",
+                            mData.data!!.updatedAt
+                        ) + " | " + convertToLocal(mData.data!!.updatedAt)
                     }
                     if (mData.data!!.wishlist != null && mData.data?.wishlist!!.size > 0) {
                         mDataWishList = (mData.data?.wishlist as ArrayList<Wishlist>?)!!
                         SharedPreferencesManager.setInt(mContext, WISHCOUNT, mDataWishList.size)
                         setWishListView()
                         setWishListAdapter()
-                        if(txtWishSeeAll.text.toString().equals("See Less",true)){
-                            txtWishSeeAll.performClick()
+                        if (txtWishSeeAll.text.toString().equals("See Less", true)) {
+                            txtWishSeeAll.text = "See Less"
+                            rvWishList.visibility = View.VISIBLE
+                            llWishListSeeLess.visibility = View.GONE
+
+                        } else {
+                            txtWishSeeAll.text = "See All"
+                            rvWishList.visibility = View.GONE
+                            llWishListSeeLess.visibility = View.VISIBLE
                         }
-                        llWishListSeeLess.visibility = View.VISIBLE
+//                        llWishListSeeLess.visibility = View.VISIBLE
                         txtWishSeeAll.visibility = View.VISIBLE
                         txtNoWishList.visibility = View.GONE
 
@@ -253,6 +333,32 @@ class WalletFragment : BaseFragment(), WalletWishListAdapter.PurchaseListener, W
             mViewModel.setTokensFromSteps()
         }
 
+        imgProductFirst.setOnClickListener {
+            onWishClick(0)
+        }
+
+        imgProductSecond.setOnClickListener {
+            onWishClick(1)
+        }
+
+        wishListinfo.setOnTouchListener { v, event ->
+            if (event.action == MotionEvent.ACTION_DOWN) {
+                if (event.x >= (wishListinfo.right - wishListinfo.compoundDrawables[2].bounds.width())) {
+                    Snackbar.make(wishListinfo,"Wishlist products would be displayed.",Snackbar.LENGTH_SHORT)
+                }
+            }
+            false
+        }
+        purchasedInfo.setOnTouchListener { v, event ->
+            if (event.action == MotionEvent.ACTION_DOWN) {
+                if (event.x >= (wishListinfo.right - wishListinfo.compoundDrawables[2].bounds.width())) {
+                    Snackbar.make(wishListinfo,"Purchased products would be displayed.",Snackbar.LENGTH_SHORT)
+                }
+            }
+            false
+        }
+
+        (mContext as LandingActivity).showDisconnection(false)
     }
 
 
@@ -264,52 +370,57 @@ class WalletFragment : BaseFragment(), WalletWishListAdapter.PurchaseListener, W
 
     private fun setWishListView() {
 //        if (mDataWishList.size in 1..2) {
-        if (mDataWishList.size==1) {
-            cdWishFirst.visibility = View.VISIBLE
-            rvWishList.visibility = View.GONE
-            txtWishSeeAll.visibility = View.GONE
-            txtProductNameFirst.text = mDataWishList[0].name
-            txtShortDescFirst.text = mDataWishList[0].shortDesc
-            txtTokenFirst.text = "${mDataWishList[0].token} TKS"
-            Picasso.get().load(RetrofitClient.IMG_URL + "" + mDataWishList[0].image).resize(200,200).into(imgProductFirst)
-            purchaseFirst.setOnClickListener {
-                showPopupProgressSpinner(true)
-                mViewModel.hitPurchaseApi(
-                    RedeemRequest(
-                        mDataWishList[0]._id.toString(),
-                        SharedPreferencesManager.getUserId(mContext)
-                    )
-                )
-            }
 
-            if (mDataWishList.size > 1) {
-                cdWishSecond.visibility = View.VISIBLE
-                txtProductNameSecond.text = mDataWishList[1].name
-                txtShortDescSecond.text = mDataWishList[1].shortDesc
-                txtTokenSecond.text = "${mDataWishList[1].token} TKS"
-                Picasso.get().load(RetrofitClient.IMG_URL + "" + mDataWishList[1].image).resize(200,200).into(imgProductSecond)
-                purchaseSecond.setOnClickListener {
+
+        if (mDataWishList.isNotEmpty()) {
+            if (mDataWishList.size >= 1) {
+                cdWishFirst.visibility = View.VISIBLE
+                rvWishList.visibility = View.GONE
+                txtWishSeeAll.visibility = View.GONE
+                txtProductNameFirst.text = mDataWishList[0].name
+                txtShortDescFirst.text = mDataWishList[0].shortDesc
+                txtTokenFirst.text = "${mDataWishList[0].token} TKS"
+                Picasso.get().load(RetrofitClient.IMG_URL + "" + mDataWishList[0].image).resize(200, 200)
+                    .into(imgProductFirst)
+                purchaseFirst.setOnClickListener {
                     showPopupProgressSpinner(true)
                     mViewModel.hitPurchaseApi(
                         RedeemRequest(
-                            mDataWishList[1]._id.toString(),
+                            mDataWishList[0]._id.toString(),
                             SharedPreferencesManager.getUserId(mContext)
                         )
                     )
                 }
-            } else {
-                cdWishSecond.visibility = View.GONE
-            }
-            /*  } else {
+
+                if (mDataWishList.size >= 2) {
+                    cdWishSecond.visibility = View.VISIBLE
+                    txtProductNameSecond.text = mDataWishList[1].name
+                    txtShortDescSecond.text = mDataWishList[1].shortDesc
+                    txtTokenSecond.text = "${mDataWishList[1].token} TKS"
+                    Picasso.get().load(RetrofitClient.IMG_URL + "" + mDataWishList[1].image).resize(200, 200)
+                        .into(imgProductSecond)
+                    purchaseSecond.setOnClickListener {
+                        showPopupProgressSpinner(true)
+                        mViewModel.hitPurchaseApi(
+                            RedeemRequest(
+                                mDataWishList[1]._id.toString(),
+                                SharedPreferencesManager.getUserId(mContext)
+                            )
+                        )
+                    }
+                } else {
+                    cdWishSecond.visibility = View.GONE
+                }
+                /*  } else {
                   cdWishSecond.visibility = View.GONE
                   cdWishFirst.visibility = View.GONE
                   rvWishList.visibility = View.VISIBLE
               }*/
 
-        }else{
-            rvWishList.visibility = View.VISIBLE
+            }/* else {
+                rvWishList.visibility = View.VISIBLE
+            }*/
         }
-
     }
 
     private fun setReedemListAdapter() {
@@ -323,7 +434,8 @@ class WalletFragment : BaseFragment(), WalletWishListAdapter.PurchaseListener, W
             txtProductNameRedeemFirst.text = mDataReedemList[0].name
             txtShortDescRedeemFirst.text = mDataReedemList[0].shortDesc
             txtTokenRedeemFirst.text = "${mDataReedemList[0].token} TKS"
-            Picasso.get().load(RetrofitClient.IMG_URL + "" + mDataReedemList[0].image).resize(200,200).placeholder(R.drawable.placeholder).into(imgProductRedeemFirst)
+            Picasso.get().load(RetrofitClient.IMG_URL + "" + mDataReedemList[0].image).resize(200, 200)
+                .placeholder(R.drawable.placeholder).into(imgProductRedeemFirst)
             firsLayout.setOnClickListener {
                 onRedeem(0)
             }
@@ -335,7 +447,8 @@ class WalletFragment : BaseFragment(), WalletWishListAdapter.PurchaseListener, W
                 txtProductNameRedeemSecond.text = mDataReedemList[1].name
                 txtShortDescRedeemSecond.text = mDataReedemList[1].shortDesc
                 txtTokenRedeemSecond.text = "${mDataReedemList[1].token} TKS"
-                Picasso.get().load(RetrofitClient.IMG_URL + "" + mDataReedemList[1].image).resize(200,200).placeholder(R.drawable.placeholder).into(imgProductRedeemSecond)
+                Picasso.get().load(RetrofitClient.IMG_URL + "" + mDataReedemList[1].image).resize(200, 200)
+                    .placeholder(R.drawable.placeholder).into(imgProductRedeemSecond)
                 secondLayout.setOnClickListener {
                     onRedeem(1)
                 }
@@ -359,7 +472,7 @@ class WalletFragment : BaseFragment(), WalletWishListAdapter.PurchaseListener, W
     }
 
     fun setUpdatedSteps(steps: String) {
-        Log.i("test","Doe")
+        Log.i("test", "Doe")
         if (txtSteps != null)
             txtSteps.text = steps
     }

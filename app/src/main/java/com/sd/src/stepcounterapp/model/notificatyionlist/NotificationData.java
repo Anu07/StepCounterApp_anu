@@ -2,16 +2,34 @@
 package com.sd.src.stepcounterapp.model.notificatyionlist;
 
 @SuppressWarnings("unused")
-public class Data {
+public class NotificationData {
 
     private long _V;
     private String _id;
     private String createdAt;
-    private Boolean isRead;
-    private String message;
+
+    public Boolean getReadStatus() {
+        return readStatus;
+    }
+
+    public void setReadStatus(Boolean readStatus) {
+        this.readStatus = readStatus;
+    }
+
+    private Boolean readStatus;
     private Object readAt;
     private String subject;
     private String userId;
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    private String message;
 
     public long get_V() {
         return _V;
@@ -37,21 +55,6 @@ public class Data {
         this.createdAt = createdAt;
     }
 
-    public Boolean getRead() {
-        return isRead;
-    }
-
-    public void setRead(Boolean read) {
-        isRead = read;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
 
     public Object getReadAt() {
         return readAt;

@@ -5,7 +5,7 @@ package com.sd.src.stepcounterapp.model.bmi;
 @SuppressWarnings("unused")
 public class BMIinfoResponse {
 
-    private com.sd.src.stepcounterapp.model.bmi.Data data;
+    private Data data;
     private String message;
     private int status;
 

@@ -1,6 +1,6 @@
 package com.sd.src.stepcounterapp.network
 
-import com.sd.src.stepcounterapp.AppApplication
+import com.sd.src.stepcounterapp.HayaTechApplication
 import okhttp3.Cache
 import okhttp3.CacheControl
 import okhttp3.Interceptor
@@ -69,7 +69,7 @@ object RetrofitClient {
         var cache: Cache? = null
         try {
             cache = Cache(
-                File(AppApplication.instance!!.cacheDir, "http-cache"),
+                File(HayaTechApplication.instance!!.cacheDir, "http-cache"),
                 (10 * 1024 * 1024).toLong()
             ) // 10 MB
         } catch (ignored: Exception) {
@@ -99,7 +99,7 @@ object RetrofitClient {
         return Interceptor { chain ->
             var request = chain.request()
 
-            if (AppApplication.hasNetwork()) {
+            if (HayaTechApplication.hasNetwork()) {
                 val cacheControl = CacheControl.Builder()
                     .maxStale(7, TimeUnit.DAYS)
                     .build()

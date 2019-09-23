@@ -28,12 +28,12 @@ class ForgotPasswordActivity : BaseActivity<SignInViewModel>() {
     override fun onCreate() {
         mViewModel!!.getBasicResponse().observe(this,
             Observer<BasicInfoResponse> { mBase ->
+                showPopupProgressSpinner(false)
                 if(mBase.status==200){
                     Toast.makeText(this@ForgotPasswordActivity,mBase.message,Toast.LENGTH_LONG).show()
                 }else{
                     Toast.makeText(this@ForgotPasswordActivity,"No Email Record found",Toast.LENGTH_LONG).show()
                 }
-                showPopupProgressSpinner(false)
             })
     }
 
@@ -55,7 +55,11 @@ class ForgotPasswordActivity : BaseActivity<SignInViewModel>() {
 
     private fun validate(): Boolean {
         var emailStr: String = emailTxt.text.toString()
-        if (!emailTxt.nonEmpty() || !emailStr.validEmail()) {
+        if (!emailTxt.nonEmpty() ) {
+            Toast.makeText(this@ForgotPasswordActivity, resources.getString(R.string.email_empty), Toast.LENGTH_LONG)
+                .show()
+            return false
+        }else if(!emailStr.validEmail()){
             Toast.makeText(this@ForgotPasswordActivity, resources.getString(R.string.email_error), Toast.LENGTH_LONG)
                 .show()
             return false

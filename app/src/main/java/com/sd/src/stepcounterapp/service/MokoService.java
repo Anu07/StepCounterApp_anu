@@ -16,7 +16,6 @@ import com.fitpolo.support.callback.MokoOrderTaskCallback;
 import com.fitpolo.support.entity.OrderTaskResponse;
 import com.fitpolo.support.handler.BaseMessageHandler;
 import com.fitpolo.support.log.LogModule;
-import com.sd.src.stepcounterapp.AppApplication;
 import com.sd.src.stepcounterapp.AppConstants;
 
 /**

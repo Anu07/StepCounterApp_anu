@@ -23,7 +23,7 @@ import kotlinx.android.synthetic.main.dialog_options.*
 import java.util.*
 
 
-class SelectCityDialog(
+class BMIResultDialog(
     context: Context,
     themeResId: Int,
     private val LayoutId: Int,

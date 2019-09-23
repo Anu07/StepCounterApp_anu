@@ -43,6 +43,7 @@ class DeviceSynchronizingActivity : BaseActivity<BaseViewModel>() {
         val intent = Intent(mContext, DeviceListActivity::class.java)
 //                    val options = ActivityOptions.makeSceneTransitionAnimation(this@SignInActivity)
         startActivity(intent)
+        finish()
     }
 
 

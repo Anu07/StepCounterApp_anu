@@ -27,6 +27,7 @@ import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
+import com.sd.src.stepcounterapp.HayaTechApplication
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.activities.MyProfileActivity
 import com.sd.src.stepcounterapp.model.profile.Data
@@ -35,6 +36,7 @@ import com.sd.src.stepcounterapp.network.RetrofitClient
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import com.sd.src.stepcounterapp.viewModels.ProfileViewModel
 import com.sd.src.stepcounterapp.viewModels.SignInViewModel
+import com.sd.src.stepcounterapp.viewModels.UpProfileViewModel
 import com.squareup.picasso.Picasso
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE
@@ -65,7 +67,9 @@ class ProfileFragment : BaseFragment(), View.OnClickListener {
                 chooseImage()
             }
             R.id.img_back -> {
-                    fragmentManager!!.popBackStackImmediate()
+                fragmentManager!!.popBackStack()
+//                fragmentManager!!.executePendingTransactions()
+
             }
             R.id.saveinfoBttn -> {
                 if (validateInputs()) {
@@ -139,7 +143,7 @@ class ProfileFragment : BaseFragment(), View.OnClickListener {
         var w = if (isWtButtonClicked) "Kgs" else "Lbs"
         var h = if (isHtButtonClicked) "Cms" else "Feet"
         showPopupProgressSpinner(true)
-        mProfileViewModel.updateProfileData(
+        mUpProfileViewModel.updateProfileData(
             UpdateProfileRequest(
                 firstNameEd.text.toString(),
                 lastNameEd.text.toString(),
@@ -188,7 +192,7 @@ class ProfileFragment : BaseFragment(), View.OnClickListener {
 
     private lateinit var croppedImage: File
     private val file: File? = null
-    private lateinit var mProfileViewModel: ProfileViewModel
+    private lateinit var mUpProfileViewModel: UpProfileViewModel
     private var mCalendar = Calendar.getInstance()
     var selectedImage: Uri? = null
     private lateinit var fileName: String
@@ -200,7 +204,6 @@ class ProfileFragment : BaseFragment(), View.OnClickListener {
     private val REQUEST_GALLERY_IMAGE: Int = 111
     private val REQUEST_IMAGE_CAPTURE: Int = 112
     private val REQUEST_CROP_IMAGE: Int = 113
-    private lateinit var mViewModel: SignInViewModel
     var isWtButtonClicked: Boolean = false
     var isHtButtonClicked: Boolean = false
 
@@ -226,12 +229,14 @@ class ProfileFragment : BaseFragment(), View.OnClickListener {
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mViewModel = ViewModelProviders.of(activity!!).get(SignInViewModel::class.java)
-        mProfileViewModel = ViewModelProviders.of(activity!!).get(ProfileViewModel::class.java)
+        mUpProfileViewModel = ViewModelProviders.of(this!!).get(UpProfileViewModel::class.java)
         userData = SharedPreferencesManager.getUpdatedUserObject(mContext)
         Picasso.get().load(RetrofitClient.IMG_URL + userData?.image).placeholder(R.drawable.nouser).into(img_nav_header)
-        firstNameEd.setText(userData!!.firstName.toString())
-        lastNameEd.setText(userData!!.lastName.toString())
+        firstNameEd.setText(userData!!.firstName.toString().capitalize())
+        lastNameEd.setText(userData!!.lastName.toString().capitalize())
+        companyName.setText(userData!!.company.toString().capitalize())
+        departmentName.setText(userData!!.department.toString().capitalize())
+        emailUser.setText(userData!!.email.toString())
         if (SharedPreferencesManager.getUpdatedUserObject(mContext).gender.equals("Male", true)) {
             isGenderClicked = false
             selectGender(maleBttn)
@@ -288,19 +293,28 @@ class ProfileFragment : BaseFragment(), View.OnClickListener {
                 return false
             }
         })
-        mViewModel.getImageResponse()
+        mUpProfileViewModel.getImageResponse()
             .observe(this, androidx.lifecycle.Observer { mImg ->
-                showPopupProgressSpinner(false)
+                try {
+                    showPopupProgressSpinner(false)
+                } catch (e: Exception) {
+                }
             })
 
-        mProfileViewModel.getUpdateProfileResponse().observe(this, androidx.lifecycle.Observer { mData ->
-            showPopupProgressSpinner(false)
+        mUpProfileViewModel.getUpdateProfileResponse().observe(this, androidx.lifecycle.Observer { mData ->
+            try {
+                showPopupProgressSpinner(false)
+            } catch (e: Exception) {
+            }
             if (mData.status == 200) {
-                Toast.makeText(activity, "Profile updated successfully", Toast.LENGTH_LONG).show()
-                fragmentManager!!.popBackStackImmediate()
+                Toast.makeText(activity, "Profile updated successfully", Toast.LENGTH_SHORT).show()
+                (mContext as MyProfileActivity).updateData()
+//                fragmentManager!!.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                fragmentManager!!.popBackStack()
+
+//                fragmentManager!!.executePendingTransactions()
             }
         })
-
     }
 
 
@@ -477,7 +491,7 @@ class ProfileFragment : BaseFragment(), View.OnClickListener {
                 SharedPreferencesManager.getUserId(mContext)!!
             )
         showPopupProgressSpinner(true)
-        mViewModel!!.uploadImage(requestUserID, getFiletoServer())
+        mUpProfileViewModel!!.uploadImage(requestUserID, getFiletoServer())
     }
 
 
@@ -549,5 +563,8 @@ class ProfileFragment : BaseFragment(), View.OnClickListener {
     private fun convertFeetToCms(): Double {
         return heightTxt.text.toString().toFloat() * 30.48
     }
+
+
+
 
 }

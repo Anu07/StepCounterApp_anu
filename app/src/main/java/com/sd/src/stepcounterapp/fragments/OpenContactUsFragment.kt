@@ -62,9 +62,8 @@ class OpenContactUsFragment : BaseFragment() {
             fragmentManager!!.popBackStack()
         }
         send_contact_us.setOnClickListener {
-            if(message.toString().isNotEmpty()){
-
-                viewModel.postContactUs(ContactUsRequest(userData!!.data._id,message.toString().trim()))
+            if(messageTxt.text.toString().isNotEmpty()){
+                viewModel.postContactUs(ContactUsRequest(userData!!.data._id,messageTxt.toString().trim()))
             }else{
                 Toast.makeText(activity,"Message can't be empty.", Toast.LENGTH_LONG).show()
             }

@@ -37,18 +37,18 @@ object SharedPreferencesManager {
     fun setUserId(context: Context, newValue: String) {
         val editor = getSharedPreferences(context).edit()
         editor.putString(USERID, newValue)
-        editor.commit()
+        editor.apply()
     }
 
     fun setString(context: Context, newValue: String, Key: String) {
         val editor = getSharedPreferences(context).edit()
         editor.putString(Key, newValue)
-        editor.commit()
+        editor.apply()
     }
     fun setBoolean(context: Context, newValue: Boolean, Key: String) {
         val editor = getSharedPreferences(context).edit()
         editor.putBoolean(Key, newValue)
-        editor.commit()
+        editor.apply()
     }
     fun getString(context: Context, Key: String): String? {
         return getSharedPreferences(context).getString(Key, null)
@@ -61,7 +61,7 @@ object SharedPreferencesManager {
     fun setInt(context: Context,Key: String, newValue: Int) {
         val editor = getSharedPreferences(context).edit()
         editor.putInt(Key, newValue)
-        editor.commit()
+        editor.apply()
     }
 
     fun getInt(context: Context, Key: String): Int? {
@@ -71,7 +71,7 @@ object SharedPreferencesManager {
     fun logout(context: Context) {
         val editor = getSharedPreferences(context).edit()
         editor.clear()
-        editor.commit()
+        editor.apply()
 
         // After logout redirect user to Loing Activity
         val i = Intent(context, SignInActivity::class.java)
@@ -91,7 +91,7 @@ object SharedPreferencesManager {
         val gson = Gson()
         val json = gson.toJson(myObject) // myObject - instance of MyObject
         prefsEditor.putString("User", json)
-        prefsEditor.commit()
+        prefsEditor.apply()
     }
 
 
@@ -100,7 +100,7 @@ object SharedPreferencesManager {
         val gson = Gson()
         val json = gson.toJson(myObject) // myObject - instance of MyObject
         prefsEditor.putString("UpdatedUser", json)
-        prefsEditor.commit()
+        prefsEditor.apply()
     }
 
 
@@ -109,7 +109,7 @@ object SharedPreferencesManager {
         val gson = Gson()
         val json = gson.toJson(myWearData) // myObject - instance of MyObject
         prefsEditor.putString("Wearable", json)
-        prefsEditor.commit()
+        prefsEditor.apply()
     }
 
     fun getSyncObject(context: Context): ArrayList<DailyStep>? {

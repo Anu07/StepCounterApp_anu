@@ -38,7 +38,7 @@ class OpenFAQFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         webView.loadUrl("http://3.15.112.60:4200/faq") //http://3.15.112.60:4200/faq
-
+        webView.settings.javaScriptEnabled = true
     }
 
 

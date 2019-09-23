@@ -11,7 +11,7 @@
         <ImageView
                 android:id="@+id/image"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="wrap_content"
                 android:scaleType="fitXY"
                 android:layout_gravity="center"/>
         <com.sd.src.stepcounterapp.utils.CustomTextView
@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content"/>
 
         <LinearLayout android:orientation="vertical"
-                      android:layout_gravity="center"
+                      android:layout_gravity="center|center_vertical"
                       android:gravity="center"
                       android:layout_width="match_parent"
                       android:layout_height="wrap_content">

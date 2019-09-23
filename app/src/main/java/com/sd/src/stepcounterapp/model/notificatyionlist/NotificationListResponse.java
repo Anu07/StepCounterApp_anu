@@ -6,7 +6,7 @@ import java.util.List;
 @SuppressWarnings("unused")
 public class NotificationListResponse {
 
-    private List<Data> data;
+    private List<NotificationData> data;
     private String message;
     private int status;
 
@@ -27,11 +27,11 @@ public class NotificationListResponse {
         this.status = status;
     }
 
-    public List<Data> getData() {
+    public List<NotificationData> getData() {
         return data;
     }
 
-    public void setData(List<Data> data) {
+    public void setData(List<NotificationData> data) {
         this.data = data;
     }
 }

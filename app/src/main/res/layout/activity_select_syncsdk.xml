@@ -8,6 +8,7 @@
     <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
+            android:layout_gravity="center"
             android:layout_height="match_parent">
 
         <LinearLayout android:orientation="horizontal"
@@ -49,8 +50,9 @@
                 android:text="@string/sync_ur_fitness"
                 app:appfont="montserrat_semibold.ttf"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
                 android:textSize="@dimen/_25sdp"
+                android:layout_marginLeft="@dimen/_10sdp"
+                 android:layout_marginRight="@dimen/_10sdp"
                 android:textColor="@color/colorBlack"
                 app:layout_constraintTop_toTopOf="parent"/>
 

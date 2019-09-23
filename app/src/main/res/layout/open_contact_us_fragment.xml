@@ -47,10 +47,11 @@
         <com.sd.src.stepcounterapp.utils.CustomEditText
                 android:layout_width="match_parent"
                 android:hint="Message"
-                android:id="@+id/message"
+                android:id="@+id/messageTxt"
                 app:appEditfont="montserrat_regular.ttf"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/_25ssp"
+                android:maxLines="3"
                 android:layout_marginBottom="@dimen/_20ssp"/>
 
 

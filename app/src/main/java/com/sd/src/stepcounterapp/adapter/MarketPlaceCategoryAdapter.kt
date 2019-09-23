@@ -94,6 +94,10 @@ class MarketPlaceCategoryAdapter(
                     holder.wishBttnSecond.setImageResource(R.drawable.featured)
                 }
 
+            }else{
+                holder.cdSecond.visibility = View.GONE
+                holder.txtSeeAll.visibility = View.GONE
+
             }
 
 

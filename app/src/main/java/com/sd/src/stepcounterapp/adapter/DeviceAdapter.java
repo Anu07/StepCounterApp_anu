@@ -25,7 +25,7 @@ public class DeviceAdapter extends FitpoloBaseAdapter<BleDevice> {
     protected void bindViewHolder(int position, ViewHolder viewHolder, View convertView, ViewGroup parent) {
         final DeviceViewHolder holder = (DeviceViewHolder) viewHolder;
         final BleDevice device = getItem(position);
-        holder.deviceName.setText("HAYATECH_"+device.name);
+        holder.deviceName.setText(String.format("HAYATECH_%s", device.name));
         holder.deviceAddress.setText(device.address.substring(device.address.length()-5                                                                                               ));
         holder.deviceRssi.setText(device.rssi + "");
     

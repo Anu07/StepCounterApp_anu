@@ -4,10 +4,14 @@ import android.content.Context
 import android.os.Build
 import android.view.Gravity
 import androidx.annotation.RequiresApi
+import com.sd.src.stepcounterapp.changeDateFormat
+import com.sd.src.stepcounterapp.getDaysDifference
 import com.sd.src.stepcounterapp.interfaces.InterfacesCall
 import com.sd.src.stepcounterapp.model.challenge.Data
+import com.sd.src.stepcounterapp.utils.Utils
 import kotlinx.android.synthetic.main.dialog_challenges.*
 import kotlinx.android.synthetic.main.dialog_stop_challenges.*
+import kotlinx.android.synthetic.main.dialog_stop_challenges.view.*
 
 class StopChallengeDialog(context: Context, themeResId: Int,
                           private val LayoutId: Int,data: Data,
@@ -37,6 +41,13 @@ class StopChallengeDialog(context: Context, themeResId: Int,
     }
 
     fun setData() {
+        txtChallengeNameDetail.text = mData.name
+        var daysDuration:String? = getDaysDifference(changeDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", "dd/MM/yyyy", mData.startDateTime), changeDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", "dd/MM/yyyy", mData.endDateTime)).toString()
+        if(daysDuration.equals("0")){
+            txtChallengeStopDateDialog.text = "Today"
+        }else{
+            txtChallengeStopDateDialog.text = "$daysDuration Days"
+        }
         btnNo.setOnClickListener {
             dismiss()
         }

@@ -11,6 +11,8 @@ import androidx.annotation.RequiresApi
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.sd.src.stepcounterapp.R
+import com.sd.src.stepcounterapp.changeDateFormat
+import com.sd.src.stepcounterapp.getDaysDifference
 import com.sd.src.stepcounterapp.model.challenge.Data
 import com.sd.src.stepcounterapp.network.RetrofitClient
 import com.squareup.picasso.Picasso
@@ -28,6 +30,12 @@ class ChallengeAdapter(
         this.item = mValues[position]
         holder.textView.text = item.name.capitalize()
         holder.textShort.text = item.shortDesc.capitalize()
+        var daysDuration:String? = getDaysDifference(changeDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", "dd/MM/yyyy", item.startDateTime), changeDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", "dd/MM/yyyy", item.endDateTime)).toString()
+        if(daysDuration.equals("0")){
+            holder.txtDurDesc.text = "Duration: "+"Today"
+        }else{
+            holder.txtDurDesc.text = "Duration: $daysDuration"
+        }
         holder.imageView.setOnClickListener {
             mListener!!.onItemClick(position,item)
         }
@@ -43,6 +51,7 @@ class ChallengeAdapter(
     inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
 
         var textView: TextView
+        var txtDurDesc: TextView
         var textShort: TextView
         var imageView: ImageView
         var cdMain: CardView
@@ -52,6 +61,7 @@ class ChallengeAdapter(
         init {
             textView = v.findViewById<View>(R.id.txtChallengeName) as TextView
             textShort = v.findViewById<View>(R.id.txtShortDesc) as TextView
+            txtDurDesc = v.findViewById<View>(R.id.txtDurDesc) as TextView
             imageView = v.findViewById<View>(R.id.imgChallenge) as ImageView
             cdMain = v.findViewById<View>(R.id.cdMain) as CardView
         }

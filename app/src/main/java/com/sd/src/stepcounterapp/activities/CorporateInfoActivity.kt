@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.sd.src.stepcounterapp.R
-import com.sd.src.stepcounterapp.dialog.SelectCityDialog
+import com.sd.src.stepcounterapp.dialog.BMIResultDialog
 import com.sd.src.stepcounterapp.interfaces.InterfacesCall
 import com.sd.src.stepcounterapp.model.OptionsModel
 import com.sd.src.stepcounterapp.viewModels.BaseViewModel
@@ -52,7 +52,7 @@ class CorporateInfoActivity : BaseActivity<BaseViewModel>(), View.OnClickListene
 
     private fun openDepartment() {
         val dialog =
-            SelectCityDialog(mContext, R.style.pullBottomfromTop,R.layout.dialog_options,mDepartmentArray, Bundle(),  "SELECT DEPARTMENT",
+            BMIResultDialog(mContext, R.style.pullBottomfromTop,R.layout.dialog_options,mDepartmentArray, Bundle(),  "SELECT DEPARTMENT",
                 InterfacesCall.Callback { pos -> txtDepartment.text = mDepartmentArray[pos].name })
         dialog.show()
     }

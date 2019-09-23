@@ -13,9 +13,12 @@ public class Purchased implements Parcelable {
     private String invoiceNo;
     private String name;
     private String purchasedAt;
+    private long quantity;
     private String rewardId;
     private String shortDesc;
     private long token;
+
+
     private String vendorId;
 
     public String get_id() {
@@ -66,6 +69,14 @@ public class Purchased implements Parcelable {
         this.purchasedAt = purchasedAt;
     }
 
+    public long getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(long quantity) {
+        this.quantity = quantity;
+    }
+
     public String getRewardId() {
         return rewardId;
     }
@@ -90,13 +101,6 @@ public class Purchased implements Parcelable {
         this.token = token;
     }
 
-    public String getVendorId() {
-        return vendorId;
-    }
-
-    public void setVendorId(String vendorId) {
-        this.vendorId = vendorId;
-    }
 
     @Override
     public int describeContents() {
@@ -111,6 +115,7 @@ public class Purchased implements Parcelable {
         dest.writeString(this.invoiceNo);
         dest.writeString(this.name);
         dest.writeString(this.purchasedAt);
+        dest.writeLong(this.quantity);
         dest.writeString(this.rewardId);
         dest.writeString(this.shortDesc);
         dest.writeLong(this.token);
@@ -127,6 +132,7 @@ public class Purchased implements Parcelable {
         this.invoiceNo = in.readString();
         this.name = in.readString();
         this.purchasedAt = in.readString();
+        this.quantity = in.readLong();
         this.rewardId = in.readString();
         this.shortDesc = in.readString();
         this.token = in.readLong();

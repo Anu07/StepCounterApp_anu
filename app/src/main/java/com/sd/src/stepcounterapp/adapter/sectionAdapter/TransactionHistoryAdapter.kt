@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.changeDateFormat
+import com.sd.src.stepcounterapp.convertToLocal
 import com.sd.src.stepcounterapp.model.transactionhistory.TransactionEntry
 import com.sd.src.stepcounterapp.setFirstCapWord
 import com.sd.src.stepcounterapp.utils.Utils
@@ -61,7 +62,7 @@ class TransactionHistoryAdapter(val context: Context, val date: String, val list
         }
 
         data.createdAt?.let {
-            itemHolder.time.text = Utils.getTimefromISOTime(it)
+            itemHolder.time.text = convertToLocal(it)
         } ?: run {
             itemHolder.time.text = ""
         }

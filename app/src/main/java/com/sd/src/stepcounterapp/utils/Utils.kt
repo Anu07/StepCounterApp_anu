@@ -10,10 +10,8 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
-import androidx.core.content.ContextCompat.startActivity
-import android.text.method.TextKeyListener.clear
 import android.util.Log
-import com.sd.src.stepcounterapp.AppApplication.Companion.TAG
+import com.sd.src.stepcounterapp.HayaTechApplication.Companion.TAG
 import java.text.ParseException
 
 
@@ -45,6 +43,34 @@ object Utils {
     /**
      * returns time from iso timestamp
      */
+
+    fun filterTimefromISOTime(date: String): String {
+        //2019-08-20T19:30:00.000Z
+        var splitted = ""
+        var newDate: Date? = null
+
+        try {
+            val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+            try {
+                newDate = format.parse(date)
+                Log.e("Date", "Parse" + date)
+                System.out.println(date)
+            } catch (e: ParseException) {
+                e.printStackTrace()
+            }
+
+            System.out.println(newDate)
+            val your_format = SimpleDateFormat("yyyy-MM-dd hh:mm a").format(newDate)
+            splitted = your_format.split(" ")[1] + " " + your_format.split(" ")[2]
+            println(splitted[1])    //The second part of the splitted string, i.e time
+
+
+        } catch (e: ParseException) {
+            System.out.println(e.toString()) //date format error
+        }
+        return splitted
+    }
+
 
     fun getTimefromISOTime(date: String): String {
         //2019-08-20T19:30:00.000Z

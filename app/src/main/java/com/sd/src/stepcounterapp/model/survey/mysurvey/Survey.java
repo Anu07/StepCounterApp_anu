@@ -9,6 +9,16 @@ public class Survey {
     private long earningToken;
     private String expireOn;
     private String name;
+
+    public String getAttendAt() {
+        return attendAt;
+    }
+
+    public void setAttendAt(String attendAt) {
+        this.attendAt = attendAt;
+    }
+
+    private String attendAt;
     private List<Product> products;
 
     public String get_id() {

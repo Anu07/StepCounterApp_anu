@@ -184,4 +184,10 @@
     <string name="new_challenge">New Challenge</string>
     <string name="goal_achieved">Goal Achieved</string>
     <string name="a_new_survey_available">A New Survey Available</string>
+    <string name="dummy_txt">
+        <![CDATA[Give yourself something to celebrate with us! A new Personal Best. Increase your average daily step distance by 1k for 1 month & choose any featured SAHI REWARD for FREE.]]></string>
+    <string name="stop_challenge">Stop Challenge</string>
+    <string name="email_empty">Email field can\'t be left empty</string>
+
+    <string name="default_notification_channel_id">hayatech_channel_id</string>
 </resources>

@@ -71,7 +71,7 @@ class SurveyDetailActivity : BaseActivity<SurveyViewModel>(), SurveysQuestionsAd
     override fun initListeners() {
         img_back.setOnClickListener {
             finish()
-//            ( this@SurveyDetailActivity as LandingActivity).onFragmnet(0)
+//            ( this@SurveyDetailActivity as LandingActivity).onFragment(0)
         }
         finishbutton.setOnClickListener {
             if(mAnsData.isNotEmpty()){

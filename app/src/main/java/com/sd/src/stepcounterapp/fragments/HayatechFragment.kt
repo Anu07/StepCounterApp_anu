@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Handler
-import android.provider.Settings
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
@@ -25,9 +24,11 @@ import com.github.mikephil.charting.components.XAxis.XAxisPosition
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
+import com.sd.src.stepcounterapp.HayaTechApplication
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.activities.LandingActivity
 import com.sd.src.stepcounterapp.adapter.PatternProgressTextAdapter
+import com.sd.src.stepcounterapp.changeDateFormat
 import com.sd.src.stepcounterapp.dialog.OptionDialog
 import com.sd.src.stepcounterapp.interfaces.InterfacesCall
 import com.sd.src.stepcounterapp.model.DeviceResponse.DashboardResponse
@@ -42,6 +43,7 @@ import com.sd.src.stepcounterapp.utils.InterConsts.MONTHLY
 import com.sd.src.stepcounterapp.utils.InterConsts.WEEKLY
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager.SYNCDATE
+import com.sd.src.stepcounterapp.utils.SharedPreferencesManager.WEARABLEID
 import com.sd.src.stepcounterapp.viewModels.DeviceViewModel
 import kotlinx.android.synthetic.main.fragment_hayatech.*
 import java.util.*
@@ -62,8 +64,8 @@ class HayatechFragment : BaseFragment() {
             mContext = context
             return instance
         }
-    }
 
+    }
     lateinit var updater: Runnable
     private var updatedList: ArrayList<Activity> = ArrayList()
     private var updating: Boolean = false
@@ -74,15 +76,27 @@ class HayatechFragment : BaseFragment() {
 //    }
     var activityList: ArrayList<Activity>? = null
     private var mDataList: Data? = Data()
-    private lateinit var mViewModel: DeviceViewModel
+    var mViewModel: DeviceViewModel? = null
     var optionArray = arrayListOf<OptionsModel>()
     var android_id: String? = null
     var xAxis: XAxis? = null
     private var mWeekListFormater = arrayOfNulls<String>(7)
     private var mMonthListFormater = arrayOfNulls<String>(31)
-
+    val colors: IntArray = intArrayOf(R.color.green_txt, R.color.blue_txt)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        mViewModel = ViewModelProviders.of(activity!!).get(DeviceViewModel::class.java)
+        (mContext as LandingActivity).showDisconnection(false)
         return inflater.inflate(R.layout.fragment_hayatech, container, false)
+
+    }
+
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        if(mViewModel==null){
+            mViewModel = ViewModelProviders.of(activity!!).get(DeviceViewModel::class.java)
+        }
+        Log.i("attach","viewmodel")
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -90,23 +104,27 @@ class HayatechFragment : BaseFragment() {
 
         setFilterOptionArray()
 
-        mViewModel = ViewModelProviders.of(activity!!).get(DeviceViewModel::class.java)
+        distance.isSelected = true
+
         circular_progress.setProgressTextAdapter(PatternProgressTextAdapter())
         setStepsText()
+        if(mViewModel==null){
+            mViewModel = ViewModelProviders.of(activity!!).get(DeviceViewModel::class.java)
+        }
         showPopupProgressSpinner(true)
-        mViewModel.fetchSyncData(
+        mViewModel!!.fetchSyncData(
             if (txtGraphFilter.text.toString().equals(WEEKLY, ignoreCase = true)) {
                 FetchDeviceDataRequest(WEEKLY, SharedPreferencesManager.getUserId(mContext))
             } else {
                 FetchDeviceDataRequest(MONTHLY, SharedPreferencesManager.getUserId(mContext))
             }
         )
-        mViewModel.getSyncResponse().observe(this,
+        mViewModel!!.getSyncResponse().observe(this,
             Observer<BasicInfoResponse> { mResponse ->
                 Log.i("Sync", "Data synced successfully")
-                callDashboard()
+//                callDashboard()
             })
-        mViewModel.getDashResponse().observe(this,
+        mViewModel!!.getDashResponse().observe(this,
             Observer<DashboardResponse> { mDashResponse ->
                 showPopupProgressSpinner(false)
 
@@ -128,11 +146,11 @@ class HayatechFragment : BaseFragment() {
                 if(mDashResponse.data.closestToken.toString() != "0"){
                     wishListCloseLayout.visibility = View.VISIBLE
                     wishlistTxt.text =
-                        "You are only " + mDashResponse.data.closestToken + " Tokens away from an item on your wish list! Keep walking!"
+                        "You are only ${mDashResponse.data.closestToken} Tokens away from an item on your wish list! Keep walking!"
                 }else{
                     wishListCloseLayout.visibility= View.GONE
                 }
-                               circular_progress.setProgress(mDashResponse.data.todayToken.toDouble(), 10.00)
+                circular_progress.setProgress(mDashResponse.data.todayToken.toDouble(), 10.00)
                 company_rank_count.text = mDashResponse.data.companyRank.toString()
                 tokensVal.text = mDashResponse.data.totalUserToken.toString()
                 SharedPreferencesManager.setString(
@@ -150,16 +168,12 @@ class HayatechFragment : BaseFragment() {
             })
 
         if (SharedPreferencesManager.hasKey(mContext, "Wearable")) {
-            android_id = Settings.Secure.getString(
-                mContext.contentResolver,
-                Settings.Secure.ANDROID_ID
-            )
 
-            mViewModel.syncDevice(
+            mViewModel!!.syncDevice(
                 SyncRequest(
                     getActivityData(),
                     SharedPreferencesManager.getUserId(mContext),
-                    android_id
+                    SharedPreferencesManager.getString(mContext, WEARABLEID)
                 )
             )
         }
@@ -173,7 +187,7 @@ class HayatechFragment : BaseFragment() {
                         txtGraphFilter.text = optionArray[pos].name
                         setFilterOptionArray()
                         optionArray[pos].isSelected = true
-                        mViewModel.fetchSyncData(
+                        mViewModel!!.fetchSyncData(
                             if (txtGraphFilter.text.toString().equals(WEEKLY, ignoreCase = true)) {
                                 FetchDeviceDataRequest(WEEKLY, SharedPreferencesManager.getUserId(mContext))
                             } else {
@@ -194,12 +208,12 @@ class HayatechFragment : BaseFragment() {
         }
 
         leaderDash.setOnClickListener {
-            (mContext as LandingActivity).onFragmnet(5)
+            (mContext as LandingActivity).onFragment(5)
         }
 
         spndTokens.setOnClickListener {
             //            callback.onFragmentClick(0)
-            (mContext as LandingActivity).onFragmnet(0)
+            (mContext as LandingActivity).onFragment(0)
         }
 
         token_title.setOnClickListener {
@@ -219,7 +233,7 @@ class HayatechFragment : BaseFragment() {
         }
         spndTokens.setOnClickListener {
             //            callback.onFragmentClick(0)
-            (mContext as LandingActivity).onFragmnet(2)
+            (mContext as LandingActivity).onFragment(2)
         }
 //        startSyncTimer()
         /* if (!MokoSupport.getInstance().isConnDevice(
@@ -231,8 +245,7 @@ class HayatechFragment : BaseFragment() {
          ) {
  //            startSyncTimer()
          }*/
-
-
+        (mContext as LandingActivity).disableSwipe(false)
     }
 
 
@@ -328,7 +341,6 @@ class HayatechFragment : BaseFragment() {
         ll.lineColor = Color.GRAY
         ll.lineWidth = 4f
         ll.textSize = 12f
-
         var xAxisFormatter: DayAxisValueFormatter =
             if (txtGraphFilter.text.toString().equals(WEEKLY, ignoreCase = true)) {
                 DayAxisValueFormatter(barchart, WEEKLY,mWeekListFormater)
@@ -348,10 +360,19 @@ class HayatechFragment : BaseFragment() {
             var weeklyData: ArrayList<BarEntry> = addDataFromServer(format)
             val bardataset = BarDataSet(weeklyData, "")
             barchart.data = null
-            bardataset.color = Color.parseColor("#8DC540")
+//            bardataset.setColors(colors, mContext)
+            weeklyData.iterator().forEach {
+                if(it.y < 10000.0f){
+                    bardataset.valueTextColor = colors[1]
+                }else{
+                    bardataset.valueTextColor = colors[0]
+                }
+            }
             barchart.animateY(5000)
+            barchart.legend.isEnabled = false;   // Hide the legend
             val data = BarData(bardataset)
             barchart.data = data
+            barchart.data.isHighlightEnabled = false
         }
     }
 
@@ -362,6 +383,7 @@ class HayatechFragment : BaseFragment() {
                 if (mDataList!!.activity != null) {
                     mDataList!!.activity.forEachIndexed { index, element ->
                         graphData.add(index, BarEntry(index.toFloat(), element.steps.toFloat()))
+                        mWeekListFormater[index] = changeDateFormat("yyyy-MM-dd", "E_dd MMM, yyyy", element.date).split("_")[0]
                     }
                 }
             } else {
@@ -387,6 +409,7 @@ class HayatechFragment : BaseFragment() {
                         mDataList!!.activity.subList((mDataList!!.activity.size - 8), (mDataList!!.activity.size - 1))
                             .forEachIndexed { index, element ->
                                 graphData.add(index, BarEntry(index.toFloat(), element.token.toFloat()))
+                                mWeekListFormater[index] = changeDateFormat("yyyy-MM-dd", "E_dd MMM, yyyy", element.date).split("_")[0]
                             }
                     } else {
                         mDataList!!.activity.forEachIndexed { index, element ->
@@ -415,6 +438,7 @@ class HayatechFragment : BaseFragment() {
                 if (mDataList!!.todayToken != null) {
                     mDataList!!.activity.forEachIndexed { index, element ->
                         graphData.add(index, BarEntry(index.toFloat(), element.distance.toFloat()))
+                        mWeekListFormater[index] = changeDateFormat("yyyy-MM-dd", "E_dd MMM, yyyy", element.date).split("_")[0]
                     }
                 }
             } else {
@@ -452,16 +476,18 @@ class HayatechFragment : BaseFragment() {
                 totl_dist_suffix.text = "Km"
             }
             try {
-                mViewModel.syncDevice(
+                mViewModel!!.syncDevice(
                     SyncRequest(
                         getLatestActivityData(dailyStep),
                         SharedPreferencesManager.getUserId(mContext),
-                        android_id
+                        SharedPreferencesManager.getString(mContext, WEARABLEID)
                     )
                 )
             } catch (e: Exception) {
-                Log.e("Exception","Msg"+e.message)
+                Log.e("Viewmodel","Exception"+e.printStackTrace())
             }
+
+
         }
     }
 
@@ -473,40 +499,12 @@ class HayatechFragment : BaseFragment() {
         var timerHandler = Handler()
 
         updater = Runnable {
-            setBarChart("STEPS")
+//            setBarChart("STEPS")
             timerHandler.postDelayed(updater, 5000)
         }
         timerHandler.post(updater)
     }
 
-
-    /*  private fun startSyncTimer() {
-          var timer = Timer()
-          timer.scheduleAtFixedRate(timerTask {
-              mViewModel.syncDevice(
-                  SyncRequest(
-                      getLatestActivityData(dailyStep),
-                      SharedPreferencesManager.getUserId(mContext),
-                      android_id
-                  )
-              )
-          }, 0L, 5000)
-
-      }*/
-
-
-    /**
-     * get Latest data request array
-     */
-    /*private fun getLatestActivityDataObject(dailyStep: DailyStep): Activity {
-        return Activity(
-            dailyStep.date,
-            dailyStep.distance.toDouble(),
-            dailyStep.duration.toInt(),
-            dailyStep.count.toInt(),
-            dailyStep.calories.toInt()
-        )
-    }*/
 
     private fun getLatestActivityData(dailyStep: DailyStep): ArrayList<Activity>? {
         var activityList: ArrayList<Activity>? = ArrayList()
@@ -524,17 +522,20 @@ class HayatechFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        mViewModel.syncDevice(
+        if(mViewModel==null){
+            mViewModel = ViewModelProviders.of(activity!!).get(DeviceViewModel::class.java)
+        }
+        mViewModel!!.syncDevice(
             SyncRequest(
                 getActivityData(),
                 SharedPreferencesManager.getUserId(mContext),
-                android_id
+                SharedPreferencesManager.getString(mContext, WEARABLEID)
             )
         )
     }
 
     fun callDashboard() {
-        mViewModel.fetchSyncData(
+        mViewModel!!.fetchSyncData(
             FetchDeviceDataRequest(WEEKLY, SharedPreferencesManager.getUserId(mContext))
         )
     }

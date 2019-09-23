@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
               android:orientation="vertical"
               android:padding="@dimen/_15sdp"
               android:layout_gravity="bottom"
@@ -21,7 +21,7 @@
             app:appfont="montserrat_regular.ttf"/>
 
     <com.sd.src.stepcounterapp.utils.CustomTextView
-            android:id="@+id/txtDepartment"
+            android:id="@+id/txtChallengeNameDetail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Sahi Sponsored Challenge"
@@ -47,11 +47,11 @@
                 app:appfont="montserrat_regular.ttf"/>
 
         <com.sd.src.stepcounterapp.utils.CustomTextView
-                android:id="@+id/txtStartDate"
+                android:id="@+id/txtChallengeStopDateDialog"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_5sdp"
-                android:text="June 22, 2019"
+                tools:text="June 22, 2019"
                 android:ellipsize="end"
                 android:textColor="@color/colorBlack"
                 android:maxLines="1"

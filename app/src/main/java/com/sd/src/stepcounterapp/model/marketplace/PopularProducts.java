@@ -63,6 +63,17 @@ public class PopularProducts{
         @Expose
         private Integer token;
 
+        public Vendor getVendor() {
+            return vendor;
+        }
+
+        public void setVendor(Vendor vendor) {
+            this.vendor = vendor;
+        }
+
+        @SerializedName("vendor")
+        @Expose
+        private Vendor vendor;
         public Integer getQuantity() {
             return quantity;
         }

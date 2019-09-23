@@ -25,7 +25,6 @@ import com.sd.src.stepcounterapp.activities.LandingActivity
 import com.sd.src.stepcounterapp.adapter.MarketPlaceCategoryAdapter
 import com.sd.src.stepcounterapp.adapter.MarketPlacePopularityAdapter
 import com.sd.src.stepcounterapp.adapter.MarketPlaceSeeAllAdapter
-import com.sd.src.stepcounterapp.changeDateFormat
 import com.sd.src.stepcounterapp.dialog.FilterDialog
 import com.sd.src.stepcounterapp.dialog.MarketPlaceDialog
 import com.sd.src.stepcounterapp.dialog.MarketPopPlaceDialog
@@ -35,17 +34,14 @@ import com.sd.src.stepcounterapp.model.generic.BasicRequest
 import com.sd.src.stepcounterapp.model.marketplace.BasicSearchRequest
 import com.sd.src.stepcounterapp.model.marketplace.MarketResponse
 import com.sd.src.stepcounterapp.model.marketplace.PopularProducts
+import com.sd.src.stepcounterapp.model.marketplace.walletInfo.WalletModelResponse
 import com.sd.src.stepcounterapp.model.redeemnow.RedeemRequest
-import com.sd.src.stepcounterapp.model.wallet.walletDetailResponse.Purchased
 import com.sd.src.stepcounterapp.model.wallet.walletDetailResponse.WalletModel
-import com.sd.src.stepcounterapp.model.wallet.walletDetailResponse.Wishlist
 import com.sd.src.stepcounterapp.model.wishList.AddWishRequest
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager.EARNEDTOKENS
-import com.sd.src.stepcounterapp.utils.Utils
 import com.sd.src.stepcounterapp.viewModels.MarketPlaceViewModel
 import kotlinx.android.synthetic.main.fragment_market_place.*
-import kotlinx.android.synthetic.main.fragment_wallet.*
 
 
 class MarketPlaceFragment : BaseFragment(), FilterDialog.MarketFilterInterface, MarketPlaceClickInterface,
@@ -227,17 +223,20 @@ class MarketPlaceFragment : BaseFragment(), FilterDialog.MarketFilterInterface, 
 
 
         mViewModel.getWalletData().observe(this,
-            Observer<WalletModel> { mData ->
-                SharedPreferencesManager.setInt(
-                    WalletFragment.mContext,
-                    SharedPreferencesManager.WISHCOUNT, mData.data?.wishlist!!.size)
-                count = SharedPreferencesManager.getInt(
-                    mContext,
-                    SharedPreferencesManager.WISHCOUNT
-                )
-                SharedPreferencesManager.setString(mContext,mData.data.totalEarnings.toString(),EARNEDTOKENS)
-                setupBadge()
-                setUpTokens()
+            Observer<WalletModelResponse> { mData ->
+                if (mData != null) {
+                    SharedPreferencesManager.setInt(
+                        WalletFragment.mContext,
+                        SharedPreferencesManager.WISHCOUNT, mData.data?.wishlist!!.size)
+                    count = SharedPreferencesManager.getInt(
+                        mContext,
+                        SharedPreferencesManager.WISHCOUNT
+                    )
+                    SharedPreferencesManager.setString(mContext,mData.data.totalEarnings.toString(),EARNEDTOKENS)
+                    setupBadge()
+                    setUpTokens()
+                }
+
             })
 
 
@@ -344,6 +343,11 @@ class MarketPlaceFragment : BaseFragment(), FilterDialog.MarketFilterInterface, 
         return inflater.inflate(R.layout.fragment_market_place, container, false)
     }
 
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        (mContext as LandingActivity).showDisconnection(false)
+    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -352,7 +356,7 @@ class MarketPlaceFragment : BaseFragment(), FilterDialog.MarketFilterInterface, 
         setSeeAllAdapter()
         setUpTokens()
         setupBadge()
-
+        (mContext as LandingActivity).showDisconnection(false)
         txtSeeAll.setOnClickListener {
             rvSeeAll.visibility = View.GONE
             llSeeAll.visibility = View.GONE
@@ -434,11 +438,10 @@ class MarketPlaceFragment : BaseFragment(), FilterDialog.MarketFilterInterface, 
 
         wishlist.setOnClickListener {
             //            callback.onFragmentClick(2)
-            (mContext as LandingActivity).onFragmnet(4)
+            (mContext as LandingActivity).onFragment(4)
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             rvProduct.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
-                (mContext as LandingActivity).disableSwipe(true)
 
             }
         }
@@ -454,6 +457,7 @@ class MarketPlaceFragment : BaseFragment(), FilterDialog.MarketFilterInterface, 
                 return true
             }
         })
+        (mContext as LandingActivity).disableSwipe(true)
 
     }
 

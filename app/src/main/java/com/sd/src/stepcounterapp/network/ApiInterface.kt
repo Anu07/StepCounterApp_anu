@@ -19,7 +19,9 @@ import com.sd.src.stepcounterapp.model.loginrequest.LoginRequestObject
 import com.sd.src.stepcounterapp.model.marketplace.BasicSearchRequest
 import com.sd.src.stepcounterapp.model.marketplace.MarketResponse
 import com.sd.src.stepcounterapp.model.marketplace.PopularProducts
+import com.sd.src.stepcounterapp.model.marketplace.walletInfo.WalletModelResponse
 import com.sd.src.stepcounterapp.model.notification.NotificationResponse
+import com.sd.src.stepcounterapp.model.notification.read_notification.NotificationReadRequest
 import com.sd.src.stepcounterapp.model.notificatyionlist.NotificationListResponse
 import com.sd.src.stepcounterapp.model.privacy.PrivacyResponse
 import com.sd.src.stepcounterapp.model.profile.ProfileResponse
@@ -28,14 +30,19 @@ import com.sd.src.stepcounterapp.model.redeemnow.RedeemRequest
 import com.sd.src.stepcounterapp.model.rewards.AddRewardsRequestObject
 import com.sd.src.stepcounterapp.model.rewards.MyRedeemedResponse
 import com.sd.src.stepcounterapp.model.rewards.RewardsCategoriesResponse
+import com.sd.src.stepcounterapp.model.rewards.selectedRewards.SelectedRewardCategories
 import com.sd.src.stepcounterapp.model.survey.SurveyResponse
 import com.sd.src.stepcounterapp.model.survey.mysurvey.MySurveyResponse
+import com.sd.src.stepcounterapp.model.survey.mysurveyresponse.MySurveyResponseModel
 import com.sd.src.stepcounterapp.model.survey.surveyrequest.SurveystartRequestModel
 import com.sd.src.stepcounterapp.model.syncDevice.FetchDeviceDataRequest
 import com.sd.src.stepcounterapp.model.syncDevice.SyncRequest
 import com.sd.src.stepcounterapp.model.transactionhistory.TransactionHistoryModel
 import com.sd.src.stepcounterapp.model.updateresponse.UpdateProfileResponse
+import com.sd.src.stepcounterapp.model.vendor.PurchaseVendorResponse
+import com.sd.src.stepcounterapp.model.vendor.VendorRequest
 import com.sd.src.stepcounterapp.model.wallet.TokenModel
+import com.sd.src.stepcounterapp.model.wallet.purchase.PurchaseResponse
 import com.sd.src.stepcounterapp.model.wallet.walletDetailResponse.WalletModel
 import com.sd.src.stepcounterapp.model.wishList.AddWishRequest
 import com.sd.src.stepcounterapp.model.wishList.GetWishListRequest
@@ -64,7 +71,7 @@ interface ApiInterface {
     @POST("api/user_survey")
     fun getMySurveys(
         @Body body: BasicRequest
-    ): Call<MySurveyResponse>
+    ): Call<MySurveyResponseModel>
 
 
     @POST("api/contactus")
@@ -191,8 +198,11 @@ interface ApiInterface {
     @POST("/api/wallet")
     fun wallet(@Body body: BasicRequest): Call<WalletModel>
 
+    @POST("/api/wallet")
+    fun walletData(@Body body: BasicRequest): Call<WalletModelResponse>
+
     @POST("/api/redeem_now")
-    fun redeemNow(@Body body: RedeemRequest): Call<BasicInfoResponse>
+    fun redeemNow(@Body body: RedeemRequest): Call<PurchaseResponse>
 
     @POST("/api/leaderboard")
     fun getLeaderboard(@Body body: LeaderBoardRequest): Call<LeaderBoardResponse>
@@ -233,4 +243,18 @@ interface ApiInterface {
         @Body body: BasicRequest
     ): Call<NotificationListResponse>
 
+
+    @POST("api/categories")
+    fun getSelectedRewardsCategories( @Body body: BasicRequest): Call<SelectedRewardCategories>
+
+    @POST("api/notification_read")
+    fun readNotification(
+        @Body body: NotificationReadRequest
+    ): Call<BasicInfoResponse>
+
+
+    @POST("api/product_vendor")
+    fun getVendorDetails(
+        @Body body: VendorRequest
+    ): Call<PurchaseVendorResponse>
 }

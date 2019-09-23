@@ -3,14 +3,12 @@ package com.sd.src.stepcounterapp.fragments
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
-import com.sd.src.stepcounterapp.AppApplication
+import com.sd.src.stepcounterapp.HayaTechApplication
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.activities.LandingActivity
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
@@ -61,7 +59,7 @@ class ChangePasswordFragment : BaseFragment() {
                 if (newPwdTxt.text.toString().trim() == conNewPwdText.text.toString().trim()) {
 
                     viewModel.changePassword(
-                        SharedPreferencesManager.getUserId(AppApplication.applicationContext()),
+                        SharedPreferencesManager.getUserId(HayaTechApplication.applicationContext()),
                         old_password.text.toString().trim(),
                         newPwdTxt.text.toString().trim()
                     )

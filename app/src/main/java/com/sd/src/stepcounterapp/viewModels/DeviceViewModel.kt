@@ -5,7 +5,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.sd.src.stepcounterapp.AppApplication
+import com.sd.src.stepcounterapp.HayaTechApplication
 import com.sd.src.stepcounterapp.model.DeviceResponse.DashboardResponse
 import com.sd.src.stepcounterapp.model.generic.BasicInfoResponse
 import com.sd.src.stepcounterapp.model.syncDevice.FetchDeviceDataRequest
@@ -36,17 +36,28 @@ class DeviceViewModel(application: Application) : AndroidViewModel(application) 
 
 
     fun syncDevice(request: SyncRequest) {
-        call!!.syncWeableData(request).enqueue(object : Callback<BasicInfoResponse> {
+        if(!request.activity.isEmpty()){
+            call!!.syncWeableData(request).enqueue(object : Callback<BasicInfoResponse> {
 
-            override fun onFailure(call: Call<BasicInfoResponse>?, t: Throwable?) {
-                Log.v("retrofit", "call failed")
-                Toast.makeText(AppApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
-            }
+                override fun onFailure(call: Call<BasicInfoResponse>?, t: Throwable?) {
+                    Log.v("retrofit", "call failed")
+                    Toast.makeText(HayaTechApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
+                }
 
-            override fun onResponse(call: Call<BasicInfoResponse>?, response: Response<BasicInfoResponse>?) {
-                mResponse!!.value = response!!.body()
-            }
-        })
+                override fun onResponse(call: Call<BasicInfoResponse>?, response: Response<BasicInfoResponse>?) {
+                    if (response!!.code() == 405) {
+                        Toast.makeText(HayaTechApplication.applicationContext(), "User doesn't exist", Toast.LENGTH_LONG)
+                            .show()
+                        HayaTechApplication.instance!!.logoutUser()
+                    } else if(response!!.code() == 200) {
+                        mResponse!!.value = response!!.body()
+                    }else {
+                        Log.i("Empty","activity array")
+                    }
+                }
+            })
+        }
+
     }
 
 
@@ -54,11 +65,17 @@ class DeviceViewModel(application: Application) : AndroidViewModel(application) 
         call!!.getSyncData(request).enqueue(object : Callback<DashboardResponse> {
             override fun onFailure(call: Call<DashboardResponse>, t: Throwable) {
                 Log.v("retrofit", "call failed")
-                Toast.makeText(AppApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
+                Toast.makeText(HayaTechApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
             }
 
             override fun onResponse(call: Call<DashboardResponse>, response: Response<DashboardResponse>) {
-                mDashResponse!!.value = response.body()
+                if (response!!.body()!!.status == 405) {
+                    Toast.makeText(HayaTechApplication.applicationContext(), "User doesn't exist", Toast.LENGTH_LONG)
+                        .show()
+                    mDashResponse!!.value =DashboardResponse()
+                } else if (response!!.body()!!.status == 200) {
+                    mDashResponse!!.value = response.body()
+                }
             }
 
         })

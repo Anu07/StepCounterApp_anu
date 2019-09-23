@@ -1,12 +1,16 @@
 package com.sd.src.stepcounterapp.activities
 
+import android.app.Notification
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.Window
 import androidx.appcompat.app.AppCompatActivity
 import com.jaeger.library.StatusBarUtil
 import com.sd.src.stepcounterapp.AppConstants
+import com.sd.src.stepcounterapp.AppConstants.INTENT_NOTIFICATION
+import com.sd.src.stepcounterapp.HayaTechApplication
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.model.login.LoginResponseJ
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
@@ -36,7 +40,7 @@ class SplashActivity : AppCompatActivity() {
                         finish()
                     }
 
-                }else if(!userObj.data.basicFlag && !userObj.data.rewardFlag){
+                }else if(!userObj.data.basicFlag ){
                     val intent = Intent(applicationContext, BasicInfoActivity::class.java)
                     startActivity(intent)
                     finish()
@@ -69,6 +73,11 @@ class SplashActivity : AppCompatActivity() {
         }
 
         super.onDestroy()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.e("Test intent",""+HayaTechApplication.notificationTitle)
     }
 
 }

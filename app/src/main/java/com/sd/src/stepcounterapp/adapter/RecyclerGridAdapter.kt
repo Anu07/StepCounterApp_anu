@@ -13,6 +13,7 @@ import androidx.annotation.RequiresApi
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.sd.src.stepcounterapp.R
+import com.sd.src.stepcounterapp.model.marketplace.MarketResponse
 import com.sd.src.stepcounterapp.model.rewards.Data
 import com.sd.src.stepcounterapp.network.RetrofitClient
 import com.squareup.picasso.Picasso
@@ -28,7 +29,7 @@ class RecyclerGridAdapter(
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         this.item = mValues[position]
-        holder.textView.text = item.name
+        holder.textView.text = item.name.capitalize()
         Log.i("Photo url", "" + position)
         checkSelection(position, holder)
         holder.imageView.setOnClickListener {
@@ -56,7 +57,7 @@ class RecyclerGridAdapter(
             } else {
                 holder.imageView.foreground = mContext.getDrawable(R.drawable.image_overlay)
                 holder.imageView.setImageDrawable(mContext.getDrawable(R.drawable.image_overlay))
-                Picasso.get().load(RetrofitClient.IMG_URL + "" + item.image).placeholder(R.drawable.placeholder)
+                Picasso.get().load(RetrofitClient.IMG_URL + "" + item.image).placeholder(R.drawable.placeholder).resize(200,200)
                     .into(holder.imageView)
             }
         }else{
@@ -64,7 +65,7 @@ class RecyclerGridAdapter(
                 holder.imageView.setImageDrawable(mContext.getDrawable(R.drawable.image_selected_overlay))
             } else {
                 holder.imageView.setImageDrawable(mContext.getDrawable(R.drawable.image_overlay))
-                Picasso.get().load(RetrofitClient.IMG_URL + "" + item.image).placeholder(R.drawable.placeholder)
+                Picasso.get().load(RetrofitClient.IMG_URL + "" + item.image).placeholder(R.drawable.placeholder).resize(200,200)
                     .into(holder.imageView)
             }
         }
@@ -89,8 +90,14 @@ class RecyclerGridAdapter(
             frameLayout = v.findViewById<View>(R.id.parentLayout) as FrameLayout
             cdMain = v.findViewById<View>(R.id.cdMain) as CardView
         }
+    }
 
 
+    fun swap(mList:  MutableList<Data>){
+        if(mValues.size>0)
+            mValues.clear()
+        mValues  = mList
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

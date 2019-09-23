@@ -5,26 +5,23 @@ import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.sd.src.stepcounterapp.AppApplication
+import com.sd.src.stepcounterapp.HayaTechApplication
 import com.sd.src.stepcounterapp.model.challenge.MyChallengeResponse
 import com.sd.src.stepcounterapp.model.generic.BasicRequest
 import com.sd.src.stepcounterapp.model.profile.ProfileResponse
-import com.sd.src.stepcounterapp.model.profile.UpdateProfileRequest
 import com.sd.src.stepcounterapp.model.rewards.MyRedeemedResponse
-import com.sd.src.stepcounterapp.model.survey.mysurvey.MySurveyResponse
-import com.sd.src.stepcounterapp.model.updateresponse.UpdateProfileResponse
+import com.sd.src.stepcounterapp.model.survey.mysurveyresponse.MySurveyResponseModel
 import com.sd.src.stepcounterapp.network.RetrofitClient
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class ProfileViewModel(application: Application) : AndroidViewModel(application){
+class ProfileViewModel(application: Application) : AndroidViewModel(application) {
     private var mProfileResponse: MutableLiveData<ProfileResponse>? = null
-    private var mUpdateResponse: MutableLiveData<UpdateProfileResponse>? = null
     private var mMyChallengeResponse: MutableLiveData<MyChallengeResponse>? = null
     private var mMyRedeemedResponse: MutableLiveData<MyRedeemedResponse>? = null
-    private var mySurveyReponse: MutableLiveData<MySurveyResponse>? = null
+    private var mySurveyReponse: MutableLiveData<MySurveyResponseModel>? = null
 
 
     val call = RetrofitClient.instance
@@ -35,21 +32,14 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
         }
         return mProfileResponse as MutableLiveData<ProfileResponse>
     }
-    fun getSurveyResponse(): MutableLiveData<MySurveyResponse> {
+
+    fun getSurveyResponse(): MutableLiveData<MySurveyResponseModel> {
         if (mySurveyReponse == null) {
             mySurveyReponse = MutableLiveData()
         }
-        return mySurveyReponse as MutableLiveData<MySurveyResponse>
+        return mySurveyReponse as MutableLiveData<MySurveyResponseModel>
     }
 
-
-
-    fun getUpdateProfileResponse(): MutableLiveData<UpdateProfileResponse> {
-        if (mUpdateResponse == null) {
-            mUpdateResponse = MutableLiveData()
-        }
-        return mUpdateResponse as MutableLiveData<UpdateProfileResponse>
-    }
 
     fun getMyChallengeResponse(): MutableLiveData<MyChallengeResponse> {
         if (mMyChallengeResponse == null) {
@@ -67,80 +57,109 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
 
 
     fun getProfileData() {
-        call!!.getProfileData(BasicRequest(SharedPreferencesManager.getUserId(AppApplication.applicationContext()))).enqueue(object : Callback<ProfileResponse> {
-            override fun onFailure(call: Call<ProfileResponse>, t: Throwable) {
-                Log.v("retrofit", "call failed")
-                Toast.makeText(AppApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
-            }
+        call!!.getProfileData(BasicRequest(SharedPreferencesManager.getUserId(HayaTechApplication.applicationContext())))
+            .enqueue(object : Callback<ProfileResponse> {
+                override fun onFailure(call: Call<ProfileResponse>, t: Throwable) {
+                    Log.v("retrofit", "call failed")
+                    Toast.makeText(HayaTechApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
+                }
 
-            override fun onResponse(call: Call<ProfileResponse>, response: Response<ProfileResponse>) {
-                mProfileResponse!!.value = response.body()
-            }
+                override fun onResponse(call: Call<ProfileResponse>, response: Response<ProfileResponse>) {
+                    if (response!!.code() == 405) {
+                        Toast.makeText(
+                            HayaTechApplication.applicationContext(),
+                            "User doesn't exist",
+                            Toast.LENGTH_LONG
+                        )
+                            .show()
+                        HayaTechApplication.instance!!.logoutUser()
+                    } else if (response!!.body()!!.status == 200) {
+                        mProfileResponse!!.value = response.body()
+                    }
+                }
 
-        })
-    }
-
-    fun updateProfileData(request:UpdateProfileRequest) {
-        call!!.update_profile(request).enqueue(object : Callback<UpdateProfileResponse> {
-            override fun onFailure(call: Call<UpdateProfileResponse>, t: Throwable) {
-                Log.v("retrofit", "call failed")
-                Toast.makeText(AppApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
-            }
-
-            override fun onResponse(call: Call<UpdateProfileResponse>, response: Response<UpdateProfileResponse>) {
-                mUpdateResponse!!.value = response.body()
-            }
-
-        })
+            })
     }
 
 
     fun getMyChallenge() {
-        call!!.getMyChallenges(BasicRequest(SharedPreferencesManager.getUserId(AppApplication.applicationContext()))).enqueue(object :
-            Callback<MyChallengeResponse> {
-            override fun onFailure(call: Call<MyChallengeResponse>, t: Throwable) {
-                Log.v("retrofit", "call failed" + t)
-                Toast.makeText(AppApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
-            }
+        call!!.getMyChallenges(BasicRequest(SharedPreferencesManager.getUserId(HayaTechApplication.applicationContext())))
+            .enqueue(object :
+                Callback<MyChallengeResponse> {
+                override fun onFailure(call: Call<MyChallengeResponse>, t: Throwable) {
+                    Log.v("retrofit", "call failed" + t)
+                    Toast.makeText(HayaTechApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
+                }
 
-            override fun onResponse(call: Call<MyChallengeResponse>, response: Response<MyChallengeResponse>) {
-                mMyChallengeResponse!!.value = response.body()
-            }
+                override fun onResponse(call: Call<MyChallengeResponse>, response: Response<MyChallengeResponse>) {
+                    if (response!!.code() == 405) {
+                        Toast.makeText(
+                            HayaTechApplication.applicationContext(),
+                            "User doesn't exist",
+                            Toast.LENGTH_LONG
+                        )
+                            .show()
+                        HayaTechApplication.instance!!.logoutUser()
+                    } else if (response!!.body()!!.status == 200) {
+                        mMyChallengeResponse!!.value = response.body()
+                    }
+                }
 
-        })
+            })
     }
 
-
     fun getRedeemRewards() {
-        call!!.getMyRedeemedRewards(BasicRequest(SharedPreferencesManager.getUserId(AppApplication.applicationContext()))).enqueue(object :
-            Callback<MyRedeemedResponse> {
-            override fun onFailure(call: Call<MyRedeemedResponse>, t: Throwable) {
-                Log.v("retrofit", "call failed" + t)
-                Toast.makeText(AppApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
-            }
+        call!!.getMyRedeemedRewards(BasicRequest(SharedPreferencesManager.getUserId(HayaTechApplication.applicationContext())))
+            .enqueue(object :
+                Callback<MyRedeemedResponse> {
+                override fun onFailure(call: Call<MyRedeemedResponse>, t: Throwable) {
+                    Log.v("retrofit", "call failed" + t)
+                    Toast.makeText(HayaTechApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
+                }
 
-            override fun onResponse(call: Call<MyRedeemedResponse>, response: Response<MyRedeemedResponse>) {
-                mMyRedeemedResponse!!.value = response.body()
-            }
+                override fun onResponse(call: Call<MyRedeemedResponse>, response: Response<MyRedeemedResponse>) {
+                    if (response!!.code() == 405) {
+                        Toast.makeText(
+                            HayaTechApplication.applicationContext(),
+                            "User doesn't exist",
+                            Toast.LENGTH_LONG
+                        )
+                            .show()
+                        HayaTechApplication.instance!!.logoutUser()
+                    } else if (response!!.body()!!.status == 200) {
+                        mMyRedeemedResponse!!.value = response.body()
+                    }
+                }
 
-        })
+            })
     }
 
 
     fun getMySurveys() {
-        call!!.getMySurveys(BasicRequest(SharedPreferencesManager.getUserId(AppApplication.applicationContext()))).enqueue(object :
-            Callback<MySurveyResponse> {
-            override fun onFailure(call: Call<MySurveyResponse>, t: Throwable) {
-                Log.v("retrofit", "call failed" + t)
-                Toast.makeText(AppApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
-            }
+        call!!.getMySurveys(BasicRequest(SharedPreferencesManager.getUserId(HayaTechApplication.applicationContext())))
+            .enqueue(object :
+                Callback<MySurveyResponseModel> {
+                override fun onFailure(call: Call<MySurveyResponseModel>, t: Throwable) {
+                    Log.v("retrofit", "call failed" + t)
+                    Toast.makeText(HayaTechApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
+                }
 
-            override fun onResponse(call: Call<MySurveyResponse>, response: Response<MySurveyResponse>) {
-                mySurveyReponse!!.value = response.body()
-            }
+                override fun onResponse(call: Call<MySurveyResponseModel>, response: Response<MySurveyResponseModel>) {
+                    if (response!!.code() == 405) {
+                        Toast.makeText(
+                            HayaTechApplication.applicationContext(),
+                            "User doesn't exist",
+                            Toast.LENGTH_LONG
+                        )
+                            .show()
+                        HayaTechApplication.instance!!.logoutUser()
+                    } else if (response!!.body()!!.status == 200) {
+                        mySurveyReponse!!.value = response.body()
 
-        })
+                    }
+                }
+
+            })
     }
-
 
 }

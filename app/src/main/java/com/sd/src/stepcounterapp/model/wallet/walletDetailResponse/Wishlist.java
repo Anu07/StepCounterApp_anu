@@ -1,160 +1,222 @@
 
 package com.sd.src.stepcounterapp.model.wallet.walletDetailResponse;
 
-@SuppressWarnings("unused")
-public class Wishlist {
+import android.os.Parcel;
+import android.os.Parcelable;
 
-    private long _V;
+@SuppressWarnings("unused")
+public class Wishlist implements Parcelable {
+
+    private int _V;
     private String _id;
     private String adminId;
-    private Object createdAt;
+    private String createdAt;
     private String description;
     private String image;
     private Boolean isActive;
     private Boolean isDeleted;
     private String name;
-    private long quantity;
+    private int quantity;
     private String rewardId;
     private String shortDesc;
-    private long token;
-    private long totalSales;
+    private int token;
+    private int totalSales;
     private String updatedAt;
     private String vendorId;
-    private long wishlistCount;
-    
-    public long get_V() {
-        return _V;
-    }
-    
-    public void set_V(long _V) {
-        this._V = _V;
-    }
-    
+    private int wishlistCount;
+
+
     public String get_id() {
         return _id;
     }
-    
+
     public void set_id(String _id) {
         this._id = _id;
     }
-    
+
     public String getAdminId() {
         return adminId;
     }
-    
+
     public void setAdminId(String adminId) {
         this.adminId = adminId;
     }
-    
-    public Object getCreatedAt() {
-        return createdAt;
-    }
-    
-    public void setCreatedAt(Object createdAt) {
-        this.createdAt = createdAt;
-    }
-    
+
+
     public String getDescription() {
         return description;
     }
-    
+
     public void setDescription(String description) {
         this.description = description;
     }
-    
+
     public String getImage() {
         return image;
     }
-    
+
     public void setImage(String image) {
         this.image = image;
     }
-    
+
     public Boolean getActive() {
         return isActive;
     }
-    
+
     public void setActive(Boolean active) {
         isActive = active;
     }
-    
+
     public Boolean getDeleted() {
         return isDeleted;
     }
-    
+
     public void setDeleted(Boolean deleted) {
         isDeleted = deleted;
     }
-    
+
     public String getName() {
         return name;
     }
-    
+
     public void setName(String name) {
         this.name = name;
     }
-    
-    public long getQuantity() {
-        return quantity;
-    }
-    
-    public void setQuantity(long quantity) {
-        this.quantity = quantity;
-    }
-    
+
+
     public String getRewardId() {
         return rewardId;
     }
-    
+
     public void setRewardId(String rewardId) {
         this.rewardId = rewardId;
     }
-    
+
     public String getShortDesc() {
         return shortDesc;
     }
-    
+
     public void setShortDesc(String shortDesc) {
         this.shortDesc = shortDesc;
     }
-    
-    public long getToken() {
-        return token;
-    }
-    
-    public void setToken(long token) {
-        this.token = token;
-    }
-    
-    public long getTotalSales() {
-        return totalSales;
-    }
-    
-    public void setTotalSales(long totalSales) {
-        this.totalSales = totalSales;
-    }
-    
+
+
+
     public String getUpdatedAt() {
         return updatedAt;
     }
-    
+
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
     }
-    
-    public String getVendorId() {
-        return vendorId;
+
+
+    public int get_V() {
+        return _V;
     }
-    
-    public void setVendorId(String vendorId) {
-        this.vendorId = vendorId;
+
+    public void set_V(int _V) {
+        this._V = _V;
     }
-    
-    public long getWishlistCount() {
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public int getToken() {
+        return token;
+    }
+
+    public void setToken(int token) {
+        this.token = token;
+    }
+
+    public int getTotalSales() {
+        return totalSales;
+    }
+
+    public void setTotalSales(int totalSales) {
+        this.totalSales = totalSales;
+    }
+
+    public int getWishlistCount() {
         return wishlistCount;
     }
-    
-    public void setWishlistCount(long wishlistCount) {
+
+    public void setWishlistCount(int wishlistCount) {
         this.wishlistCount = wishlistCount;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this._V);
+        dest.writeString(this._id);
+        dest.writeString(this.adminId);
+        dest.writeString(this.createdAt);
+        dest.writeString(this.description);
+        dest.writeString(this.image);
+        dest.writeValue(this.isActive);
+        dest.writeValue(this.isDeleted);
+        dest.writeString(this.name);
+        dest.writeInt(this.quantity);
+        dest.writeString(this.rewardId);
+        dest.writeString(this.shortDesc);
+        dest.writeInt(this.token);
+        dest.writeInt(this.totalSales);
+        dest.writeString(this.updatedAt);
+        dest.writeString(this.vendorId);
+        dest.writeInt(this.wishlistCount);
+    }
+
+    public Wishlist() {
+    }
+
+    protected Wishlist(Parcel in) {
+        this._V = in.readInt();
+        this._id = in.readString();
+        this.adminId = in.readString();
+        this.createdAt = in.readString();
+        this.description = in.readString();
+        this.image = in.readString();
+        this.isActive = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.isDeleted = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.name = in.readString();
+        this.quantity = in.readInt();
+        this.rewardId = in.readString();
+        this.shortDesc = in.readString();
+        this.token = in.readInt();
+        this.totalSales = in.readInt();
+        this.updatedAt = in.readString();
+        this.vendorId = in.readString();
+        this.wishlistCount = in.readInt();
+    }
+
+    public static final Parcelable.Creator<Wishlist> CREATOR = new Parcelable.Creator<Wishlist>() {
+        @Override
+        public Wishlist createFromParcel(Parcel source) {
+            return new Wishlist(source);
+        }
+
+        @Override
+        public Wishlist[] newArray(int size) {
+            return new Wishlist[size];
+        }
+    };
 }

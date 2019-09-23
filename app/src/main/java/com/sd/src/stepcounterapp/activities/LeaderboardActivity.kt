@@ -8,7 +8,7 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.sd.src.stepcounterapp.AppApplication
+import com.sd.src.stepcounterapp.HayaTechApplication
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.adapter.LeaderboardAdapter
 import com.sd.src.stepcounterapp.fragments.ChallengesFragment.Companion.INTENT_PARAM
@@ -24,7 +24,6 @@ import com.sd.src.stepcounterapp.viewModels.LeaderboardViewModel
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_leaderboard.*
 import kotlinx.android.synthetic.main.crosstitlebar.*
-import kotlinx.android.synthetic.main.fragment_wallet.*
 
 
 class LeaderboardActivity : BaseActivity<LeaderboardViewModel>(), ItemClickGlobalListner,
@@ -33,7 +32,7 @@ class LeaderboardActivity : BaseActivity<LeaderboardViewModel>(), ItemClickGloba
         mViewModel!!.getLeaderboard(
             LeaderBoardRequest(
                 pos.toString(),
-                SharedPreferencesManager.getUserId(AppApplication.applicationContext())
+                SharedPreferencesManager.getUserId(HayaTechApplication.applicationContext())
             )
         )
     }
@@ -67,23 +66,23 @@ class LeaderboardActivity : BaseActivity<LeaderboardViewModel>(), ItemClickGloba
         adapter = ArrayAdapter(this, R.layout.spinner_item, addEntriesToDropDown())
         leaderselection.adapter = adapter
         if (intent.hasExtra(INTENT_PARAM)) {
-            leaderselection.setSelection(1)
             ag_steps_msg.visibility = View.GONE
+            leaderselection.setSelection(1)
             showPopupProgressSpinner(true)
             mViewModel!!.getLeaderboard(
                 LeaderBoardRequest(
                     "1",                // 0 and 1 are also supported as general and challeneg
-                    SharedPreferencesManager.getUserId(AppApplication.applicationContext())
+                    SharedPreferencesManager.getUserId(HayaTechApplication.applicationContext())
                 )
             )
         } else {
-            leaderselection.setSelection(0)
             ag_steps_msg.visibility = View.VISIBLE
+            leaderselection.setSelection(0)
             showPopupProgressSpinner(true)
             mViewModel!!.getLeaderboard(
                 LeaderBoardRequest(
                     "0",
-                    SharedPreferencesManager.getUserId(AppApplication.applicationContext())
+                    SharedPreferencesManager.getUserId(HayaTechApplication.applicationContext())
                 )
             )
         }
@@ -91,11 +90,16 @@ class LeaderboardActivity : BaseActivity<LeaderboardViewModel>(), ItemClickGloba
         mViewModel!!.getLeaderboardResponse().observe(this, Observer { mData ->
             showPopupProgressSpinner(false)
             if (mData != null) {
+                if(leaderselection.selectedItemPosition == 1){
+                    ag_steps_msg.visibility = View.GONE
+                }else{
+                    ag_steps_msg.visibility = View.VISIBLE
+                }
                 if (mData.data != null && mData.data[0].name != null) {
                     if(mData.data.size>3){
                         rvleaderboard.visibility = View.VISIBLE
                     }else{
-                        rvleaderboard.visibility = View.GONE
+                        rvleaderboard.visibility = View.INVISIBLE
                     }
                     mainList = mData.data as ArrayList<Data>?
                     firstLayout.visibility = View.VISIBLE
@@ -122,11 +126,20 @@ class LeaderboardActivity : BaseActivity<LeaderboardViewModel>(), ItemClickGloba
 
                     if (mainList!!.size > 2) {
                         if(mainList!!.size>4){
-                            mChallengeDataList = ArrayList(mainList?.subList(3, mainList!!.lastIndex))
+                            mChallengeDataList = ArrayList(mainList?.subList(3, mainList!!.size))
                         }else if(mainList!!.size>3){
                             mChallengeDataList.add(mainList!![3])
                         }
                         mLeaderAdapter.swap(mChallengeDataList)
+                    }
+
+                    if(mainList!!.size ==1){
+                        secondPosition.visibility = View.VISIBLE
+                        secName.text = "NA"
+                        secSteps.text = "0 steps"
+                        ThirdPosition.visibility = View.VISIBLE
+                        thirdName.text = "NA"
+                        thirdSteps.text = "0 steps"
                     }
 
                 } else {

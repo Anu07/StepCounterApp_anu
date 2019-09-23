@@ -57,17 +57,17 @@ class SettingsFragment : BaseFragment() {
             startActivity(Intent(mContext, SyncDeviceActivity::class.java).putExtra("disconnect", true))
         }
         ll_change_password.setOnClickListener {
-            (mContext as LandingActivity).onFragmnet(6)
+            (mContext as LandingActivity).onFragment(6)
         }
         img_back.setOnClickListener {
             fragmentManager!!.popBackStack()
         }
         privacy_policy.setOnClickListener {
-            (mContext as LandingActivity).onFragmnet(10)
+            (mContext as LandingActivity).onFragment(10)
         }
 
         terms_conditions.setOnClickListener {
-            (mContext as LandingActivity).onFragmnet(11)
+            (mContext as LandingActivity).onFragment(11)
 
         }
 

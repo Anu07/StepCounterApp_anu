@@ -12,6 +12,18 @@ public class Data {
 	@SerializedName("lastUpdated")
 	@Expose
 	private String lastUpdated;
+
+	public String getBadgeCount() {
+		return badgeCount;
+	}
+
+	public void setBadgeCount(String badgeCount) {
+		this.badgeCount = badgeCount;
+	}
+
+	@SerializedName("badgeCount")
+	@Expose
+	private String badgeCount;
 	@SerializedName("activity")
 	@Expose
 	private List<Activity> activity;

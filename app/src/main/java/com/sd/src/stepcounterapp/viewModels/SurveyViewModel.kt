@@ -5,7 +5,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.sd.src.stepcounterapp.AppApplication
+import com.sd.src.stepcounterapp.HayaTechApplication
 import com.sd.src.stepcounterapp.model.generic.BasicInfoResponse
 import com.sd.src.stepcounterapp.model.generic.BasicRequest
 import com.sd.src.stepcounterapp.model.survey.SurveyResponse
@@ -38,17 +38,21 @@ class SurveyViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     fun hitSurveyListApi() {
-        call!!.getsurvey(BasicRequest(SharedPreferencesManager.getUserId(AppApplication.applicationContext())))
+        call!!.getsurvey(BasicRequest(SharedPreferencesManager.getUserId(HayaTechApplication.applicationContext())))
             .enqueue(object :
                 Callback<SurveyResponse> {
                 override fun onFailure(call: Call<SurveyResponse>?, t: Throwable?) {
                     Log.v("retrofit", "call failed")
-                    Toast.makeText(AppApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
+                    Toast.makeText(HayaTechApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
                 }
 
                 override fun onResponse(call: Call<SurveyResponse>?, response: Response<SurveyResponse>?) {
                     if (response!!.code() == 200) {
                         mSurveyList!!.value = response?.body()!!
+                    } else  if (response!!.code() == 405) {
+                        Toast.makeText(HayaTechApplication.applicationContext(), "User doesn't exist", Toast.LENGTH_LONG)
+                            .show()
+                        HayaTechApplication.instance!!.logoutUser()
                     } else {
                         var model = SurveyResponse()
                         model.message = "Invalid request"       //TODO
@@ -64,12 +68,16 @@ class SurveyViewModel(application: Application) : AndroidViewModel(application) 
             Callback<BasicInfoResponse> {
             override fun onFailure(call: Call<BasicInfoResponse>?, t: Throwable?) {
                 Log.v("retrofit", "call failed")
-                Toast.makeText(AppApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
+                Toast.makeText(HayaTechApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
             }
 
             override fun onResponse(call: Call<BasicInfoResponse>?, response: Response<BasicInfoResponse>?) {
                 if(response!!.body()!!.status == 200){
                     mSurveyAttend!!.value = response!!.body()
+                }else  if (response!!.code() == 405) {
+                    Toast.makeText(HayaTechApplication.applicationContext(), "User doesn't exist", Toast.LENGTH_LONG)
+                        .show()
+                    HayaTechApplication.instance!!.logoutUser()
                 }else{
                     mSurveyAttend!!.value = BasicInfoResponse()
                 }

@@ -1,13 +1,15 @@
 
 package com.sd.src.stepcounterapp.model.survey.mysurvey;
 
+import com.sd.src.stepcounterapp.model.survey.Question;
+
 import java.util.List;
 public class Datum {
 
     private long _V;
     private String _id;
     private String attendAt;
-    private List<Survey> survey;
+    private List<Product> survey;
     private String surveyCategoryId;
     private List<UserAnswer> userAnswer;
     private String userId;
@@ -36,11 +38,11 @@ public class Datum {
         this.attendAt = attendAt;
     }
 
-    public List<Survey> getSurvey() {
+    public List<Product> getSurvey() {
         return survey;
     }
 
-    public void setSurvey(List<Survey> survey) {
+    public void setSurvey(List<Product> survey) {
         this.survey = survey;
     }
 

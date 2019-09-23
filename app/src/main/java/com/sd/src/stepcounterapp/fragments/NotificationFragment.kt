@@ -13,12 +13,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.activities.LandingActivity
 import com.sd.src.stepcounterapp.adapter.NotificationsAdapter
-import com.sd.src.stepcounterapp.model.notificatyionlist.Data
+import com.sd.src.stepcounterapp.model.notificatyionlist.NotificationData
 import com.sd.src.stepcounterapp.viewModels.NotificationsViewModel
 import kotlinx.android.synthetic.main.backtitlebar.*
 import kotlinx.android.synthetic.main.fragment_notification.*
 
-class NotificationFragment : BaseFragment() {
+class NotificationFragment : BaseFragment(), NotificationsAdapter.NotifyItemClickListener {
+    override fun onItemClick(pos: Int) {
+        mViewModel.readNotification(mNotificationList[pos]._id)
+    }
+
     companion object {
         @SuppressLint("StaticFieldLeak")
         lateinit var instance: NotificationFragment
@@ -33,6 +37,7 @@ class NotificationFragment : BaseFragment() {
         }
     }
 
+    private var mNotificationList: MutableList<NotificationData> =ArrayList()
     private lateinit var notificationAdapter: NotificationsAdapter
     private lateinit var mViewModel: NotificationsViewModel
 
@@ -50,7 +55,16 @@ class NotificationFragment : BaseFragment() {
         }
         mViewModel.getNotificationResponse().observe(this, Observer { mData ->
             if(mData.status == 200){
-                setAdapter(mData.data as ArrayList<Data>)
+                mNotificationList=mData.data
+                setAdapter(mData.data as ArrayList<NotificationData>)
+            }else{
+                Toast.makeText(SettingsFragment.mContext,"Some error occurred", Toast.LENGTH_LONG).show()
+            }
+        })
+        mViewModel.getReadNotificationResponse().observe(this, Observer { mData ->
+            if(mData.status == 200){
+
+                mViewModel.getNotifications()
             }else{
                 Toast.makeText(SettingsFragment.mContext,"Some error occurred", Toast.LENGTH_LONG).show()
             }
@@ -58,10 +72,10 @@ class NotificationFragment : BaseFragment() {
     }
 
 
-    private fun setAdapter(mData: ArrayList<Data>) {
+    private fun setAdapter(mData: ArrayList<NotificationData>) {
         //   showPopupProgressSpinner(false)
         notificationList.layoutManager = LinearLayoutManager(mContext)
-        notificationAdapter = NotificationsAdapter(mContext, mData)
+        notificationAdapter = NotificationsAdapter(mContext, mData,this)
         notificationList.adapter = notificationAdapter
     }
 

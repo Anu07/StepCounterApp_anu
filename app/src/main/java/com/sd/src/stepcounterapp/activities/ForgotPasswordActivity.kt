@@ -30,7 +30,7 @@ class ForgotPasswordActivity : BaseActivity<SignInViewModel>() {
             Observer<BasicInfoResponse> { mBase ->
                 showPopupProgressSpinner(false)
                 if(mBase.status==200){
-                    Toast.makeText(this@ForgotPasswordActivity,mBase.message,Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@ForgotPasswordActivity,"Email sent successfully.",Toast.LENGTH_LONG).show()
                 }else{
                     Toast.makeText(this@ForgotPasswordActivity,"No Email Record found",Toast.LENGTH_LONG).show()
                 }

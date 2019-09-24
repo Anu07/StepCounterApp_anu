@@ -206,6 +206,8 @@ class ProfileFragment : BaseFragment(), View.OnClickListener {
     private val REQUEST_CROP_IMAGE: Int = 113
     var isWtButtonClicked: Boolean = false
     var isHtButtonClicked: Boolean = false
+    private var heightValue:String =""
+    private var weightValue:String =""
 
 
     companion object {
@@ -245,7 +247,9 @@ class ProfileFragment : BaseFragment(), View.OnClickListener {
             selectGender(femaleBttn)
         }
         dobTxt.setText(userData!!.dob.toString())
+        heightValue = userData!!.height.toString()
         heightTxt.setText(userData!!.height.toString())
+        weightValue = userData!!.weight.toString()
         weightTxt.setText(userData!!.weight.toString())
         maleBttn.setOnClickListener(this)
         femaleBttn.setOnClickListener(this)

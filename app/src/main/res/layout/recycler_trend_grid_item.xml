@@ -28,7 +28,6 @@
                     android:layout_centerHorizontal="true"
                     android:cropToPadding="true"
                     android:scaleType="fitXY"
-                    android:foreground="@drawable/img_ovrlay_slider"
                     android:layout_gravity="fill_vertical"
                     app:layout_constraintBottom_toBottomOf="@id/coverImg"
                     android:src="@drawable/placeholder"

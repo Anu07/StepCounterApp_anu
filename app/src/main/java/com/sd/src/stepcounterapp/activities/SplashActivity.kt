@@ -30,16 +30,16 @@ class SplashActivity : AppCompatActivity() {
             }else{
                 userObj = SharedPreferencesManager.getUserObject(this@SplashActivity)
                 if(userObj.data.basicFlag && userObj.data.rewardFlag){
-                    if(SharedPreferencesManager.hasKey(this@SplashActivity,"Wearable")){
+//                    if(SharedPreferencesManager.hasKey(this@SplashActivity,"Wearable")){
                         val intent = Intent(applicationContext, LandingActivity::class.java)
                         startActivity(intent)
                         finish()
-                    }else{
-                        val intent = Intent(applicationContext, SyncDeviceActivity::class.java)
-                        startActivity(intent)
-                        finish()
-                    }
-
+                    /* }else{
+                         val intent = Intent(applicationContext, SyncDeviceActivity::class.java)
+                         startActivity(intent)
+                         finish()
+                     }
+ */
                 }else if(!userObj.data.basicFlag ){
                     val intent = Intent(applicationContext, BasicInfoActivity::class.java)
                     startActivity(intent)
@@ -75,9 +75,5 @@ class SplashActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
-    override fun onResume() {
-        super.onResume()
-        Log.e("Test intent",""+HayaTechApplication.notificationTitle)
-    }
 
 }

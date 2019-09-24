@@ -60,7 +60,6 @@ class HayaTechApplication : Application() {
 
     companion object {
 
-        var notificationTitle: String = ""
         val TAG = HayaTechApplication::class.java
             .simpleName
         var instance: HayaTechApplication? = null

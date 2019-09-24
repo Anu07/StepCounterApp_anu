@@ -36,7 +36,7 @@ import com.fitpolo.support.task.ZReadStepTask
 import com.fitpolo.support.task.ZWriteSystemTimeTask
 import com.sd.src.stepcounterapp.AppConstants
 import com.sd.src.stepcounterapp.AppConstants.INTENT_FROMAPP
-import com.sd.src.stepcounterapp.HayaTechApplication
+import com.sd.src.stepcounterapp.AppConstants.INTENT_NOTIFICATION
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.adapter.LandingPagerAdapter
 import com.sd.src.stepcounterapp.fragments.*
@@ -187,6 +187,7 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
         vpLanding.setPagingEnabled(false)
         vpLanding.adapter = mAdapter
         vpLanding.offscreenPageLimit = 0
+        initListeners()
 
         mViewModel?.getDashResponse()?.observe(this, androidx.lifecycle.Observer { mDashResponse ->
             if (mDashResponse.data.lastUpdated != null) {
@@ -197,23 +198,6 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
             }
         })
 
-        if (HayaTechApplication.notificationTitle.isNotEmpty()) {
-            when (HayaTechApplication.notificationTitle) {
-                "Challenge Complete" -> loadFragment(1)     //challenges
-                "Redeem Wishlist" ->
-                    loadFragment(4) //wallet
-                "Product Deleted" ->
-                    loadFragment(2)     //marketplace
-                "Daily Top Score" -> startActivity(Intent(this@LandingActivity, LeaderboardActivity::class.java))
-                "Weekly Top Score" -> startActivity(Intent(this@LandingActivity, LeaderboardActivity::class.java))
-                "Challenge Invitiation" -> loadFragment(1)  //challenges
-                "New Product" -> loadFragment(2)  //marketplace
-            }
-        } else {
-            loadFragment(FRAG_HAYATECH)
-            HayaTechApplication.notificationTitle = ""
-        }
-
         if (intent.hasExtra("surveyBack")) {
             vpLanding.currentItem = 3
         }
@@ -221,8 +205,10 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
         mViewModel?.getSyncResponse()?.observe(this,
             androidx.lifecycle.Observer<BasicInfoResponse> {
                 showPopupProgressSpinner(false)
-                dismissSwipe()
+//                dismissSwipe()
             })
+
+
 
         vpLanding?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
 
@@ -237,10 +223,21 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
                 current = position
                 swipeLayout.isEnabled = position == 0
                 loadFragment(position)
+                if (current == 0) {
+                    if (MokoSupport.getInstance().isConnDevice(
+                            this@LandingActivity,
+                            SharedPreferencesManager.getString(this@LandingActivity, WEARABLEID)
+                        )
+                    ) {
+                        showDisconnection(false)
+                    } else {
+                        showDisconnection(true)
+                    }
+                }
             }
 
         })
-        checkBluetoothGPSPermissions()
+
         mViewModel?.fetchSyncData(
             FetchDeviceDataRequest(
                 InterConsts.WEEKLY, SharedPreferencesManager.getUserId(
@@ -248,6 +245,7 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
                 )
             )
         )
+
     }
 
     private fun openNotificationFragment() {
@@ -277,19 +275,19 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
         profileImgTitle.setOnClickListener {
             startActivity(Intent(this@LandingActivity, MyProfileActivity::class.java))
         }
-        setNavHeader()
         if (!MokoSupport.getInstance().isConnDevice(
                 this@LandingActivity,
                 SharedPreferencesManager.getString(this@LandingActivity, WEARABLEID)
             )
         ) {
-//            showDisconnection(true)
+            showDisconnection(true)
             Log.e("disconnected", "detected")
             checkBluetoothGPSPermissions()
         } else {
             showDisconnection(false)
             getLastestSteps()
         }
+        setNavHeader()
         llHayatech.setOnClickListener(this@LandingActivity)
         llChallenges.setOnClickListener(this@LandingActivity)
         llMarketPalace.setOnClickListener(this@LandingActivity)
@@ -298,16 +296,18 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
         img_nav.setOnClickListener(this@LandingActivity)
         swipeLayout.setOnRefreshListener {
             //            swipeLayout.isRefreshing = false
-            if (!MokoSupport.getInstance().isConnDevice(
-                    this@LandingActivity,
-                    SharedPreferencesManager.getString(this@LandingActivity, WEARABLEID)
+            if (!SharedPreferencesManager.hasKey(this@LandingActivity, WEARABLEID)) {
+                swipeLayout.isRefreshing = false
+                showReconnection()
+            } else if (!MokoSupport.getInstance().isConnDevice(
+                    this@LandingActivity, SharedPreferencesManager.getString(this@LandingActivity, WEARABLEID)
                 )
             ) {
-                swipeLayout.isRefreshing = true
+                swipeLayout.isRefreshing = false
                 showDisconnection(true)
-                Log.e("disconnected", "detected")
                 checkBluetoothGPSPermissions()
             } else {
+                showDisconnection(false)
                 swipeLayout.isRefreshing = false
                 getLastestSteps()
             }
@@ -315,22 +315,48 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
 
     }
 
+    private fun showReconnection() {
+        val builder = AlertDialog.Builder(this@LandingActivity)
+        builder.setMessage("You are not connected with wearable device, press OK for connection")
+            .setCancelable(false)
+            .setPositiveButton("Ok") { dialog, id ->
+                //                disconnectBLE()
+                swipeLayout.isRefreshing = false
+                startActivity(Intent(this@LandingActivity, SyncDeviceActivity::class.java))
+            }
+            .setNegativeButton("Cancel") { dialog, id -> dialog.cancel() }
+        val alert = builder.create()
+        alert.show()
+    }
+
     /**
      * to check if bluetooth & GPS enabled or not
      */
     private fun checkBluetoothGPSPermissions() {
-        if (BluetoothAdapter.getDefaultAdapter().isEnabled && manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            searchDevices()
-        } else {
+        if (!SharedPreferencesManager.hasKey(this@LandingActivity, WEARABLEID)) {
             showDisconnection(true)
-            if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                showGPSDisabledAlertToUser()
+        } else {
+            if (MokoSupport.getInstance().isConnDevice(
+                    this@LandingActivity,
+                    SharedPreferencesManager.getString(this@LandingActivity, WEARABLEID)
+                )
+            ) {
+                showDisconnection(false)
             } else {
-                searchDevices()
+                showDisconnection(false)
+                if (BluetoothAdapter.getDefaultAdapter().isEnabled && manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                    searchDevices()
+                } else {
+                    showDisconnection(true)
+                    if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                        showGPSDisabledAlertToUser()
+                    } else {
+                        searchDevices()
+                    }
+
+                }
             }
-
         }
-
     }
 
 
@@ -394,7 +420,6 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
 
             }
             FRAG_CHALLENGES -> {
-                showDisconnection(false)
                 imgChallenges.setImageResource(R.drawable.challenge_s)
                 txt_title.setImageResource(R.drawable.challenges_header)
             }
@@ -553,7 +578,7 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
                         return
                     }
                     showDisconnection(false)
-                    HayatechFragment.instance.syncingWearableMsg(false)
+//                    HayatechFragment.instance.syncingWearableMsg(false)
                     SharedPreferencesManager.saveSyncObject(this@LandingActivity, lastestSteps)
                     HayatechFragment.instance.setCurrentSteps(lastestSteps!![lastestSteps!!.lastIndex])
                     updateDeviceData()
@@ -719,17 +744,18 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
                 }
             } else {
                 dismissSwipe()
-                if (!MokoSupport.getInstance().isConnDevice(
-                        this@LandingActivity,
-                        SharedPreferencesManager.getString(this@LandingActivity, WEARABLEID)
-                    )
-                ) {
-//                    showDisconnection(true)
-                    Log.e("disconnected", "detected")
-                    checkBluetoothGPSPermissions()
-                } else {
-                    getLastestSteps()
-                }
+                Log.e("Device", "not found nearby.")
+                /*  if (!MokoSupport.getInstance().isConnDevice(
+                          this@LandingActivity,
+                          SharedPreferencesManager.getString(this@LandingActivity, WEARABLEID)
+                      )
+                  ) {
+  //                    showDisconnection(true)
+                      Log.e("disconnected", "detected")
+                      checkBluetoothGPSPermissions()
+                  } else {
+                      getLastestSteps()
+                  }*/
             }
 
         }
@@ -755,10 +781,14 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
     override fun onResume() {
         super.onResume()
         DfuServiceListenerHelper.registerProgressListener(this, mDfuProgressListener)
-        Log.e("disconnected", "detected")
         checkBluetoothGPSPermissions()
-        if (HayaTechApplication.notificationTitle.isNotEmpty()) {
-            when (HayaTechApplication.notificationTitle) {
+        onNotification()
+        setNavHeader()
+    }
+
+    private fun onNotification() {
+        if (intent.hasExtra(INTENT_NOTIFICATION)) {
+            when (intent.getStringExtra(INTENT_NOTIFICATION)) {
                 "Challenge Complete" -> loadFragment(1)     //challenges
                 "Redeem Wishlist" ->
                     loadFragment(4) //wallet
@@ -769,13 +799,7 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
                 "Challenge Invitiation" -> loadFragment(1)  //challenges
                 "New Product" -> loadFragment(2)  //marketplace
             }
-        } else {
-            loadFragment(FRAG_HAYATECH)
         }
-
-
-        setNavHeader()
-
     }
 
 
@@ -984,11 +1008,12 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
     fun showDisconnection(b: Boolean): FrameLayout.LayoutParams {
         var params = swipeLayout.layoutParams as FrameLayout.LayoutParams
         if (b) {
-            params.setMargins(10, 220, 10, 10)
             notconnectedTxt.visibility = VISIBLE
+            swipeLayout.isEnabled = true
+            params.setMargins(10, 220, 10, 10)
         } else {
-            params.setMargins(0, 140, 0, 0)
             notconnectedTxt.visibility = GONE
+            params.setMargins(0, 140, 0, 0)
         }
         swipeLayout.layoutParams = params
         return params

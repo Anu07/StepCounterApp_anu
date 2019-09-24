@@ -36,6 +36,7 @@ import com.sd.src.stepcounterapp.model.marketplace.MarketResponse
 import com.sd.src.stepcounterapp.model.marketplace.PopularProducts
 import com.sd.src.stepcounterapp.model.marketplace.walletInfo.WalletModelResponse
 import com.sd.src.stepcounterapp.model.redeemnow.RedeemRequest
+import com.sd.src.stepcounterapp.model.wallet.purchase.PurchaseResponse
 import com.sd.src.stepcounterapp.model.wallet.walletDetailResponse.WalletModel
 import com.sd.src.stepcounterapp.model.wishList.AddWishRequest
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
@@ -202,7 +203,7 @@ class MarketPlaceFragment : BaseFragment(), FilterDialog.MarketFilterInterface, 
         mViewModel.getProductApi(BasicRequest(SharedPreferencesManager.getUserId(mContext), "1"))
 
         mViewModel.getPurchase().observe(this,
-            Observer<BasicInfoResponse> { mData ->
+            Observer<PurchaseResponse> { mData ->
                 showPopupProgressSpinner(false)
                 try {
                     if (marketDialog != null && marketDialog.isShowing) {
@@ -254,11 +255,14 @@ class MarketPlaceFragment : BaseFragment(), FilterDialog.MarketFilterInterface, 
 
                 if (mProduct != null) {
                     if (mProduct.data.size > 0) {
+                        mDataCategory = ArrayList()
                         rvProduct.visibility = View.VISIBLE
                         noRec.visibility = View.GONE
                         mDataCategory = mProduct.data
                         getCategoryNameList(mDataCategory)
-                        mCategoryAdapter.swap(mDataCategory)
+//                        mCategoryAdapter.swap(mDataCategory)
+                        mCategoryAdapter = MarketPlaceCategoryAdapter(mDataCategory, mContext, this, this, this)
+                        rvProduct.adapter = mCategoryAdapter
                         if (mDataCategory.size > 0)
                             txtCategoryName.text = mDataCategory[0].name
                     }
@@ -345,7 +349,10 @@ class MarketPlaceFragment : BaseFragment(), FilterDialog.MarketFilterInterface, 
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-        (mContext as LandingActivity).showDisconnection(false)
+        try {
+            (mContext as LandingActivity).showDisconnection(false)
+        } catch (e: Exception) {
+        }
     }
 
 
@@ -356,7 +363,7 @@ class MarketPlaceFragment : BaseFragment(), FilterDialog.MarketFilterInterface, 
         setSeeAllAdapter()
         setUpTokens()
         setupBadge()
-        (mContext as LandingActivity).showDisconnection(false)
+//        (mContext as LandingActivity).showDisconnection(false)
         txtSeeAll.setOnClickListener {
             rvSeeAll.visibility = View.GONE
             llSeeAll.visibility = View.GONE

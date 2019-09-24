@@ -78,11 +78,11 @@ class ChallengeViewModel(application: Application) : AndroidViewModel(applicatio
                         Toast.makeText(HayaTechApplication.applicationContext(), "User doesn't exist", Toast.LENGTH_LONG)
                             .show()
                         HayaTechApplication.instance!!.logoutUser()
+                    } else if (response!!.body()!!.status == 400) {
+                        mStopChallenge!!.value = BasicInfoResponse()
                     } else if (response!!.body()!!.status == 200) {
                         mStopChallenge!!.value = response!!.body()
                         getchallenges(BasicRequest(SharedPreferencesManager.getUserId(ChallengesFragment.mContext), ""))
-                    } else if (response!!.body()!!.status == 400) {
-                        mStopChallenge!!.value = BasicInfoResponse()
                     }
 
                 }

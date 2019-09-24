@@ -149,7 +149,6 @@ abstract class BaseActivity<V : AndroidViewModel> : AppCompatActivity() {
         } else if (getCurrentActivityName() == "com.sd.src.stepcounterapp.activities.LandingActivity" && !doubleBackToExitPressedOnce) {
             this.doubleBackToExitPressedOnce = true
             Toast.makeText(this, "Please click BACK again to exit.", Toast.LENGTH_SHORT).show()
-
             Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
         } else {
             super.onBackPressed()

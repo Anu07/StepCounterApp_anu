@@ -89,9 +89,15 @@ class SignInViewModel(application: Application) : AndroidViewModel(application) 
                     Toast.makeText(HayaTechApplication.applicationContext(), "User doesn't exist", Toast.LENGTH_LONG)
                         .show()
                     HayaTechApplication.instance!!.logoutUser()
+                } else if (response!!.code() == 400) {
+                    var login = LoginResponseJ()
+                    Toast.makeText(HayaTechApplication.applicationContext(), "Invalid email or password.", Toast.LENGTH_LONG)
+                        .show()
+                    login.message ="Invalid email or password."
+                    mUserModel!!.value = login
                 } else {
                     var login = LoginResponseJ()
-                    login.message = "Invalid request"       //TODO
+                    login.message = "Invalid request"
                     mUserModel!!.value = login
 
                 }

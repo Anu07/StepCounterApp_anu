@@ -27,7 +27,7 @@ class PurchasedDetails : BaseActivity<PurchasedVendorModel>() {
     override fun onCreate() {
         dealData = intent.getParcelableExtra(DEALDATA)
         if (intent.hasExtra(DEALDATA)) {
-            txtCodValue.text = dealData?.rewardId
+            txtCodValue.text = dealData?.invoiceNo
             txtTitle.text = dealData?.name?.capitalize()
             txtvalue.text = dealData?.shortDesc?.capitalize()
         }

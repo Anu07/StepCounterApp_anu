@@ -33,4 +33,8 @@ open class BaseFragment : Fragment(){
             progressDialog.dismiss()
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+    }
 }

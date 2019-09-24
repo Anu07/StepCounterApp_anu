@@ -14,6 +14,7 @@ import com.sd.src.stepcounterapp.AppConstants.INTENT_FROMAPP
 import com.sd.src.stepcounterapp.HayaTechApplication
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.adapter.RecyclerGridAdapter
+import com.sd.src.stepcounterapp.adapter.multiselection.MultiSelectionCategoryAdapter
 import com.sd.src.stepcounterapp.model.login.LoginResponseJ
 import com.sd.src.stepcounterapp.model.rewards.AddRewardsRequestObject
 import com.sd.src.stepcounterapp.model.rewards.Data
@@ -32,12 +33,11 @@ class RewardsCategorySelectionActivity : BaseActivity<SignInViewModel>(),
         if (categoriesList.data[position].selectedItem && !selectedCategories!!.contains(item.name)) {
             selectedCategories!!.add(categoriesList.data[position]._id)
         }
-
     }
 
     private val mIdRewardList: ArrayList<String> = ArrayList()
-    private var mRewardList: MutableList<Data> = ArrayList<Data>()
-    private lateinit var adapter: RecyclerGridAdapter
+    private var mRewardList: MutableList<Data> = ArrayList()
+    private lateinit var adapter: MultiSelectionCategoryAdapter
     override val layoutId: Int
         get() = R.layout.activity_rewards_category_selection
     override val viewModel: SignInViewModel
@@ -73,7 +73,7 @@ class RewardsCategorySelectionActivity : BaseActivity<SignInViewModel>(),
                     }
                     categoriesList = mRewardsModel
                     if (!intent.hasExtra(INTENT_FROMAPP)) {
-                        adapter = RecyclerGridAdapter(this, mRewardsModel.data, this)
+                        adapter = MultiSelectionCategoryAdapter(this, mRewardsModel.data, this)
                         rewardsCategory.adapter = adapter
                     } else {
                         showPopupProgressSpinner(true)
@@ -92,7 +92,7 @@ class RewardsCategorySelectionActivity : BaseActivity<SignInViewModel>(),
                         }
                     }
                     Log.e("refresh", "" + mRewardList.size)
-                    adapter = RecyclerGridAdapter(this, mRewardList, this)
+                    adapter = MultiSelectionCategoryAdapter(this, mRewardList, this)
                     rewardsCategory.adapter = adapter
                 }
             })

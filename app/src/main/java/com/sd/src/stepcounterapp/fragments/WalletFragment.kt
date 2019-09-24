@@ -215,6 +215,7 @@ class WalletFragment : BaseFragment(), WalletWishListAdapter.PurchaseListener, W
 
         mViewModel.getWalletData().observe(this,
             Observer<WalletModel> { mData ->
+                showPopupProgressSpinner(false)
                 if (mData != null && mData?.data != null) {
                     txtTokens.text = mData?.data.totalGenerated.toString()
                     txtSteps.text = mData.data?.steps.toString()
@@ -290,6 +291,7 @@ class WalletFragment : BaseFragment(), WalletWishListAdapter.PurchaseListener, W
             })
 
 //        mViewModel.setTokensFromSteps()
+        showPopupProgressSpinner(true)
         mViewModel.hitWalletApi()
 
         txtWishSeeAll.setOnClickListener {
@@ -358,7 +360,7 @@ class WalletFragment : BaseFragment(), WalletWishListAdapter.PurchaseListener, W
             false
         }
 
-        (mContext as LandingActivity).showDisconnection(false)
+//        (mContext as LandingActivity).showDisconnection(false)
     }
 
 

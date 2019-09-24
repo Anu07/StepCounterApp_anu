@@ -86,9 +86,11 @@ class ChallengesFragment : BaseFragment(), ChallengeAdapter.ItemClickListener,
                     }
 
                     override fun onStart(data: Data) {
-                        if (checkChallengeValidity()) {
+                        if (checkChallengeValidity(data.startDateTime) >= 0) {
                             showPopupProgressSpinner(true)
                             mViewModel.startChallenge(data)
+                        }else{
+                            Toast.makeText(mContext, "This challenge has not started yet.", Toast.LENGTH_LONG).show()
                         }
 
                     }
@@ -96,15 +98,19 @@ class ChallengesFragment : BaseFragment(), ChallengeAdapter.ItemClickListener,
         Challengedialog!!.show()
     }
 
-    private fun checkChallengeValidity(): Boolean {
-        getCurrentDate()
-        return true
+    private fun checkChallengeValidity(startDate: String): Int {
+
+        var startDateformatted = changeDateFormat(
+            "yyyy-MM-dd'T'HH:mm:ss.SSS",
+            "yyyy-MM-dd", startDate
+        )+" "+convertToLocal(startDate)
+        Log.i("Date", "formatted$startDateformatted")
+        var format = SimpleDateFormat("yyyy-MM-dd hh:mm a")
+        return format.format(getCurrentDate()).compareTo(startDateformatted)
     }
 
-    private fun getCurrentDate(): String? {
-        var formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
-        var date = Date(System.currentTimeMillis())
-        return formatter.format(date)
+     fun getCurrentDate(): Date {
+         return Date(System.currentTimeMillis())
     }
 
     private fun sendRequestObject(data: Data): Challenge {
@@ -272,11 +278,7 @@ class ChallengesFragment : BaseFragment(), ChallengeAdapter.ItemClickListener,
             mActiveList[0].endDateTime
         ) + " | " + convertToLocal(mActiveList[0].endDateTime)
         daysLeft.text = """${getDaysDifference(
-            changeDateFormat(
-                "yyyy-MM-dd'T'HH:mm:ss.SSS",
-                "dd/MM/yyyy",
-                mActiveList[0].startDateTime
-            ), changeDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", "dd/MM/yyyy", mActiveList[0].endDateTime)
+            SimpleDateFormat("dd/MM/yyyy").format(getCurrentDate()), changeDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", "dd/MM/yyyy", mActiveList[0].endDateTime)
         )} days"""
 
         /* stopchallengeBttn.setOnClickListener {
@@ -328,7 +330,7 @@ class ChallengesFragment : BaseFragment(), ChallengeAdapter.ItemClickListener,
 
         }
         init()
-        (mContext as LandingActivity).showDisconnection(false)
+//        (mContext as LandingActivity).showDisconnection(false)
     }
 
 

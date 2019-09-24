@@ -96,9 +96,13 @@ class SyncDeviceActivity : BaseActivity<BaseViewModel>(),
             SharedPreferencesManager.removeKey(this@SyncDeviceActivity,"Wearable")
             if(!MokoSupport.getInstance().isConnDevice(this@SyncDeviceActivity,SharedPreferencesManager.getString(this@SyncDeviceActivity,WEARABLEID))){
                 Log.e("disconnect","success")
-                Toast.makeText(this@SyncDeviceActivity, "Device disconnected successfully", Toast.LENGTH_LONG).show()
+//                Toast.makeText(this@SyncDeviceActivity, "Device disconnected successfully", Toast.LENGTH_LONG).show()
             }else{
-                MokoSupport.getInstance().disConnectBle()
+               var deviceSynced = SharedPreferencesManager.getString(this@SyncDeviceActivity, WEARABLEID)
+                if(MokoSupport.getInstance().isConnDevice(this@SyncDeviceActivity,deviceSynced)){
+                    MokoSupport.getInstance().disConnectBle()
+                    Toast.makeText(this@SyncDeviceActivity, "Device disconnected successfully", Toast.LENGTH_LONG).show()
+                }
             }
         }
 

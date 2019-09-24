@@ -82,7 +82,7 @@
                     android:layout_width="match_parent"
                     android:orientation="vertical"
                     android:layout_marginTop="@dimen/_10sdp"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     android:layout_height="wrap_content">
 
                 <com.sd.src.stepcounterapp.utils.CustomTextView

@@ -15,11 +15,13 @@ import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.activities.LandingActivity
 import com.sd.src.stepcounterapp.adapter.sectionAdapter.TransactionHistoryAdapter
 import com.sd.src.stepcounterapp.model.generic.BasicRequest
+import com.sd.src.stepcounterapp.model.transactionhistory.TransactionEntry
 import com.sd.src.stepcounterapp.model.transactionhistory.TransactionHistoryModel
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import com.sd.src.stepcounterapp.viewModels.TransactionHistoryViewModel
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter
 import kotlinx.android.synthetic.main.backtitlebar.*
+import java.util.*
 
 
 class TransactionHistoryFragment : BaseFragment() {
@@ -43,37 +45,16 @@ class TransactionHistoryFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        mViewModel = ViewModelProviders.of(activity!!).get(TransactionHistoryViewModel::class.java)
-        mViewModel.getTransactionHistory(BasicRequest(SharedPreferencesManager.getUserId(mContext), ""))
+    }
 
-        mViewModel.getTransactionHistoryObject().observe(this,
-            Observer<TransactionHistoryModel> { mChallenge ->
-                mChallenge?.data?.let { list ->
-                    when (!list.isNullOrEmpty()) {
-                        true -> {
-                            // Create an instance of SectionedRecyclerViewAdapter
-                            val sectionAdapter = SectionedRecyclerViewAdapter()
 
-                            for (i in 0 until list.size) {
-                                sectionAdapter.addSection(
-                                    TransactionHistoryAdapter(
-                                        activity!!,
-                                        list[i].id,
-                                        list[i].entries
-                                    )
-                                )
-                            }
+    /**
+     * sort list
+     */
 
-                            // Set up your RecyclerView with the SectionedRecyclerViewAdapter
-                            val recyclerView = view?.findViewById(R.id.recyclerView) as RecyclerView
-                            recyclerView.layoutManager = LinearLayoutManager(context)
-                            recyclerView.adapter = sectionAdapter
-                        }
-                    }
-
-                }
-            })
-
+    private fun getReverseList(entries: List<TransactionEntry>): List<TransactionEntry> {
+        Collections.reverse(entries)
+        return entries
     }
 
 
@@ -88,6 +69,38 @@ class TransactionHistoryFragment : BaseFragment() {
         img_back.setOnClickListener {
             fragmentManager!!.popBackStack()
         }
+        mViewModel = ViewModelProviders.of(activity!!).get(TransactionHistoryViewModel::class.java)
+
+        mViewModel.getTransactionHistoryObject().observe(this,
+            Observer<TransactionHistoryModel> { mChallenge ->
+                mChallenge?.data?.let { list ->
+                    showPopupProgressSpinner(false)
+                    when (!list.isNullOrEmpty()) {
+                        true -> {
+                            // Create an instance of SectionedRecyclerViewAdapter
+                            val sectionAdapter = SectionedRecyclerViewAdapter()
+
+                            for (i in 0 until list.size) {
+                                sectionAdapter.addSection(
+                                    TransactionHistoryAdapter(
+                                        activity!!,
+                                        list[i].id,
+                                        getReverseList(list[i].entries)
+                                    )
+                                )
+                            }
+
+                            // Set up your RecyclerView with the SectionedRecyclerViewAdapter
+                            val recyclerView = view?.findViewById(R.id.recyclerView) as RecyclerView
+                            recyclerView.layoutManager = LinearLayoutManager(context)
+                            recyclerView.adapter = sectionAdapter
+                        }
+                    }
+
+                }
+            })
+        showPopupProgressSpinner(true)
+        mViewModel.getTransactionHistory(BasicRequest(SharedPreferencesManager.getUserId(mContext), ""))
 
     }
 

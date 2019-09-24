@@ -24,6 +24,14 @@ import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import com.sd.src.stepcounterapp.viewModels.BaseViewModelFactory
 import com.sd.src.stepcounterapp.viewModels.SignInViewModel
 import kotlinx.android.synthetic.main.activity_bmi_calc.*
+import kotlinx.android.synthetic.main.activity_bmi_calc.cms_ht
+import kotlinx.android.synthetic.main.activity_bmi_calc.femaleBttn
+import kotlinx.android.synthetic.main.activity_bmi_calc.fts_ht
+import kotlinx.android.synthetic.main.activity_bmi_calc.kgs_wt
+import kotlinx.android.synthetic.main.activity_bmi_calc.lbs_wt
+import kotlinx.android.synthetic.main.activity_bmi_calc.maleBttn
+import kotlinx.android.synthetic.main.activity_bmi_calc.saveinfoBttn
+import kotlinx.android.synthetic.main.fragment_profile.*
 import travel.ithaka.android.horizontalpickerlib.PickerLayoutManager
 import java.text.DecimalFormat
 
@@ -36,27 +44,27 @@ class BmiCalculatorActivity : BaseActivity<SignInViewModel>(), View.OnClickListe
                 isWtButtonClicked = false
                 changeBttnBg(v)
                 adapter.swapData(getWeightData(maxLbs))
-                rv.smoothScrollToPosition(0)
+                rv.smoothScrollToPosition(2)
             }
             R.id.kgs_wt -> {
                 isWtButtonClicked = true
                 changeBttnBg(v)
                 adapter.swapData(getWeightData(maxKgs))
-                rv.smoothScrollToPosition(0)
+                rv.smoothScrollToPosition(2)
 
             }
             R.id.cms_ht -> {
                 isHtButtonClicked = true
                 changeHtBttnBg(v)
                 adapter_ht.swapData(getHeightDataCms(maxLbs))
-                rv_ht.smoothScrollToPosition(0)
+                rv_ht.smoothScrollToPosition(2)
 
             }
             R.id.fts_ht -> {
                 isHtButtonClicked = false
                 changeHtBttnBg(v)
                 adapter_ht.swapData(getHeightData(maxHtFt))
-                rv_ht.smoothScrollToPosition(0)
+                rv_ht.smoothScrollToPosition(2)
 
             }
             R.id.maleBttn -> {
@@ -123,7 +131,6 @@ class BmiCalculatorActivity : BaseActivity<SignInViewModel>(), View.OnClickListe
         kgs_wt.isSelected = true
         cms_ht.isSelected = true
 
-
         val snapHelper = LinearSnapHelper()
         snapHelper.attachToRecyclerView(rv as RecyclerView?)
         rv.layoutManager = pickerLayoutManager
@@ -185,13 +192,23 @@ class BmiCalculatorActivity : BaseActivity<SignInViewModel>(), View.OnClickListe
 
         if (intent.hasExtra("inApp")) {
             skipBttn.visibility = View.GONE
-            if (SharedPreferencesManager.getUpdatedUserObject(this@BmiCalculatorActivity).gender.equals("Male", true)) {
-                isGenderClicked = false
-                selectGender(maleBttn)
-            } else {
-                isGenderClicked = true
-                selectGender(femaleBttn)
+            if(SharedPreferencesManager.hasKey(this@BmiCalculatorActivity,"UpdatedUser")){
+                var mSavedUser = SharedPreferencesManager.getUpdatedUserObject(this@BmiCalculatorActivity)
+                if (mSavedUser.gender.equals("Male", true)) {
+                    isGenderClicked = false
+                    selectGender(maleBttn)
+                } else {
+                    isGenderClicked = true
+                    selectGender(femaleBttn)
+                }
+               /* if(mSavedUser.heightType.equals("Feet")){
+                    changeHtBttnBg(fts_ht)
+                }else{
+                    changeHtBttnBg(cms_ht)
+                }*/
             }
+
+
         }
 
     }

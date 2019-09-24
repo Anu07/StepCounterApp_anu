@@ -37,9 +37,9 @@ class MarketPlaceViewModel(application: Application) : AndroidViewModel(applicat
         return mProduct as MutableLiveData<MarketResponse>
     }
 
-    fun getPurchase(): MutableLiveData<BasicInfoResponse> {
+    fun getPurchase(): MutableLiveData<PurchaseResponse> {
         mPurchaseResponse = MutableLiveData()
-        return mPurchaseResponse as MutableLiveData<BasicInfoResponse>
+        return mPurchaseResponse as MutableLiveData<PurchaseResponse>
     }
 
     fun getPopularity(): MutableLiveData<PopularProducts> {

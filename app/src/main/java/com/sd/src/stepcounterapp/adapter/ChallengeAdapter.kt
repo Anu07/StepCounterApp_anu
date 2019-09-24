@@ -16,6 +16,8 @@ import com.sd.src.stepcounterapp.getDaysDifference
 import com.sd.src.stepcounterapp.model.challenge.Data
 import com.sd.src.stepcounterapp.network.RetrofitClient
 import com.squareup.picasso.Picasso
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class ChallengeAdapter(
@@ -30,7 +32,7 @@ class ChallengeAdapter(
         this.item = mValues[position]
         holder.textView.text = item.name.capitalize()
         holder.textShort.text = item.shortDesc.capitalize()
-        var daysDuration:String? = getDaysDifference(changeDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", "dd/MM/yyyy", item.startDateTime), changeDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", "dd/MM/yyyy", item.endDateTime)).toString()
+        var daysDuration:String? = getDaysDifference(getCurrentDate().toString(), changeDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", "dd/MM/yyyy", item.endDateTime)).toString()
         if(daysDuration.equals("0")){
             holder.txtDurDesc.text = "Duration: "+"Today"
         }else{
@@ -85,5 +87,9 @@ class ChallengeAdapter(
     interface ItemClickListener {
         fun onItemClick(pos:Int, item: Data)
     }
-
+    fun getCurrentDate(): String? {
+        var formatter = SimpleDateFormat("dd/MM/yyyy")
+        var date = Date(System.currentTimeMillis())
+        return formatter.format(date)
+    }
 }

@@ -1,84 +1,88 @@
 package com.sd.src.stepcounterapp.firebase
 
-import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
-import android.graphics.Color
+import android.content.Intent
+import android.media.RingtoneManager
 import android.os.Build
 import android.util.Log
+import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.sd.src.stepcounterapp.HayaTechApplication
-import com.sd.src.stepcounterapp.HayaTechApplication.Companion.TAG
+import com.sd.src.stepcounterapp.AppConstants.INTENT_NOTIFICATION
 import com.sd.src.stepcounterapp.R
-import org.json.JSONException
-import org.json.JSONObject
-
+import com.sd.src.stepcounterapp.activities.LandingActivity
 
 
 class MyFirebaseMessageService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
         Log.d(TAG, "From: ${remoteMessage.from}")
-
-        // Check if message contains a data payload.
         remoteMessage.data.isNotEmpty().let {
             Log.d(TAG, "Message data payload: " + remoteMessage.data)
+
+            remoteMessage.notification?.let {
+                Log.d(TAG, "Message Notification Body: ${it.body}")
+                it.body?.let { it1 -> sendNotification(it.title!!, it.body!!) }
+            }
+
         }
-        var data = remoteMessage.data
-        val jsonObject = JSONObject(data)
-        var body = ""
-        var title = ""
-
-        try {
-            Log.e("data", jsonObject.toString())
-            body = jsonObject.getString("body")
-            title = jsonObject.getString("title")
-            Log.e("body", body)
-            Log.e("title", title)
-        } catch (e: JSONException) {
-            Log.e("exception>>>", e.toString() + "")
-            e.printStackTrace()
-            var body = remoteMessage.notification!!.body
-            Log.e("body>>>", body + "")
-        }
-
-        HayaTechApplication.notificationTitle=title
-        Log.e("body title test>>>", HayaTechApplication.notificationTitle + "")
-
-        showNotification(title,body)
-        // Check if message contains a notification payload.
-        remoteMessage.notification?.let {
-            Log.d(TAG, "Message Notification Body: ${it.body}")
-        }
-
-        // Also if you intend on generating your own notifications as a result of a received FCM
-        // message, here is where that should be initiated. See sendNotification method below.
     }
 
-    private fun showNotification(title: String?, body: String?) {
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val channelId = "hayatech_channel_id"
-        val channelName = "Hayatech Channel"
-        val importance = NotificationManager.IMPORTANCE_LOW
-        val notifyId = 1
+    /**
+     * Called if InstanceID token is updated. This may occur if the security of
+     * the previous token had been compromised. Note that this is called when the InstanceID token
+     * is initially generated so this is where you would retrieve the token.
+     */
+    override fun onNewToken(token: String) {
+        Log.d(TAG, "Refreshed token: $token")
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val notificationChannel = NotificationChannel(channelId, channelName, importance)
-            notificationChannel.enableLights(true)
-            notificationChannel.lightColor = Color.GREEN
-            notificationChannel.enableVibration(true)
-            notificationChannel.vibrationPattern = longArrayOf(100, 200, 300, 400, 500, 400, 300, 200, 400)
-            notificationManager.createNotificationChannel(notificationChannel)
+//        sendRegistrationToServer(token)
+    }
+
+    /**
+     * Create and show a simple notification containing the received FCM message.
+     *
+     * @param messageBody FCM message body received.
+     */
+    private fun sendNotification(title: String, messageBody: String) {
+        val intent = Intent(this, LandingActivity::class.java).apply {
+            putExtra(INTENT_NOTIFICATION,title)
         }
-        HayaTechApplication.notificationTitle= title.toString()
-        val notification = Notification.Builder(this)
-            .setContentTitle(title)
-            .setContentText(body)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        val pendingIntent = PendingIntent.getActivity(
+            this, 0 /* Request code */, intent,
+            PendingIntent.FLAG_ONE_SHOT
+        )
+
+        val channelId = getString(R.string.default_notification_channel_id)
+        val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+        val notificationBuilder = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.mipmap.app_icon_new)
-            .build()
-        notificationManager.notify(notifyId, notification);
+            .setContentTitle(getString(R.string.notification))
+            .setContentText(messageBody)
+            .setAutoCancel(true)
+            .setSound(defaultSoundUri)
+            .setContentIntent(pendingIntent)
+
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        // Since android Oreo notification channel is needed.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                channelId,
+                "Channel human readable title",
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build())
     }
 
+    companion object {
+
+        private const val TAG = "MyFirebaseMsgService"
+    }
 }

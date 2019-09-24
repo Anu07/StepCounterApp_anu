@@ -105,7 +105,7 @@ class SurveysFragment : BaseFragment(), ItemClickGlobalListner {
 
         setSurveyAdapter()
         init()
-        (mContext as LandingActivity).showDisconnection(false)
+//        (mContext as LandingActivity).showDisconnection(false)
     }
 
 
@@ -128,7 +128,7 @@ class SurveysFragment : BaseFragment(), ItemClickGlobalListner {
                 override fun run() {
                     handler.post(Update)
                 }
-            }, 3000, 3000)
+            }, 3000, 5000)
         }
 
     }

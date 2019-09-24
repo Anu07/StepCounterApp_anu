@@ -31,7 +31,7 @@ class MySurveyAdapter(mContext: Context?, mData: MySurveyResponseModel) :
         holder.textQues.text = mData.data[position].survey[0].questions.size.toString()
         holder.datesurvey.text = changeDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", "dd MMM, yyyy", mData.data[position].attendAt)
        holder.textView.text = mData.data[position].survey[0].name.capitalize()
-       holder.txtEarningToken.text = "Earned Tokens: "+mData.data[0].survey[position].earningToken.toString().capitalize()
+       holder.txtEarningToken.text = "Earned Tokens: "+mData.data[position].survey[0].earningToken.toString().capitalize()
         holder.customStartTextView.visibility = View.GONE
     }
 

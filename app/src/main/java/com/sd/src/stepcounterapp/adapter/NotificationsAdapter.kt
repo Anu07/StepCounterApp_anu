@@ -40,9 +40,8 @@ class NotificationsAdapter(mContext: Context?, mData: ArrayList<NotificationData
                 if (mData[position].readStatus) {
                     holder.parentLayout.setBackgroundColor(mContext!!.resources.getColor(R.color.white))
                 } else {
-                    holder.parentLayout.setBackgroundColor(mContext!!.resources.getColor(R.color.a8a8a8))
+                    holder.parentLayout.setBackgroundColor(mContext!!.resources.getColor(R.color.background_litegray))
                 }
-
             }
 
             /* holder.imageView.setOnClickListener {

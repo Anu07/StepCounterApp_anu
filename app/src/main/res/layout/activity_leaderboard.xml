@@ -24,7 +24,7 @@
                             android:layout_width="match_parent"
                             android:layout_gravity="bottom"
                             android:background="@drawable/white_round_corners_full"
-                            android:layout_marginTop="@dimen/_220sdp"
+                            android:layout_marginTop="@dimen/_240sdp"
                             android:layout_marginLeft="@dimen/_10sdp"
                             android:layout_marginRight="@dimen/_10sdp"
                             android:layout_marginBottom="?actionBarSize"
@@ -35,7 +35,7 @@
                              android:layout_height="wrap_content">
 
                     <ImageView android:layout_width="match_parent"
-                               android:layout_height="wrap_content"
+                               android:layout_height="@dimen/_250sdp"
                                android:scaleType="fitXY"
                                android:src="@drawable/slice_leaderboard"/>
                     <include layout="@layout/crosstitlebar"/>
@@ -44,7 +44,8 @@
                                  android:layout_marginTop="?actionBarSize"
                                  android:layout_marginLeft="@dimen/_10sdp"
                                  android:layout_marginRight="@dimen/_10sdp"
-                                 android:layout_height="wrap_content">
+                                 android:layout_marginBottom="@dimen/_35sdp"
+                                 android:layout_height="match_parent">
 
                         <FrameLayout android:layout_width="match_parent"
                                      android:layout_height="wrap_content">
@@ -73,7 +74,7 @@
                                       android:layout_gravity="center_horizontal"
                                       android:gravity="center_horizontal|center_vertical"
                                       android:layout_marginTop="@dimen/_40sdp"
-                                      android:layout_height="@dimen/_115sdp">
+                                      android:layout_height="@dimen/_130sdp">
                             <LinearLayout android:layout_width="0dp"
                                           android:id="@+id/secondPosition"
                                           android:visibility="invisible"
@@ -83,7 +84,7 @@
                                           android:layout_marginTop="@dimen/_5sdp"
                                           android:layout_height="match_parent">
                                 <com.sd.src.stepcounterapp.utils.CustomButton
-                                        tools:text="2"
+                                        android:text="2"
                                         app:appButtonfont="montserrat_semibold.ttf"
                                         android:layout_width="@dimen/_50sdp"
                                         android:textColor="@color/white"
@@ -130,11 +131,11 @@
                                 <com.sd.src.stepcounterapp.utils.CustomTextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="Ahmed Saleh"
+                                        tools:text="Ahmed Saleh"
                                         android:textSize="@dimen/_13ssp"
                                         android:layout_marginLeft="@dimen/_5sdp"
                                         android:layout_marginRight="@dimen/_5sdp"
-                                        android:layout_marginTop="@dimen/_5sdp"
+                                        android:layout_marginTop="@dimen/_3sdp"
                                         android:textColor="@color/white"
                                         android:gravity="center"
                                         android:id="@+id/firstName"
@@ -142,9 +143,10 @@
                                 <com.sd.src.stepcounterapp.utils.CustomTextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="11800 Steps"
+                                        tools:text="11800 Steps"
                                         android:id="@+id/firstSteps"
                                         android:textSize="@dimen/_11ssp"
+                                        android:layout_marginBottom="@dimen/_5sdp"
                                         android:textColor="@color/white"
                                         app:appfont="montserrat_light.ttf"/>
                             </LinearLayout>
@@ -158,7 +160,7 @@
                                     android:orientation="vertical"
                                     android:layout_height="match_parent">
                                 <com.sd.src.stepcounterapp.utils.CustomButton
-                                        tools:text="3"
+                                        android:text="3"
                                         app:appButtonfont="montserrat_semibold.ttf"
                                         android:layout_width="@dimen/_50sdp"
                                         android:textColor="@color/white"

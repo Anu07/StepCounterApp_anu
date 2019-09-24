@@ -190,7 +190,8 @@ class BasicInfoActivity : BaseActivity<SignInViewModel>(), DatePickerDialog.OnDa
             }
 
         }
-        dobTxt.setOnTouchListener(object : OnTouchListener {
+        dobTxt.isEnabled = false
+       /* dobTxt.setOnTouchListener(object : OnTouchListener {
             override fun onTouch(v: View, event: MotionEvent): Boolean {
                 val DRAWABLE_RIGHT = 2
 
@@ -206,7 +207,7 @@ class BasicInfoActivity : BaseActivity<SignInViewModel>(), DatePickerDialog.OnDa
                 }
                 return false
             }
-        })
+        })*/
         emailTxt.setOnTouchListener(object : OnTouchListener {
             override fun onTouch(v: View, event: MotionEvent): Boolean {
                 val DRAWABLE_RIGHT = 2

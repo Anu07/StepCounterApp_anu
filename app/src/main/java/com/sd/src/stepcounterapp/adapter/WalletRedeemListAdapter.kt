@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.sd.src.stepcounterapp.R
+import com.sd.src.stepcounterapp.fragments.WalletFragment
 import com.sd.src.stepcounterapp.model.wallet.walletDetailResponse.Purchased
 import com.sd.src.stepcounterapp.network.RetrofitClient
 import com.squareup.picasso.Picasso
@@ -27,7 +28,7 @@ class WalletRedeemListAdapter(var mData: ArrayList<Purchased>) :
         holder.txtToken.text = "${mData[position].token} TKS"
         Picasso.get().load(RetrofitClient.IMG_URL + "" + mData[position].image).into(holder.imgProduct)
         holder.redeemedParent.setOnClickListener {
-
+                WalletFragment.instance.onRedeem(position)
         }
 
     }

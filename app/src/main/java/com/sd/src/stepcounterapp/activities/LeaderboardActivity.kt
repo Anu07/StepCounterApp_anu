@@ -106,12 +106,12 @@ class LeaderboardActivity : BaseActivity<LeaderboardViewModel>(), ItemClickGloba
                     Picasso.get().load(RetrofitClient.IMG_URL + mData.data[0].image).error(R.drawable.nouser).placeholder(R.drawable.nouser)
                         .into(firstImg)
                     firstName.text = mData.data[0].name
-                    firstSteps.text = mData.data[0].steps.toString()
+                    firstSteps.text = mData.data[0].steps.toString()+" Steps"
                     if (mData.data.size >= 2) {
                         if (mData.data.size >= 3) {
                             ThirdPosition.visibility = View.VISIBLE
                             thirdName.text = mData.data[2].name
-                            thirdSteps.text = mData.data[2].steps.toString()
+                            thirdSteps.text = mData.data[2].steps.toString()+" Steps"
                         } else {
                             ThirdPosition.visibility = View.VISIBLE
                             thirdName.text = "NA"
@@ -121,7 +121,7 @@ class LeaderboardActivity : BaseActivity<LeaderboardViewModel>(), ItemClickGloba
 
                         secondPosition.visibility = View.VISIBLE
                         secName.text = mData.data[1].name
-                        secSteps.text = mData.data[1].steps.toString()
+                        secSteps.text = mData.data[1].steps.toString()+" Steps"
                     }
 
                     if (mainList!!.size > 2) {
@@ -143,7 +143,7 @@ class LeaderboardActivity : BaseActivity<LeaderboardViewModel>(), ItemClickGloba
                     }
 
                 } else {
-                    Toast.makeText(this@LeaderboardActivity, "No records found", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@LeaderboardActivity, "You have not taken any challenge.", Toast.LENGTH_LONG).show()
                     mLeaderAdapter.swap(ArrayList())
                     firstImg.setImageResource(R.drawable.nouser)
                     firstName.text ="NA"
@@ -192,6 +192,10 @@ class LeaderboardActivity : BaseActivity<LeaderboardViewModel>(), ItemClickGloba
         mLeaderAdapter = LeaderboardAdapter(SurveysFragment.mContext, mChallengeDataList, this)
         rvleaderboard.adapter = mLeaderAdapter
 
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
     }
 
 }

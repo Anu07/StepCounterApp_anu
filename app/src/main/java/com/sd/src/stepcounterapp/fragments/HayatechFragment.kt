@@ -24,7 +24,6 @@ import com.github.mikephil.charting.components.XAxis.XAxisPosition
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
-import com.sd.src.stepcounterapp.HayaTechApplication
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.activities.LandingActivity
 import com.sd.src.stepcounterapp.adapter.PatternProgressTextAdapter
@@ -66,6 +65,7 @@ class HayatechFragment : BaseFragment() {
         }
 
     }
+
     lateinit var updater: Runnable
     private var updatedList: ArrayList<Activity> = ArrayList()
     private var updating: Boolean = false
@@ -78,14 +78,12 @@ class HayatechFragment : BaseFragment() {
     private var mDataList: Data? = Data()
     var mViewModel: DeviceViewModel? = null
     var optionArray = arrayListOf<OptionsModel>()
-    var android_id: String? = null
     var xAxis: XAxis? = null
     private var mWeekListFormater = arrayOfNulls<String>(7)
     private var mMonthListFormater = arrayOfNulls<String>(31)
     val colors: IntArray = intArrayOf(R.color.green_txt, R.color.blue_txt)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mViewModel = ViewModelProviders.of(activity!!).get(DeviceViewModel::class.java)
-        (mContext as LandingActivity).showDisconnection(false)
         return inflater.inflate(R.layout.fragment_hayatech, container, false)
 
     }
@@ -93,10 +91,10 @@ class HayatechFragment : BaseFragment() {
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-        if(mViewModel==null){
+        if (mViewModel == null) {
             mViewModel = ViewModelProviders.of(activity!!).get(DeviceViewModel::class.java)
         }
-        Log.i("attach","viewmodel")
+        Log.i("attach", "viewmodel")
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -108,7 +106,7 @@ class HayatechFragment : BaseFragment() {
 
         circular_progress.setProgressTextAdapter(PatternProgressTextAdapter())
         setStepsText()
-        if(mViewModel==null){
+        if (mViewModel == null) {
             mViewModel = ViewModelProviders.of(activity!!).get(DeviceViewModel::class.java)
         }
         showPopupProgressSpinner(true)
@@ -132,7 +130,7 @@ class HayatechFragment : BaseFragment() {
                 if (!updating || MokoSupport.getInstance().isConnDevice(
                         mContext, SharedPreferencesManager.getString(
                             mContext,
-                            SharedPreferencesManager.WEARABLEID
+                            WEARABLEID
                         )
                     )
                 ) {
@@ -143,12 +141,12 @@ class HayatechFragment : BaseFragment() {
                 }
                 WalletFragment.instance.setUpdatedSteps(mDashResponse.data.totalUserSteps.toString())
                 Log.i("total", "steps" + mDashResponse.data.totalUserSteps.toString())
-                if(mDashResponse.data.closestToken.toString() != "0"){
+                if (mDashResponse.data.closestToken.toString() != "0") {
                     wishListCloseLayout.visibility = View.VISIBLE
                     wishlistTxt.text =
                         "You are only ${mDashResponse.data.closestToken} Tokens away from an item on your wish list! Keep walking!"
-                }else{
-                    wishListCloseLayout.visibility= View.GONE
+                } else {
+                    wishListCloseLayout.visibility = View.GONE
                 }
                 circular_progress.setProgress(mDashResponse.data.todayToken.toDouble(), 10.00)
                 company_rank_count.text = mDashResponse.data.companyRank.toString()
@@ -235,17 +233,6 @@ class HayatechFragment : BaseFragment() {
             //            callback.onFragmentClick(0)
             (mContext as LandingActivity).onFragment(2)
         }
-//        startSyncTimer()
-        /* if (!MokoSupport.getInstance().isConnDevice(
-                 mContext, SharedPreferencesManager.getString(
-                     mContext,
-                     SharedPreferencesManager.WEARABLEID
-                 )
-             )
-         ) {
- //            startSyncTimer()
-         }*/
-        (mContext as LandingActivity).disableSwipe(false)
     }
 
 
@@ -279,7 +266,7 @@ class HayatechFragment : BaseFragment() {
                     }
                 }
             } else {
-                newList=list
+                newList = list
             }
 
             newList!!.iterator().forEach {
@@ -343,7 +330,7 @@ class HayatechFragment : BaseFragment() {
         ll.textSize = 12f
         var xAxisFormatter: DayAxisValueFormatter =
             if (txtGraphFilter.text.toString().equals(WEEKLY, ignoreCase = true)) {
-                DayAxisValueFormatter(barchart, WEEKLY,mWeekListFormater)
+                DayAxisValueFormatter(barchart, WEEKLY, mWeekListFormater)
             } else {
                 DayAxisValueFormatter(barchart, MONTHLY, mMonthListFormater)
             }
@@ -362,14 +349,14 @@ class HayatechFragment : BaseFragment() {
             barchart.data = null
 //            bardataset.setColors(colors, mContext)
             weeklyData.iterator().forEach {
-                if(it.y < 10000.0f){
+                if (it.y < 10000.0f) {
                     bardataset.valueTextColor = colors[1]
-                }else{
+                } else {
                     bardataset.valueTextColor = colors[0]
                 }
             }
             barchart.animateY(5000)
-            barchart.legend.isEnabled = false;   // Hide the legend
+            barchart.legend.isEnabled = false   // Hide the legend
             val data = BarData(bardataset)
             barchart.data = data
             barchart.data.isHighlightEnabled = false
@@ -383,7 +370,8 @@ class HayatechFragment : BaseFragment() {
                 if (mDataList!!.activity != null) {
                     mDataList!!.activity.forEachIndexed { index, element ->
                         graphData.add(index, BarEntry(index.toFloat(), element.steps.toFloat()))
-                        mWeekListFormater[index] = changeDateFormat("yyyy-MM-dd", "E_dd MMM, yyyy", element.date).split("_")[0]
+                        mWeekListFormater[index] =
+                            changeDateFormat("yyyy-MM-dd", "E_dd MMM, yyyy", element.date).split("_")[0]
                     }
                 }
             } else {
@@ -409,7 +397,8 @@ class HayatechFragment : BaseFragment() {
                         mDataList!!.activity.subList((mDataList!!.activity.size - 8), (mDataList!!.activity.size - 1))
                             .forEachIndexed { index, element ->
                                 graphData.add(index, BarEntry(index.toFloat(), element.token.toFloat()))
-                                mWeekListFormater[index] = changeDateFormat("yyyy-MM-dd", "E_dd MMM, yyyy", element.date).split("_")[0]
+                                mWeekListFormater[index] =
+                                    changeDateFormat("yyyy-MM-dd", "E_dd MMM, yyyy", element.date).split("_")[0]
                             }
                     } else {
                         mDataList!!.activity.forEachIndexed { index, element ->
@@ -417,6 +406,7 @@ class HayatechFragment : BaseFragment() {
                         }
                     }
                 }
+
             } else {
                 if (mDataList!!.activity != null) {
                     if (mDataList!!.activity.size > 31) {
@@ -438,7 +428,8 @@ class HayatechFragment : BaseFragment() {
                 if (mDataList!!.todayToken != null) {
                     mDataList!!.activity.forEachIndexed { index, element ->
                         graphData.add(index, BarEntry(index.toFloat(), element.distance.toFloat()))
-                        mWeekListFormater[index] = changeDateFormat("yyyy-MM-dd", "E_dd MMM, yyyy", element.date).split("_")[0]
+                        mWeekListFormater[index] =
+                            changeDateFormat("yyyy-MM-dd", "E_dd MMM, yyyy", element.date).split("_")[0]
                     }
                 }
             } else {
@@ -484,7 +475,7 @@ class HayatechFragment : BaseFragment() {
                     )
                 )
             } catch (e: Exception) {
-                Log.e("Viewmodel","Exception"+e.printStackTrace())
+                Log.e("Viewmodel", "Exception" + e.printStackTrace())
             }
 
 
@@ -499,7 +490,7 @@ class HayatechFragment : BaseFragment() {
         var timerHandler = Handler()
 
         updater = Runnable {
-//            setBarChart("STEPS")
+            //            setBarChart("STEPS")
             timerHandler.postDelayed(updater, 5000)
         }
         timerHandler.post(updater)
@@ -522,7 +513,7 @@ class HayatechFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        if(mViewModel==null){
+        if (mViewModel == null) {
             mViewModel = ViewModelProviders.of(activity!!).get(DeviceViewModel::class.java)
         }
         mViewModel!!.syncDevice(

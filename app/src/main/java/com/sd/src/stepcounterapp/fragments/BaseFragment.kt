@@ -47,7 +47,6 @@ open class BaseFragment : Fragment(){
             }
 
             override fun onFinish() {
-
                 progressDialog.dismiss()
             }
         }.start()

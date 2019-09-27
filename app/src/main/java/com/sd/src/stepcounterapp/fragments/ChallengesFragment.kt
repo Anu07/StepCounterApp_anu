@@ -172,12 +172,15 @@ class ChallengesFragment : BaseFragment(), ChallengeAdapter.ItemClickListener,
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         mViewModel = ViewModelProviders.of(activity!!).get(ChallengeViewModel::class.java)
+
+
+        showPopupProgressSpinner(true)
         mViewModel.getchallenges(BasicRequest(SharedPreferencesManager.getUserId(mContext), ""))
 
         mViewModel.getChallengeObject().observe(this,
             Observer<ChallengeResponse> { mChallenge ->
                 if (mChallenge != null) {
-
+                    showPopupProgressSpinner(false)
                     if (mChallenge.data != null) {
                         mChallengeCategory = mChallenge.data
                         setChallengeAdapter()

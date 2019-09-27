@@ -3,6 +3,7 @@ package com.sd.src.stepcounterapp.model.wallet.walletDetailResponse;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import com.sd.src.stepcounterapp.model.vendor.Vendor;
 
 @SuppressWarnings("unused")
 public class Purchased implements Parcelable {
@@ -19,7 +20,7 @@ public class Purchased implements Parcelable {
     private long token;
 
 
-    private String vendorId;
+    private Vendor vendorId;
 
     public String get_id() {
         return _id;
@@ -101,6 +102,13 @@ public class Purchased implements Parcelable {
         this.token = token;
     }
 
+    public Vendor getVendorId() {
+        return vendorId;
+    }
+
+    public void setVendorId(Vendor vendorId) {
+        this.vendorId = vendorId;
+    }
 
     @Override
     public int describeContents() {
@@ -119,7 +127,7 @@ public class Purchased implements Parcelable {
         dest.writeString(this.rewardId);
         dest.writeString(this.shortDesc);
         dest.writeLong(this.token);
-        dest.writeString(this.vendorId);
+        dest.writeParcelable(this.vendorId, flags);
     }
 
     public Purchased() {
@@ -136,7 +144,7 @@ public class Purchased implements Parcelable {
         this.rewardId = in.readString();
         this.shortDesc = in.readString();
         this.token = in.readLong();
-        this.vendorId = in.readString();
+        this.vendorId = in.readParcelable(Vendor.class.getClassLoader());
     }
 
     public static final Parcelable.Creator<Purchased> CREATOR = new Parcelable.Creator<Purchased>() {

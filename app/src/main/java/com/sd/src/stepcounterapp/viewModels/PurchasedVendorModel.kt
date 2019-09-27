@@ -37,14 +37,15 @@ class PurchasedVendorModel(application: Application) : AndroidViewModel(applicat
             }
 
             override fun onResponse(call: Call<PurchaseVendorResponse>?, response: Response<PurchaseVendorResponse>?) {
-                if(response!!.body()!!.status == 200 ){
-                    mPurchaseVendorResponse!!.value = response!!.body()
-                }else if (response!!.code() == 405) {
-                    Toast.makeText(HayaTechApplication.applicationContext(), "User doesn't exist", Toast.LENGTH_LONG)
-                        .show()
-                    HayaTechApplication.instance!!.logoutUser()
-                }else {
-                    mPurchaseVendorResponse!!.value = PurchaseVendorResponse()
+                when {
+                    response!!.body()!!.status == 200 -> mPurchaseVendorResponse!!.value = response!!.body()
+                    response!!.code() == 405 -> {
+                        Toast.makeText(HayaTechApplication.applicationContext(), "User doesn't exist", Toast.LENGTH_LONG)
+                            .show()
+                        HayaTechApplication.instance!!.logoutUser()
+                    }
+                    response!!.code() == 400 -> mPurchaseVendorResponse!!.value = PurchaseVendorResponse()
+                    else -> mPurchaseVendorResponse!!.value = PurchaseVendorResponse()
                 }
             }
         })

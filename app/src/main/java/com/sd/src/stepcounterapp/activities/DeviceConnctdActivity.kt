@@ -24,6 +24,8 @@ class DeviceConnctdActivity : BaseActivity<BaseViewModel>() {
             val intent = Intent(this@DeviceConnctdActivity, LandingActivity::class.java)
             //                    val options = ActivityOptions.makeSceneTransitionAnimation(this@SignInActivity)
             intent.putExtra("Steps", getIntent().getStringExtra("Steps"))
+            intent.putExtra("device", getIntent().getSerializableExtra("device"))
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             startActivity(intent)
             finish()
         }

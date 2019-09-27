@@ -19,6 +19,7 @@ object SharedPreferencesManager {
     val GA_NOTIFY = "goal_achieved"
     val NSA_NOTIFY = "new_survey_added"
     val NC_NOTIFY = "new_challenge"
+    val VAR_WEARABLE = "Wearable"
 
     // properties
     private val USERID = "userId"
@@ -108,13 +109,13 @@ object SharedPreferencesManager {
         val prefsEditor = getSharedPreferences(context).edit()
         val gson = Gson()
         val json = gson.toJson(myWearData) // myObject - instance of MyObject
-        prefsEditor.putString("Wearable", json)
+        prefsEditor.putString(VAR_WEARABLE, json)
         prefsEditor.apply()
     }
 
     fun getSyncObject(context: Context): ArrayList<DailyStep>? {
         val gson = Gson()
-        val json = getSharedPreferences(context).getString("Wearable", "")
+        val json = getSharedPreferences(context).getString(VAR_WEARABLE, "")
         val type = object : TypeToken<List<DailyStep>>() {}.type
         val array: ArrayList<DailyStep> = gson.fromJson(json, type)
         return array

@@ -31,7 +31,6 @@ import kotlinx.android.synthetic.main.activity_bmi_calc.kgs_wt
 import kotlinx.android.synthetic.main.activity_bmi_calc.lbs_wt
 import kotlinx.android.synthetic.main.activity_bmi_calc.maleBttn
 import kotlinx.android.synthetic.main.activity_bmi_calc.saveinfoBttn
-import kotlinx.android.synthetic.main.fragment_profile.*
 import travel.ithaka.android.horizontalpickerlib.PickerLayoutManager
 import java.text.DecimalFormat
 
@@ -87,7 +86,7 @@ class BmiCalculatorActivity : BaseActivity<SignInViewModel>(), View.OnClickListe
     private var height: String = ""
     private var gender: String = ""
     var wts: Int = 0
-    var hts: Int = 0
+    var hts: Float = 0f
     var flooredheight: Float = 0.0f
     override val layoutId: Int
         get() = R.layout.activity_bmi_calc
@@ -163,6 +162,20 @@ class BmiCalculatorActivity : BaseActivity<SignInViewModel>(), View.OnClickListe
             .observe(this, Observer { mUser ->
                 if (mUser.status == 200) {
                     if (intent.hasExtra("inApp")) {
+                       /* var responseLogin = LoginResponseJ()
+                        var loginData = Data(
+                            mUser.data.firstName,
+                            mUser.data.lastName,
+                            mUser.data.image,
+                            mUser.data.dob,
+                            mUser.data._id,
+                            mUser.data.email,
+                            mUser.data.username,
+                            mUser.data.basicFlag,
+                            mUser.data.rewardFlag
+                        )
+                        responseLogin.data = loginData
+                        SharedPreferencesManager.saveUserObject(this@BmiCalculatorActivity,responseLogin)*/
                         finish()
                     } else {
                         var responseLogin = LoginResponseJ()
@@ -298,7 +311,7 @@ class BmiCalculatorActivity : BaseActivity<SignInViewModel>(), View.OnClickListe
                         "",
                         InterfacesCall.Callback {
 
-                            if (intent.hasExtra("inApp")) {
+                            if (!intent.hasExtra("inApp")) {
                                 mViewModel!!.addBasicInfo(
                                     BasicInfoRequestObject(
                                         SharedPreferencesManager.getUserId(this@BmiCalculatorActivity)!!,
@@ -319,10 +332,10 @@ class BmiCalculatorActivity : BaseActivity<SignInViewModel>(), View.OnClickListe
                                 mViewModel!!.addBasicInfo(
                                     BasicInfoRequestObject(
                                         SharedPreferencesManager.getUserId(this@BmiCalculatorActivity)!!,
-                                        intent.getStringExtra("username"),
-                                        intent.getStringExtra("firstname"),
-                                        intent.getStringExtra("lastname"),
-                                        intent.getStringExtra("dob"),
+                                        SharedPreferencesManager.getUpdatedUserObject(this@BmiCalculatorActivity).username,
+                                        SharedPreferencesManager.getUpdatedUserObject(this@BmiCalculatorActivity).firstName,
+                                        SharedPreferencesManager.getUpdatedUserObject(this@BmiCalculatorActivity).lastName,
+                                        SharedPreferencesManager.getUpdatedUserObject(this@BmiCalculatorActivity).dob,
                                         gender,
                                         roundOffFloat( weight.toFloat()),
                                         w,
@@ -430,9 +443,8 @@ class BmiCalculatorActivity : BaseActivity<SignInViewModel>(), View.OnClickListe
      * Cms to Feet
      */
 
-    fun convertCmsToInch(cms: Int): Int {
-        var result = cms * 0.39f
-        return result.toInt()
+    fun convertCmsToInch(cms: Float): Float {
+        return cms * 0.39f
     }
 
 
@@ -462,10 +474,10 @@ class BmiCalculatorActivity : BaseActivity<SignInViewModel>(), View.OnClickListe
             wts = wt
         }
         if (!isHtButtonClicked) {
-            flooredheight = (String.format("%.2f", convertFeetToInch(ht))).toFloat()
+            flooredheight = (String.format("%.1f", convertFeetToInch(ht))).toFloat()
         } else {
-            hts = convertCmsToInch(ht.toInt())
-            flooredheight = (String.format("%.2f", hts.toFloat())).toFloat()
+            hts = convertCmsToInch(ht.toFloat())
+            flooredheight = (String.format("%.1f", hts)).toFloat()
         }
 
 //        Formula: 703 x weight (lbs) / [height (in)]2

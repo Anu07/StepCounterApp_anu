@@ -47,7 +47,6 @@
         <activity android:name=".activities.LandingActivity"
                   android:windowSoftInputMode="stateHidden"
                   android:screenOrientation="portrait">
-
             <intent-filter>
                 <action android:name="LandingActivity" />
                 <category android:name="android.intent.category.DEFAULT" />

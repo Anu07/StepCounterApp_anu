@@ -84,6 +84,7 @@ public class MokoSupport implements MokoResponseCallback {
     private Context mContext;
     private MokoConnStateCallback mMokoConnStateCallback;
     private HashMap<OrderType, MokoCharacteristic> mCharacteristicMap;
+//    public static final UUID X_ACCEL_DESCRIPTOR_UUID = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb");
     private static final UUID DESCRIPTOR_UUID_NOTIFY = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb");
     private static final UUID SERVICE_UUID = UUID.fromString("0000ffc0-0000-1000-8000-00805f9b34fb");
 
@@ -181,7 +182,7 @@ public class MokoSupport implements MokoResponseCallback {
     public synchronized void connDevice(final Context context, String address, final MokoConnStateCallback mokoConnStateCallback) {
         setConnStateCallback(mokoConnStateCallback);
         if (isReConnecting) {
-            LogModule.i("正在重连中...");
+            LogModule.i("Anu...");
             return;
         }
         if (TextUtils.isEmpty(address)) {
@@ -201,7 +202,7 @@ public class MokoSupport implements MokoResponseCallback {
         gattCallback.setMessageHandler(mHandler);
         mDeviceAddress = address;
         final BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
-        reConnectCount = 2;
+        reConnectCount = 0;
         if (device != null) {
             isReConnecting = true;
             mHandler.post(new Runnable() {
@@ -467,8 +468,9 @@ public class MokoSupport implements MokoResponseCallback {
         if (mQueue.isEmpty()) {
             mMokoConnStateCallback.onConnectSuccess();
             isReConnecting = false;
-            reConnectCount = 2;
+            reConnectCount = 0;
         }
+
     }
 
     public void pollTask() {
@@ -574,7 +576,7 @@ public class MokoSupport implements MokoResponseCallback {
                         isReConnecting = false;
                         return;
                     }
-                    isReConnecting = true;
+//                    isReConnecting = true;
                     if (isBluetoothOpen()) {
                         if (isReConnectLimited) {
                             reConnectCount--;

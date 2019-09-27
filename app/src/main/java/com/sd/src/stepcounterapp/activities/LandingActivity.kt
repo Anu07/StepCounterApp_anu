@@ -25,6 +25,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.viewpager.widget.ViewPager
 import com.fitpolo.support.MokoConstants
 import com.fitpolo.support.MokoSupport
+import com.fitpolo.support.callback.MokoConnStateCallback
 import com.fitpolo.support.callback.MokoScanDeviceCallback
 import com.fitpolo.support.entity.BleDevice
 import com.fitpolo.support.entity.DailyStep
@@ -33,10 +34,8 @@ import com.fitpolo.support.entity.OrderTaskResponse
 import com.fitpolo.support.log.LogModule
 import com.fitpolo.support.task.ZOpenStepListenerTask
 import com.fitpolo.support.task.ZReadStepTask
-import com.fitpolo.support.task.ZWriteSystemTimeTask
 import com.sd.src.stepcounterapp.AppConstants
-import com.sd.src.stepcounterapp.AppConstants.INTENT_FROMAPP
-import com.sd.src.stepcounterapp.AppConstants.INTENT_NOTIFICATION
+import com.sd.src.stepcounterapp.AppConstants.*
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.adapter.LandingPagerAdapter
 import com.sd.src.stepcounterapp.fragments.*
@@ -49,6 +48,7 @@ import com.sd.src.stepcounterapp.service.MokoService
 import com.sd.src.stepcounterapp.utils.InterConsts
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager.SYNCDATE
+import com.sd.src.stepcounterapp.utils.SharedPreferencesManager.VAR_WEARABLE
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager.WEARABLEID
 import com.sd.src.stepcounterapp.utils.Utils
 import com.sd.src.stepcounterapp.viewModels.BaseViewModelFactory
@@ -71,7 +71,7 @@ import kotlin.collections.ArrayList
  */
 
 
-class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback, View.OnClickListener {
+class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback, View.OnClickListener{
 
     fun hideBottomLayout(state: Boolean) {
         if (state) {
@@ -116,6 +116,7 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
     }
 
 
+    private lateinit var mDevice: BleDevice
     private var current: Int = 0
     private var deviceSynced: String? = ""
     private val FRAG_HAYATECH: Int = 0
@@ -160,6 +161,12 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
     )
 
     override fun onCreate() {
+        if(intent.hasExtra("device")){
+            mDevice = intent.getSerializableExtra("device") as BleDevice
+        }
+
+        bindService(Intent(this, MokoService::class.java), mServiceConnection, Activity.BIND_AUTO_CREATE)
+
         mDrawerLayout = findViewById(R.id.drawer_layout)
         manager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         mDialog = ProgressDialog(this)
@@ -187,6 +194,7 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
         vpLanding.setPagingEnabled(false)
         vpLanding.adapter = mAdapter
         vpLanding.offscreenPageLimit = 0
+        setNavHeader()
         initListeners()
 
         mViewModel?.getDashResponse()?.observe(this, androidx.lifecycle.Observer { mDashResponse ->
@@ -201,7 +209,6 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
         if (intent.hasExtra("surveyBack")) {
             vpLanding.currentItem = 3
         }
-        bindService(Intent(this, MokoService::class.java), mServiceConnection, Activity.BIND_AUTO_CREATE)
         mViewModel?.getSyncResponse()?.observe(this,
             androidx.lifecycle.Observer<BasicInfoResponse> {
                 showPopupProgressSpinner(false)
@@ -296,10 +303,19 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
         img_nav.setOnClickListener(this@LandingActivity)
         swipeLayout.setOnRefreshListener {
             //            swipeLayout.isRefreshing = false
-            if (!SharedPreferencesManager.hasKey(this@LandingActivity, WEARABLEID)) {
+            if (!SharedPreferencesManager.hasKey(this@LandingActivity, WEARABLEID) || !SharedPreferencesManager.hasKey(
+                    this@LandingActivity,
+                    VAR_WEARABLE
+                )
+            ) {
                 swipeLayout.isRefreshing = false
                 showReconnection()
-            } else if (!MokoSupport.getInstance().isConnDevice(
+            }  else {
+                swipeLayout.isRefreshing = false
+                showDisconnection(true)
+                checkBluetoothGPSPermissions()
+            }
+            /*else if (!MokoSupport.getInstance().isConnDevice(
                     this@LandingActivity, SharedPreferencesManager.getString(this@LandingActivity, WEARABLEID)
                 )
             ) {
@@ -310,7 +326,7 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
                 showDisconnection(false)
                 swipeLayout.isRefreshing = false
                 getLastestSteps()
-            }
+            }*/
         }
 
     }
@@ -320,9 +336,13 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
         builder.setMessage("You are not connected with wearable device, press OK for connection")
             .setCancelable(false)
             .setPositiveButton("Ok") { dialog, id ->
-                //                disconnectBLE()
                 swipeLayout.isRefreshing = false
-                startActivity(Intent(this@LandingActivity, SyncDeviceActivity::class.java))
+                startActivity(
+                    Intent(this@LandingActivity, SyncDeviceActivity::class.java).putExtra(
+                        INTENT_RECONNECT,
+                        true
+                    )
+                )
             }
             .setNegativeButton("Cancel") { dialog, id -> dialog.cancel() }
         val alert = builder.create()
@@ -333,29 +353,27 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
      * to check if bluetooth & GPS enabled or not
      */
     private fun checkBluetoothGPSPermissions() {
-        if (!SharedPreferencesManager.hasKey(this@LandingActivity, WEARABLEID)) {
+        if (!SharedPreferencesManager.hasKey(
+                this@LandingActivity,
+                WEARABLEID
+            ) || !SharedPreferencesManager.hasKey(this@LandingActivity, VAR_WEARABLE)
+        ) {
             showDisconnection(true)
         } else {
-            if (MokoSupport.getInstance().isConnDevice(
-                    this@LandingActivity,
-                    SharedPreferencesManager.getString(this@LandingActivity, WEARABLEID)
-                )
-            ) {
-                showDisconnection(false)
-            } else {
+
                 showDisconnection(false)
                 if (BluetoothAdapter.getDefaultAdapter().isEnabled && manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                     searchDevices()
                 } else {
-                    showDisconnection(true)
                     if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                         showGPSDisabledAlertToUser()
                     } else {
                         searchDevices()
                     }
-
                 }
-            }
+
+
+
         }
     }
 
@@ -417,7 +435,6 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
             FRAG_HAYATECH -> {
                 imgHayatech.setImageResource(R.drawable.dashboard_s)
                 txt_title.setImageResource(R.drawable.headerlogo)
-
             }
             FRAG_CHALLENGES -> {
                 imgChallenges.setImageResource(R.drawable.challenge_s)
@@ -467,6 +484,7 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
             .setPositiveButton("Yes") { dialog, id ->
                 //                disconnectBLE()
                 SharedPreferencesManager.logout(this@LandingActivity)
+                MokoSupport.getInstance().disConnectBle()
             }
             .setNegativeButton("No") { dialog, id -> dialog.cancel() }
         val alert = builder.create()
@@ -475,7 +493,6 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
     }
 
     private fun disconnectBLE() {
-        MokoSupport.getInstance().disConnectBle()
         if (!MokoSupport.getInstance().isConnDevice(
                 this@LandingActivity,
                 SharedPreferencesManager.getString(this@LandingActivity, WEARABLEID)
@@ -502,10 +519,8 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
             filter.addAction(MokoConstants.ACTION_CURRENT_DATA)
             filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED)
             filter.priority = 200
-//            filter.priority = 100
             dismissSwipe()
             registerReceiver(mReceiver, filter)
-//            MokoSupport.getInstance().sendOrder(ZReadVersionTask(mService))
 
         }
 
@@ -530,24 +545,15 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
                         mDialog!!.dismiss()
 
                     }
-//                    Toast.makeText(this@LandingActivity, "Connect success", Toast.LENGTH_SHORT).show()
                     showDisconnection(false)
-//                    setSystemTime()
                     getLastestSteps()
                     openStepChangeListener()
-
                 }
                 if (MokoConstants.ACTION_CONN_STATUS_DISCONNECTED == intent.action) {
                     abortBroadcast()
                     showDisconnection(true)
                     dismissSwipe()
                     HayatechFragment.instance.syncingWearableMsg(false)
-                    checkBluetoothGPSPermissions()
-                    if (MokoSupport.getInstance().isBluetoothOpen && MokoSupport.getInstance().reconnectCount > 0) {
-//                        Toast.makeText(this@LandingActivity, "Connect failed", Toast.LENGTH_SHORT).show()
-                        showDisconnection(true)
-                        return
-                    }
                     if (!this@LandingActivity.isFinishing() && mDialog!!.isShowing) {
                         mDialog!!.dismiss()
                     }
@@ -566,7 +572,10 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
                     showDisconnection(true)
                     dismissSwipe()
                     HayatechFragment.instance.syncingWearableMsg(false)
-                    this@LandingActivity.finish()
+                    if (!this@LandingActivity.isFinishing() && mDialog!!.isShowing) {
+                        mDialog!!.dismiss()
+                    }
+//                    this@LandingActivity.finish()
                 }
                 if (MokoConstants.ACTION_ORDER_RESULT == action) {
                     val response =
@@ -584,6 +593,7 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
                     updateDeviceData()
                 }
                 if (MokoConstants.ACTION_ORDER_TIMEOUT == action) {
+                    showDisconnection(false)
                     Toast.makeText(this@LandingActivity, "Timeout", Toast.LENGTH_SHORT).show()
                     dismissSwipe()
 
@@ -600,7 +610,7 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
                     when (orderEnum) {
                         OrderEnum.Z_STEPS_CHANGES_LISTENER -> {
                             val dailyStep = MokoSupport.getInstance().dailyStep
-                            LogModule.i(dailyStep.toString())
+                            LogModule.i("Test change event" + dailyStep.toString())
                             HayatechFragment.instance.syncingWearableMsg(false)
                             HayatechFragment.instance.setCurrentSteps(dailyStep)
                             mViewModel!!.syncDevice(
@@ -619,8 +629,26 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
     }
 
     private fun turnOnBluetooth() {
-        var mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
-        mBluetoothAdapter.enable()
+        val builder = AlertDialog.Builder(this@LandingActivity)
+        builder.setMessage("Bluetooth permissions are required for this application to function properly.")
+            .setCancelable(false)
+            .setPositiveButton("Ok") { dialog, id ->
+                var mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
+                mBluetoothAdapter.enable()
+            }
+            .setNegativeButton("Cancel") { dialog, id ->
+                Toast.makeText(
+                    this@LandingActivity,
+                    "Please enable bluetooth for proper functioning of this application.",
+                    Toast.LENGTH_LONG
+                ).show()
+                dialog.cancel()
+            }
+
+        val alert = builder.create()
+        alert.show()
+
+
     }
 
     /**
@@ -631,15 +659,12 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
     private fun dismissSwipe() {
         if (swipeLayout.isRefreshing) {
             swipeLayout.isRefreshing = false
-            /* vpLanding.adapter = mAdapter
-             vpLanding.currentItem = 0
-             loadFragment(0)*/
         }
 
     }
 
     private fun updateDeviceData() {
-        if (SharedPreferencesManager.hasKey(HayatechFragment.mContext, "Wearable")) {
+        if (SharedPreferencesManager.hasKey(HayatechFragment.mContext, VAR_WEARABLE)) {
             showPopupProgressSpinner(true)
             mViewModel!!.syncDevice(
                 SyncRequest(
@@ -722,7 +747,7 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
         deviceMap!![device.address] = device
         mDatas!!.clear()
         mDatas!!.addAll(deviceMap!!.values)
-
+        mAdapter!!.notifyDataSetChanged()
 
     }
 
@@ -730,21 +755,33 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
         if (!this@LandingActivity.isFinishing && mDialog!!.isShowing) {
             mDialog!!.dismiss()
         }
+
+
+
+
+
         dismissSwipe()
-        HayatechFragment.instance.syncingWearableMsg(true)
         mDatas!!.clear()
         mDatas!!.addAll(deviceMap!!.values)
 
         mDatas!!.iterator().forEach {
             if (it.address == deviceSynced) {
                 if (MokoSupport.getInstance().isConnDevice(this@LandingActivity, it.address)) {
+                    HayatechFragment.instance.syncingWearableMsg(true)
+                    bindService(Intent(this, MokoService::class.java), mServiceConnection, Activity.BIND_AUTO_CREATE)
                     getLastestSteps()
+                    openStepChangeListener()
+
                 } else {
-                    mService!!.connectBluetoothDevice(it.address)
+                    if (SharedPreferencesManager.hasKey(this@LandingActivity, VAR_WEARABLE)) {
+                        mService!!.connectBluetoothDevice(it.address)
+                        getLastestSteps()
+                        openStepChangeListener()
+                    }
                 }
             } else {
                 dismissSwipe()
-                Log.e("Device", "not found nearby.")
+                Log.e("Device", "not in list.")
                 /*  if (!MokoSupport.getInstance().isConnDevice(
                           this@LandingActivity,
                           SharedPreferencesManager.getString(this@LandingActivity, WEARABLEID)
@@ -774,16 +811,16 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
     override fun onPause() {
         super.onPause()
         DfuServiceListenerHelper.unregisterProgressListener(this, mDfuProgressListener)
-
     }
 
 
     override fun onResume() {
         super.onResume()
+        setNavHeader()
         DfuServiceListenerHelper.registerProgressListener(this, mDfuProgressListener)
         checkBluetoothGPSPermissions()
+        Log.i("if", "device ocnnect$deviceSynced")
         onNotification()
-        setNavHeader()
     }
 
     private fun onNotification() {
@@ -820,7 +857,7 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
     private val mDfuProgressListener = object : DfuProgressListenerAdapter() {
         override fun onDeviceConnecting(deviceAddress: String?) {
             mDeviceConnectCount++
-            if (mDeviceConnectCount > 3) {
+            if (mDeviceConnectCount > 1) {
                 Toast.makeText(this@LandingActivity, "Error:DFU Failed", Toast.LENGTH_SHORT).show()
                 dismissDFUProgressDialog()
                 val manager = LocalBroadcastManager.getInstance(this@LandingActivity)
@@ -885,7 +922,7 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
 
 
     fun openStepChangeListener() {
-        MokoSupport.getInstance().sendOrder(ZOpenStepListenerTask(mService))
+            MokoSupport.getInstance().sendOrder(ZOpenStepListenerTask(mService))
     }
 
 
@@ -991,10 +1028,6 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
      */
 
 
-    fun setSystemTime() {
-        MokoSupport.getInstance().sendOrder(ZWriteSystemTimeTask(mService))
-    }
-
     fun disableSwipe(b: Boolean) {
         if (swipeLayout != null) {
             swipeLayout.isEnabled = !b
@@ -1010,7 +1043,7 @@ class LandingActivity : BaseActivity<DeviceViewModel>(), MokoScanDeviceCallback,
         if (b) {
             notconnectedTxt.visibility = VISIBLE
             swipeLayout.isEnabled = true
-            params.setMargins(10, 220, 10, 10)
+            params.setMargins(10, 230, 10, 10)
         } else {
             notconnectedTxt.visibility = GONE
             params.setMargins(0, 140, 0, 0)

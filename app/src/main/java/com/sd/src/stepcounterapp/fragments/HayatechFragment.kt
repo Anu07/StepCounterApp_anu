@@ -165,7 +165,7 @@ class HayatechFragment : BaseFragment() {
 
             })
 
-        if (SharedPreferencesManager.hasKey(mContext, "Wearable")) {
+        if (SharedPreferencesManager.hasKey(mContext, SharedPreferencesManager.VAR_WEARABLE)) {
 
             mViewModel!!.syncDevice(
                 SyncRequest(
@@ -256,7 +256,7 @@ class HayatechFragment : BaseFragment() {
         activityList = ArrayList()
         var newList: ArrayList<DailyStep>? = ArrayList()
 
-        if (SharedPreferencesManager.hasKey(mContext, "Wearable")) {
+        if (SharedPreferencesManager.hasKey(mContext, SharedPreferencesManager.VAR_WEARABLE)) {
             var list: ArrayList<DailyStep>? = SharedPreferencesManager.getSyncObject(mContext)
             if (SharedPreferencesManager.hasKey(mContext, SYNCDATE)) {
                 var lastSyncDate = SharedPreferencesManager.getString(mContext, SYNCDATE)!!.split("T")[0]

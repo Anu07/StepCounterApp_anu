@@ -5,6 +5,7 @@
               android:layout_width="match_parent"
               android:background="@color/gray_backGround"
               android:layout_height="wrap_content"
+              android:layout_marginBottom="@dimen/_40sdp"
               android:orientation="vertical">
 
     <androidx.core.widget.NestedScrollView

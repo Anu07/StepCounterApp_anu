@@ -63,7 +63,9 @@ class SignInActivity : BaseActivity<SignInViewModel>() {
                     SharedPreferencesManager.saveUserObject(this@SignInActivity, loginUser)
                     if (loginUser.data.username.isNotEmpty()) {
                         if (loginUser.data.basicFlag && loginUser.data.rewardFlag) {
-                            if (SharedPreferencesManager.hasKey(this@SignInActivity, "Wearable")) {
+                            if (SharedPreferencesManager.hasKey(this@SignInActivity,
+                                    SharedPreferencesManager.VAR_WEARABLE
+                                )) {
                                 val intent = Intent(applicationContext, LandingActivity::class.java)
                                 startActivity(intent)
                                 finish()

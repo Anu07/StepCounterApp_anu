@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.fitpolo.support.MokoSupport
+import com.sd.src.stepcounterapp.AppConstants
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.adapter.RecyclerSyncGridAdapter
 import com.sd.src.stepcounterapp.model.syncDevice.SyncDeviceSelectionArray
@@ -76,7 +77,7 @@ class SyncDeviceActivity : BaseActivity<BaseViewModel>(),
         var user = SharedPreferencesManager.getUserObject(this@SyncDeviceActivity)
         headerTextwelcome.text = "Welcome " + user.data.firstName + "!"
         var lm = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-
+        var deviceSynced = SharedPreferencesManager.getString(this@SyncDeviceActivity, WEARABLEID)
         gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER)
         network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
 
@@ -91,16 +92,25 @@ class SyncDeviceActivity : BaseActivity<BaseViewModel>(),
             headerTextwelcome.visibility = View.GONE
         }
 
+        //when coming from home screen reconnect dialog
+        if(intent.hasExtra(AppConstants.INTENT_RECONNECT)){
+            skipBttn.visibility= View.GONE
+            unlink.visibility = View.GONE
+            cntnBttn.visibility = View.VISIBLE
+            unlinkBttnsLay.visibility = View.GONE
+            headerTextwelcome.visibility = View.GONE
+        }
+
         unlink.setOnClickListener {
-            MokoSupport.getInstance().disConnectBle()
-            SharedPreferencesManager.removeKey(this@SyncDeviceActivity,"Wearable")
+
             if(!MokoSupport.getInstance().isConnDevice(this@SyncDeviceActivity,SharedPreferencesManager.getString(this@SyncDeviceActivity,WEARABLEID))){
                 Log.e("disconnect","success")
 //                Toast.makeText(this@SyncDeviceActivity, "Device disconnected successfully", Toast.LENGTH_LONG).show()
             }else{
-               var deviceSynced = SharedPreferencesManager.getString(this@SyncDeviceActivity, WEARABLEID)
                 if(MokoSupport.getInstance().isConnDevice(this@SyncDeviceActivity,deviceSynced)){
                     MokoSupport.getInstance().disConnectBle()
+                    SharedPreferencesManager.removeKey(this@SyncDeviceActivity, SharedPreferencesManager.VAR_WEARABLE)
+                    SharedPreferencesManager.removeKey(this@SyncDeviceActivity, WEARABLEID)
                     Toast.makeText(this@SyncDeviceActivity, "Device disconnected successfully", Toast.LENGTH_LONG).show()
                 }
             }
@@ -108,16 +118,22 @@ class SyncDeviceActivity : BaseActivity<BaseViewModel>(),
 
 
         nBttn.setOnClickListener {
+            val intent = Intent(mContext, LandingActivity::class.java)
+            startActivity(intent)
             finish()
         }
 
         chgBttn.setOnClickListener {
-            if (!gps_enabled && !network_enabled) {
-                showGPSDisabledAlertToUser()
-            } else if (gps_enabled && network_enabled) {
-                val intent = Intent(mContext, GuideActivity::class.java)
+            if(MokoSupport.getInstance().isConnDevice(this@SyncDeviceActivity,deviceSynced)){
+                Toast.makeText(this@SyncDeviceActivity, "Please unlink wearable first.",Toast.LENGTH_SHORT).show()
+            }else {
+                if (!gps_enabled && !network_enabled) {
+                    showGPSDisabledAlertToUser()
+                } else if (gps_enabled && network_enabled) {
+                    val intent = Intent(mContext, GuideActivity::class.java)
 //                    val options = ActivityOptions.makeSceneTransitionAnimation(this@SignInActivity)
-                startActivity(intent)
+                    startActivity(intent)
+                }
             }
         }
 

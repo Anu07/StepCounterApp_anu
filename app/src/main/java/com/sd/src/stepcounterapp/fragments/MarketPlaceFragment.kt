@@ -246,15 +246,16 @@ class MarketPlaceFragment : BaseFragment(), FilterDialog.MarketFilterInterface, 
         mViewModel.getCategory().observe(this,
             Observer<MarketResponse> { mProduct ->
                 try {
+                    showPopupProgressSpinner(false)
+
                     if(filterdial!= null && filterdial.isShowing){
                         filterdial.dismiss()
                     }
                 } catch (e: Exception) {
                     Log.e("Dialog","Filter"+e.message)
                 }
-
                 if (mProduct != null) {
-                    if (mProduct.data.size > 0) {
+                    if (mProduct.data!=null && mProduct.data.size > 0) {
                         mDataCategory = ArrayList()
                         rvProduct.visibility = View.VISIBLE
                         noRec.visibility = View.GONE
@@ -482,6 +483,7 @@ class MarketPlaceFragment : BaseFragment(), FilterDialog.MarketFilterInterface, 
 
     private fun performSearch() {
         if (tabtype) {
+            showPopupProgressSpinner(true)
             mViewModel.getSearchCategoryApi(
                 BasicSearchRequest(
                     SharedPreferencesManager.getUserId(mContext),
@@ -489,6 +491,7 @@ class MarketPlaceFragment : BaseFragment(), FilterDialog.MarketFilterInterface, 
                 )
             )
         } else {
+            showPopupProgressSpinner(true)
             mViewModel.getSearchProductApi(
                 BasicSearchRequest(
                     SharedPreferencesManager.getUserId(mContext),

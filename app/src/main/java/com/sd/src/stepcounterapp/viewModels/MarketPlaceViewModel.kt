@@ -87,12 +87,16 @@ class MarketPlaceViewModel(application: Application) : AndroidViewModel(applicat
             }
 
             override fun onResponse(call: Call<MarketResponse>?, response: Response<MarketResponse>?) {
-                if (response!!.body()!!.status == 405) {
-                    Toast.makeText(HayaTechApplication.applicationContext(), "User doesn't exist", Toast.LENGTH_LONG)
+                when {
+                    response!!.code() == 405 -> {
+                        Toast.makeText(HayaTechApplication.applicationContext(), "User doesn't exist", Toast.LENGTH_LONG)
+                            .show()
+                        HayaTechApplication.instance!!.logoutUser()
+                    }
+                    response!!.code() == 400 -> Toast.makeText(HayaTechApplication.applicationContext(), "No record found.", Toast.LENGTH_LONG)
                         .show()
-                    HayaTechApplication.instance!!.logoutUser()
-                } else if (response!!.body()!!.status == 200) {
-                    mProduct!!.value = response!!.body()
+                    response!!.code() == 200 -> mProduct!!.value = response!!.body()
+                    else -> mProduct!!.value = MarketResponse()
                 }
             }
         })

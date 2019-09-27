@@ -126,7 +126,7 @@ abstract class BaseActivity<V : AndroidViewModel> : AppCompatActivity() {
         if (isShowing == true) {
 
             progressDialog.setContentView(R.layout.popup_progressbar)
-            progressDialog.setCancelable(false)
+            progressDialog.setCancelable(true)
             progressDialog.window.setBackgroundDrawable(
                 ColorDrawable(Color.TRANSPARENT)
             )

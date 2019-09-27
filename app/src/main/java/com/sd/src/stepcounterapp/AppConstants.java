@@ -1,12 +1,5 @@
 package com.sd.src.stepcounterapp;
 
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.location.LocationManager;
-import android.provider.Settings;
-import androidx.appcompat.app.AlertDialog;
-
 /**
  * @Date 2017/5/17
  * @Author wenzheng.liu
@@ -22,8 +15,7 @@ public class AppConstants {
     public static final String SIGN_COMPLETED = "signUpCompleted";
     public static final String INTENT_FROMAPP = "inApplication";
     public static final String INTENT_NOTIFICATION = "NotificationData";
-
-
+    public static final String INTENT_RECONNECT = "ReconnectDialog";
     public static final int PERMISSION_REQUEST_CODE = 1;
 
 
@@ -32,9 +24,6 @@ public class AppConstants {
     public static final int REQUEST_CODE_LOCATION_SETTINGS = 122;
 
     public static final int REQUEST_CODE_ENABLE_BT = 1001;
-    
-    
-    
-    
-    
+
+
 }

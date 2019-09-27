@@ -93,7 +93,7 @@ public class ZReadStepTask extends OrderTask {
                     MokoSupport.getInstance().setDailySteps(dailySteps);
                     MokoSupport.getInstance().setDailyStepCount(stepCount);
                     if (stepCount > 0) {
-                        LogModule.i("还有" + stepCount + "条记步数据未同步");
+                        LogModule.i("step" + stepCount + "count 条记步数据未同步");
                         return;
                     }
                 }

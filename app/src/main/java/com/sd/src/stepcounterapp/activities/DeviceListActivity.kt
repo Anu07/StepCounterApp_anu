@@ -28,6 +28,7 @@ import com.sd.src.stepcounterapp.adapter.DeviceAdapter
 import com.sd.src.stepcounterapp.service.DfuService
 import com.sd.src.stepcounterapp.service.MokoService
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
+import com.sd.src.stepcounterapp.utils.SharedPreferencesManager.VAR_WEARABLE
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager.WEARABLEID
 import com.sd.src.stepcounterapp.utils.Utils
 import kotlinx.android.synthetic.main.scanbar.*
@@ -126,15 +127,19 @@ class DeviceListActivity : Basefit(), AdapterView.OnItemClickListener, MokoScanD
                         mDialog!!.dismiss()
                     }
                     Toast.makeText(this@DeviceListActivity, "Connect success", Toast.LENGTH_SHORT).show()
+                    SharedPreferencesManager.setString(this@DeviceListActivity,"1" ,VAR_WEARABLE)
                     getLastestSteps()
                     updateDeviceTime()
+
                 }
                 if (MokoConstants.ACTION_CONN_STATUS_DISCONNECTED == intent.action) {
                     abortBroadcast()
-                    if (MokoSupport.getInstance().isBluetoothOpen && MokoSupport.getInstance().reconnectCount > 0) {
-                        Toast.makeText(this@DeviceListActivity, "Device disconnected", Toast.LENGTH_SHORT).show()
-                        return
-                    }
+                    Toast.makeText(this@DeviceListActivity, "Device disconnected", Toast.LENGTH_SHORT).show()
+
+                     if (MokoSupport.getInstance().isBluetoothOpen && MokoSupport.getInstance().reconnectCount > 0) {
+                         Toast.makeText(this@DeviceListActivity, "Device disconnected", Toast.LENGTH_SHORT).show()
+                         return
+                     }
                     if (!this@DeviceListActivity.isFinishing() && mDialog!!.isShowing) {
                         mDialog!!.dismiss()
                     }
@@ -149,7 +154,7 @@ class DeviceListActivity : Basefit(), AdapterView.OnItemClickListener, MokoScanD
                 if (MokoConstants.ACTION_CONN_STATUS_DISCONNECTED == action) {
                     abortBroadcast()
                     Toast.makeText(this@DeviceListActivity, "Device disconnected", Toast.LENGTH_SHORT).show()
-                    this@DeviceListActivity.finish()
+//                    this@DeviceListActivity.finish()
                 }
                 if (MokoConstants.ACTION_ORDER_RESULT == action) {
                     val response =
@@ -168,14 +173,16 @@ class DeviceListActivity : Basefit(), AdapterView.OnItemClickListener, MokoScanD
                         ).show()
                     }*/
                     SharedPreferencesManager.saveSyncObject(this@DeviceListActivity, lastestSteps)
+                    Log.i("steps",""+lastestSteps)
+                    gotoDeviceconnctd()
                 }
                 if (MokoConstants.ACTION_ORDER_TIMEOUT == action) {
                     Toast.makeText(this@DeviceListActivity, "Timeout", Toast.LENGTH_SHORT).show()
                 }
                 if (MokoConstants.ACTION_ORDER_FINISH == action) {
 //                    Toast.makeText(this@DeviceListActivity, "Success", Toast.LENGTH_SHORT).show()
-                    Log.i("steps",""+lastestSteps)
-                    gotoDeviceconnctd()
+//                    Log.i("steps",""+lastestSteps)
+//                    gotoDeviceconnctd()
                 }
             }
         }
@@ -189,6 +196,7 @@ class DeviceListActivity : Basefit(), AdapterView.OnItemClickListener, MokoScanD
         val intent = Intent(this@DeviceListActivity, DeviceConnctdActivity::class.java)
         //                    val options = ActivityOptions.makeSceneTransitionAnimation(this@SignInActivity)
         intent.putExtra("Steps", lastestSteps?.get(lastestSteps!!.size - 1)!!.count)
+        intent.putExtra("device", mDevice)
         startActivity(intent)
         finish()
     }
@@ -316,7 +324,6 @@ class DeviceListActivity : Basefit(), AdapterView.OnItemClickListener, MokoScanD
     override fun onResume() {
         super.onResume()
         DfuServiceListenerHelper.registerProgressListener(this, mDfuProgressListener)
-
     }
 
 

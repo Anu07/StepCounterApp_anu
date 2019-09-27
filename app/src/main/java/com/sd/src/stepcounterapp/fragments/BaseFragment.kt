@@ -17,7 +17,7 @@ open class BaseFragment : Fragment(){
             progressDialog = Dialog(activity)
             progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
             progressDialog.setContentView(R.layout.popup_progressbar)
-            progressDialog.setCancelable(false)
+            progressDialog.setCancelable(true)
             progressDialog.window.setBackgroundDrawable(
                 ColorDrawable(Color.TRANSPARENT)
             )

@@ -60,7 +60,7 @@
                         app:progressStrokeWidth="16dp"
                         app:startAngle="270"
                         app:textColor="@color/white"
-                        app:textSize="14sp"
+                        app:textSize="0sp"
                         app:fillBackground="false"
                         app:gradientType="linear"
                         app:gradientEndColor="@color/gradientColorEnd"/>
@@ -195,6 +195,7 @@
                             android:layout_height="wrap_content"
                             android:id="@+id/steps"
                             android:textStyle="bold"
+                            android:text="0"
                             android:layout_gravity="center"
                             app:appfont="montserrat_semibold.ttf"
                             android:textSize="@dimen/_21ssp"
@@ -275,6 +276,7 @@
                         android:background="@drawable/shadow_bg"
                         android:orientation="horizontal"
                         android:weightSum="1"
+                        android:visibility="gone"
                         android:id="@+id/wishListCloseLayout"
                         android:layout_margin="@dimen/_10sdp">
                     <com.sd.src.stepcounterapp.utils.CustomTextView

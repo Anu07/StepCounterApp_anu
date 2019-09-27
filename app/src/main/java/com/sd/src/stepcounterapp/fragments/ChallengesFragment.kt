@@ -31,6 +31,7 @@ import com.sd.src.stepcounterapp.model.challenge.Challenge
 import com.sd.src.stepcounterapp.model.challenge.ChallengeResponse
 import com.sd.src.stepcounterapp.model.challenge.ChallengeTakenResponse.StartChallengeResponse
 import com.sd.src.stepcounterapp.model.challenge.Data
+import com.sd.src.stepcounterapp.model.challenge.Ongoing
 import com.sd.src.stepcounterapp.model.generic.BasicInfoResponse
 import com.sd.src.stepcounterapp.model.generic.BasicRequest
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
@@ -280,6 +281,12 @@ class ChallengesFragment : BaseFragment(), ChallengeAdapter.ItemClickListener,
         daysLeft.text = """${getDaysDifference(
             SimpleDateFormat("dd/MM/yyyy").format(getCurrentDate()), changeDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", "dd/MM/yyyy", mActiveList[0].endDateTime)
         )} days"""
+
+        if(mActiveList[0].completed){
+            progressTxt.text = "Completed"
+        }else{
+            progressTxt.text = "In Progress"
+        }
 
         /* stopchallengeBttn.setOnClickListener {
              mViewModel.stopchallenges(mActiveList[0]._id)

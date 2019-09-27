@@ -9,6 +9,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.os.Handler
 import android.view.View
 import android.view.Window
@@ -138,6 +139,7 @@ abstract class BaseActivity<V : AndroidViewModel> : AppCompatActivity() {
                 android.graphics.PorterDuff.Mode.MULTIPLY
             )
             progressDialog.show()
+            dismissDialog()
         } else if (isShowing == false) {
             progressDialog.dismiss()
         }
@@ -162,6 +164,21 @@ abstract class BaseActivity<V : AndroidViewModel> : AppCompatActivity() {
         val cn = am.getRunningTasks(1)[0].topActivity
         return cn.className
     }
+
+    private fun dismissDialog() {
+        object : CountDownTimer(5000, 1000) {
+
+            override fun onTick(millisUntilFinished: Long) {
+
+            }
+
+            override fun onFinish() {
+
+                progressDialog.dismiss()
+            }
+        }.start()
+    }
+
 
 }
 

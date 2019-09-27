@@ -177,6 +177,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="IN PROGRESS"
                                 android:ellipsize="end"
+                                android:id="@+id/progressTxt"
                                 android:maxLines="1"
                                 android:textColor="#8DC540"
                                 android:textSize="@dimen/_10ssp"

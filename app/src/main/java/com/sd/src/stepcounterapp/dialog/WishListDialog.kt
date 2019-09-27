@@ -52,7 +52,10 @@ class WishListDialog(
         txtToken.text = mData.token.toString() + " TKS"
         txtDetailLong.text = Html.fromHtml(mData.description)
         wishlistImg.setImageResource(R.drawable.wishlist_fill)
-//        vendorEmail.text = mData.
+        vendorEmail.text = mData.vendorId.email
+        vendorWeb.text = mData.vendorId.websiteUrl
+        vendorDetail.text = mData.vendorId.description
+        Picasso.get().load(RetrofitClient.IMG_URL + mData.vendorId.image).into(vendorLogo)
         btnPurchaseStart.setOnClickListener {
             mListener.onPurchase(mData)
         }

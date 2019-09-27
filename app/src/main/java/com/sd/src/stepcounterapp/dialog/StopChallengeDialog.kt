@@ -8,14 +8,13 @@ import com.sd.src.stepcounterapp.changeDateFormat
 import com.sd.src.stepcounterapp.getDaysDifference
 import com.sd.src.stepcounterapp.interfaces.InterfacesCall
 import com.sd.src.stepcounterapp.model.challenge.Data
-import com.sd.src.stepcounterapp.utils.Utils
-import kotlinx.android.synthetic.main.dialog_challenges.*
+import com.sd.src.stepcounterapp.model.challenge.Ongoing
 import kotlinx.android.synthetic.main.dialog_stop_challenges.*
-import kotlinx.android.synthetic.main.dialog_stop_challenges.view.*
 
-class StopChallengeDialog(context: Context, themeResId: Int,
-                          private val LayoutId: Int,data: Data,
-                          var mListener: StopInterface)
+class StopChallengeDialog(
+    context: Context, themeResId: Int,
+    private val LayoutId: Int, data: Data,
+    var mListener: StopInterface)
     : BaseDialog(context, themeResId) {
     var mData: Data = data
     init {

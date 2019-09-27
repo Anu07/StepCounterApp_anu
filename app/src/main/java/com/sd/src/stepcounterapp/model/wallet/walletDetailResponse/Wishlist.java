@@ -22,7 +22,7 @@ public class Wishlist implements Parcelable {
     private int token;
     private int totalSales;
     private String updatedAt;
-    private String vendorId;
+    private VendorId vendorId;
     private int wishlistCount;
 
 
@@ -159,6 +159,15 @@ public class Wishlist implements Parcelable {
         this.wishlistCount = wishlistCount;
     }
 
+
+    public VendorId getVendorId() {
+        return vendorId;
+    }
+
+    public void setVendorId(VendorId vendorId) {
+        this.vendorId = vendorId;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -181,7 +190,7 @@ public class Wishlist implements Parcelable {
         dest.writeInt(this.token);
         dest.writeInt(this.totalSales);
         dest.writeString(this.updatedAt);
-        dest.writeString(this.vendorId);
+        dest.writeParcelable(this.vendorId, flags);
         dest.writeInt(this.wishlistCount);
     }
 
@@ -204,7 +213,7 @@ public class Wishlist implements Parcelable {
         this.token = in.readInt();
         this.totalSales = in.readInt();
         this.updatedAt = in.readString();
-        this.vendorId = in.readString();
+        this.vendorId = in.readParcelable(VendorId.class.getClassLoader());
         this.wishlistCount = in.readInt();
     }
 

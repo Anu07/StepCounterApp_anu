@@ -5,7 +5,6 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
-import android.os.Handler
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
@@ -41,15 +40,19 @@ import com.sd.src.stepcounterapp.utils.DayAxisValueFormatter
 import com.sd.src.stepcounterapp.utils.InterConsts.MONTHLY
 import com.sd.src.stepcounterapp.utils.InterConsts.WEEKLY
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
+import com.sd.src.stepcounterapp.utils.SharedPreferencesManager.FIREBASETOKEN
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager.SYNCDATE
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager.WEARABLEID
 import com.sd.src.stepcounterapp.viewModels.DeviceViewModel
 import kotlinx.android.synthetic.main.fragment_hayatech.*
-import java.util.*
-import kotlin.collections.ArrayList
 
 
 class HayatechFragment : BaseFragment() {
+
+
+    interface SwipeVisibiltyListener{
+        fun showSwipe()
+    }
 
     companion object {
         @SuppressLint("StaticFieldLeak")
@@ -66,14 +69,12 @@ class HayatechFragment : BaseFragment() {
 
     }
 
+    private var afterSync: Boolean = false
+    var swipeListener:SwipeVisibiltyListener? = null
+    var prevTokenEstd: Int? = 0
+    private var tokenEstd: Int = 10
     lateinit var updater: Runnable
-    private var updatedList: ArrayList<Activity> = ArrayList()
     private var updating: Boolean = false
-    //    internal lateinit var callback: MarketPlaceFragment.FragmentClick
-//
-//    fun FragmentClickListener(callback: MarketPlaceFragment.FragmentClick) {
-//        this.callback = callback
-//    }
     var activityList: ArrayList<Activity>? = null
     private var mDataList: Data? = Data()
     var mViewModel: DeviceViewModel? = null
@@ -82,19 +83,23 @@ class HayatechFragment : BaseFragment() {
     private var mWeekListFormater = arrayOfNulls<String>(7)
     private var mMonthListFormater = arrayOfNulls<String>(31)
     val colors: IntArray = intArrayOf(R.color.green_txt, R.color.blue_txt)
+
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mViewModel = ViewModelProviders.of(activity!!).get(DeviceViewModel::class.java)
         return inflater.inflate(R.layout.fragment_hayatech, container, false)
-
     }
 
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
+        swipeListener = (mContext as LandingActivity);
+
         if (mViewModel == null) {
             mViewModel = ViewModelProviders.of(activity!!).get(DeviceViewModel::class.java)
         }
         Log.i("attach", "viewmodel")
+        (mContext as LandingActivity).disableSwipe(false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -104,12 +109,12 @@ class HayatechFragment : BaseFragment() {
 
         distance.isSelected = true
 
-        circular_progress.setProgressTextAdapter(PatternProgressTextAdapter())
+
         setStepsText()
         if (mViewModel == null) {
             mViewModel = ViewModelProviders.of(activity!!).get(DeviceViewModel::class.java)
         }
-        showPopupProgressSpinner(true)
+//        showPopupProgressSpinner(true)
         mViewModel!!.fetchSyncData(
             if (txtGraphFilter.text.toString().equals(WEEKLY, ignoreCase = true)) {
                 FetchDeviceDataRequest(WEEKLY, SharedPreferencesManager.getUserId(mContext))
@@ -120,25 +125,31 @@ class HayatechFragment : BaseFragment() {
         mViewModel!!.getSyncResponse().observe(this,
             Observer<BasicInfoResponse> { mResponse ->
                 Log.i("Sync", "Data synced successfully")
-//                callDashboard()
+                afterSync= true
+                callDashboard()
             })
         mViewModel!!.getDashResponse().observe(this,
             Observer<DashboardResponse> { mDashResponse ->
-                showPopupProgressSpinner(false)
+//                showPopupProgressSpinner(false)
 
                 mDataList = mDashResponse.data
-                if (!updating || MokoSupport.getInstance().isConnDevice(
-                        mContext, SharedPreferencesManager.getString(
-                            mContext,
-                            WEARABLEID
+                if(!afterSync){
+                    if (!updating || MokoSupport.getInstance().isConnDevice(
+                            mContext, SharedPreferencesManager.getString(
+                                mContext,
+                                WEARABLEID
+                            )
                         )
-                    )
-                ) {
-                    steps.text = mDashResponse.data.totalUserSteps.toString()
-                    totalstepsCount.text = mDashResponse.data.todayToken.toString()
-                    totl_dist.text = mDashResponse.data.totalUserDistance.toString()
-                    totl_dist_suffix.text = "Km"
+                    ) {
+                        steps.text = mDashResponse.data.totalUserSteps.toString()
+                        totalstepsCount.text = mDashResponse.data.todayToken.toString()
+                        prevTokenEstd = mDashResponse.data.todayToken
+                        totl_dist.text = mDashResponse.data.totalUserDistance.toString()
+                        totl_dist_suffix.text = "Km"
+                        calculateEstdToken(steps.text.toString())
+                    }
                 }
+
                 WalletFragment.instance.setUpdatedSteps(mDashResponse.data.totalUserSteps.toString())
                 Log.i("total", "steps" + mDashResponse.data.totalUserSteps.toString())
                 if (mDashResponse.data.closestToken.toString() != "0") {
@@ -148,7 +159,6 @@ class HayatechFragment : BaseFragment() {
                 } else {
                     wishListCloseLayout.visibility = View.GONE
                 }
-                circular_progress.setProgress(mDashResponse.data.todayToken.toDouble(), 10.00)
                 company_rank_count.text = mDashResponse.data.companyRank.toString()
                 tokensVal.text = mDashResponse.data.totalUserToken.toString()
                 SharedPreferencesManager.setString(
@@ -163,7 +173,10 @@ class HayatechFragment : BaseFragment() {
 
                 setBarChart("STEPS")
 
+                swipeListener?.showSwipe()          //to enable swipe
+
             })
+
 
         if (SharedPreferencesManager.hasKey(mContext, SharedPreferencesManager.VAR_WEARABLE)) {
 
@@ -171,10 +184,16 @@ class HayatechFragment : BaseFragment() {
                 SyncRequest(
                     getActivityData(),
                     SharedPreferencesManager.getUserId(mContext),
-                    SharedPreferencesManager.getString(mContext, WEARABLEID)
+                    SharedPreferencesManager.getString(mContext, WEARABLEID),
+                    SharedPreferencesManager.getString(mContext, FIREBASETOKEN)
                 )
             )
         }
+
+
+
+        circular_progress.setProgressTextAdapter(PatternProgressTextAdapter())
+        circular_progress.setProgress(prevTokenEstd!!.toDouble(), 10.00)
 
         txtGraphFilter.setOnClickListener {
             val dialog =
@@ -233,6 +252,8 @@ class HayatechFragment : BaseFragment() {
             //            callback.onFragmentClick(0)
             (mContext as LandingActivity).onFragment(2)
         }
+
+
     }
 
 
@@ -465,13 +486,15 @@ class HayatechFragment : BaseFragment() {
                 steps.text = dailyStep.count.toInt().toString()
                 totl_dist.text = dailyStep.distance.toString()
                 totl_dist_suffix.text = "Km"
+                calculateEstdToken(steps.text.toString())
             }
             try {
                 mViewModel!!.syncDevice(
                     SyncRequest(
                         getLatestActivityData(dailyStep),
                         SharedPreferencesManager.getUserId(mContext),
-                        SharedPreferencesManager.getString(mContext, WEARABLEID)
+                        SharedPreferencesManager.getString(mContext, WEARABLEID),
+                        SharedPreferencesManager.getString(mContext, FIREBASETOKEN)
                     )
                 )
             } catch (e: Exception) {
@@ -482,20 +505,22 @@ class HayatechFragment : BaseFragment() {
         }
     }
 
-
     /**
-     * Start timer for updating graph every 3 secs
+     * tokensEstimation
      */
-    private fun startSyncTimer() {
-        var timerHandler = Handler()
 
-        updater = Runnable {
-            //            setBarChart("STEPS")
-            timerHandler.postDelayed(updater, 5000)
+    private fun calculateEstdToken(dailyStep: String) {
+        tokenEstd = when {
+            (dailyStep.toInt()) > 10000 -> 10
+            dailyStep.toInt() > 999 -> dailyStep.toInt() / 1000
+            else -> mDataList!!.todayToken
         }
-        timerHandler.post(updater)
-    }
+        Log.i("Calculated", "Token$tokenEstd")
 
+        if (tokenEstd != totalstepsCount.text.toString().toInt()) {
+            totalstepsCount.text = tokenEstd.toString()
+        }
+    }
 
     private fun getLatestActivityData(dailyStep: DailyStep): ArrayList<Activity>? {
         var activityList: ArrayList<Activity>? = ArrayList()
@@ -516,11 +541,14 @@ class HayatechFragment : BaseFragment() {
         if (mViewModel == null) {
             mViewModel = ViewModelProviders.of(activity!!).get(DeviceViewModel::class.java)
         }
+
+        (mContext as LandingActivity).checkDeviceConnection()
         mViewModel!!.syncDevice(
             SyncRequest(
                 getActivityData(),
                 SharedPreferencesManager.getUserId(mContext),
-                SharedPreferencesManager.getString(mContext, WEARABLEID)
+                SharedPreferencesManager.getString(mContext, WEARABLEID),
+                SharedPreferencesManager.getString(mContext, FIREBASETOKEN)
             )
         )
     }
@@ -540,16 +568,6 @@ class HayatechFragment : BaseFragment() {
             }
         }
 
-    }
-
-
-    /**
-     * day from a date
-     */
-    fun dayFromDate(date: String) {
-        var sCalendar = Calendar.getInstance()
-        var dayLongName = sCalendar!!.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
-        Log.e("Day", "found" + dayLongName.toString())
     }
 
 }

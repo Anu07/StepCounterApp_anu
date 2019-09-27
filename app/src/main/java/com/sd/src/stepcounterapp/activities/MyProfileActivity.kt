@@ -79,7 +79,7 @@ class MyProfileActivity : BaseActivity<ProfileViewModel>() {
             startActivity(Intent(this@MyProfileActivity, BmiCalculatorActivity::class.java).putExtra("inApp", "1"))
         }
         img_back.setOnClickListener {
-            super.onBackPressed()
+            finish()
         }
         editView.setOnClickListener {
           openFragment(ProfileFragment())
@@ -109,6 +109,9 @@ class MyProfileActivity : BaseActivity<ProfileViewModel>() {
         transaction.commit()
     }
 
-
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
+    }
 
 }

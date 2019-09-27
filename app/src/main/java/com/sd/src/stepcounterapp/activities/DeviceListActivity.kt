@@ -130,7 +130,6 @@ class DeviceListActivity : Basefit(), AdapterView.OnItemClickListener, MokoScanD
                     SharedPreferencesManager.setString(this@DeviceListActivity,"1" ,VAR_WEARABLE)
                     getLastestSteps()
                     updateDeviceTime()
-
                 }
                 if (MokoConstants.ACTION_CONN_STATUS_DISCONNECTED == intent.action) {
                     abortBroadcast()
@@ -143,7 +142,6 @@ class DeviceListActivity : Basefit(), AdapterView.OnItemClickListener, MokoScanD
                     if (!this@DeviceListActivity.isFinishing() && mDialog!!.isShowing) {
                         mDialog!!.dismiss()
                     }
-                    Toast.makeText(this@DeviceListActivity, "Device disconnected", Toast.LENGTH_SHORT).show()
                 }
                 if (BluetoothAdapter.ACTION_STATE_CHANGED == action) {
                     val blueState = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, 0)
@@ -153,7 +151,6 @@ class DeviceListActivity : Basefit(), AdapterView.OnItemClickListener, MokoScanD
                 }
                 if (MokoConstants.ACTION_CONN_STATUS_DISCONNECTED == action) {
                     abortBroadcast()
-                    Toast.makeText(this@DeviceListActivity, "Device disconnected", Toast.LENGTH_SHORT).show()
 //                    this@DeviceListActivity.finish()
                 }
                 if (MokoConstants.ACTION_ORDER_RESULT == action) {
@@ -267,9 +264,9 @@ class DeviceListActivity : Basefit(), AdapterView.OnItemClickListener, MokoScanD
 
     override fun onDestroy() {
         super.onDestroy()
-        unregisterReceiver(mReceiver)
+      /*  unregisterReceiver(mReceiver)
         unbindService(mServiceConnection)
-        stopService(Intent(this, MokoService::class.java))
+        stopService(Intent(this, MokoService::class.java))*/
     }
 
     override fun onStartScan() {
@@ -316,7 +313,7 @@ class DeviceListActivity : Basefit(), AdapterView.OnItemClickListener, MokoScanD
 
     override fun onPause() {
         super.onPause()
-        DfuServiceListenerHelper.unregisterProgressListener(this, mDfuProgressListener)
+//        DfuServiceListenerHelper.unregisterProgressListener(this, mDfuProgressListener)
 
     }
 

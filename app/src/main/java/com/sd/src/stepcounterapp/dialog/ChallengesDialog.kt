@@ -13,6 +13,7 @@ import com.sd.src.stepcounterapp.model.challenge.Data
 import com.sd.src.stepcounterapp.network.RetrofitClient
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.dialog_challenges.*
+import kotlinx.android.synthetic.main.fragment_rewardschallenges.*
 
 class ChallengesDialog(
     context: Context,
@@ -52,6 +53,12 @@ class ChallengesDialog(
         }
         btnStop.setOnClickListener {
             mListener.onStop(mData)
+        }
+
+        if(mData.completed){
+            txtProgress.text = "Completed"
+        }else{
+            txtProgress.text = "In Progress"
         }
     }
 

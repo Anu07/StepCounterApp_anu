@@ -203,7 +203,8 @@
                         android:textSize="@dimen/_20ssp"
                         android:text="0"
                         app:layout_constraintStart_toStartOf="@+id/customTextView6"
-                        app:layout_constraintTop_toBottomOf="@+id/customTextView6" android:id="@+id/txtTokens"/>
+                        app:layout_constraintTop_toBottomOf="@+id/customTextView6"
+                        android:id="@+id/txtTokens"/>
 
                 <com.sd.src.stepcounterapp.utils.CustomTextView
                         android:layout_width="wrap_content"
@@ -296,8 +297,8 @@
                             android:layout_weight="1"
                             android:layout_width="0dp"
                             app:cardCornerRadius="@dimen/_5ssp"
-                            android:layout_marginLeft ="@dimen/_10sdp"
-                            android:layout_marginRight ="@dimen/_3sdp"
+                            android:layout_marginLeft="@dimen/_10sdp"
+                            android:layout_marginRight="@dimen/_3sdp"
                             android:layout_marginTop="@dimen/_10sdp"
                             android:layout_marginBottom="@dimen/_10sdp"
                             android:elevation="@dimen/_10ssp"
@@ -421,10 +422,10 @@
                             android:layout_weight="1"
                             android:layout_width="0dp"
                             app:cardCornerRadius="@dimen/_5ssp"
-                            android:layout_marginLeft ="@dimen/_3sdp"
-                            android:layout_marginRight ="@dimen/_10sdp"
+                            android:layout_marginLeft="@dimen/_3sdp"
+                            android:layout_marginRight="@dimen/_10sdp"
                             android:layout_marginTop="@dimen/_10sdp"
-                            android:layout_marginBottom="@dimen/_10sdp"                            android:elevation="@dimen/_10ssp"
+                            android:layout_marginBottom="@dimen/_10sdp" android:elevation="@dimen/_10ssp"
                             android:layout_height="wrap_content">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
@@ -475,7 +476,7 @@
                                         android:ellipsize="marquee"
                                         android:singleLine="true"
                                         android:focusable="true"
-                                        android:focusableInTouchMode="true"                                        tools:text="50% Off Wellness Ret..."
+                                        android:focusableInTouchMode="true" tools:text="50% Off Wellness Ret..."
                                         android:textColor="@color/colorBlack"
                                         android:textSize="@dimen/_10ssp"
                                         app:appfont="montserrat_semibold.ttf"
@@ -617,10 +618,10 @@
                             android:layout_weight="1"
                             android:layout_width="0dp"
                             app:cardCornerRadius="@dimen/_5ssp"
-                            android:layout_marginLeft ="@dimen/_10sdp"
-                            android:layout_marginRight ="@dimen/_3sdp"
+                            android:layout_marginLeft="@dimen/_10sdp"
+                            android:layout_marginRight="@dimen/_3sdp"
                             android:layout_marginTop="@dimen/_10sdp"
-                            android:layout_marginBottom="@dimen/_10sdp"                            android:elevation="@dimen/_10ssp"
+                            android:layout_marginBottom="@dimen/_10sdp" android:elevation="@dimen/_10ssp"
                             android:layout_height="wrap_content">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
@@ -724,10 +725,10 @@
                             android:layout_weight="1"
                             android:layout_width="0dp"
                             app:cardCornerRadius="@dimen/_5ssp"
-                            android:layout_marginLeft ="@dimen/_3sdp"
-                            android:layout_marginRight ="@dimen/_10sdp"
+                            android:layout_marginLeft="@dimen/_3sdp"
+                            android:layout_marginRight="@dimen/_10sdp"
                             android:layout_marginTop="@dimen/_10sdp"
-                            android:layout_marginBottom="@dimen/_10sdp"                            android:elevation="@dimen/_10ssp"
+                            android:layout_marginBottom="@dimen/_10sdp" android:elevation="@dimen/_10ssp"
                             android:layout_height="wrap_content">
 
                         <androidx.constraintlayout.widget.ConstraintLayout

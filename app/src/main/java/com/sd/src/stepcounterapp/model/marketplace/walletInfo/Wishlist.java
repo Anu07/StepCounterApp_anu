@@ -3,6 +3,7 @@ package com.sd.src.stepcounterapp.model.marketplace.walletInfo;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import com.sd.src.stepcounterapp.model.wallet.walletDetailResponse.VendorId;
 
 @SuppressWarnings("unused")
 public class Wishlist implements Parcelable {
@@ -22,7 +23,16 @@ public class Wishlist implements Parcelable {
     private int token;
     private int totalSales;
     private String updatedAt;
-    private String vendorId;
+
+    public VendorId getVendorId() {
+        return vendorId;
+    }
+
+    public void setVendorId(VendorId vendorId) {
+        this.vendorId = vendorId;
+    }
+
+    private VendorId vendorId;
     private int wishlistCount;
 
 
@@ -159,6 +169,7 @@ public class Wishlist implements Parcelable {
         this.wishlistCount = wishlistCount;
     }
 
+
     @Override
     public int describeContents() {
         return 0;
@@ -181,7 +192,7 @@ public class Wishlist implements Parcelable {
         dest.writeInt(this.token);
         dest.writeInt(this.totalSales);
         dest.writeString(this.updatedAt);
-        dest.writeString(this.vendorId);
+        dest.writeParcelable(this.vendorId, flags);
         dest.writeInt(this.wishlistCount);
     }
 
@@ -204,11 +215,11 @@ public class Wishlist implements Parcelable {
         this.token = in.readInt();
         this.totalSales = in.readInt();
         this.updatedAt = in.readString();
-        this.vendorId = in.readString();
+        this.vendorId = in.readParcelable(VendorId.class.getClassLoader());
         this.wishlistCount = in.readInt();
     }
 
-    public static final Creator<Wishlist> CREATOR = new Creator<Wishlist>() {
+    public static final Parcelable.Creator<Wishlist> CREATOR = new Parcelable.Creator<Wishlist>() {
         @Override
         public Wishlist createFromParcel(Parcel source) {
             return new Wishlist(source);

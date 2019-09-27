@@ -19,6 +19,9 @@ public class MarketResponse {
     @Expose
     private Integer status;
 
+
+    private Integer pages;
+
     public void setData(ArrayList<Data> data) {
         this.data = data;
     }

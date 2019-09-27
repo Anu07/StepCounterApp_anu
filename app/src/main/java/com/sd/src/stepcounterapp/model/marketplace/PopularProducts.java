@@ -17,6 +17,10 @@ public class PopularProducts{
   @SerializedName("status")
   @Expose
   private Integer status;
+
+
+  private Integer pages;
+
   public void setData(ArrayList<Data> data){
    this.data=data;
   }

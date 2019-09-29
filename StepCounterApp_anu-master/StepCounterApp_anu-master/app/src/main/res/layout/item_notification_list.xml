@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:background="@color/white"
+              android:layout_height="@dimen/_100sdp">
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:padding="@dimen/_10sdp"
+            android:id="@+id/parentNotification"
+            android:layout_height="match_parent">
+
+        <com.mikhaellopez.circularimageview.CircularImageView
+                android:id="@+id/noti_img"
+                android:layout_width="@dimen/_50sdp"
+                android:src="@drawable/nouser"
+                android:layout_gravity="center_vertical"
+                android:layout_height="@dimen/_50sdp"/>
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:padding="@dimen/_8sdp"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:layout_height="match_parent">
+
+            <com.sd.src.stepcounterapp.utils.CustomTextView
+                    android:layout_width="match_parent"
+                    android:ellipsize="end"
+                    android:id="@+id/notificationtitle"
+                    android:ems="10"
+                    android:text="Amazing!! you just turned 10 tokens.Amazing!! you just turned 10 tokens"
+                    android:lines="3"
+                    android:minLines="2"
+                    android:singleLine="false"
+                    android:textColor="@color/gray"
+                    android:layout_height="wrap_content"/>
+            <com.sd.src.stepcounterapp.utils.CustomTextView
+                    android:layout_width="match_parent"
+                    android:id="@+id/notificationdate"
+                    android:text="Today, 08:40pm"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:textColor="@color/gray_text"
+                    android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:layout_marginLeft="@dimen/_15sdp"
+          android:background="@color/gray_text"/>
+</LinearLayout>

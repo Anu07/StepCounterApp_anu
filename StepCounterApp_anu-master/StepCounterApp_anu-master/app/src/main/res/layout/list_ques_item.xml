@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_margin="@dimen/_5sdp"
+              android:layout_height="wrap_content">
+
+    <com.sd.src.stepcounterapp.utils.CustomTextView
+            android:id="@+id/quesText"
+            android:text="What is question?"
+            app:appfont="montserrat_semibold.ttf"
+            android:layout_width="match_parent"
+            android:textSize="@dimen/_18sdp"
+            android:textColor="@color/colorBlack"
+            android:layout_marginLeft="@dimen/_5sdp"
+            android:layout_marginRight="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:layout_height="wrap_content"/>
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:id="@+id/optionsview"
+            android:background="@color/white"
+            android:layout_margin="@dimen/_5sdp"
+            android:layout_height="wrap_content">
+
+
+    </LinearLayout>
+</LinearLayout>

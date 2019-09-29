@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+    <ScrollView android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+        <LinearLayout android:layout_width="match_parent"
+                      android:orientation="vertical"
+                      android:layout_height="match_parent">
+            <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="match_parent"
+                    android:id="@+id/appLogo"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:src="@drawable/logo_vector"
+                    android:layout_marginTop="@dimen/_57sdp"
+                    android:layout_marginLeft="@dimen/_40sdp"
+                    android:layout_marginRight="@dimen/_40sdp"
+                    android:layout_marginBottom="@dimen/_60sdp"
+                    android:layout_height="wrap_content"/>
+
+            <com.sd.src.stepcounterapp.utils.CustomTextView
+                    android:id="@+id/headerText"
+                    android:layout_width="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@+id/appLogo"
+                    style="@style/headerTextStyle"
+                    android:text="Sign In"
+                    app:appfont="montserrat_semibold.ttf"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                    style="@style/textLayoutStyle"
+                    android:id="@+id/emailLayout"
+                    android:layout_width="match_parent">
+
+                <com.sd.src.stepcounterapp.utils.CustomEditText
+                        android:id="@+id/emailTxt"
+                        android:hint="@string/hint_email_usrname"
+                        android:textColor="@color/colorBlack"
+                        android:layout_width="match_parent"
+                        android:maxLength="60"
+                        android:inputType="textEmailAddress"
+                        android:singleLine="true"
+                        app:appEditfont="montserrat_regular.ttf"
+                        android:layout_height="wrap_content"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                    style="@style/textLayoutStyle"
+                    android:id="@+id/pwdLayout">
+
+                <com.sd.src.stepcounterapp.utils.CustomEditText
+                        android:id="@+id/pwdTxt"
+                        android:hint="@string/hint_pwd"
+                        android:textColor="@color/colorBlack"
+                        android:layout_width="match_parent"
+                        android:inputType="textPassword"
+                        app:appEditfont="montserrat_regular.ttf"
+                        android:layout_height="wrap_content"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.sd.src.stepcounterapp.utils.CustomTextView
+                    android:text="Forgot Password?"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/forgotTextView"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:textSize="@dimen/_14sdp"
+                    android:transitionName="@string/transition_name"
+                    app:appfont="montserrat_regular.ttf"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:layout_marginEnd="16dp"/>
+
+            <com.sd.src.stepcounterapp.utils.CustomButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_background"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    app:appButtonfont="montserrat_medium.ttf"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:id="@+id/signBttn"
+                    android:textSize="@dimen/_15sdp"
+                    android:textColor="@color/white"
+                    android:text="@string/sign_in"/>
+        </LinearLayout>
+
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

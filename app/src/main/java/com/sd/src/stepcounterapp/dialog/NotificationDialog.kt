@@ -56,7 +56,7 @@ class NotificationDialog(
             dismiss()
         }
         changebttn.setOnClickListener {
-            mListener.onUpdateSettings("")
+            mListener.onUpdateSettings(goalachievedbttn.isChecked, newchallnegebttn.isChecked ,newsurveybttn.isChecked )
         }
     }
 
@@ -66,7 +66,7 @@ class NotificationDialog(
 
 
     interface NotificationInterface {
-        fun onUpdateSettings(queryCat: String)
+        fun onUpdateSettings(goal: Boolean,challenge:Boolean,survey:Boolean)
 
     }
 }

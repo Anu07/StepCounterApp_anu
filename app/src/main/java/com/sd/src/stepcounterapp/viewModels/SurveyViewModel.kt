@@ -12,6 +12,7 @@ import com.sd.src.stepcounterapp.model.survey.SurveyResponse
 import com.sd.src.stepcounterapp.model.survey.surveyrequest.SurveystartRequestModel
 import com.sd.src.stepcounterapp.network.RetrofitClient
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
+import com.sd.src.stepcounterapp.utils.Utils
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -37,54 +38,83 @@ class SurveyViewModel(application: Application) : AndroidViewModel(application) 
         return mSurveyAttend as MutableLiveData<BasicInfoResponse>
     }
 
-    fun hitSurveyListApi() {
-        call!!.getsurvey(BasicRequest(SharedPreferencesManager.getUserId(HayaTechApplication.applicationContext())))
-            .enqueue(object :
-                Callback<SurveyResponse> {
-                override fun onFailure(call: Call<SurveyResponse>?, t: Throwable?) {
-                    Log.v("retrofit", "call failed")
-                    Toast.makeText(HayaTechApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
-                }
+    fun hitSurveyListApi(request:BasicRequest) {
+        if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
 
-                override fun onResponse(call: Call<SurveyResponse>?, response: Response<SurveyResponse>?) {
-                    if (response!!.code() == 200) {
-                        mSurveyList!!.value = response?.body()!!
-                    } else  if (response!!.code() == 405) {
-                        Toast.makeText(HayaTechApplication.applicationContext(), "User doesn't exist", Toast.LENGTH_LONG)
-                            .show()
-                        HayaTechApplication.instance!!.logoutUser()
-                    } else {
-                        var model = SurveyResponse()
-                        model.message = "Invalid request"       //TODO
-                        mSurveyList!!.value = model
+            call!!.getsurvey(
+               request
+            )
+                .enqueue(object :
+                    Callback<SurveyResponse> {
+                    override fun onFailure(call: Call<SurveyResponse>?, t: Throwable?) {
+                        Log.v("retrofit", "call failed")
+                        Toast.makeText(
+                            HayaTechApplication.applicationContext(),
+                            "Server error",
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
-                }
-            })
+
+                    override fun onResponse(
+                        call: Call<SurveyResponse>?,
+                        response: Response<SurveyResponse>?
+                    ) {
+                        if (response!!.code() == 200) {
+                            mSurveyList!!.value = response?.body()!!
+                        } else if (response!!.code() == 405) {
+                            Toast.makeText(
+                                HayaTechApplication.applicationContext(),
+                                "User doesn't exist",
+                                Toast.LENGTH_LONG
+                            )
+                                .show()
+                            HayaTechApplication.instance!!.logoutUser()
+                        } else {
+                            var model = SurveyResponse()
+                            model.message = "Invalid request"       //TODO
+                            mSurveyList!!.value = model
+                        }
+                    }
+                })
+        }
     }
 
 
     fun hitAttendSurveyApi(request: SurveystartRequestModel) {
-        call!!.takesurvey(request).enqueue(object :
-            Callback<BasicInfoResponse> {
-            override fun onFailure(call: Call<BasicInfoResponse>?, t: Throwable?) {
-                Log.v("retrofit", "call failed")
-                Toast.makeText(HayaTechApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
-            }
+        if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
 
-            override fun onResponse(call: Call<BasicInfoResponse>?, response: Response<BasicInfoResponse>?) {
-                if(response!!.body()!!.status == 200){
-                    mSurveyAttend!!.value = response!!.body()
-                }else  if (response!!.code() == 405) {
-                    Toast.makeText(HayaTechApplication.applicationContext(), "User doesn't exist", Toast.LENGTH_LONG)
-                        .show()
-                    HayaTechApplication.instance!!.logoutUser()
-                }else{
-                    mSurveyAttend!!.value = BasicInfoResponse()
+            call!!.takesurvey(request).enqueue(object :
+                Callback<BasicInfoResponse> {
+                override fun onFailure(call: Call<BasicInfoResponse>?, t: Throwable?) {
+                    Log.v("retrofit", "call failed")
+                    Toast.makeText(
+                        HayaTechApplication.applicationContext(),
+                        "Server error",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
 
-            }
-        })
-    }
+                override fun onResponse(
+                    call: Call<BasicInfoResponse>?,
+                    response: Response<BasicInfoResponse>?
+                ) {
+                    if (response!!.body()!!.status == 200) {
+                        mSurveyAttend!!.value = response!!.body()
+                    } else if (response!!.code() == 405) {
+                        Toast.makeText(
+                            HayaTechApplication.applicationContext(),
+                            "User doesn't exist",
+                            Toast.LENGTH_LONG
+                        )
+                            .show()
+                        HayaTechApplication.instance!!.logoutUser()
+                    } else {
+                        mSurveyAttend!!.value = BasicInfoResponse()
+                    }
 
+                }
+            })
+        }
+    }
 
 }

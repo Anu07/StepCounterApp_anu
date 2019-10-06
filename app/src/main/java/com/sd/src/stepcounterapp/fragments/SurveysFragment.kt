@@ -13,14 +13,19 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager.widget.ViewPager
+import com.sd.src.stepcounterapp.HayaTechApplication
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.activities.LandingActivity
 import com.sd.src.stepcounterapp.activities.SurveyDetailActivity
 import com.sd.src.stepcounterapp.adapter.SlidingImageAdapter
 import com.sd.src.stepcounterapp.adapter.SurveysAdapter
+import com.sd.src.stepcounterapp.model.generic.BasicRequest
 import com.sd.src.stepcounterapp.model.survey.Datum
 import com.sd.src.stepcounterapp.model.survey.SurveyResponse
+import com.sd.src.stepcounterapp.utils.EndlessRecyclerOnScrollListener
 import com.sd.src.stepcounterapp.utils.ItemClickGlobalListner
+import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
+import com.sd.src.stepcounterapp.utils.Utils
 import com.sd.src.stepcounterapp.viewModels.SurveyViewModel
 import kotlinx.android.synthetic.main.fragment_surveys.*
 import java.util.*
@@ -56,7 +61,7 @@ class SurveysFragment : BaseFragment(), ItemClickGlobalListner {
 
     private lateinit var mSlideAdapter: SlidingImageAdapter
     private var currentPage: Int = -1
-    private var NUM_PAGES: Int = 3
+    private var NUM_PAGES: Int = 0
     lateinit var mSurveyAdapter: SurveysAdapter
     private lateinit var mViewModel: SurveyViewModel
     private var ImagesArray: ArrayList<Datum>? = ArrayList()
@@ -64,8 +69,20 @@ class SurveysFragment : BaseFragment(), ItemClickGlobalListner {
 
     var rewardsViewPager: ViewPager? = null
     private var mData: ArrayList<Datum> = ArrayList()
+    private var page = 0
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        (mContext as LandingActivity).showDisconnection(false)
+        (mContext as LandingActivity).disableSwipe(false)
+    }
+
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val v = inflater.inflate(R.layout.fragment_surveys, container, false)
         rewardsViewPager = v.findViewById(R.id.rewardsViewPager)
         return v
@@ -78,30 +95,41 @@ class SurveysFragment : BaseFragment(), ItemClickGlobalListner {
         mViewModel.getSurveyList().observe(this,
             Observer<SurveyResponse> { mData ->
                 showPopupProgressSpinner(false)
-                if (mData != null && (mData.data!= null)) {
+                if (mData != null && (mData.data != null)) {
                     if (mData.data!!.size > 0) {
                         rvSurveys.visibility = View.VISIBLE
                         norec.visibility = View.GONE
                         surveyArray = mData.data as ArrayList<Datum>?
                         mSurveyAdapter.swap(mData.data as ArrayList<Datum>)
                         if (mData.featured.size > 0) {
+                            pagerFrame.visibility = View.VISIBLE
                             ImagesArray = mData.featured as ArrayList<Datum>?
                             rewardsViewPager!!.adapter = SlidingImageAdapter(
                                 ChallengesFragment.mContext,
                                 (mData.featured as ArrayList<Datum>?)!!,
                                 this
                             )
+                            NUM_PAGES = mData.featured.size
                             spring_dots_indicator.setViewPager(rewardsViewPager)
                         }
+                    } else {
+                        pagerFrame.visibility = View.GONE
                     }
                 } else {
                     rvSurveys.visibility = View.GONE
                     norec.visibility = View.VISIBLE
                 }
             })
+        if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
 
-        showPopupProgressSpinner(true)
-        mViewModel.hitSurveyListApi()
+            showPopupProgressSpinner(true)
+            mViewModel.hitSurveyListApi(
+                BasicRequest(
+                    SharedPreferencesManager.getUserId(HayaTechApplication.applicationContext()),
+                    page
+                )
+            )
+        }
 
         setSurveyAdapter()
         init()
@@ -138,6 +166,18 @@ class SurveysFragment : BaseFragment(), ItemClickGlobalListner {
         rvSurveys.layoutManager = LinearLayoutManager(mContext)
         mSurveyAdapter = SurveysAdapter(mContext, mData, this)
         rvSurveys.adapter = mSurveyAdapter
+        rvSurveys.addOnScrollListener(object: EndlessRecyclerOnScrollListener(){
+            override fun onLoadMore(currentPage: Int) {
+                showPopupProgressSpinner(true)
+                mViewModel.hitSurveyListApi(
+                    BasicRequest(
+                        SharedPreferencesManager.getUserId(HayaTechApplication.applicationContext()),
+                        currentPage
+                    )
+                )
+            }
+
+        })
     }
 
 
@@ -149,7 +189,12 @@ class SurveysFragment : BaseFragment(), ItemClickGlobalListner {
 
     fun notifyData() {
         if (mViewModel != null)
-            mViewModel.hitSurveyListApi()
+            if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
+                mViewModel.hitSurveyListApi(  BasicRequest(
+                    SharedPreferencesManager.getUserId(HayaTechApplication.applicationContext()),
+                    currentPage
+                ))
+            }
     }
 
 

@@ -20,22 +20,18 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.core.net.toFile
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProviders
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
-import com.sd.src.stepcounterapp.HayaTechApplication
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.activities.MyProfileActivity
 import com.sd.src.stepcounterapp.model.profile.Data
 import com.sd.src.stepcounterapp.model.profile.UpdateProfileRequest
 import com.sd.src.stepcounterapp.network.RetrofitClient
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
-import com.sd.src.stepcounterapp.viewModels.ProfileViewModel
-import com.sd.src.stepcounterapp.viewModels.SignInViewModel
 import com.sd.src.stepcounterapp.viewModels.UpProfileViewModel
 import com.squareup.picasso.Picasso
 import com.theartofdev.edmodo.cropper.CropImage
@@ -81,28 +77,28 @@ class ProfileFragment : BaseFragment(), View.OnClickListener {
                 isWtButtonClicked = false
                 changeBttnBg(v)
                 if (weightTxt.text.toString().isNotEmpty()) {
-                    weightTxt.setText(convertLbsToKgs().toString())
+                    weightTxt.setText((String.format("%.1f", convertLbsToKgs())))
                 }
             }
             R.id.kgs_wt -> {
                 isWtButtonClicked = true
                 changeBttnBg(v)
                 if (weightTxt.text.toString().isNotEmpty()) {
-                    weightTxt.setText(convertKgsToLbs().toString())
+                    weightTxt.setText((String.format("%.1f", convertKgsToLbs())))
                 }
             }
             R.id.cms_ht -> {
                 isHtButtonClicked = true
                 changeHtBttnBg(v)
                 if (heightTxt.text.toString().isNotEmpty()) {
-                    heightTxt.setText(convertFeetToCms().toString())
+                    heightTxt.setText((String.format("%.1f", convertFeetToCms())))
                 }
             }
             R.id.fts_ht -> {
                 isHtButtonClicked = false
                 changeHtBttnBg(v)
                 if (heightTxt.text.toString().isNotEmpty()) {
-                    heightTxt.setText(convertCmsToFeet().toString())
+                    heightTxt.setText((String.format("%.1f", convertCmsToFeet())))
                 }
 
             }
@@ -206,8 +202,8 @@ class ProfileFragment : BaseFragment(), View.OnClickListener {
     private val REQUEST_CROP_IMAGE: Int = 113
     var isWtButtonClicked: Boolean = false
     var isHtButtonClicked: Boolean = false
-    private var heightValue:String =""
-    private var weightValue:String =""
+    private var heightValue: String = ""
+    private var weightValue: String = ""
 
 
     companion object {
@@ -247,10 +243,43 @@ class ProfileFragment : BaseFragment(), View.OnClickListener {
             selectGender(femaleBttn)
         }
         dobTxt.setText(userData!!.dob.toString())
-        heightValue = userData!!.height.toString()
-        heightTxt.setText(userData!!.height.toString())
-        weightValue = userData!!.weight.toString()
-        weightTxt.setText(userData!!.weight.toString())
+        if (SharedPreferencesManager.hasKey(mContext, "BMI")) {
+            var bmi = SharedPreferencesManager.getBmiObject(mContext)
+            if (bmi != null) {
+                heightValue = bmi!!.height.toString()
+                heightTxt.setText(bmi!!.height.toString())
+                weightValue = bmi!!.weight.toString()
+                weightTxt.setText(bmi!!.weight.toString())
+                if (bmi.heightType == "Cms") {
+                    cms_ht.performClick()
+                } else {
+                    fts_ht.performClick()
+                }
+                if (bmi.weightType == "Kgs") {
+                    kgs_wt.performClick()
+                } else {
+                    lbs_wt.performClick()
+                }
+            }
+        } else {
+            heightValue = userData!!.height.toString()
+            heightTxt.setText(userData!!.height.toString())
+            weightValue = userData!!.weight.toString()
+            weightTxt.setText(userData!!.weight.toString())
+            if (userData!!.heightType == "Cms") {
+                cms_ht.performClick()
+            } else {
+                fts_ht.performClick()
+            }
+            if (userData!!.weightType == "Kgs") {
+                kgs_wt.performClick()
+            } else {
+                lbs_wt.performClick()
+            }
+        }
+
+        dobTxt.isEnabled = false
+        dobTxt.isClickable = false
         maleBttn.setOnClickListener(this)
         femaleBttn.setOnClickListener(this)
         saveinfoBttn.setOnClickListener(this)
@@ -261,16 +290,7 @@ class ProfileFragment : BaseFragment(), View.OnClickListener {
         fts_ht.setOnClickListener(this)
         cms_ht.setOnClickListener(this)
         img_back.setOnClickListener(this)
-        if (userData!!.heightType == "Cms") {
-            cms_ht.performClick()
-        } else {
-            fts_ht.performClick()
-        }
-        if (userData!!.weightType == "Kgs") {
-            kgs_wt.performClick()
-        } else {
-            lbs_wt.performClick()
-        }
+
 
 
         dobTxt.setOnTouchListener(object : View.OnTouchListener, DatePickerDialog.OnDateSetListener {
@@ -422,6 +442,7 @@ class ProfileFragment : BaseFragment(), View.OnClickListener {
                         if (takePictureIntent.resolveActivity(mContext.packageManager) != null) {
                             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
                         }
+
                     }
                 }
 
@@ -460,31 +481,34 @@ class ProfileFragment : BaseFragment(), View.OnClickListener {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        when (requestCode) {
-            REQUEST_IMAGE_CAPTURE -> if (resultCode == RESULT_OK) {
-                selectedImage = data!!.data
+        if (data != null) {
+            when (requestCode) {
+                REQUEST_IMAGE_CAPTURE ->
+                    if (resultCode == RESULT_OK) {
+                        selectedImage = data!!.data
 //                img_nav_header.setImageURI(selectedImage)
-                img_nav_header.setImageURI(selectedImage)
+//                        img_nav_header.setImageURI(selectedImage)
 
-                ImageCropFunction()
+                        ImageCropFunction()
 
-            }
-            REQUEST_GALLERY_IMAGE -> if (resultCode == RESULT_OK) {
-                selectedImage = data!!.data
+                    }
+
+                REQUEST_GALLERY_IMAGE -> if (resultCode == RESULT_OK) {
+                    selectedImage = data!!.data
 //                profileImg.setImageURI(selectedImage)
-                ImageCropFunction()
-            }
-            CROP_IMAGE_ACTIVITY_REQUEST_CODE -> {
-                var result: CropImage.ActivityResult = CropImage.getActivityResult(data)
-                img_nav_header.setImageURI(result.uri)
-                croppedImage = result.uri.toFile()
-                uploadImageToServer()
-            }
-            CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE -> {
-                Toast.makeText(activity, "Some error occurred", Toast.LENGTH_LONG).show()
-            }
+                    ImageCropFunction()
+                }
+                CROP_IMAGE_ACTIVITY_REQUEST_CODE -> {
+                    var result: CropImage.ActivityResult = CropImage.getActivityResult(data)
+                    img_nav_header.setImageURI(result.uri)
+                    croppedImage = result.uri.toFile()
+                    uploadImageToServer()
+                }
+                CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE -> {
+                    Toast.makeText(activity, "Some error occurred", Toast.LENGTH_LONG).show()
+                }
 
-
+            }
         }
     }
 
@@ -498,14 +522,6 @@ class ProfileFragment : BaseFragment(), View.OnClickListener {
         mUpProfileViewModel!!.uploadImage(requestUserID, getFiletoServer())
     }
 
-
-    fun getRealPathFromURI(contentUri: Uri): String {
-        val proj = arrayOf(MediaStore.Audio.Media.DATA)
-        val cursor = activity?.managedQuery(contentUri, proj, null, null, null)
-        val column_index = cursor?.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)
-        cursor?.moveToFirst()
-        return cursor?.getString(column_index!!)!!
-    }
 
     /**
      * request body for image
@@ -527,9 +543,8 @@ class ProfileFragment : BaseFragment(), View.OnClickListener {
     fun ImageCropFunction() {
         context?.let {
             CropImage.activity(selectedImage)
-                .setGuidelines(CropImageView.Guidelines.ON)
-                .setMinCropResultSize(800, 800)
-                .setMaxCropResultSize(1000, 1000)
+                .setCropShape(CropImageView.CropShape.OVAL)
+                .setAspectRatio(1, 1)
                 .start(it, this)
         }
     }
@@ -547,11 +562,13 @@ class ProfileFragment : BaseFragment(), View.OnClickListener {
      */
 
     private fun convertKgsToLbs(): Double {
-        return weightTxt.text.toString().toFloat() * 2.20
+        if (userData!!.weightType == "Kgs") return userData!!.weight.toFloat() * 2.20
+        return userData!!.weight.toFloat() * 2.20
     }
 
 
     private fun convertLbsToKgs(): Double {
+        if (userData!!.weightType == "Lbs") return userData!!.weight.toFloat() * 0.454
         return weightTxt.text.toString().toFloat() * 0.454
     }
 
@@ -561,14 +578,14 @@ class ProfileFragment : BaseFragment(), View.OnClickListener {
      */
 
     private fun convertCmsToFeet(): Double {
-        return heightTxt.text.toString().toFloat() / 30.48
+        if (userData!!.heightType == "Cms") return userData!!.height.toFloat() / 30.48
+        return userData!!.height.toDouble()
     }
 
     private fun convertFeetToCms(): Double {
-        return heightTxt.text.toString().toFloat() * 30.48
+        if (userData!!.heightType == "Feet") return userData!!.height.toFloat() * 30.48
+        return userData!!.height.toDouble()
     }
-
-
 
 
 }

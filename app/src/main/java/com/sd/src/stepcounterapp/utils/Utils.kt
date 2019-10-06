@@ -3,16 +3,16 @@ package com.sd.src.stepcounterapp.utils
 import android.content.Context
 import android.content.Intent
 import android.location.LocationManager
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.provider.Settings
 import androidx.core.app.NotificationManagerCompat
 
 import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Date
-import java.util.Locale
 import android.util.Log
 import com.sd.src.stepcounterapp.HayaTechApplication.Companion.TAG
 import java.text.ParseException
+import java.util.*
 
 
 object Utils {
@@ -99,7 +99,11 @@ object Utils {
         return splitted
     }
 
-    fun formateDateFromstring(inputFormat: String, outputFormat: String, inputDate: String): String {
+    fun formateDateFromstring(
+        inputFormat: String,
+        outputFormat: String,
+        inputDate: String
+    ): String {
 
         var parsed: Date? = null
         var outputDate = ""
@@ -118,8 +122,6 @@ object Utils {
         return outputDate
 
     }
-
-
 
 
     fun isNotificationListenerEnabled(context: Context): Boolean {
@@ -152,8 +154,58 @@ object Utils {
         return gps && network
     }
 
+    fun retryInternet(mContext: Context): Boolean {
+        var connectivity = mContext.getSystemService(
+            Context.CONNECTIVITY_SERVICE
+        )
+        if (connectivity != null) {
+            val connMgr = mContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val networkInfo = connMgr.activeNetworkInfo
+            return networkInfo != null && networkInfo.isConnected
+        }
+        return false
+    }
 
 
+    /**
+     * get Current date
+     */
+
+    fun getCurrentDate(): String? {
+        var formatter = SimpleDateFormat("dd/MM/yyyy")
+        var date = Date(System.currentTimeMillis())
+        return formatter.format(date)
+    }
+
+
+    /**
+     * get Current date
+     */
+
+    fun getWearCurrentDate(): String? {
+        var formatter = SimpleDateFormat("yyyy-MM-dd")
+        var date = Date(System.currentTimeMillis())
+        return formatter.format(date)
+    }
+
+
+    /**
+     * fetch offset
+     */
+
+    fun parseTimeOffset(): Int {
+
+        val tz = TimeZone.getDefault()
+        val cal = Calendar.getInstance(tz)
+        val offsetInMillis = tz.getOffset(cal.timeInMillis)
+
+        var offset =
+            String.format("%02d:%02d", Math.abs(offsetInMillis / 3600000), Math.abs(offsetInMillis / 60000 % 60))
+        var minutesOffset = ((offset.split(":")[0].toInt()*60) + offset.split(":")[1].toInt())
+        offset = (if (offsetInMillis >= 0) "+" else "-") + minutesOffset
+        Log.i("minutes","offset "+offset.toInt())
+        return offset.toInt()
+    }
 
 
 

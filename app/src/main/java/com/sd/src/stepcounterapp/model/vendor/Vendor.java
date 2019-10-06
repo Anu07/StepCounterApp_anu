@@ -4,71 +4,80 @@ package com.sd.src.stepcounterapp.model.vendor;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 @SuppressWarnings("unused")
 public class Vendor implements Parcelable {
 
-    private String _id;
-    private String address;
-    private String contactPerson;
-    private String description;
-    private String email;
-    private String image;
-    private long mobile;
-
-    public String get_id() {
-        return _id;
-    }
-
-    public void set_id(String _id) {
-        this._id = _id;
-    }
+    @SerializedName("address")
+    private String mAddress;
+    @SerializedName("contactPerson")
+    private String mContactPerson;
+    @SerializedName("description")
+    private String mDescription;
+    @SerializedName("email")
+    private String mEmail;
+    @SerializedName("image")
+    private String mImage;
+    @SerializedName("mobile")
+    private Long mMobile;
+    @SerializedName("_id")
+    private String m_id;
 
     public String getAddress() {
-        return address;
+        return mAddress;
     }
 
     public void setAddress(String address) {
-        this.address = address;
+        mAddress = address;
     }
 
     public String getContactPerson() {
-        return contactPerson;
+        return mContactPerson;
     }
 
     public void setContactPerson(String contactPerson) {
-        this.contactPerson = contactPerson;
+        mContactPerson = contactPerson;
     }
 
     public String getDescription() {
-        return description;
+        return mDescription;
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        mDescription = description;
     }
 
     public String getEmail() {
-        return email;
+        return mEmail;
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        mEmail = email;
     }
 
     public String getImage() {
-        return image;
+        return mImage;
     }
 
     public void setImage(String image) {
-        this.image = image;
+        mImage = image;
     }
 
-    public long getMobile() {
-        return mobile;
+    public Long getMobile() {
+        return mMobile;
     }
 
-    public void setMobile(long mobile) {
-        this.mobile = mobile;
+    public void setMobile(Long mobile) {
+        mMobile = mobile;
+    }
+
+    public String get_id() {
+        return m_id;
+    }
+
+    public void set_id(String _id) {
+        m_id = _id;
     }
 
     @Override
@@ -78,26 +87,26 @@ public class Vendor implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this._id);
-        dest.writeString(this.address);
-        dest.writeString(this.contactPerson);
-        dest.writeString(this.description);
-        dest.writeString(this.email);
-        dest.writeString(this.image);
-        dest.writeLong(this.mobile);
+        dest.writeString(this.mAddress);
+        dest.writeString(this.mContactPerson);
+        dest.writeString(this.mDescription);
+        dest.writeString(this.mEmail);
+        dest.writeString(this.mImage);
+        dest.writeValue(this.mMobile);
+        dest.writeString(this.m_id);
     }
 
     public Vendor() {
     }
 
     protected Vendor(Parcel in) {
-        this._id = in.readString();
-        this.address = in.readString();
-        this.contactPerson = in.readString();
-        this.description = in.readString();
-        this.email = in.readString();
-        this.image = in.readString();
-        this.mobile = in.readLong();
+        this.mAddress = in.readString();
+        this.mContactPerson = in.readString();
+        this.mDescription = in.readString();
+        this.mEmail = in.readString();
+        this.mImage = in.readString();
+        this.mMobile = (Long) in.readValue(Long.class.getClassLoader());
+        this.m_id = in.readString();
     }
 
     public static final Parcelable.Creator<Vendor> CREATOR = new Parcelable.Creator<Vendor>() {

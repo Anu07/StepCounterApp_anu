@@ -18,6 +18,7 @@ import com.sd.src.stepcounterapp.model.wishList.AddWishRequest
 import com.sd.src.stepcounterapp.network.RetrofitClient
 import com.sd.src.stepcounterapp.utils.LoadingDialog
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
+import com.sd.src.stepcounterapp.utils.Utils
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -63,12 +64,23 @@ class MarketPlaceViewModel(application: Application) : AndroidViewModel(applicat
 
             override fun onFailure(call: Call<MarketResponse>?, t: Throwable?) {
                 Log.v("retrofit", "call failed")
-                Toast.makeText(HayaTechApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    HayaTechApplication.applicationContext(),
+                    t!!.message,
+                    Toast.LENGTH_LONG
+                ).show()
             }
 
-            override fun onResponse(call: Call<MarketResponse>?, response: Response<MarketResponse>?) {
+            override fun onResponse(
+                call: Call<MarketResponse>?,
+                response: Response<MarketResponse>?
+            ) {
                 if (response!!.body()!!.status == 405) {
-                    Toast.makeText(HayaTechApplication.applicationContext(), "User doesn't exist", Toast.LENGTH_LONG)
+                    Toast.makeText(
+                        HayaTechApplication.applicationContext(),
+                        "User doesn't exist",
+                        Toast.LENGTH_LONG
+                    )
                         .show()
                     HayaTechApplication.instance!!.logoutUser()
                 } else if (response!!.body()!!.status == 200) {
@@ -83,17 +95,32 @@ class MarketPlaceViewModel(application: Application) : AndroidViewModel(applicat
 
             override fun onFailure(call: Call<MarketResponse>?, t: Throwable?) {
                 Log.v("retrofit", "call failed")
-                Toast.makeText(HayaTechApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    HayaTechApplication.applicationContext(),
+                    "Server error",
+                    Toast.LENGTH_LONG
+                ).show()
             }
 
-            override fun onResponse(call: Call<MarketResponse>?, response: Response<MarketResponse>?) {
+            override fun onResponse(
+                call: Call<MarketResponse>?,
+                response: Response<MarketResponse>?
+            ) {
                 when {
                     response!!.code() == 405 -> {
-                        Toast.makeText(HayaTechApplication.applicationContext(), "User doesn't exist", Toast.LENGTH_LONG)
+                        Toast.makeText(
+                            HayaTechApplication.applicationContext(),
+                            "User doesn't exist",
+                            Toast.LENGTH_LONG
+                        )
                             .show()
                         HayaTechApplication.instance!!.logoutUser()
                     }
-                    response!!.code() == 400 -> Toast.makeText(HayaTechApplication.applicationContext(), "No record found.", Toast.LENGTH_LONG)
+                    response!!.code() == 400 -> Toast.makeText(
+                        HayaTechApplication.applicationContext(),
+                        "No record found.",
+                        Toast.LENGTH_LONG
+                    )
                         .show()
                     response!!.code() == 200 -> mProduct!!.value = response!!.body()
                     else -> mProduct!!.value = MarketResponse()
@@ -108,12 +135,23 @@ class MarketPlaceViewModel(application: Application) : AndroidViewModel(applicat
 
             override fun onFailure(call: Call<PopularProducts>?, t: Throwable?) {
                 Log.v("retrofit", "call failed")
-                Toast.makeText(HayaTechApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    HayaTechApplication.applicationContext(),
+                    "Server error "+t!!.message,
+                    Toast.LENGTH_LONG
+                ).show()
             }
 
-            override fun onResponse(call: Call<PopularProducts>?, response: Response<PopularProducts>?) {
+            override fun onResponse(
+                call: Call<PopularProducts>?,
+                response: Response<PopularProducts>?
+            ) {
                 if (response!!.body()!!.status == 405) {
-                    Toast.makeText(HayaTechApplication.applicationContext(), "User doesn't exist", Toast.LENGTH_LONG)
+                    Toast.makeText(
+                        HayaTechApplication.applicationContext(),
+                        "User doesn't exist",
+                        Toast.LENGTH_LONG
+                    )
                         .show()
                     HayaTechApplication.instance!!.logoutUser()
                 } else if (response!!.body()!!.status == 200) {
@@ -129,12 +167,23 @@ class MarketPlaceViewModel(application: Application) : AndroidViewModel(applicat
 
             override fun onFailure(call: Call<PopularProducts>?, t: Throwable?) {
                 Log.v("retrofit", "call failed")
-                Toast.makeText(HayaTechApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    HayaTechApplication.applicationContext(),
+                    "Server error",
+                    Toast.LENGTH_LONG
+                ).show()
             }
 
-            override fun onResponse(call: Call<PopularProducts>?, response: Response<PopularProducts>?) {
+            override fun onResponse(
+                call: Call<PopularProducts>?,
+                response: Response<PopularProducts>?
+            ) {
                 if (response!!.body()!!.status == 405) {
-                    Toast.makeText(HayaTechApplication.applicationContext(), "User doesn't exist", Toast.LENGTH_LONG)
+                    Toast.makeText(
+                        HayaTechApplication.applicationContext(),
+                        "User doesn't exist",
+                        Toast.LENGTH_LONG
+                    )
                         .show()
                     HayaTechApplication.instance!!.logoutUser()
                 } else if (response!!.body()!!.status == 200) {
@@ -153,22 +202,152 @@ class MarketPlaceViewModel(application: Application) : AndroidViewModel(applicat
 
 
     fun hitWalletApi() {
-        call!!.walletData(BasicRequest(SharedPreferencesManager.getUserId(getApplication())!!))
-            .enqueue(object : Callback<WalletModelResponse> {
-                override fun onFailure(call: Call<WalletModelResponse>?, t: Throwable?) {
+        if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
+            call!!.walletData(
+                BasicRequest(
+                    SharedPreferencesManager.getUserId(getApplication())!!,
+                    0
+                )
+            )
+                .enqueue(object : Callback<WalletModelResponse> {
+                    override fun onFailure(call: Call<WalletModelResponse>?, t: Throwable?) {
+                        Log.v("retrofit", "call failed")
+                        Toast.makeText(
+                            HayaTechApplication.applicationContext(),
+                            "Server error",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        mWalletModel!!.value = null
+                        LoadingDialog.getLoader().dismissLoader()
+                    }
+
+                    override fun onResponse(
+                        call: Call<WalletModelResponse>?,
+                        response: Response<WalletModelResponse>?
+                    ) {
+                        when {
+                            response!!.code() == 200 -> {
+                                LoadingDialog.getLoader().dismissLoader()
+                                mWalletModel!!.value = response.body()!!
+                            }
+                            response!!.code() ==400 -> {
+                            LoadingDialog.getLoader().dismissLoader()
+                                mWalletModel!!.value = WalletModelResponse()
+                            }
+                            response!!.code() == 405 -> {
+                                Toast.makeText(
+                                    HayaTechApplication.applicationContext(),
+                                    "User doesn't exist",
+                                    Toast.LENGTH_LONG
+                                )
+                                    .show()
+                                HayaTechApplication.instance!!.logoutUser()
+                            }
+                            else -> {
+                                var model = WalletModelResponse()
+                                model.message = "Server error"
+                                mWalletModel!!.value = model
+                                LoadingDialog.getLoader().dismissLoader()
+                            }
+                        }
+                    }
+                })
+        }
+
+
+    }
+
+
+    fun addWishList(body: AddWishRequest) {
+        if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
+            call!!.addWishList(body).enqueue(object : Callback<BasicInfoResponse> {
+
+                override fun onFailure(call: Call<BasicInfoResponse>?, t: Throwable?) {
                     Log.v("retrofit", "call failed")
-                    Toast.makeText(HayaTechApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
-                    mWalletModel!!.value = null
-                    LoadingDialog.getLoader().dismissLoader()
+                    Toast.makeText(
+                        HayaTechApplication.applicationContext(),
+                        "Server error",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
 
-                override fun onResponse(call: Call<WalletModelResponse>?, response: Response<WalletModelResponse>?) {
+                override fun onResponse(
+                    call: Call<BasicInfoResponse>?,
+                    response: Response<BasicInfoResponse>?
+                ) {
+                    if (response!!.body()!!.status == 405) {
+                        Toast.makeText(
+                            HayaTechApplication.applicationContext(),
+                            "User doesn't exist",
+                            Toast.LENGTH_LONG
+                        )
+                            .show()
+                        HayaTechApplication.instance!!.logoutUser()
+                    } else if (response!!.body()!!.status == 200) {
+                        mWish!!.value = response!!.body()
+                    }
+
+                }
+            })
+        }
+
+
+    }
+
+
+    fun removeWishList(body: AddWishRequest) {
+        if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
+            call!!.removeWishList(body).enqueue(object : Callback<BasicInfoResponse> {
+
+                override fun onFailure(call: Call<BasicInfoResponse>?, t: Throwable?) {
+                    Log.v("retrofit", "call failed")
+                    Toast.makeText(
+                        HayaTechApplication.applicationContext(),
+                        "Server error",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+
+                override fun onResponse(
+                    call: Call<BasicInfoResponse>?,
+                    response: Response<BasicInfoResponse>?
+                ) {
+                    if (response!!.code() == 405) {
+                        Toast.makeText(
+                            HayaTechApplication.applicationContext(),
+                            "User doesn't exist",
+                            Toast.LENGTH_LONG
+                        )
+                            .show()
+                        HayaTechApplication.instance!!.logoutUser()
+                    } else if (response!!.code() == 200) {
+                        mRemoveWish!!.value = response!!.body()
+                    }
+                }
+            })
+        }
+
+
+    }
+
+    fun hitPurchaseApi(request: RedeemRequest) {
+        if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
+            call!!.redeemNow(request).enqueue(object : Callback<PurchaseResponse> {
+                override fun onFailure(call: Call<PurchaseResponse>?, t: Throwable?) {
+                    Log.v("retrofit", "call failed")
+                    Toast.makeText(
+                        HayaTechApplication.applicationContext(),
+                        "Server error",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+
+                override fun onResponse(
+                    call: Call<PurchaseResponse>?,
+                    response: Response<PurchaseResponse>?
+                ) {
                     when {
-                        response!!.code() == 200 -> {
-                            LoadingDialog.getLoader().dismissLoader()
-                            mWalletModel!!.value = response.body()!!
-                        }
-                        response!!.body()!!.status == 405 -> {
+                        response!!.code() == 405 -> {
                             Toast.makeText(
                                 HayaTechApplication.applicationContext(),
                                 "User doesn't exist",
@@ -177,81 +356,18 @@ class MarketPlaceViewModel(application: Application) : AndroidViewModel(applicat
                                 .show()
                             HayaTechApplication.instance!!.logoutUser()
                         }
+                        response!!.code() == 200 -> mPurchaseResponse!!.value = response.body()
                         else -> {
-                            var model = WalletModelResponse()
-                            model.message = "Server error"
-                            mWalletModel!!.value = model
-                            LoadingDialog.getLoader().dismissLoader()
+                            var binfo = PurchaseResponse()
+                            binfo.status = 400
+                            binfo.message = "Unavailable"
+                            mPurchaseResponse!!.value = binfo
                         }
                     }
                 }
             })
-    }
+        }
 
 
-    fun addWishList(body: AddWishRequest) {
-        call!!.addWishList(body).enqueue(object : Callback<BasicInfoResponse> {
-
-            override fun onFailure(call: Call<BasicInfoResponse>?, t: Throwable?) {
-                Log.v("retrofit", "call failed")
-                Toast.makeText(HayaTechApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
-            }
-
-            override fun onResponse(call: Call<BasicInfoResponse>?, response: Response<BasicInfoResponse>?) {
-                if (response!!.body()!!.status == 405) {
-                    Toast.makeText(HayaTechApplication.applicationContext(), "User doesn't exist", Toast.LENGTH_LONG)
-                        .show()
-                    HayaTechApplication.instance!!.logoutUser()
-                } else if (response!!.body()!!.status == 200) {
-                    mWish!!.value = response!!.body()
-                }
-
-            }
-        })
-    }
-
-
-    fun removeWishList(body: AddWishRequest) {
-        call!!.removeWishList(body).enqueue(object : Callback<BasicInfoResponse> {
-
-            override fun onFailure(call: Call<BasicInfoResponse>?, t: Throwable?) {
-                Log.v("retrofit", "call failed")
-                Toast.makeText(HayaTechApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
-            }
-
-            override fun onResponse(call: Call<BasicInfoResponse>?, response: Response<BasicInfoResponse>?) {
-                if (response!!.code() == 405) {
-                    Toast.makeText(HayaTechApplication.applicationContext(), "User doesn't exist", Toast.LENGTH_LONG)
-                        .show()
-                    HayaTechApplication.instance!!.logoutUser()
-                } else if (response!!.code() == 200) {
-                    mRemoveWish!!.value = response!!.body()
-                }
-            }
-        })
-    }
-
-    fun hitPurchaseApi(request: RedeemRequest) {
-        call!!.redeemNow(request).enqueue(object : Callback<PurchaseResponse> {
-            override fun onFailure(call: Call<PurchaseResponse>?, t: Throwable?) {
-                Log.v("retrofit", "call failed")
-                Toast.makeText(HayaTechApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
-            }
-
-            override fun onResponse(call: Call<PurchaseResponse>?, response: Response<PurchaseResponse>?) {
-                if (response!!.code() == 405) {
-                    Toast.makeText(HayaTechApplication.applicationContext(), "User doesn't exist", Toast.LENGTH_LONG)
-                        .show()
-                    HayaTechApplication.instance!!.logoutUser()
-                } else if (response!!.code() == 200) {
-                    mPurchaseResponse!!.value = response.body()
-                } else {
-                    var binfo = PurchaseResponse()
-                    binfo.status = 400
-                    binfo.message = "Unavailable"
-                    mPurchaseResponse!!.value = binfo
-                }
-            }
-        })
     }
 }

@@ -39,12 +39,11 @@ public class DayAxisValueFormatter extends ValueFormatter {
 		String array = "";
 		if(format.equalsIgnoreCase(InterConsts.MONTHLY)) {
 			array = mMonth[(int) value];
-		}else  {
-			if(value != 28.0){
+		}else {
+			if (value != 28.0 && days < 7) {
 				array = mMonth[(int) value];
 			}
 		}
-		
 		return array;
 	}
 	

@@ -16,13 +16,12 @@ import kotlinx.android.synthetic.main.item_market_place_product.view.txtShortDes
 import kotlinx.android.synthetic.main.item_market_place_product.view.txtToken
 import kotlinx.android.synthetic.main.item_market_place_see_all.view.*
 
+
 class MarketPlacePopularityAdapter(
     categoryData: ArrayList<PopularProducts.Data>,
     var context: Context,
-    var mListener: PopularInterface
-) :
+    var mListener: PopularInterface) :
     RecyclerView.Adapter<MarketPlacePopularityAdapter.ViewHolder>() {
-
     private var mData: ArrayList<PopularProducts.Data> = categoryData
     var mContext: Context = context
 
@@ -39,11 +38,12 @@ class MarketPlacePopularityAdapter(
         holder.txtProductName.text = mItem.name
         holder.txtShortDesc.text = mItem.shortDesc
         holder.txtToken.text = "${mItem.token} TKS"
-        Picasso.get().load(RetrofitClient.IMG_URL + "" + mItem.image).placeholder(R.drawable.image_overlay).resize(400,200).into(holder.imgProduct)
-        Log.i("flag",""+mData[position].wishlist)
-        if(mData[position].wishlist){
+        Picasso.get().load(RetrofitClient.IMG_URL + "" + mItem.image).placeholder(R.drawable.image_overlay)
+            .resize(400, 200).into(holder.imgProduct)
+        Log.i("flag", "" + mData[position].wishlist)
+        if (mData[position].wishlist) {
             holder.wishListView.setImageResource(R.drawable.wishlist_fill)
-        }else{
+        } else {
             holder.wishListView.setImageResource(R.drawable.featured)
         }
         holder.wishListView.setOnClickListener {
@@ -51,7 +51,7 @@ class MarketPlacePopularityAdapter(
             mListener.onPopularItemwishlisted(position, mItem)
         }
         holder.parentLay.setOnClickListener {
-            mListener.onPopClick(position,mItem)
+            mListener.onPopClick(position, mItem)
         }
 
     }
@@ -60,7 +60,9 @@ class MarketPlacePopularityAdapter(
         return mData.size
     }
 
+
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
         val imgProduct = itemView.imgProduct!!
         val txtProductName = itemView.txtProductName!!
         val txtShortDesc = itemView.txtShortDesc!!
@@ -70,14 +72,14 @@ class MarketPlacePopularityAdapter(
     }
 
 
-    fun swap(mList: ArrayList<PopularProducts.Data>){
-        if(mData.size>0)
+    fun swap(mList: ArrayList<PopularProducts.Data>) {
+        if (mData.size > 0)
             mData.clear()
-        mData  = mList
+        mData = mList
         notifyDataSetChanged()
     }
 
-    interface PopularInterface{
+    interface PopularInterface {
         fun onPopularItemwishlisted(
             position: Int,
             mItem: PopularProducts.Data

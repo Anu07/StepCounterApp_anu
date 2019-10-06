@@ -27,7 +27,7 @@ class SurveyDetailActivity : BaseActivity<SurveyViewModel>(), SurveysQuestionsAd
         if(mAnsData.contains(value)){
             mAnsData.remove(value)
         }else{
-            mAnsData.add(pos, value)
+            mAnsData.add(value)
         }
     }
 
@@ -74,7 +74,7 @@ class SurveyDetailActivity : BaseActivity<SurveyViewModel>(), SurveysQuestionsAd
 //            ( this@SurveyDetailActivity as LandingActivity).onFragment(0)
         }
         finishbutton.setOnClickListener {
-            if(mAnsData.isNotEmpty()){
+            if(mAnsData.isNotEmpty() && (mAnsData.size > mItemData.questions.size)){
                 showPopupProgressSpinner(true)
                 mViewModel!!.hitAttendSurveyApi(
                     SurveystartRequestModel(
@@ -85,7 +85,7 @@ class SurveyDetailActivity : BaseActivity<SurveyViewModel>(), SurveysQuestionsAd
                     )
                 )
             }else{
-                Toast.makeText(this@SurveyDetailActivity, "Please select an answer", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@SurveyDetailActivity, "Please answer all the questions", Toast.LENGTH_LONG).show()
             }
 
         }
@@ -97,10 +97,10 @@ class SurveyDetailActivity : BaseActivity<SurveyViewModel>(), SurveysQuestionsAd
 
     private fun getanswersData(): ArrayList<UserAnswer> {
         mItemData!!.questions.forEachIndexed { index, element ->
-            if (mAnsData[index].isNotEmpty()) {           //if mAns list has answer stored on that position
+            if (mAnsData[index].isNotEmpty() ) {           //if mAns list has answer stored on that position
                 userAns = UserAnswer()
                 userAns.answer = mAnsData
-                userAns.id = mItemData.questions.get(index)._id
+                userAns.id = mItemData.questions[index]._id
                 Log.e("Answer and Id", "" + userAns.answer + "!!1" + userAns.id)
                 mUserAnswerData.add(userAns)
             }

@@ -7,7 +7,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
+import com.sd.src.stepcounterapp.HayaTechApplication.Companion.TAG
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.activities.LandingActivity
 import kotlinx.android.synthetic.main.backtitlebar.*
@@ -39,6 +42,7 @@ class OpenFAQFragment : BaseFragment() {
         super.onActivityCreated(savedInstanceState)
         webView.loadUrl("http://3.15.112.60:4200/faq") //http://3.15.112.60:4200/faq
         webView.settings.javaScriptEnabled = true
+
     }
 
 

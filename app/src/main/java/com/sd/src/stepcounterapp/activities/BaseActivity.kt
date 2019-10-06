@@ -4,31 +4,42 @@ import android.annotation.TargetApi
 import android.app.ActivityManager
 import android.app.Dialog
 import android.content.Context
+import android.content.DialogInterface
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
+import android.util.Log
 import android.view.View
 import android.view.Window
 import android.view.inputmethod.InputMethodManager
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.annotation.LayoutRes
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.AndroidViewModel
 import com.google.android.material.snackbar.Snackbar
+import com.sd.src.stepcounterapp.HayaTechApplication
 import com.sd.src.stepcounterapp.R
+import com.sd.src.stepcounterapp.utils.LoadingDialog
+import com.sd.src.stepcounterapp.utils.NetworkChangeReceiver
+import com.sd.src.stepcounterapp.utils.Utils
 
 
 /**
  * Created by shubham on 22/05/19.
  */
 
-abstract class BaseActivity<V : AndroidViewModel> : AppCompatActivity() {
+abstract class BaseActivity<V : AndroidViewModel> : AppCompatActivity(),
+    NetworkChangeReceiver.ConnectivityReceiverListener {
 
+    private lateinit var alertDialog: AlertDialog
     private lateinit var progressBar: ProgressBar
     private lateinit var progressDialog: Dialog
     var TAG: String = "com.sd.src.stepcounterapp.activities.BaseActivity:-"
@@ -63,6 +74,7 @@ abstract class BaseActivity<V : AndroidViewModel> : AppCompatActivity() {
      * @return context
      */
     protected abstract val context: Context
+    var mBReceiver: NetworkChangeReceiver? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,7 +82,17 @@ abstract class BaseActivity<V : AndroidViewModel> : AppCompatActivity() {
         this.mContext = context
         this.mViewModel = if (mViewModel == null) viewModel else mViewModel
         progressDialog = Dialog(this@BaseActivity)
+        alertDialog = AlertDialog.Builder(mContext).create()
         progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        LoadingDialog.initLoader()
+        mBReceiver = NetworkChangeReceiver()
+        try {
+            registerReceiver(
+                mBReceiver,
+                IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+            )
+        } catch (e: Exception) {
+        }
         onCreate()
         initListeners()
     }
@@ -124,7 +146,12 @@ abstract class BaseActivity<V : AndroidViewModel> : AppCompatActivity() {
 
 
     fun showPopupProgressSpinner(isShowing: Boolean?) {
-        if (isShowing == true) {
+        if(isShowing!!){
+            LoadingDialog.getLoader().showLoader(context)
+        }else{
+            LoadingDialog.getLoader().dismissLoader()
+        }
+       /* if (isShowing == true) {
 
             progressDialog.setContentView(R.layout.popup_progressbar)
             progressDialog.setCancelable(true)
@@ -142,7 +169,7 @@ abstract class BaseActivity<V : AndroidViewModel> : AppCompatActivity() {
             dismissDialog()
         } else if (isShowing == false) {
             progressDialog.dismiss()
-        }
+        }*/
     }
 
     override fun onBackPressed() {
@@ -179,6 +206,68 @@ abstract class BaseActivity<V : AndroidViewModel> : AppCompatActivity() {
         }.start()
     }
 
+    override fun onNetworkConnectionChanged(isConnected: Boolean) {
+        if (!isConnected) {
+            internetDialog()
+        }else{
+
+            if(alertDialog.isShowing){
+                alertDialog.cancel()
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        NetworkChangeReceiver.connectivityReceiverListener = this
+    }
+
+
+    /**
+     * to display alert on internet unavaialble
+     */
+
+
+    private fun internetDialog() {
+
+        alertDialog =  AlertDialog.Builder(context)
+            .setTitle(R.string.info)
+            .setMessage("Internet connection unavailable")
+            .setCancelable(false)
+            .setPositiveButton(R.string.retry, null) //Set to null. We override the onclick
+//            .setNegativeButton(R.string.cancel,null)
+            .create()
+
+        alertDialog.setOnShowListener {
+            var button = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            button.setOnClickListener {
+                Log.e("click","+ve")
+                if(Utils.retryInternet(mContext)){
+                    alertDialog.cancel()
+                }else{
+                    Toast.makeText(mContext,"Internet unavailable",Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+        alertDialog.show()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        try {
+            unregisterReceiver(mBReceiver)
+        } catch (e: Exception) {
+        }
+    }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        try {
+            unregisterReceiver(mBReceiver)
+        } catch (e: Exception) {
+        }
+    }
 
 }
 

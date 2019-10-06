@@ -16,6 +16,7 @@ public class AppConstants {
     public static final String INTENT_FROMAPP = "inApplication";
     public static final String INTENT_NOTIFICATION = "NotificationData";
     public static final String INTENT_RECONNECT = "ReconnectDialog";
+    public static final String INTENT_CHALLENGETKN = "challengeTaken";
     public static final int PERMISSION_REQUEST_CODE = 1;
 
 

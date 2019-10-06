@@ -30,7 +30,7 @@ class SlidingImageAdapter(
     override fun instantiateItem(view: ViewGroup, position: Int): Any {
         val imageLayout = inflater.inflate(R.layout.sliding_survey_img_layout, view, false)!!
         var surveyTitle = imageLayout.findViewById<TextView>(R.id.challengesTitle)
-        surveyTitle.text = IMAGES[position].name
+        surveyTitle.text = IMAGES[position].name.capitalize()
 
         val imageView = imageLayout
             .findViewById(R.id.image) as ImageView

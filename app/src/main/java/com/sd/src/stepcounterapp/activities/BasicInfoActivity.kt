@@ -27,6 +27,7 @@ import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import com.sd.src.stepcounterapp.viewModels.BaseViewModelFactory
 import com.sd.src.stepcounterapp.viewModels.SignInViewModel
 import com.theartofdev.edmodo.cropper.CropImage
+import com.theartofdev.edmodo.cropper.CropImageView
 import com.wajahatkarim3.easyvalidation.core.view_ktx.nonEmpty
 import kotlinx.android.synthetic.main.activity_basic_info.*
 import kotlinx.android.synthetic.main.activity_basic_info.dobTxt
@@ -169,7 +170,11 @@ class BasicInfoActivity : BaseActivity<SignInViewModel>(), DatePickerDialog.OnDa
                         permissions: List<PermissionRequest>,
                         token: PermissionToken
                     ) {
-
+                        Toast.makeText(
+                            this@BasicInfoActivity,
+                            "Please allow these permissions for app to function properly.",
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
                 }).check()
         }
@@ -366,7 +371,13 @@ class BasicInfoActivity : BaseActivity<SignInViewModel>(), DatePickerDialog.OnDa
     fun ImageCropFunction() {
 
         CropImage.activity(selectedImage)
+            .setCropShape(CropImageView.CropShape.OVAL)
+            .setAspectRatio(1,1)
             .start(this)
     }
+
+
+
+
 }
 

@@ -30,8 +30,10 @@ class RewardsCategorySelectionActivity : BaseActivity<SignInViewModel>(),
 
 
     override fun onItemClick(item: Data, position: Int) {
-        if (categoriesList.data[position].selectedItem && !selectedCategories!!.contains(item.name)) {
-            selectedCategories!!.add(categoriesList.data[position]._id)
+        if (!selectedCategories!!.contains(item._id)) {
+            selectedCategories!!.add(item._id)
+        } else {
+            selectedCategories!!.remove(item._id)
         }
     }
 
@@ -92,6 +94,9 @@ class RewardsCategorySelectionActivity : BaseActivity<SignInViewModel>(),
                         }
                     }
                     Log.e("refresh", "" + mRewardList.size)
+                    adapter = MultiSelectionCategoryAdapter(this, mRewardList, this)
+                    rewardsCategory.adapter = adapter
+                }else{
                     adapter = MultiSelectionCategoryAdapter(this, mRewardList, this)
                     rewardsCategory.adapter = adapter
                 }

@@ -12,8 +12,10 @@ import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.sd.src.stepcounterapp.AppConstants.INTENT_NOTIFICATION
+import com.sd.src.stepcounterapp.HayaTechApplication
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.activities.LandingActivity
+import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 
 
 class MyFirebaseMessageService : FirebaseMessagingService() {
@@ -37,7 +39,12 @@ class MyFirebaseMessageService : FirebaseMessagingService() {
      */
     override fun onNewToken(token: String) {
         Log.d(TAG, "Refreshed token: $token")
-
+        if (token != null) {
+            SharedPreferencesManager.setString(
+                HayaTechApplication.applicationContext(),token,
+                SharedPreferencesManager.FIREBASETOKEN
+            )
+        }
 //        sendRegistrationToServer(token)
     }
 

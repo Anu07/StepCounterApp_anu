@@ -13,7 +13,6 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -33,9 +32,12 @@ import com.fitpolo.support.entity.OrderTaskResponse
 import com.fitpolo.support.log.LogModule
 import com.fitpolo.support.task.ZOpenStepListenerTask
 import com.fitpolo.support.task.ZReadStepTask
+import com.fitpolo.support.task.ZWriteSystemTimeTask
 import com.sd.src.stepcounterapp.AppConstants.*
+import com.sd.src.stepcounterapp.HayaTechApplication
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.adapter.LandingPagerAdapter
+import com.sd.src.stepcounterapp.adapter.NavArrayAdapter
 import com.sd.src.stepcounterapp.fragments.*
 import com.sd.src.stepcounterapp.model.generic.BasicInfoResponse
 import com.sd.src.stepcounterapp.model.syncDevice.FetchDeviceDataRequest
@@ -57,6 +59,7 @@ import kotlinx.android.synthetic.main.bottom_toolbar.*
 import kotlinx.android.synthetic.main.titlebar.*
 import no.nordicsemi.android.dfu.DfuProgressListenerAdapter
 import no.nordicsemi.android.dfu.DfuServiceListenerHelper
+import java.lang.Integer.parseInt
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -69,8 +72,10 @@ import kotlin.collections.ArrayList
  */
 
 
+//shubham verma
+
 class LandingActivity : BaseActivity<DeviceViewModel>(),
-    MokoScanDeviceCallback, View.OnClickListener,HayatechFragment.SwipeVisibiltyListener {
+    MokoScanDeviceCallback, View.OnClickListener, HayatechFragment.SwipeVisibiltyListener {
     override fun showSwipe() {
         swipeLayout.isEnabled = true
     }
@@ -137,6 +142,7 @@ class LandingActivity : BaseActivity<DeviceViewModel>(),
     private var mSelected = -1
     internal var gps_enabled = false
     internal var network_enabled = false
+
     override val layoutId: Int
         get() = R.layout.activity_landing
     var lastestSteps: ArrayList<DailyStep>? = null
@@ -149,7 +155,7 @@ class LandingActivity : BaseActivity<DeviceViewModel>(),
         get() = this@LandingActivity
 
     lateinit var mAdapter: LandingPagerAdapter
-
+    var notificationCount = 0
     private lateinit var mDrawerLayout: DrawerLayout
     private lateinit var mActionBarDrawerToggle: ActionBarDrawerToggle
     private val users = arrayOf(
@@ -172,8 +178,8 @@ class LandingActivity : BaseActivity<DeviceViewModel>(),
         mDrawerLayout = findViewById(R.id.drawer_layout)
         manager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         mDialog = ProgressDialog(this)
-        var aAdapter = ArrayAdapter(this, R.layout.menu_textview, users)
-        list_menu_item.adapter = aAdapter
+//        var aAdapter = ArrayAdapter(this, R.layout.menu_textview, users)
+
         list_menu_item.onItemClickListener = AdapterView.OnItemClickListener { a, v, position, id ->
             when (position) {
                 0 -> openEditActivity()
@@ -200,21 +206,26 @@ class LandingActivity : BaseActivity<DeviceViewModel>(),
         setNavHeader()
         initListeners()
 
+
         mViewModel?.getDashResponse()?.observe(this, androidx.lifecycle.Observer { mDashResponse ->
             if (mDashResponse.data.lastUpdated != null) {
+                Log.e("Count", "Notification" + mDashResponse.data.badgeCount.toInt())
+                notificationCount = mDashResponse.data.badgeCount.toInt()
                 SharedPreferencesManager.setString(
                     HayatechFragment.mContext, mDashResponse.data.lastUpdated,
                     SYNCDATE
                 )
             }
         })
+        var aAdapter = NavArrayAdapter(this, users, notificationCount)
+        list_menu_item.adapter = aAdapter
 
         if (intent.hasExtra("surveyBack")) {
             vpLanding.currentItem = 3
         }
         mViewModel?.getSyncResponse()?.observe(this,
             androidx.lifecycle.Observer<BasicInfoResponse> {
-//                dismissSwipe()
+                //                dismissSwipe()
             })
 
 
@@ -226,35 +237,33 @@ class LandingActivity : BaseActivity<DeviceViewModel>(),
             }
 
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+
             }
 
             override fun onPageSelected(position: Int) {
                 current = position
+                if (position > 0) {
+                    swipeLayout.isEnabled = false
+                    showDisconnection(false)
+                }
                 swipeLayout.isEnabled = position == 0
                 loadFragment(position)
-                /* if (current == 0) {
-                     if (MokoSupport.getInstance().isConnDevice(
-                             this@LandingActivity,
-                             SharedPreferencesManager.getString(this@LandingActivity, WEARABLEID)
-                         )
-                     ) {
-                         showDisconnection(false)
-                     } else {
-                         showDisconnection(true)
-                     }
-                 }*/
             }
 
         })
 
-        mViewModel?.fetchSyncData(
-            FetchDeviceDataRequest(
-                InterConsts.WEEKLY, SharedPreferencesManager.getUserId(
-                    HayatechFragment.mContext
+        if (Utils.retryInternet(this@LandingActivity)) {
+
+            mViewModel?.fetchSyncData(
+                FetchDeviceDataRequest(
+                    InterConsts.WEEKLY, SharedPreferencesManager.getUserId(
+                        HayatechFragment.mContext
+                    ),Utils.parseTimeOffset()
                 )
             )
-        )
+        }
 
+        checkBluetoothGPSPermissions()
 
     }
 
@@ -413,19 +422,26 @@ class LandingActivity : BaseActivity<DeviceViewModel>(),
                 txt_title.setImageResource(R.drawable.headerlogo)
             }
             FRAG_CHALLENGES -> {
+                showDisconnection(false)
+                disableSwipe(false)
                 imgChallenges.setImageResource(R.drawable.challenge_s)
                 txt_title.setImageResource(R.drawable.challenges_header)
             }
             FRAG_MARKET_PLACE -> {
+                showDisconnection(false)
+                disableSwipe(false)
                 imgMarketPalace.setImageResource(R.drawable.marketplace_s)
                 txt_title.setImageResource(R.drawable.marketplace_header)
             }
             FRAG_SURVEY -> {
+                showDisconnection(false)
+                disableSwipe(false)
                 imgSurvey.setImageResource(R.drawable.survey_s)
                 txt_title.setImageResource(R.drawable.surveys_header)
             }
             FRAG_WALLET -> {
-
+                showDisconnection(false)
+                disableSwipe(false)
                 imgWallet.setImageResource(R.drawable.wallet_s)
                 txt_title.setImageResource(R.drawable.wallet_header)
             }
@@ -520,10 +536,12 @@ class LandingActivity : BaseActivity<DeviceViewModel>(),
                     showDisconnection(true)
                     dismissSwipe()
                     HayatechFragment.instance.syncingWearableMsg(false)
-                    if (!this@LandingActivity.isFinishing() && mDialog!!.isShowing) {
+                    if (!this@LandingActivity.isFinishing && mDialog!!.isShowing) {
                         mDialog!!.dismiss()
                     }
-
+                    if (SharedPreferencesManager.hasKey(this@LandingActivity, VAR_WEARABLE)) {
+                        mService!!.connectBluetoothDevice(deviceSynced)
+                    }
                 }
                 if (BluetoothAdapter.ACTION_STATE_CHANGED == action) {
                     val blueState = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, 0)
@@ -552,8 +570,12 @@ class LandingActivity : BaseActivity<DeviceViewModel>(),
                     if (lastestSteps == null || lastestSteps!!.isEmpty()) {
                         return
                     }
+                    if(lastestSteps!![lastestSteps!!.lastIndex].date != Utils.getWearCurrentDate()){
+                        setSystemTime()
+                    }
+
                     showDisconnection(false)
-//                    HayatechFragment.instance.syncingWearableMsg(false)
+                    HayatechFragment.instance.syncingWearableMsg(false)
                     SharedPreferencesManager.saveSyncObject(this@LandingActivity, lastestSteps)
                     HayatechFragment.instance.setCurrentSteps(lastestSteps!![lastestSteps!!.lastIndex])
                     updateDeviceData()
@@ -577,19 +599,24 @@ class LandingActivity : BaseActivity<DeviceViewModel>(),
                     when (orderEnum) {
                         OrderEnum.Z_STEPS_CHANGES_LISTENER -> {
                             val dailyStep = MokoSupport.getInstance().dailyStep
-                            HayatechFragment.instance.syncingWearableMsg(false)
-                            HayatechFragment.instance.setCurrentSteps(dailyStep)
-                            mViewModel!!.syncDevice(
-                                SyncRequest(
-                                    getLatestActivityData(dailyStep),
-                                    SharedPreferencesManager.getUserId(HayatechFragment.mContext),
-                                    SharedPreferencesManager.getString(this@LandingActivity, WEARABLEID),
-                                    SharedPreferencesManager.getString(
-                                        HayatechFragment.mContext,
-                                        SharedPreferencesManager.FIREBASETOKEN
+//                            HayatechFragment.instance.syncingWearableMsg(false)
+                            try {
+                                HayatechFragment.instance.setCurrentSteps(dailyStep)
+                                if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
+                                    mViewModel!!.syncDevice(
+                                        SyncRequest(
+                                            getLatestActivityData(dailyStep),
+                                            SharedPreferencesManager.getUserId(HayatechFragment.mContext),
+                                            SharedPreferencesManager.getString(this@LandingActivity, WEARABLEID),
+                                            SharedPreferencesManager.getString(
+                                                HayatechFragment.mContext,
+                                                SharedPreferencesManager.FIREBASETOKEN
+                                            )
+                                        )
                                     )
-                                )
-                            )
+                                }
+                            } catch (e: Exception) {
+                            }
                         }
                     }
                 }
@@ -634,17 +661,20 @@ class LandingActivity : BaseActivity<DeviceViewModel>(),
     }
 
     private fun updateDeviceData() {
-        if (SharedPreferencesManager.hasKey(HayatechFragment.mContext, VAR_WEARABLE)) {
-            mViewModel!!.syncDevice(
-                SyncRequest(
-                    getActivityData(),
-                    SharedPreferencesManager.getUserId(HayatechFragment.mContext),
-                    SharedPreferencesManager.getString(this@LandingActivity, WEARABLEID),SharedPreferencesManager.getString(
-                        HayatechFragment.mContext,
-                        SharedPreferencesManager.FIREBASETOKEN
+        if (Utils.retryInternet(this@LandingActivity)) {
+            if (SharedPreferencesManager.hasKey(HayatechFragment.mContext, VAR_WEARABLE)) {
+                mViewModel!!.syncDevice(
+                    SyncRequest(
+                        getActivityData(),
+                        SharedPreferencesManager.getUserId(HayatechFragment.mContext),
+                        SharedPreferencesManager.getString(this@LandingActivity, WEARABLEID),
+                        SharedPreferencesManager.getString(
+                            HayatechFragment.mContext,
+                            SharedPreferencesManager.FIREBASETOKEN
+                        )
                     )
                 )
-            )
+            }
         }
     }
 
@@ -731,20 +761,20 @@ class LandingActivity : BaseActivity<DeviceViewModel>(),
                 if (MokoSupport.getInstance().isConnDevice(this@LandingActivity, it.address)) {
                     showDisconnection(false)
                     HayatechFragment.instance.syncingWearableMsg(true)
-                    bindService(Intent(this, MokoService::class.java), mServiceConnection, Activity.BIND_AUTO_CREATE)
-                    getLastestSteps()
-                    openStepChangeListener()
+                    /* bindService(Intent(this, MokoService::class.java), mServiceConnection, Activity.BIND_AUTO_CREATE)
+                     getLastestSteps()
+                     openStepChangeListener()*/
 
                 } else {
                     if (SharedPreferencesManager.hasKey(this@LandingActivity, VAR_WEARABLE)) {
                         mService!!.connectBluetoothDevice(it.address)
-                        bindService(
-                            Intent(this, MokoService::class.java),
-                            mServiceConnection,
-                            Activity.BIND_AUTO_CREATE
-                        )
-                        getLastestSteps()
-                        openStepChangeListener()
+                        /* bindService(
+                             Intent(this, MokoService::class.java),
+                             mServiceConnection,
+                             Activity.BIND_AUTO_CREATE
+                         )
+                         getLastestSteps()
+                         openStepChangeListener()*/
                     }
                 }
             } else {
@@ -755,21 +785,31 @@ class LandingActivity : BaseActivity<DeviceViewModel>(),
 
         }
 
-        if(MokoSupport.getInstance().isConnDevice(this@LandingActivity,SharedPreferencesManager.getString(this@LandingActivity,
-                WEARABLEID))){
+        if (MokoSupport.getInstance().isConnDevice(
+                this@LandingActivity, SharedPreferencesManager.getString(
+                    this@LandingActivity,
+                    WEARABLEID
+                )
+            )
+        ) {
             getLastestSteps()
             openStepChangeListener()
-            Log.e("getLastestSteps","openStepChangeListener"+MokoSupport.getInstance().userInfo)
+            Log.e("getLastestSteps", "openStepChangeListener" + MokoSupport.getInstance().userInfo)
         }
 
-        Log.e("array","device" + mDatas!!.size)
+        Log.e("array", "device" + mDatas!!.size)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-      /*  unregisterReceiver(mReceiver)
-        unbindService(mServiceConnection)
-        stopService(Intent(this, MokoService::class.java))*/
+        try {
+            unregisterReceiver(mReceiver)
+            unbindService(mServiceConnection)
+            stopService(Intent(this, MokoService::class.java))
+        } catch (e: Exception) {
+            Log.e("Error", "unregister")
+        }
+
     }
 
 
@@ -783,13 +823,29 @@ class LandingActivity : BaseActivity<DeviceViewModel>(),
         onNotification()
     }
 
-     fun checkDeviceConnection() {
-        if (SharedPreferencesManager.hasKey(this@LandingActivity, VAR_WEARABLE) ) {
+    fun checkDeviceConnection() {
+        if (SharedPreferencesManager.hasKey(this@LandingActivity, VAR_WEARABLE)) {
             showDisconnection(false)
-        }else if(SharedPreferencesManager.hasKey(this@LandingActivity, WEARABLEID) && !MokoSupport.getInstance().isConnDevice(this@LandingActivity,SharedPreferencesManager.getString(this@LandingActivity,
-                WEARABLEID))){
+        } else if (SharedPreferencesManager.hasKey(
+                this@LandingActivity,
+                WEARABLEID
+            ) && !MokoSupport.getInstance().isConnDevice(
+                this@LandingActivity, SharedPreferencesManager.getString(
+                    this@LandingActivity,
+                    WEARABLEID
+                )
+            )
+        ) {
             showDisconnection(true)
             swipeLayout.isEnabled = true
+            if (MokoSupport.getInstance().isConnDevice(
+                    this@LandingActivity,
+                    SharedPreferencesManager.getString(this@LandingActivity, WEARABLEID)
+                )
+            ) {
+                getLastestSteps()
+                openStepChangeListener()
+            }
         } else {
             showDisconnection(true)
             swipeLayout.isEnabled = true
@@ -1007,8 +1063,9 @@ class LandingActivity : BaseActivity<DeviceViewModel>(),
 
 
     fun disableSwipe(b: Boolean) {
+
         if (swipeLayout != null) {
-            swipeLayout.isEnabled = !b
+            swipeLayout.isEnabled = b
         }
     }
 
@@ -1024,6 +1081,17 @@ class LandingActivity : BaseActivity<DeviceViewModel>(),
         }
         swipeLayout.layoutParams = params
         return params
+    }
+
+
+
+    /**
+     * Set system time from device
+     */
+
+
+    fun setSystemTime() {
+        MokoSupport.getInstance().sendOrder(ZWriteSystemTimeTask(mService))
     }
 
 }

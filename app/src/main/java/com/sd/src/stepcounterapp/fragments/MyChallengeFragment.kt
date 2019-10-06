@@ -2,17 +2,18 @@ package com.sd.src.stepcounterapp.fragments
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.os.Build
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.sd.src.stepcounterapp.AppConstants.INTENT_CHALLENGETKN
 import com.sd.src.stepcounterapp.R
+import com.sd.src.stepcounterapp.activities.LeaderboardActivity
 import com.sd.src.stepcounterapp.adapter.MyChallengeAdapter
+import com.sd.src.stepcounterapp.model.challenge.MyChallengeData
 import com.sd.src.stepcounterapp.model.challenge.MyChallengeResponse
 import com.sd.src.stepcounterapp.model.profile.Data
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
@@ -20,8 +21,12 @@ import com.sd.src.stepcounterapp.viewModels.ProfileViewModel
 import kotlinx.android.synthetic.main.black_crosstitlebar.*
 import kotlinx.android.synthetic.main.list_challenges.*
 
-class MyChallengeFragment : BaseFragment() {
+class MyChallengeFragment : BaseFragment(), MyChallengeAdapter.myChallengeItemClickListener {
+    override fun onItemClick(pos: Int) {
+        startActivity(Intent(activity,LeaderboardActivity::class.java).putExtra(INTENT_CHALLENGETKN,challengesTkn[pos].challengeId))
+    }
 
+    private var challengesTkn: List<MyChallengeData> = arrayListOf()
     private lateinit var mProfileViewModel: ProfileViewModel
     private var userData: Data? = null
 
@@ -65,6 +70,7 @@ class MyChallengeFragment : BaseFragment() {
                 if(mData.data.isEmpty()){
                     noDataTxt.visibility = View.VISIBLE
                 }else{
+                    challengesTkn= mData.data
                     noDataTxt.visibility = View.GONE
                     setAdapter(mData)
                 }
@@ -77,8 +83,7 @@ class MyChallengeFragment : BaseFragment() {
     private fun setAdapter(mData: MyChallengeResponse) {
      //   showPopupProgressSpinner(false)
         list_mychallenges.layoutManager = LinearLayoutManager(mContext)
-        myChallengeAdapter = MyChallengeAdapter(mContext, mData)
+        myChallengeAdapter = MyChallengeAdapter(mContext, mData,this)
         list_mychallenges.adapter = myChallengeAdapter
     }
-
 }

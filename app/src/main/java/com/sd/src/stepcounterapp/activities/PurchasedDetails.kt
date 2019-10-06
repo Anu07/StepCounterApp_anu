@@ -30,13 +30,8 @@ class PurchasedDetails : BaseActivity<PurchasedVendorModel>() {
             txtCodValue.text = dealData?.invoiceNo
             txtTitle.text = dealData?.name?.capitalize()
             txtvalue.text = dealData?.shortDesc?.capitalize()
+            addressDetails.text = dealData?.vendorId?.address?.capitalize()
         }
-        mViewModel?.getVendorResponse()!!.observe(this, Observer { mResponse ->
-            if(mResponse.data!=null){
-                addressDetails.text = mResponse.data.vendor.address
-            }
-        })
-        mViewModel?.getVendorDetails(VendorRequest(dealData!!.invoiceNo))
     }
 
     override fun initListeners() {

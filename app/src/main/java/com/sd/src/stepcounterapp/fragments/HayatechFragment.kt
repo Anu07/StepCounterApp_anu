@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
+import android.os.Handler
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
@@ -15,7 +16,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.fitpolo.support.MokoSupport
 import com.fitpolo.support.entity.DailyStep
 import com.github.mikephil.charting.components.LimitLine
 import com.github.mikephil.charting.components.XAxis
@@ -23,6 +23,7 @@ import com.github.mikephil.charting.components.XAxis.XAxisPosition
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
+import com.sd.src.stepcounterapp.HayaTechApplication
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.activities.LandingActivity
 import com.sd.src.stepcounterapp.adapter.PatternProgressTextAdapter
@@ -43,6 +44,8 @@ import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager.FIREBASETOKEN
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager.SYNCDATE
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager.WEARABLEID
+import com.sd.src.stepcounterapp.utils.Utils
+import com.sd.src.stepcounterapp.utils.Utils.getCurrentDate
 import com.sd.src.stepcounterapp.viewModels.DeviceViewModel
 import kotlinx.android.synthetic.main.fragment_hayatech.*
 
@@ -50,7 +53,7 @@ import kotlinx.android.synthetic.main.fragment_hayatech.*
 class HayatechFragment : BaseFragment() {
 
 
-    interface SwipeVisibiltyListener{
+    interface SwipeVisibiltyListener {
         fun showSwipe()
     }
 
@@ -70,7 +73,7 @@ class HayatechFragment : BaseFragment() {
     }
 
     private var afterSync: Boolean = false
-    var swipeListener:SwipeVisibiltyListener? = null
+    var swipeListener: SwipeVisibiltyListener? = null
     var prevTokenEstd: Int? = 0
     private var tokenEstd: Int = 10
     lateinit var updater: Runnable
@@ -85,7 +88,11 @@ class HayatechFragment : BaseFragment() {
     val colors: IntArray = intArrayOf(R.color.green_txt, R.color.blue_txt)
 
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         mViewModel = ViewModelProviders.of(activity!!).get(DeviceViewModel::class.java)
         return inflater.inflate(R.layout.fragment_hayatech, container, false)
     }
@@ -93,7 +100,7 @@ class HayatechFragment : BaseFragment() {
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-        swipeListener = (mContext as LandingActivity);
+        swipeListener = (mContext as LandingActivity)
 
         if (mViewModel == null) {
             mViewModel = ViewModelProviders.of(activity!!).get(DeviceViewModel::class.java)
@@ -115,40 +122,36 @@ class HayatechFragment : BaseFragment() {
             mViewModel = ViewModelProviders.of(activity!!).get(DeviceViewModel::class.java)
         }
 //        showPopupProgressSpinner(true)
-        mViewModel!!.fetchSyncData(
-            if (txtGraphFilter.text.toString().equals(WEEKLY, ignoreCase = true)) {
-                FetchDeviceDataRequest(WEEKLY, SharedPreferencesManager.getUserId(mContext))
-            } else {
-                FetchDeviceDataRequest(MONTHLY, SharedPreferencesManager.getUserId(mContext))
-            }
-        )
+        if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
+            mViewModel!!.fetchSyncData(
+                if (txtGraphFilter.text.toString().equals(WEEKLY, ignoreCase = true)) {
+                    FetchDeviceDataRequest(WEEKLY, SharedPreferencesManager.getUserId(mContext),Utils.parseTimeOffset())
+                } else {
+                    FetchDeviceDataRequest(MONTHLY, SharedPreferencesManager.getUserId(mContext),Utils.parseTimeOffset())
+                }
+            )
+        }
+
         mViewModel!!.getSyncResponse().observe(this,
             Observer<BasicInfoResponse> { mResponse ->
                 Log.i("Sync", "Data synced successfully")
-                afterSync= true
-                callDashboard()
+//                afterSync = true
+//                callDashboard()
             })
         mViewModel!!.getDashResponse().observe(this,
             Observer<DashboardResponse> { mDashResponse ->
-//                showPopupProgressSpinner(false)
+                //                showPopupProgressSpinner(false)
 
                 mDataList = mDashResponse.data
-                if(!afterSync){
-                    if (!updating || MokoSupport.getInstance().isConnDevice(
-                            mContext, SharedPreferencesManager.getString(
-                                mContext,
-                                WEARABLEID
-                            )
-                        )
-                    ) {
-                        steps.text = mDashResponse.data.totalUserSteps.toString()
-                        totalstepsCount.text = mDashResponse.data.todayToken.toString()
-                        prevTokenEstd = mDashResponse.data.todayToken
-                        totl_dist.text = mDashResponse.data.totalUserDistance.toString()
-                        totl_dist_suffix.text = "Km"
-                        calculateEstdToken(steps.text.toString())
-                    }
-                }
+//                if (!afterSync) {
+                steps.text = mDashResponse.data.totalUserSteps.toString()
+                totalstepsCount.text = mDashResponse.data.todayToken.toString()
+                prevTokenEstd = mDashResponse.data.todayToken
+                totl_dist.text = mDashResponse.data.totalUserDistance.toString()
+                totl_dist_suffix.text = "Km"
+                if (Integer.parseInt(steps.text.toString()) > 0)
+                    calculateEstdToken(steps.text.toString())
+//                }
 
                 WalletFragment.instance.setUpdatedSteps(mDashResponse.data.totalUserSteps.toString())
                 Log.i("total", "steps" + mDashResponse.data.totalUserSteps.toString())
@@ -167,7 +170,11 @@ class HayatechFragment : BaseFragment() {
                 )
 
                 if (mDashResponse.data.lastUpdated != null) {
-                    SharedPreferencesManager.setString(mContext, mDashResponse.data.lastUpdated, SYNCDATE)
+                    SharedPreferencesManager.setString(
+                        mContext,
+                        mDashResponse.data.lastUpdated,
+                        SYNCDATE
+                    )
 //                    SharedPreferencesManager.saveSyncObject(mContext,syncDataFromServer())
                 }
 
@@ -177,19 +184,20 @@ class HayatechFragment : BaseFragment() {
 
             })
 
+        if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
 
-        if (SharedPreferencesManager.hasKey(mContext, SharedPreferencesManager.VAR_WEARABLE)) {
+            if (SharedPreferencesManager.hasKey(mContext, SharedPreferencesManager.VAR_WEARABLE)) {
 
-            mViewModel!!.syncDevice(
-                SyncRequest(
-                    getActivityData(),
-                    SharedPreferencesManager.getUserId(mContext),
-                    SharedPreferencesManager.getString(mContext, WEARABLEID),
-                    SharedPreferencesManager.getString(mContext, FIREBASETOKEN)
+                mViewModel!!.syncDevice(
+                    SyncRequest(
+                        getActivityData(),
+                        SharedPreferencesManager.getUserId(mContext),
+                        SharedPreferencesManager.getString(mContext, WEARABLEID),
+                        SharedPreferencesManager.getString(mContext, FIREBASETOKEN)
+                    )
                 )
-            )
+            }
         }
-
 
 
         circular_progress.setProgressTextAdapter(PatternProgressTextAdapter())
@@ -204,15 +212,29 @@ class HayatechFragment : BaseFragment() {
                         txtGraphFilter.text = optionArray[pos].name
                         setFilterOptionArray()
                         optionArray[pos].isSelected = true
-                        mViewModel!!.fetchSyncData(
-                            if (txtGraphFilter.text.toString().equals(WEEKLY, ignoreCase = true)) {
-                                FetchDeviceDataRequest(WEEKLY, SharedPreferencesManager.getUserId(mContext))
-                            } else {
-                                FetchDeviceDataRequest(MONTHLY, SharedPreferencesManager.getUserId(mContext))
-                            }
-                        )
+                        if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
+
+                            mViewModel!!.fetchSyncData(
+                                if (txtGraphFilter.text.toString().equals(
+                                        WEEKLY,
+                                        ignoreCase = true
+                                    )
+                                ) {
+                                    FetchDeviceDataRequest(
+                                        WEEKLY,
+                                        SharedPreferencesManager.getUserId(mContext)
+                                    ,Utils.parseTimeOffset())
+                                } else {
+                                    FetchDeviceDataRequest(
+                                        MONTHLY,
+                                        SharedPreferencesManager.getUserId(mContext),Utils.parseTimeOffset()
+                                    )
+                                }
+                            )
+                        }
 
                     })
+
             dialog.show()
         }
 
@@ -280,7 +302,8 @@ class HayatechFragment : BaseFragment() {
         if (SharedPreferencesManager.hasKey(mContext, SharedPreferencesManager.VAR_WEARABLE)) {
             var list: ArrayList<DailyStep>? = SharedPreferencesManager.getSyncObject(mContext)
             if (SharedPreferencesManager.hasKey(mContext, SYNCDATE)) {
-                var lastSyncDate = SharedPreferencesManager.getString(mContext, SYNCDATE)!!.split("T")[0]
+                var lastSyncDate =
+                    SharedPreferencesManager.getString(mContext, SYNCDATE)!!.split("T")[0]
                 list?.forEachIndexed { index, _ ->
                     if (list[index].date == lastSyncDate) {
                         newList?.addAll(list.subList(index, list.lastIndex))
@@ -387,26 +410,54 @@ class HayatechFragment : BaseFragment() {
     private fun addDataFromServer(format: String): ArrayList<BarEntry> {
         val graphData = ArrayList<BarEntry>()
         if (format == "STEPS") {
-            if (txtGraphFilter.text.toString().equals(WEEKLY, ignoreCase = true)) {
+            if (txtGraphFilter != null && txtGraphFilter.text.toString().equals(WEEKLY, ignoreCase = true)) {
                 if (mDataList!!.activity != null) {
-                    mDataList!!.activity.forEachIndexed { index, element ->
-                        graphData.add(index, BarEntry(index.toFloat(), element.steps.toFloat()))
-                        mWeekListFormater[index] =
-                            changeDateFormat("yyyy-MM-dd", "E_dd MMM, yyyy", element.date).split("_")[0]
+                    if(mDataList!!.activity.size>7){
+                        mDataList!!.activity.removeAt(0)
+                    }
+                    try {
+                        mDataList!!.activity.forEachIndexed { index, element ->
+                            graphData.add(index, BarEntry(index.toFloat(), element.steps.toFloat()))
+                            mWeekListFormater[index] =
+                                changeDateFormat(
+                                    "yyyy-MM-dd",
+                                    "E_dd MMM, yyyy",
+                                    element.date
+                                ).split("_")[0]
+                        }
+                    } catch (e: Exception) {
+                        Log.e("weekly","data invalidate")
                     }
                 }
             } else {
                 if (mDataList!!.activity != null) {
                     if (mDataList!!.activity.size > 31) {
-                        mDataList!!.activity.subList((mDataList!!.activity.size - 32), (mDataList!!.activity.size - 1))
+                        mDataList!!.activity.subList(
+                            (mDataList!!.activity.size - 32),
+                            (mDataList!!.activity.size - 1)
+                        )
                             .forEachIndexed { index, element ->
-                                graphData.add(index, BarEntry(index.toFloat(), element.steps.toFloat()))
-                                mMonthListFormater[index] = element.date.toString().replace("2019-", "")
+                                graphData.add(
+                                    index,
+                                    BarEntry(index.toFloat(), element.steps.toFloat())
+                                )
+                                mMonthListFormater[index] =
+                                    changeDateFormat(
+                                        "yyyy-MM-dd",
+                                        "dd-MMM",
+                                        element.date
+                                    ).split("_")[0]
+
                             }
                     } else {
                         mDataList!!.activity.forEachIndexed { index, element ->
                             graphData.add(index, BarEntry(index.toFloat(), element.steps.toFloat()))
-                            mMonthListFormater[index] = element.date.toString().replace("2019-", "")
+                            mMonthListFormater[index] = changeDateFormat(
+                                "yyyy-MM-dd",
+                                "dd-MMM",
+                                element.date
+                            ).split("_")[0]
+
                         }
                     }
                 }
@@ -415,11 +466,21 @@ class HayatechFragment : BaseFragment() {
             if (txtGraphFilter.text.toString().equals(WEEKLY, ignoreCase = true)) {
                 if (mDataList!!.todayToken != null) {
                     if (mDataList!!.activity.size > 7) {
-                        mDataList!!.activity.subList((mDataList!!.activity.size - 8), (mDataList!!.activity.size - 1))
+                        mDataList!!.activity.subList(
+                            (mDataList!!.activity.size - 8),
+                            (mDataList!!.activity.size - 1)
+                        )
                             .forEachIndexed { index, element ->
-                                graphData.add(index, BarEntry(index.toFloat(), element.token.toFloat()))
+                                graphData.add(
+                                    index,
+                                    BarEntry(index.toFloat(), element.token.toFloat())
+                                )
                                 mWeekListFormater[index] =
-                                    changeDateFormat("yyyy-MM-dd", "E_dd MMM, yyyy", element.date).split("_")[0]
+                                    changeDateFormat(
+                                        "yyyy-MM-dd",
+                                        "E_dd MMM, yyyy",
+                                        element.date
+                                    ).split("_")[0]
                             }
                     } else {
                         mDataList!!.activity.forEachIndexed { index, element ->
@@ -431,15 +492,27 @@ class HayatechFragment : BaseFragment() {
             } else {
                 if (mDataList!!.activity != null) {
                     if (mDataList!!.activity.size > 31) {
-                        mDataList!!.activity.subList((mDataList!!.activity.size - 32), (mDataList!!.activity.size - 1))
+                        mDataList!!.activity.subList(
+                            (mDataList!!.activity.size - 32),
+                            (mDataList!!.activity.size - 1)
+                        )
                             .forEachIndexed { index, element ->
-                                graphData.add(index, BarEntry(index.toFloat(), element.token.toFloat()))
-                                mMonthListFormater.set(index, element.date.toString().replace("2019-", ""))
+                                graphData.add(
+                                    index,
+                                    BarEntry(index.toFloat(), element.token.toFloat())
+                                )
+                                mMonthListFormater.set(
+                                    index,
+                                    element.date.toString().replace("2019-", "")
+                                )
                             }
                     } else {
                         mDataList!!.activity.forEachIndexed { index, element ->
                             graphData.add(index, BarEntry(index.toFloat(), element.token.toFloat()))
-                            mMonthListFormater.set(index, element.date.toString().replace("2019-", ""))
+                            mMonthListFormater.set(
+                                index,
+                                element.date.toString().replace("2019-", "")
+                            )
                         }
                     }
                 }
@@ -450,21 +523,40 @@ class HayatechFragment : BaseFragment() {
                     mDataList!!.activity.forEachIndexed { index, element ->
                         graphData.add(index, BarEntry(index.toFloat(), element.distance.toFloat()))
                         mWeekListFormater[index] =
-                            changeDateFormat("yyyy-MM-dd", "E_dd MMM, yyyy", element.date).split("_")[0]
+                            changeDateFormat(
+                                "yyyy-MM-dd",
+                                "E_dd MMM, yyyy",
+                                element.date
+                            ).split("_")[0]
                     }
                 }
             } else {
                 if (mDataList!!.activity != null) {
                     if (mDataList!!.activity.size > 31) {
-                        mDataList!!.activity.subList((mDataList!!.activity.size - 32), (mDataList!!.activity.size - 1))
+                        mDataList!!.activity.subList(
+                            (mDataList!!.activity.size - 32),
+                            (mDataList!!.activity.size - 1)
+                        )
                             .forEachIndexed { index, element ->
-                                graphData.add(index, BarEntry(index.toFloat(), element.distance.toFloat()))
-                                mMonthListFormater.set(index, element.date.toString().replace("2019-", ""))
+                                graphData.add(
+                                    index,
+                                    BarEntry(index.toFloat(), element.distance.toFloat())
+                                )
+                                mMonthListFormater.set(
+                                    index,
+                                    element.date.toString().replace("2019-", "")
+                                )
                             }
                     } else {
                         mDataList!!.activity.forEachIndexed { index, element ->
-                            graphData.add(index, BarEntry(index.toFloat(), element.distance.toFloat()))
-                            mMonthListFormater.set(index, element.date.toString().replace("2019-", ""))
+                            graphData.add(
+                                index,
+                                BarEntry(index.toFloat(), element.distance.toFloat())
+                            )
+                            mMonthListFormater.set(
+                                index,
+                                element.date.toString().replace("2019-", "")
+                            )
                         }
                     }
                 }
@@ -482,23 +574,34 @@ class HayatechFragment : BaseFragment() {
                 "Updating",
                 "steps" + dailyStep.count.toInt().toString()
             )
-            if (steps != null && totl_dist != null) {
+
+
+
+            if ((steps != null && totl_dist != null)) {
                 steps.text = dailyStep.count.toInt().toString()
                 totl_dist.text = dailyStep.distance.toString()
                 totl_dist_suffix.text = "Km"
-                calculateEstdToken(steps.text.toString())
-            }
-            try {
-                mViewModel!!.syncDevice(
-                    SyncRequest(
-                        getLatestActivityData(dailyStep),
-                        SharedPreferencesManager.getUserId(mContext),
-                        SharedPreferencesManager.getString(mContext, WEARABLEID),
-                        SharedPreferencesManager.getString(mContext, FIREBASETOKEN)
-                    )
-                )
-            } catch (e: Exception) {
-                Log.e("Viewmodel", "Exception" + e.printStackTrace())
+                if (Integer.parseInt(steps.text.toString()) > 0) {
+                    calculateEstdToken(steps.text.toString())
+                }
+                if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
+
+                    Handler().postDelayed({
+                        try {
+                            mViewModel!!.syncDevice(
+                                SyncRequest(
+                                    getLatestActivityData(dailyStep),
+                                    SharedPreferencesManager.getUserId(mContext),
+                                    SharedPreferencesManager.getString(mContext, WEARABLEID),
+                                    SharedPreferencesManager.getString(mContext, FIREBASETOKEN)
+                                )
+                            )
+                        } catch (e: Exception) {
+                            Log.e("Viewmodel", "Exception" + e.printStackTrace())
+                        }
+                    }, 2000)
+
+                }
             }
 
 
@@ -515,11 +618,12 @@ class HayatechFragment : BaseFragment() {
             dailyStep.toInt() > 999 -> dailyStep.toInt() / 1000
             else -> mDataList!!.todayToken
         }
-        Log.i("Calculated", "Token$tokenEstd")
+//        Log.i("Calculated", "Token$" + totalstepsCount.text.toString().toInt())
 
-        if (tokenEstd != totalstepsCount.text.toString().toInt()) {
+        if ((tokenEstd > 0 && totalstepsCount.text.toString() != "0.0") && tokenEstd != totalstepsCount.text.toString().toInt()) {
             totalstepsCount.text = tokenEstd.toString()
         }
+
     }
 
     private fun getLatestActivityData(dailyStep: DailyStep): ArrayList<Activity>? {
@@ -543,19 +647,22 @@ class HayatechFragment : BaseFragment() {
         }
 
         (mContext as LandingActivity).checkDeviceConnection()
-        mViewModel!!.syncDevice(
-            SyncRequest(
-                getActivityData(),
-                SharedPreferencesManager.getUserId(mContext),
-                SharedPreferencesManager.getString(mContext, WEARABLEID),
-                SharedPreferencesManager.getString(mContext, FIREBASETOKEN)
+        if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
+
+            mViewModel!!.syncDevice(
+                SyncRequest(
+                    getActivityData(),
+                    SharedPreferencesManager.getUserId(mContext),
+                    SharedPreferencesManager.getString(mContext, WEARABLEID),
+                    SharedPreferencesManager.getString(mContext, FIREBASETOKEN)
+                )
             )
-        )
+        }
     }
 
     fun callDashboard() {
         mViewModel!!.fetchSyncData(
-            FetchDeviceDataRequest(WEEKLY, SharedPreferencesManager.getUserId(mContext))
+            FetchDeviceDataRequest(WEEKLY, SharedPreferencesManager.getUserId(mContext),Utils.parseTimeOffset())
         )
     }
 
@@ -568,6 +675,18 @@ class HayatechFragment : BaseFragment() {
             }
         }
 
+    }
+
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            Log.i("visible", "home")
+            afterSync = false
+            (mContext as LandingActivity).checkDeviceConnection()
+//            initBarChart()
+//            setBarChart("STEPS")
+        }
     }
 
 }

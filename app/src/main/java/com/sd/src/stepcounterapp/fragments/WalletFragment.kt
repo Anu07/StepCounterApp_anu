@@ -15,6 +15,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import com.sd.src.stepcounterapp.HayaTechApplication
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.activities.LandingActivity
 import com.sd.src.stepcounterapp.activities.PurchasedDetails
@@ -34,14 +35,19 @@ import com.sd.src.stepcounterapp.model.wishList.AddWishRequest
 import com.sd.src.stepcounterapp.network.RetrofitClient
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager.WISHCOUNT
+import com.sd.src.stepcounterapp.utils.Utils
 import com.sd.src.stepcounterapp.viewModels.WalletViewModel
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_wallet.*
 
-class WalletFragment : BaseFragment(), WalletWishListAdapter.PurchaseListener, WalletRedeemListAdapter.RedeemListener {
+class WalletFragment : BaseFragment(), WalletWishListAdapter.PurchaseListener,
+    WalletRedeemListAdapter.RedeemListener {
     override fun onWishClick(pos: Int) {
         marketDialog =
-            WishListDialog(mContext, mDataWishList[pos], R.style.pullBottomfromTop, R.layout.dialog_marketplace,
+            WishListDialog(mContext,
+                mDataWishList[pos],
+                R.style.pullBottomfromTop,
+                R.layout.dialog_marketplace,
                 object : WishListDialog.WishListInterface {
                     override fun onWishlist(data: Wishlist) {
                         showPopupProgressSpinner(true)
@@ -77,7 +83,12 @@ class WalletFragment : BaseFragment(), WalletWishListAdapter.PurchaseListener, W
     }
 
     override fun onRedeem(position: Int) {
-        startActivity(Intent(mContext, PurchasedDetails::class.java).putExtra(DEALDATA, mDataReedemList[position]))
+        startActivity(
+            Intent(mContext, PurchasedDetails::class.java).putExtra(
+                DEALDATA,
+                mDataReedemList[position]
+            )
+        )
     }
 
     override fun onDelete(pos: Int) {
@@ -132,16 +143,28 @@ class WalletFragment : BaseFragment(), WalletWishListAdapter.PurchaseListener, W
     private var mDataWishList: ArrayList<Wishlist> = ArrayList()
     private var mDataReedemList: ArrayList<Purchased> = ArrayList()
     private lateinit var mViewModel: WalletViewModel
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_wallet, container, false)
+    }
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        (mContext as LandingActivity).showDisconnection(false)
+        (mContext as LandingActivity).disableSwipe(true)
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
         mViewModel = ViewModelProviders.of(activity!!).get(WalletViewModel::class.java)
 
-       mViewModel.removeWishList().observe(this,
+        mViewModel.removeWishList().observe(this,
             Observer<BasicInfoResponse> {
                 showPopupProgressSpinner(false)
                 try {
@@ -155,7 +178,10 @@ class WalletFragment : BaseFragment(), WalletWishListAdapter.PurchaseListener, W
                 }
                 if (it != null) {
                     if (it.status == 200) {
-                        mViewModel.hitWalletApi()
+                        if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
+
+                            mViewModel.hitWalletApi()
+                        }
                     }
                 }
             })
@@ -177,7 +203,10 @@ class WalletFragment : BaseFragment(), WalletWishListAdapter.PurchaseListener, W
                             mData.data!!.lastUpdated
                         ) + convertToLocal(mData.data!!.lastUpdated)
                     }
-                    mViewModel.hitWalletApi()
+                    if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
+
+                        mViewModel.hitWalletApi()
+                    }
                 } else {
                     Toast.makeText(mContext, mData.message, Toast.LENGTH_LONG).show()
                 }
@@ -190,7 +219,10 @@ class WalletFragment : BaseFragment(), WalletWishListAdapter.PurchaseListener, W
                 } catch (e: Exception) {
                 }
                 Toast.makeText(mContext, mData.message, Toast.LENGTH_LONG).show()
-                mViewModel.hitWalletApi()
+                if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
+
+                    mViewModel.hitWalletApi()
+                }
             })
 
         mViewModel.getPurchase().observe(this,
@@ -200,13 +232,20 @@ class WalletFragment : BaseFragment(), WalletWishListAdapter.PurchaseListener, W
                         marketDialog.dismiss()
                     }
                 } catch (e: Exception) {
-                    Log.e("trace",e.message)
+                    Log.e("trace", e.message)
                 }
                 showPopupProgressSpinner(false)
                 if (mData != null) {
                     if (mData.status == 200) {
-                        Toast.makeText(mContext, "Product purchased successfully", Toast.LENGTH_LONG).show()
-                        mViewModel.hitWalletApi()
+                        Toast.makeText(
+                            mContext,
+                            "Product purchased successfully",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
+
+                            mViewModel.hitWalletApi()
+                        }
                     } else {
                         Toast.makeText(mContext, mData.message, Toast.LENGTH_LONG).show()
                     }
@@ -291,8 +330,11 @@ class WalletFragment : BaseFragment(), WalletWishListAdapter.PurchaseListener, W
             })
 
 //        mViewModel.setTokensFromSteps()
-        showPopupProgressSpinner(true)
-        mViewModel.hitWalletApi()
+        if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
+
+            showPopupProgressSpinner(true)
+            mViewModel.hitWalletApi()
+        }
 
         txtWishSeeAll.setOnClickListener {
             if (!rvWishList.isVisible) {
@@ -326,13 +368,16 @@ class WalletFragment : BaseFragment(), WalletWishListAdapter.PurchaseListener, W
         }
 
         historyView.setOnClickListener {
-            (HayatechFragment.mContext as LandingActivity).hideBottomLayout(true)
+            (mContext as LandingActivity).hideBottomLayout(true)
             openFragment()
         }
 
         convertTokens.setOnClickListener {
-            showPopupProgressSpinner(true)
-            mViewModel.setTokensFromSteps()
+            if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
+
+                showPopupProgressSpinner(true)
+                mViewModel.setTokensFromSteps()
+            }
         }
 
         imgProductFirst.setOnClickListener {
@@ -346,7 +391,11 @@ class WalletFragment : BaseFragment(), WalletWishListAdapter.PurchaseListener, W
         wishListinfo.setOnTouchListener { v, event ->
             if (event.action == MotionEvent.ACTION_DOWN) {
                 if (event.x >= (wishListinfo.right - wishListinfo.compoundDrawables[2].bounds.width())) {
-                    Snackbar.make(wishListinfo,"Wishlist products would be displayed.",Snackbar.LENGTH_SHORT)
+                    Snackbar.make(
+                        wishListinfo,
+                        "Wishlist products would be displayed.",
+                        Snackbar.LENGTH_SHORT
+                    )
                 }
             }
             false
@@ -354,7 +403,11 @@ class WalletFragment : BaseFragment(), WalletWishListAdapter.PurchaseListener, W
         purchasedInfo.setOnTouchListener { v, event ->
             if (event.action == MotionEvent.ACTION_DOWN) {
                 if (event.x >= (wishListinfo.right - wishListinfo.compoundDrawables[2].bounds.width())) {
-                    Snackbar.make(wishListinfo,"Purchased products would be displayed.",Snackbar.LENGTH_SHORT)
+                    Snackbar.make(
+                        wishListinfo,
+                        "Purchased products would be displayed.",
+                        Snackbar.LENGTH_SHORT
+                    )
                 }
             }
             false
@@ -382,16 +435,21 @@ class WalletFragment : BaseFragment(), WalletWishListAdapter.PurchaseListener, W
                 txtProductNameFirst.text = mDataWishList[0].name
                 txtShortDescFirst.text = mDataWishList[0].shortDesc
                 txtTokenFirst.text = "${mDataWishList[0].token} TKS"
-                Picasso.get().load(RetrofitClient.IMG_URL + "" + mDataWishList[0].image).resize(200, 200)
+                Picasso.get().load(RetrofitClient.IMG_URL + "" + mDataWishList[0].image)
+                    .resize(200, 200)
                     .into(imgProductFirst)
                 purchaseFirst.setOnClickListener {
-                    showPopupProgressSpinner(true)
-                    mViewModel.hitPurchaseApi(
-                        RedeemRequest(
-                            mDataWishList[0]._id.toString(),
-                            SharedPreferencesManager.getUserId(mContext)
+                    if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
+
+                        showPopupProgressSpinner(true)
+
+                        mViewModel.hitPurchaseApi(
+                            RedeemRequest(
+                                mDataWishList[0]._id.toString(),
+                                SharedPreferencesManager.getUserId(mContext)
+                            )
                         )
-                    )
+                    }
                 }
 
                 if (mDataWishList.size >= 2) {
@@ -399,16 +457,20 @@ class WalletFragment : BaseFragment(), WalletWishListAdapter.PurchaseListener, W
                     txtProductNameSecond.text = mDataWishList[1].name
                     txtShortDescSecond.text = mDataWishList[1].shortDesc
                     txtTokenSecond.text = "${mDataWishList[1].token} TKS"
-                    Picasso.get().load(RetrofitClient.IMG_URL + "" + mDataWishList[1].image).resize(200, 200)
+                    Picasso.get().load(RetrofitClient.IMG_URL + "" + mDataWishList[1].image)
+                        .resize(200, 200)
                         .into(imgProductSecond)
                     purchaseSecond.setOnClickListener {
-                        showPopupProgressSpinner(true)
-                        mViewModel.hitPurchaseApi(
-                            RedeemRequest(
-                                mDataWishList[1]._id.toString(),
-                                SharedPreferencesManager.getUserId(mContext)
+                        if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
+
+                            showPopupProgressSpinner(true)
+                            mViewModel.hitPurchaseApi(
+                                RedeemRequest(
+                                    mDataWishList[1]._id.toString(),
+                                    SharedPreferencesManager.getUserId(mContext)
+                                )
                             )
-                        )
+                        }
                     }
                 } else {
                     cdWishSecond.visibility = View.GONE
@@ -436,7 +498,8 @@ class WalletFragment : BaseFragment(), WalletWishListAdapter.PurchaseListener, W
             txtProductNameRedeemFirst.text = mDataReedemList[0].name
             txtShortDescRedeemFirst.text = mDataReedemList[0].shortDesc
             txtTokenRedeemFirst.text = "${mDataReedemList[0].token} TKS"
-            Picasso.get().load(RetrofitClient.IMG_URL + "" + mDataReedemList[0].image).resize(200, 200)
+            Picasso.get().load(RetrofitClient.IMG_URL + "" + mDataReedemList[0].image)
+                .resize(200, 200)
                 .placeholder(R.drawable.placeholder).into(imgProductRedeemFirst)
             firsLayout.setOnClickListener {
                 onRedeem(0)
@@ -449,7 +512,8 @@ class WalletFragment : BaseFragment(), WalletWishListAdapter.PurchaseListener, W
                 txtProductNameRedeemSecond.text = mDataReedemList[1].name
                 txtShortDescRedeemSecond.text = mDataReedemList[1].shortDesc
                 txtTokenRedeemSecond.text = "${mDataReedemList[1].token} TKS"
-                Picasso.get().load(RetrofitClient.IMG_URL + "" + mDataReedemList[1].image).resize(200, 200)
+                Picasso.get().load(RetrofitClient.IMG_URL + "" + mDataReedemList[1].image)
+                    .resize(200, 200)
                     .placeholder(R.drawable.placeholder).into(imgProductRedeemSecond)
                 secondLayout.setOnClickListener {
                     onRedeem(1)
@@ -465,7 +529,7 @@ class WalletFragment : BaseFragment(), WalletWishListAdapter.PurchaseListener, W
 
 
     private fun openFragment() {
-        var fragmentTransaction = getFragmentManager()?.beginTransaction()
+        var fragmentTransaction = fragmentManager?.beginTransaction()
         fragmentTransaction?.add(R.id.container, TransactionHistoryFragment.newInstance(mContext))
         fragmentTransaction?.addToBackStack(null)
         fragmentTransaction?.commit()
@@ -474,9 +538,12 @@ class WalletFragment : BaseFragment(), WalletWishListAdapter.PurchaseListener, W
     }
 
     fun setUpdatedSteps(steps: String) {
-        Log.i("test", "Doe")
         if (txtSteps != null)
             txtSteps.text = steps
+    }
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
     }
 
 }

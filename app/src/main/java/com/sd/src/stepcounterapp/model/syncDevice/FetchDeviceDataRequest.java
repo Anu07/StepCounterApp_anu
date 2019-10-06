@@ -13,12 +13,27 @@ public class FetchDeviceDataRequest {
 	@SerializedName("userId")
 	@Expose
 	private String userId;
-	
-	public FetchDeviceDataRequest(String recordType, String userId) {
+
+	public FetchDeviceDataRequest(String recordType, String userId, int offset) {
 		this.recordType = recordType;
 		this.userId = userId;
+		this.offset = offset;
 	}
+
+
+    public int getOffset() {
+        return offset;
+    }
+
+    public void setOffset(int offset) {
+        this.offset = offset;
+    }
+
+    @SerializedName("offset")
+	@Expose
+	private int offset;
 	
+
 	public void setRecordType(String recordType) {
 		this.recordType = recordType;
 	}

@@ -1,43 +1,50 @@
 
 package com.sd.src.stepcounterapp.model.vendor;
 
+import com.google.gson.annotations.SerializedName;
+
 @SuppressWarnings("unused")
 public class Data {
 
-    private Product product;
-    private String purchasedAt;
-    private String userId;
-    private Vendor vendor;
+    @SerializedName("product")
+    private Product mProduct;
+    @SerializedName("purchasedAt")
+    private String mPurchasedAt;
+    @SerializedName("userId")
+    private String mUserId;
+    @SerializedName("vendor")
+    private VendorId mVendor;
 
     public Product getProduct() {
-        return product;
+        return mProduct;
     }
 
     public void setProduct(Product product) {
-        this.product = product;
+        mProduct = product;
     }
 
     public String getPurchasedAt() {
-        return purchasedAt;
+        return mPurchasedAt;
     }
 
     public void setPurchasedAt(String purchasedAt) {
-        this.purchasedAt = purchasedAt;
+        mPurchasedAt = purchasedAt;
     }
 
     public String getUserId() {
-        return userId;
+        return mUserId;
     }
 
     public void setUserId(String userId) {
-        this.userId = userId;
+        mUserId = userId;
     }
 
-    public Vendor getVendor() {
-        return vendor;
+
+    public VendorId getmVendor() {
+        return mVendor;
     }
 
-    public void setVendor(Vendor vendor) {
-        this.vendor = vendor;
+    public void setmVendor(VendorId mVendor) {
+        this.mVendor = mVendor;
     }
 }

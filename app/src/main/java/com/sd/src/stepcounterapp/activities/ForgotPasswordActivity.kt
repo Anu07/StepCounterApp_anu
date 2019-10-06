@@ -6,6 +6,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.model.generic.BasicInfoResponse
+import com.sd.src.stepcounterapp.model.loginrequest.ForgetRequestObject
 import com.sd.src.stepcounterapp.model.loginrequest.LoginRequestObject
 import com.sd.src.stepcounterapp.viewModels.BaseViewModelFactory
 import com.sd.src.stepcounterapp.viewModels.SignInViewModel
@@ -42,10 +43,10 @@ class ForgotPasswordActivity : BaseActivity<SignInViewModel>() {
             if (validate()) {
                 showPopupProgressSpinner(true)
                 mViewModel!!.forgetPassword(
-                    LoginRequestObject(
+                    ForgetRequestObject(
                         "",
                         "",
-                        emailTxt.text.toString(),
+                        emailTxt.text.toString().toLowerCase(),
                         ""
                     )
                 )

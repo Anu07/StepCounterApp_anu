@@ -16,10 +16,13 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.sd.src.stepcounterapp.HayaTechApplication
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.activities.LandingActivity
 import com.sd.src.stepcounterapp.adapter.MarketPlaceCategoryAdapter
@@ -37,100 +40,195 @@ import com.sd.src.stepcounterapp.model.marketplace.PopularProducts
 import com.sd.src.stepcounterapp.model.marketplace.walletInfo.WalletModelResponse
 import com.sd.src.stepcounterapp.model.redeemnow.RedeemRequest
 import com.sd.src.stepcounterapp.model.wallet.purchase.PurchaseResponse
-import com.sd.src.stepcounterapp.model.wallet.walletDetailResponse.WalletModel
 import com.sd.src.stepcounterapp.model.wishList.AddWishRequest
+import com.sd.src.stepcounterapp.utils.EndlessRecyclerOnScrollListener
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager.EARNEDTOKENS
+import com.sd.src.stepcounterapp.utils.Utils
 import com.sd.src.stepcounterapp.viewModels.MarketPlaceViewModel
 import kotlinx.android.synthetic.main.fragment_market_place.*
 
 
-class MarketPlaceFragment : BaseFragment(), FilterDialog.MarketFilterInterface, MarketPlaceClickInterface,
+class MarketPlaceFragment : BaseFragment(), FilterDialog.MarketFilterInterface,
+    MarketPlaceClickInterface,
     MarketPlaceCategoryAdapter.twoItemListener,
     MarketPlaceCategoryAdapter.ClickMarketListener,
     MarketPlacePopularityAdapter.PopularInterface, MarketPlaceSeeAllAdapter.CategoryInterface {
 
 
     override fun onCategoryList(queryCat: String) {
-        mViewModel.getSearchCategoryApi(
-            BasicSearchRequest(
-                SharedPreferencesManager.getUserId(mContext),
-                queryCat
+        if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
+
+            mViewModel.getSearchCategoryApi(
+                BasicSearchRequest(
+                    SharedPreferencesManager.getUserId(mContext),
+                    queryCat
+                )
             )
-        )
+        }
     }
 
     override fun onPopClick(position: Int, mItem: PopularProducts.Data) {
-        marketPopDialog = MarketPopPlaceDialog(mContext, mItem, R.style.pullBottomfromTop, R.layout.dialog_marketplace,
+        marketPopDialog = MarketPopPlaceDialog(mContext,
+            mItem,
+            R.style.pullBottomfromTop,
+            R.layout.dialog_marketplace,
             object : MarketPopPlaceDialog.PurchaseInterface {
                 override fun onWishlist(data: PopularProducts.Data) {
                     if (!data.wishlist) {
                         showPopupProgressSpinner(true)
-                        mViewModel.addWishList(AddWishRequest(SharedPreferencesManager.getUserId(context!!), data._id))
-                    }else{
+                        mViewModel.addWishList(
+                            AddWishRequest(
+                                SharedPreferencesManager.getUserId(
+                                    context!!
+                                ), data._id
+                            )
+                        )
+                    } else {
                         showPopupProgressSpinner(true)
-                        mViewModel.removeWishList(AddWishRequest(SharedPreferencesManager.getUserId(context!!), data._id))
+                        mViewModel.removeWishList(
+                            AddWishRequest(
+                                SharedPreferencesManager.getUserId(
+                                    context!!
+                                ), data._id
+                            )
+                        )
                     }
                 }
+
                 override fun onPurchase(data: PopularProducts.Data) {
-                    if(mItem.quantity>0){
+                    if (mItem.quantity > 0) {
                         showPopupProgressSpinner(true)
-                        mViewModel.hitPurchaseApi(RedeemRequest(mItem._id, SharedPreferencesManager.getUserId(mContext)))
-                    }else{
-                        Toast.makeText(mContext,  "This product has been out of stock, please try another product.", Toast.LENGTH_LONG).show()
+                        mViewModel.hitPurchaseApi(
+                            RedeemRequest(
+                                mItem._id,
+                                SharedPreferencesManager.getUserId(mContext)
+                            )
+                        )
+                    } else {
+                        Toast.makeText(
+                            mContext,
+                            "This product has been out of stock, please try another product.",
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
 
 
                 }
             })
-        marketPopDialog!!.show()
+        marketPopDialog.show()
     }
 
     override fun onClick(position: Int, mItem: MarketResponse.Products) {
-        marketDialog = MarketPlaceDialog(mContext, mItem, R.style.pullBottomfromTop, R.layout.dialog_marketplace,
+        marketDialog = MarketPlaceDialog(mContext,
+            mItem,
+            R.style.pullBottomfromTop,
+            R.layout.dialog_marketplace,
             object : MarketPlaceDialog.PurchaseInterface {
                 override fun onWishlist(data: MarketResponse.Products) {
                     if (!data.wishlist) {
-                        showPopupProgressSpinner(true)
-                        mViewModel.addWishList(AddWishRequest(SharedPreferencesManager.getUserId(context!!), data._id))
-                    }else{
-                        showPopupProgressSpinner(true)
-                        mViewModel.removeWishList(AddWishRequest(SharedPreferencesManager.getUserId(context!!), data._id))
+                        if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
+
+                            showPopupProgressSpinner(true)
+                            mViewModel.addWishList(
+                                AddWishRequest(
+                                    SharedPreferencesManager.getUserId(
+                                        context!!
+                                    ), data._id
+                                )
+                            )
+                        }
+                    } else {
+                        if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
+
+                            showPopupProgressSpinner(true)
+                            mViewModel.removeWishList(
+                                AddWishRequest(
+                                    SharedPreferencesManager.getUserId(
+                                        context!!
+                                    ), data._id
+                                )
+                            )
+                        }
                     }
 
                 }
 
                 override fun onPurchase(data: MarketResponse.Products) {
-                    if(mItem.quantity>0){
-                        showPopupProgressSpinner(true)
-                        mViewModel.hitPurchaseApi(RedeemRequest(mItem._id, SharedPreferencesManager.getUserId(mContext)))
-                    }else{
-                        Toast.makeText(mContext,  "This product has been out of stock, please try another product.", Toast.LENGTH_LONG).show()
+                    if (mItem.quantity > 0) {
+                        if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
+
+                            showPopupProgressSpinner(true)
+                            mViewModel.hitPurchaseApi(
+                                RedeemRequest(
+                                    mItem._id,
+                                    SharedPreferencesManager.getUserId(mContext)
+                                )
+                            )
+                        }
+                    } else {
+                        Toast.makeText(
+                            mContext,
+                            "This product has been out of stock, please try another product.",
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
 
                 }
             })
-        marketDialog!!.show()
+        marketDialog.show()
     }
 
     override fun onWish(position: Int, mItem: MarketResponse.Products) {
         if (!mItem.wishlist) {
-            showPopupProgressSpinner(true)
-            mViewModel.addWishList(AddWishRequest(SharedPreferencesManager.getUserId(context!!), mItem._id))
+            if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
+
+                showPopupProgressSpinner(true)
+                mViewModel.addWishList(
+                    AddWishRequest(
+                        SharedPreferencesManager.getUserId(context!!),
+                        mItem._id
+                    )
+                )
+            }
         } else {
-            showPopupProgressSpinner(true)
-            mViewModel.removeWishList(AddWishRequest(SharedPreferencesManager.getUserId(context!!), mItem._id))
+            if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
+
+                showPopupProgressSpinner(true)
+                mViewModel.removeWishList(
+                    AddWishRequest(
+                        SharedPreferencesManager.getUserId(context!!),
+                        mItem._id
+                    )
+                )
+            }
         }
     }
 
 
     override fun onItemwishlisted(position: Int, mItem: MarketResponse.Products) {
         if (!mItem.wishlist) {
-            showPopupProgressSpinner(true)
-            mViewModel.addWishList(AddWishRequest(SharedPreferencesManager.getUserId(context!!), mItem._id))
+            if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
+
+                showPopupProgressSpinner(true)
+                mViewModel.addWishList(
+                    AddWishRequest(
+                        SharedPreferencesManager.getUserId(context!!),
+                        mItem._id
+                    )
+                )
+            }
         } else {
-            showPopupProgressSpinner(true)
-            mViewModel.removeWishList(AddWishRequest(SharedPreferencesManager.getUserId(context!!), mItem._id))
+            if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
+
+                showPopupProgressSpinner(true)
+                mViewModel.removeWishList(
+                    AddWishRequest(
+                        SharedPreferencesManager.getUserId(context!!),
+                        mItem._id
+                    )
+                )
+            }
         }
     }
 
@@ -139,11 +237,27 @@ class MarketPlaceFragment : BaseFragment(), FilterDialog.MarketFilterInterface, 
         mItem: PopularProducts.Data
     ) {
         if (!mItem.wishlist) {
-            showPopupProgressSpinner(true)
-            mViewModel.addWishList(AddWishRequest(SharedPreferencesManager.getUserId(context!!), mItem._id))
+            if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
+
+                showPopupProgressSpinner(true)
+                mViewModel.addWishList(
+                    AddWishRequest(
+                        SharedPreferencesManager.getUserId(context!!),
+                        mItem._id
+                    )
+                )
+            }
         } else {
-            showPopupProgressSpinner(true)
-            mViewModel.removeWishList(AddWishRequest(SharedPreferencesManager.getUserId(context!!), mItem._id))
+            if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
+
+                showPopupProgressSpinner(true)
+                mViewModel.removeWishList(
+                    AddWishRequest(
+                        SharedPreferencesManager.getUserId(context!!),
+                        mItem._id
+                    )
+                )
+            }
         }
     }
 
@@ -159,7 +273,8 @@ class MarketPlaceFragment : BaseFragment(), FilterDialog.MarketFilterInterface, 
             llSeeAll.visibility = View.VISIBLE
             rvProduct.visibility = View.GONE
             if (mDataCategory[position].products.size > 0) {
-                mSeeAllAdapter = MarketPlaceSeeAllAdapter(mDataCategory[position].products, this, this)
+                mSeeAllAdapter =
+                    MarketPlaceSeeAllAdapter(mDataCategory[position].products, this, this)
                 rvSeeAll.adapter = mSeeAllAdapter
             }
         } else {
@@ -183,6 +298,9 @@ class MarketPlaceFragment : BaseFragment(), FilterDialog.MarketFilterInterface, 
             return instance
         }
     }
+
+    var loading = true
+    private var page: Int = 0
     lateinit var filterdial: FilterDialog
     private val mCategoryNameList: ArrayList<String> = ArrayList()
     var count: Int? = 0
@@ -195,74 +313,100 @@ class MarketPlaceFragment : BaseFragment(), FilterDialog.MarketFilterInterface, 
     private var mDataCategory: ArrayList<MarketResponse.Data> = ArrayList()
     private var mDataPopularity: ArrayList<PopularProducts.Data> = ArrayList()
     lateinit var mSeeAllAdapter: MarketPlaceSeeAllAdapter
-
+    private lateinit var scrollListener: RecyclerView.OnScrollListener
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         mViewModel = ViewModelProviders.of(activity!!).get(MarketPlaceViewModel::class.java)
-        mViewModel.getCategoryApi(BasicRequest(SharedPreferencesManager.getUserId(mContext), "1"))
-        mViewModel.getProductApi(BasicRequest(SharedPreferencesManager.getUserId(mContext), "1"))
+        if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
 
+            mViewModel.getCategoryApi(BasicRequest(SharedPreferencesManager.getUserId(mContext), 0))
+            mViewModel.getProductApi(BasicRequest(SharedPreferencesManager.getUserId(mContext), 0))
+        }
         mViewModel.getPurchase().observe(this,
             Observer<PurchaseResponse> { mData ->
                 showPopupProgressSpinner(false)
                 try {
-                    if (marketDialog != null && marketDialog.isShowing) {
+                    if (marketDialog.isShowing) {
                         marketDialog.dismiss()
                     }
-                    if (marketPopDialog != null && marketPopDialog.isShowing) {
+                    if (marketPopDialog.isShowing) {
                         marketPopDialog.dismiss()
                     }
                 } catch (e: Exception) {
                 }
                 if (mData.status == 200) {
-                    Toast.makeText(WalletFragment.mContext, "Product purchased successfully", Toast.LENGTH_LONG).show()
-                    mViewModel.getCategoryApi(BasicRequest(SharedPreferencesManager.getUserId(mContext), "1"))
+                    Toast.makeText(
+                        WalletFragment.mContext,
+                        "Product purchased successfully",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
+
+                        mViewModel.getCategoryApi(
+                            BasicRequest(
+                                SharedPreferencesManager.getUserId(
+                                    mContext
+                                ), 0
+                            )
+                        )
+                    }
                 } else if (mData.status == 400) {
-                    Toast.makeText(WalletFragment.mContext, "Insufficient tokens", Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        WalletFragment.mContext,
+                        "Insufficient tokens",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             })
 
 
         mViewModel.getWalletData().observe(this,
             Observer<WalletModelResponse> { mData ->
-                if (mData != null) {
+                if (mData!=null && mData.data != null) {
                     SharedPreferencesManager.setInt(
                         WalletFragment.mContext,
-                        SharedPreferencesManager.WISHCOUNT, mData.data?.wishlist!!.size)
+                        SharedPreferencesManager.WISHCOUNT, mData.data?.wishlist!!.size
+                    )
                     count = SharedPreferencesManager.getInt(
                         mContext,
                         SharedPreferencesManager.WISHCOUNT
                     )
-                    SharedPreferencesManager.setString(mContext,mData.data.totalEarnings.toString(),EARNEDTOKENS)
+                    SharedPreferencesManager.setString(
+                        mContext,
+                        mData.data.totalEarnings.toString(),
+                        EARNEDTOKENS
+                    )
                     setupBadge()
                     setUpTokens()
                 }
 
             })
 
+        if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
 
-        mViewModel.hitWalletApi()
-
+            mViewModel.hitWalletApi()
+        }
         mViewModel.getCategory().observe(this,
             Observer<MarketResponse> { mProduct ->
                 try {
                     showPopupProgressSpinner(false)
 
-                    if(filterdial!= null && filterdial.isShowing){
+                    if (filterdial.isShowing) {
                         filterdial.dismiss()
                     }
                 } catch (e: Exception) {
-                    Log.e("Dialog","Filter"+e.message)
+                    Log.e("Dialog", "Filter" + e.message)
                 }
                 if (mProduct != null) {
-                    if (mProduct.data!=null && mProduct.data.size > 0) {
+                    if (mProduct.data != null && mProduct.data.size > 0) {
                         mDataCategory = ArrayList()
                         rvProduct.visibility = View.VISIBLE
                         noRec.visibility = View.GONE
                         mDataCategory = mProduct.data
                         getCategoryNameList(mDataCategory)
 //                        mCategoryAdapter.swap(mDataCategory)
-                        mCategoryAdapter = MarketPlaceCategoryAdapter(mDataCategory, mContext, this, this, this)
+                        mCategoryAdapter =
+                            MarketPlaceCategoryAdapter(mDataCategory, mContext, this, this, this)
                         rvProduct.adapter = mCategoryAdapter
                         if (mDataCategory.size > 0)
                             txtCategoryName.text = mDataCategory[0].name
@@ -275,6 +419,7 @@ class MarketPlaceFragment : BaseFragment(), FilterDialog.MarketFilterInterface, 
 
         mViewModel.getPopularity().observe(this,
             Observer<PopularProducts> { mPopProduct ->
+                showPopupProgressSpinner(false)
                 if (mPopProduct != null) {
                     if (mPopProduct.data.size > 0) {
                         rvPopularity.visibility = View.VISIBLE
@@ -294,19 +439,34 @@ class MarketPlaceFragment : BaseFragment(), FilterDialog.MarketFilterInterface, 
                 } catch (e: Exception) {
                 }
                 try {
-                    if (marketDialog != null && marketDialog.isShowing) {
+                    if (marketDialog.isShowing) {
                         marketDialog.dismiss()
                     }
-                    if (marketPopDialog != null && marketPopDialog.isShowing) {
+                    if (marketPopDialog.isShowing) {
                         marketPopDialog.dismiss()
                     }
                 } catch (e: Exception) {
                 }
                 if (it != null) {
                     if (it.status == 200) {
-                        mViewModel.getCategoryApi(BasicRequest(SharedPreferencesManager.getUserId(mContext), "1"))
-                        mViewModel.getProductApi(BasicRequest(SharedPreferencesManager.getUserId(mContext), "1"))
-                        mViewModel.hitWalletApi()
+                        if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
+
+                            mViewModel.getCategoryApi(
+                                BasicRequest(
+                                    SharedPreferencesManager.getUserId(
+                                        mContext
+                                    ), 0
+                                )
+                            )
+                            mViewModel.getProductApi(
+                                BasicRequest(
+                                    SharedPreferencesManager.getUserId(
+                                        mContext
+                                    ), page
+                                )
+                            )
+                            mViewModel.hitWalletApi()
+                        }
                     }
                 }
             })
@@ -315,19 +475,34 @@ class MarketPlaceFragment : BaseFragment(), FilterDialog.MarketFilterInterface, 
             Observer<BasicInfoResponse> {
                 showPopupProgressSpinner(false)
                 try {
-                    if (marketDialog != null && marketDialog.isShowing) {
+                    if (marketDialog.isShowing) {
                         marketDialog.dismiss()
                     }
-                    if (marketPopDialog != null && marketPopDialog.isShowing) {
+                    if (marketPopDialog.isShowing) {
                         marketPopDialog.dismiss()
                     }
                 } catch (e: Exception) {
                 }
                 if (it != null) {
                     if (it.status == 200) {
-                        mViewModel.hitWalletApi()
-                        mViewModel.getCategoryApi(BasicRequest(SharedPreferencesManager.getUserId(mContext), "1"))
-                        mViewModel.getProductApi(BasicRequest(SharedPreferencesManager.getUserId(mContext), "1"))
+                        if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
+
+                            mViewModel.hitWalletApi()
+                            mViewModel.getCategoryApi(
+                                BasicRequest(
+                                    SharedPreferencesManager.getUserId(
+                                        mContext
+                                    ), 0
+                                )
+                            )
+                            mViewModel.getProductApi(
+                                BasicRequest(
+                                    SharedPreferencesManager.getUserId(
+                                        mContext
+                                    ), page
+                                )
+                            )
+                        }
                     }
                 }
             })
@@ -338,13 +513,17 @@ class MarketPlaceFragment : BaseFragment(), FilterDialog.MarketFilterInterface, 
     private fun getCategoryNameList(mDataCategory: java.util.ArrayList<MarketResponse.Data>) {
 
         mDataCategory.forEach {
-            if(!mCategoryNameList.contains(it.name)){
+            if (!mCategoryNameList.contains(it.name)) {
                 mCategoryNameList.add(it.name)
             }
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_market_place, container, false)
     }
 
@@ -352,6 +531,7 @@ class MarketPlaceFragment : BaseFragment(), FilterDialog.MarketFilterInterface, 
         super.onAttach(context)
         try {
             (mContext as LandingActivity).showDisconnection(false)
+            (mContext as LandingActivity).disableSwipe(false)
         } catch (e: Exception) {
         }
     }
@@ -373,16 +553,16 @@ class MarketPlaceFragment : BaseFragment(), FilterDialog.MarketFilterInterface, 
 
         txtCategory.setOnClickListener {
             tabtype = true
-            txtCategory.setTextColor(resources.getColor(R.color.colorBlack))
-            txtPopularity.setTextColor(resources.getColor(R.color.gray_text))
+            txtCategory.setTextColor(ContextCompat.getColor(mContext, R.color.colorBlack))
+            txtPopularity.setTextColor(ContextCompat.getColor(mContext, R.color.gray_text))
             llCategory.visibility = View.VISIBLE
             llPopularity.visibility = View.GONE
         }
 
         txtPopularity.setOnClickListener {
             tabtype = false
-            txtPopularity.setTextColor(resources.getColor(R.color.colorBlack))
-            txtCategory.setTextColor(resources.getColor(R.color.gray_text))
+            txtPopularity.setTextColor(ContextCompat.getColor(mContext, R.color.colorBlack))
+            txtCategory.setTextColor(ContextCompat.getColor(mContext, R.color.gray_text))
             llCategory.visibility = View.GONE
             llPopularity.visibility = View.VISIBLE
         }
@@ -411,8 +591,23 @@ class MarketPlaceFragment : BaseFragment(), FilterDialog.MarketFilterInterface, 
         searchView.onRightDrawableClicked {
             if (searchView.text.isNotEmpty()) {
                 it.text.clear()
-                mViewModel.getCategoryApi(BasicRequest(SharedPreferencesManager.getUserId(mContext), "1"))
-                mViewModel.getProductApi(BasicRequest(SharedPreferencesManager.getUserId(mContext), "1"))
+                if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
+
+                    mViewModel.getCategoryApi(
+                        BasicRequest(
+                            SharedPreferencesManager.getUserId(
+                                mContext
+                            ), 0
+                        )
+                    )
+                    mViewModel.getProductApi(
+                        BasicRequest(
+                            SharedPreferencesManager.getUserId(
+                                mContext
+                            ), page
+                        )
+                    )
+                }
             }
 
         }
@@ -423,8 +618,23 @@ class MarketPlaceFragment : BaseFragment(), FilterDialog.MarketFilterInterface, 
             override fun afterTextChanged(s: Editable) {
 
                 if (s.isEmpty()) {
-                    mViewModel.getCategoryApi(BasicRequest(SharedPreferencesManager.getUserId(mContext), "1"))
-                    mViewModel.getProductApi(BasicRequest(SharedPreferencesManager.getUserId(mContext), "1"))
+                    if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
+
+                        mViewModel.getCategoryApi(
+                            BasicRequest(
+                                SharedPreferencesManager.getUserId(
+                                    mContext
+                                ), 0
+                            )
+                        )
+                        mViewModel.getProductApi(
+                            BasicRequest(
+                                SharedPreferencesManager.getUserId(
+                                    mContext
+                                ), page
+                            )
+                        )
+                    }
                 }
 
             }
@@ -456,9 +666,9 @@ class MarketPlaceFragment : BaseFragment(), FilterDialog.MarketFilterInterface, 
 
         topLayout.setOnTouchListener(object : View.OnTouchListener {
             override fun onTouch(p0: View?, ev: MotionEvent?): Boolean {
-                if (ev!!.action == MotionEvent.ACTION_DOWN){
+                if (ev!!.action == MotionEvent.ACTION_DOWN) {
                     (mContext as LandingActivity).disableSwipe(false)
-                }else if (ev!!.action == MotionEvent.ACTION_UP){
+                } else if (ev.action == MotionEvent.ACTION_UP) {
                     //no need
                 }
 
@@ -474,30 +684,36 @@ class MarketPlaceFragment : BaseFragment(), FilterDialog.MarketFilterInterface, 
      */
 
     private fun setUpTokens() {
-        if(SharedPreferencesManager.hasKey(mContext,EARNEDTOKENS)){
-            tokenVal.text = SharedPreferencesManager.getString(mContext,EARNEDTOKENS)
-        }else{
+        if (SharedPreferencesManager.hasKey(mContext, EARNEDTOKENS)) {
+            tokenVal.text = SharedPreferencesManager.getString(mContext, EARNEDTOKENS)
+        } else {
             tokenVal.text = ""
         }
     }
 
     private fun performSearch() {
         if (tabtype) {
-            showPopupProgressSpinner(true)
-            mViewModel.getSearchCategoryApi(
-                BasicSearchRequest(
-                    SharedPreferencesManager.getUserId(mContext),
-                    searchView.text.toString()
+            if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
+
+                showPopupProgressSpinner(true)
+                mViewModel.getSearchCategoryApi(
+                    BasicSearchRequest(
+                        SharedPreferencesManager.getUserId(mContext),
+                        searchView.text.toString()
+                    )
                 )
-            )
+            }
         } else {
-            showPopupProgressSpinner(true)
-            mViewModel.getSearchProductApi(
-                BasicSearchRequest(
-                    SharedPreferencesManager.getUserId(mContext),
-                    searchView.text.toString()
+            if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
+
+                showPopupProgressSpinner(true)
+                mViewModel.getSearchProductApi(
+                    BasicSearchRequest(
+                        SharedPreferencesManager.getUserId(mContext),
+                        searchView.text.toString()
+                    )
                 )
-            )
+            }
         }
     }
 
@@ -508,10 +724,24 @@ class MarketPlaceFragment : BaseFragment(), FilterDialog.MarketFilterInterface, 
     }
 
     private fun setPopularityAdapter() {
-        rvPopularity.layoutManager = LinearLayoutManager(mContext)
+        var mlayoutManager = LinearLayoutManager(mContext)
+        rvPopularity.isNestedScrollingEnabled = false
+        rvPopularity.layoutManager = mlayoutManager
         mPopularityAdapter = MarketPlacePopularityAdapter(mDataPopularity, mContext, this)
         rvPopularity.adapter = mPopularityAdapter
+        rvPopularity.addOnScrollListener(object:EndlessRecyclerOnScrollListener(){
+            override fun onLoadMore(currentPage: Int) {
+                showPopupProgressSpinner(true)
+                mViewModel.getProductApi( BasicRequest(
+                    SharedPreferencesManager.getUserId(
+                        mContext
+                    ), currentPage
+                ))
+            }
+
+        })
     }
+
 
     private fun setSeeAllAdapter() {
         rvSeeAll.layoutManager = LinearLayoutManager(mContext)

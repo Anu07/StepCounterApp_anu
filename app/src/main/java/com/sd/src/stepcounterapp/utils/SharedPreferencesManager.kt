@@ -7,6 +7,7 @@ import com.fitpolo.support.entity.DailyStep
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.sd.src.stepcounterapp.activities.SignInActivity
+import com.sd.src.stepcounterapp.model.bmi.BMIObject
 import com.sd.src.stepcounterapp.model.login.LoginResponseJ
 import com.sd.src.stepcounterapp.model.profile.Data
 import java.util.*
@@ -95,6 +96,24 @@ object SharedPreferencesManager {
         prefsEditor.apply()
     }
 
+    fun saveBmiObject(context: Context, myObject: BMIObject) {
+        val prefsEditor = getSharedPreferences(context).edit()
+        val gson = Gson()
+        val json = gson.toJson(myObject) // myObject - instance of MyObject
+        prefsEditor.putString("BMI", json)
+        prefsEditor.apply()
+    }
+
+
+    fun getBmiObject(context: Context): BMIObject {
+        val gson = Gson()
+        val json = getSharedPreferences(context).getString("BMI", "")
+        val type = object : TypeToken<BMIObject>() {}.type
+        val bmi: BMIObject = gson.fromJson(json, BMIObject::class.java)
+        return bmi
+    }
+
+
 
     fun saveUpdatedUserObject(context: Context, myObject: Data) {
         val prefsEditor = getSharedPreferences(context).edit()
@@ -131,7 +150,7 @@ object SharedPreferencesManager {
     fun getUpdatedUserObject(context: Context): Data {
         val gson = Gson()
         val json = getSharedPreferences(context).getString("UpdatedUser", "")
-        val obj: Data = gson.fromJson<Data>(json, Data::class.java)
+        val obj: Data = gson.fromJson(json, Data::class.java)
         return obj
     }
 

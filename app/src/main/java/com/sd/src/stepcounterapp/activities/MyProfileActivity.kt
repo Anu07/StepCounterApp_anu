@@ -2,14 +2,15 @@ package com.sd.src.stepcounterapp.activities
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.changeDateFormat
-import com.sd.src.stepcounterapp.fragments.*
+import com.sd.src.stepcounterapp.fragments.MyChallengeFragment
+import com.sd.src.stepcounterapp.fragments.MyRedeemedRewardsFragment
+import com.sd.src.stepcounterapp.fragments.MySurveysFragment
+import com.sd.src.stepcounterapp.fragments.ProfileFragment
 import com.sd.src.stepcounterapp.network.RetrofitClient
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager.SYNCDATE
@@ -18,9 +19,7 @@ import com.sd.src.stepcounterapp.viewModels.ProfileViewModel
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_my_profile.*
 import kotlinx.android.synthetic.main.black_crosstitlebar.*
-import android.text.method.TextKeyListener.clear
-import androidx.lifecycle.ViewModel
-
+import android.net.Uri
 
 
 class MyProfileActivity : BaseActivity<ProfileViewModel>() {
@@ -28,14 +27,14 @@ class MyProfileActivity : BaseActivity<ProfileViewModel>() {
         get() = R.layout.activity_my_profile
 
     override val viewModel: ProfileViewModel
-
         get() = ViewModelProviders.of(
             this,
             BaseViewModelFactory { ProfileViewModel(application) })
             .get(ProfileViewModel::class.java)
 
     private var profileFragment: ProfileFragment? = null
-
+    private var mCurrentPhotoPath: String? = null
+    private var mCapturedImageURI: Uri? = null
     override
     val context: Context
         get() = this@MyProfileActivity
@@ -43,15 +42,21 @@ class MyProfileActivity : BaseActivity<ProfileViewModel>() {
 
     override fun onCreate() {
         lastUpdtd.text =
-            "Last updated: " + changeDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS",
-                "dd MMM, yyyy",SharedPreferencesManager.getString(this@MyProfileActivity, SYNCDATE)
-                ?: "Not available")
+            "Last updated: " + changeDateFormat(
+                "yyyy-MM-dd'T'HH:mm:ss.SSS",
+                "dd MMM, yyyy", SharedPreferencesManager.getString(this@MyProfileActivity, SYNCDATE)
+                    ?: "Not available"
+            )
         mViewModel!!.getProfileResponse().observe(this, Observer { mResponse ->
             showPopupProgressSpinner(false)
             if (mResponse.data != null) {
                 SharedPreferencesManager.saveUpdatedUserObject(this@MyProfileActivity, mResponse.data)
                 if (mResponse.data.image.isNotEmpty()) {
-                    SharedPreferencesManager.setString(this@MyProfileActivity,RetrofitClient.IMG_URL + mResponse.data.image,"userImage")
+                    SharedPreferencesManager.setString(
+                        this@MyProfileActivity,
+                        RetrofitClient.IMG_URL + mResponse.data.image,
+                        "userImage"
+                    )
 //                    LandingActivity.updateUserImage(RetrofitClient.IMG_URL + mResponse.data.image)
                     Picasso.get().load(RetrofitClient.IMG_URL + mResponse.data.image).placeholder(R.drawable.nouser)
                         .resize(200, 200)
@@ -68,7 +73,7 @@ class MyProfileActivity : BaseActivity<ProfileViewModel>() {
         mViewModel!!.getProfileData()
     }
 
-    fun updateData(){
+    fun updateData() {
         mViewModel!!.getProfileData()
     }
 
@@ -79,10 +84,10 @@ class MyProfileActivity : BaseActivity<ProfileViewModel>() {
             startActivity(Intent(this@MyProfileActivity, BmiCalculatorActivity::class.java).putExtra("inApp", "1"))
         }
         img_back.setOnClickListener {
-            finish()
+            onBackPressed()
         }
         editView.setOnClickListener {
-          openFragment(ProfileFragment())
+            openFragment(ProfileFragment())
         }
 
         lin_my_challenges.setOnClickListener {
@@ -111,7 +116,10 @@ class MyProfileActivity : BaseActivity<ProfileViewModel>() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        finish()
+//        finish()
     }
+
+
+
 
 }

@@ -11,15 +11,19 @@ import com.sd.src.stepcounterapp.model.changepwd.ChangePasswordRequest
 import com.sd.src.stepcounterapp.model.contactUs.ContactUsRequest
 import com.sd.src.stepcounterapp.model.generic.BasicInfoResponse
 import com.sd.src.stepcounterapp.model.generic.BasicRequest
+import com.sd.src.stepcounterapp.model.generic.BasicUserRequest
 import com.sd.src.stepcounterapp.model.image.ImageResponse
 import com.sd.src.stepcounterapp.model.leaderboard.LeaderBoardRequest
 import com.sd.src.stepcounterapp.model.leaderboard.LeaderBoardResponse
+import com.sd.src.stepcounterapp.model.leaderboard.LeaderBoardTknRequest
 import com.sd.src.stepcounterapp.model.login.LoginResponseJ
+import com.sd.src.stepcounterapp.model.loginrequest.ForgetRequestObject
 import com.sd.src.stepcounterapp.model.loginrequest.LoginRequestObject
 import com.sd.src.stepcounterapp.model.marketplace.BasicSearchRequest
 import com.sd.src.stepcounterapp.model.marketplace.MarketResponse
 import com.sd.src.stepcounterapp.model.marketplace.PopularProducts
 import com.sd.src.stepcounterapp.model.marketplace.walletInfo.WalletModelResponse
+import com.sd.src.stepcounterapp.model.notification.BasicNotificationSettingsRequest
 import com.sd.src.stepcounterapp.model.notification.NotificationResponse
 import com.sd.src.stepcounterapp.model.notification.read_notification.NotificationReadRequest
 import com.sd.src.stepcounterapp.model.notificatyionlist.NotificationListResponse
@@ -32,14 +36,13 @@ import com.sd.src.stepcounterapp.model.rewards.MyRedeemedResponse
 import com.sd.src.stepcounterapp.model.rewards.RewardsCategoriesResponse
 import com.sd.src.stepcounterapp.model.rewards.selectedRewards.SelectedRewardCategories
 import com.sd.src.stepcounterapp.model.survey.SurveyResponse
-import com.sd.src.stepcounterapp.model.survey.mysurvey.MySurveyResponse
 import com.sd.src.stepcounterapp.model.survey.mysurveyresponse.MySurveyResponseModel
 import com.sd.src.stepcounterapp.model.survey.surveyrequest.SurveystartRequestModel
 import com.sd.src.stepcounterapp.model.syncDevice.FetchDeviceDataRequest
 import com.sd.src.stepcounterapp.model.syncDevice.SyncRequest
 import com.sd.src.stepcounterapp.model.transactionhistory.TransactionHistoryModel
 import com.sd.src.stepcounterapp.model.updateresponse.UpdateProfileResponse
-import com.sd.src.stepcounterapp.model.vendor.PurchaseVendorResponse
+import com.sd.src.stepcounterapp.model.vendor.VendorDetailResponse
 import com.sd.src.stepcounterapp.model.vendor.VendorRequest
 import com.sd.src.stepcounterapp.model.wallet.TokenModel
 import com.sd.src.stepcounterapp.model.wallet.purchase.PurchaseResponse
@@ -87,7 +90,7 @@ interface ApiInterface {
 
     @POST("api/forgot_password")
     fun forget_password(
-        @Body body: LoginRequestObject
+        @Body body: ForgetRequestObject
     ): Call<BasicInfoResponse>
 
     @PUT("api/add_basic_info")
@@ -187,7 +190,7 @@ interface ApiInterface {
     fun startChallenge(@Body body: ChallengeStartRequestModel): Call<StartChallengeResponse>
 
     @POST("api/steps_to_token")
-    fun steps_to_token(@Body body: BasicRequest): Call<TokenModel>
+    fun steps_to_token(@Body body: BasicUserRequest): Call<TokenModel>
 
     @POST("api/survey")
     fun getsurvey(@Body body: BasicRequest): Call<SurveyResponse>
@@ -196,7 +199,7 @@ interface ApiInterface {
     fun takesurvey(@Body body: SurveystartRequestModel): Call<BasicInfoResponse>
 
     @POST("/api/wallet")
-    fun wallet(@Body body: BasicRequest): Call<WalletModel>
+    fun wallet(@Body body: BasicUserRequest): Call<WalletModel>
 
     @POST("/api/wallet")
     fun walletData(@Body body: BasicRequest): Call<WalletModelResponse>
@@ -207,17 +210,18 @@ interface ApiInterface {
     @POST("/api/leaderboard")
     fun getLeaderboard(@Body body: LeaderBoardRequest): Call<LeaderBoardResponse>
 
-
+    @POST("/api/challenge_leaderboard")
+    fun getTknLeaderboard(@Body body: LeaderBoardTknRequest): Call<LeaderBoardResponse>
 
     @POST("api/profile")
     fun getProfileData(
-        @Body body: BasicRequest
+        @Body body: BasicUserRequest
     ): Call<ProfileResponse>
 
 
     @POST("api/notification_setting")
     fun notificationSettings(
-        @Body body: BasicRequest
+        @Body body: BasicNotificationSettingsRequest
     ): Call<NotificationResponse>
 
     @POST("api/my_transactions")
@@ -240,12 +244,12 @@ interface ApiInterface {
 
     @POST("api/notifications")
     fun getNotificationList(
-        @Body body: BasicRequest
+        @Body body:com.sd.src.stepcounterapp.model.notification.BasicRequest
     ): Call<NotificationListResponse>
 
 
     @POST("api/categories")
-    fun getSelectedRewardsCategories( @Body body: BasicRequest): Call<SelectedRewardCategories>
+    fun getSelectedRewardsCategories( @Body body: BasicUserRequest): Call<SelectedRewardCategories>
 
     @POST("api/notification_read")
     fun readNotification(
@@ -256,5 +260,5 @@ interface ApiInterface {
     @POST("api/product_vendor")
     fun getVendorDetails(
         @Body body: VendorRequest
-    ): Call<PurchaseVendorResponse>
+    ): Call<VendorDetailResponse>
 }

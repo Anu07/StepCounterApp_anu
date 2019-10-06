@@ -122,7 +122,7 @@ public class ProgressBarCircularIndeterminate extends CustomView {
     
     private int dpToPx(int dp, Resources resources) {
         float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, resources.getDisplayMetrics());
-        return (int) Integer.parseInt(String.valueOf(px));
+        return (int) Integer.parseInt(String.valueOf(Math.round(px)));
     }
     
    

@@ -57,7 +57,7 @@ class ChangePasswordFragment : BaseFragment() {
         changePassword.setOnClickListener {
             if (old_password.text.toString().trim().isNotEmpty() && newPwdTxt.text.toString().trim().isNotEmpty() && conNewPwdText.text.toString().trim().length != 0) {
                 if (newPwdTxt.text.toString().trim() == conNewPwdText.text.toString().trim()) {
-
+                    showPopupProgressSpinner(true)
                     viewModel.changePassword(
                         SharedPreferencesManager.getUserId(HayaTechApplication.applicationContext()),
                         old_password.text.toString().trim(),
@@ -76,6 +76,7 @@ class ChangePasswordFragment : BaseFragment() {
         }
 
         viewModel.getChangePasswordResponse().observe(this, androidx.lifecycle.Observer { mData ->
+            showPopupProgressSpinner(false)
             if (mData.status == 200) {
                 Toast.makeText(activity, "Password has been changed successfully.", Toast.LENGTH_LONG).show()
                 fragmentManager!!.popBackStackImmediate()

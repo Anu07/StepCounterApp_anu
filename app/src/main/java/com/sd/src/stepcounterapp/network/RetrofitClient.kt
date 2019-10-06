@@ -14,14 +14,13 @@ import java.util.concurrent.TimeUnit
 object RetrofitClient {
 
     //http://54.71.18.74:4575/api/auth/login
-
+//    http://172.24.8.177:3000/api/dashboard
     val BASE_URL = "http://3.15.112.60:3000/"
-    //    val BASE_URL = "http://54.71.18.74:4575/"
+//        val BASE_URL = "http://54.71.18.74:4575/"
 //    val IMG_URL = "http://54.71.18.74:4575"
     val IMG_URL = "http://3.15.112.60:3000"
     private val CACHE_CONTROL = "Cache-Control"
     private var retrofit: Retrofit? = null
-    private var retrofitGoogle: Retrofit? = null
     private var retrofitEtaGoogle: Retrofit? = null
     private var apiInterface: ApiInterface? = null
 

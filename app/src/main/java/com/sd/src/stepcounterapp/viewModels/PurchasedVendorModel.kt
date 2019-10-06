@@ -6,49 +6,64 @@ import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.sd.src.stepcounterapp.HayaTechApplication
-import com.sd.src.stepcounterapp.model.generic.BasicRequest
-import com.sd.src.stepcounterapp.model.notification.NotificationResponse
-import com.sd.src.stepcounterapp.model.vendor.PurchaseVendorResponse
+import com.sd.src.stepcounterapp.model.vendor.VendorDetailResponse
 import com.sd.src.stepcounterapp.model.vendor.VendorRequest
 import com.sd.src.stepcounterapp.network.RetrofitClient
-import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
+import com.sd.src.stepcounterapp.utils.Utils
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class PurchasedVendorModel(application: Application) : AndroidViewModel(application){
-    private var mPurchaseVendorResponse: MutableLiveData<PurchaseVendorResponse>?= null
+class PurchasedVendorModel(application: Application) : AndroidViewModel(application) {
+    private var mPurchaseVendorResponse: MutableLiveData<VendorDetailResponse>? = null
     val call = RetrofitClient.instance
 
-    fun getVendorResponse(): MutableLiveData<PurchaseVendorResponse> {
+    fun getVendorResponse(): MutableLiveData<VendorDetailResponse> {
         if (mPurchaseVendorResponse == null) {
             mPurchaseVendorResponse = MutableLiveData()
         }
-        return mPurchaseVendorResponse as MutableLiveData<PurchaseVendorResponse>
+        return mPurchaseVendorResponse as MutableLiveData<VendorDetailResponse>
     }
 
-    fun getVendorDetails(request:VendorRequest) {
-        call!!.getVendorDetails(request).enqueue(object :
-            Callback<PurchaseVendorResponse> {
+    fun getVendorDetails(request: VendorRequest) {
+        if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
 
-            override fun onFailure(call: Call<PurchaseVendorResponse>?, t: Throwable?) {
-                Log.v("retrofit", "call failed")
-                Toast.makeText(HayaTechApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
-            }
+            call!!.getVendorDetails(request).enqueue(object :
+                Callback<VendorDetailResponse> {
 
-            override fun onResponse(call: Call<PurchaseVendorResponse>?, response: Response<PurchaseVendorResponse>?) {
-                when {
-                    response!!.body()!!.status == 200 -> mPurchaseVendorResponse!!.value = response!!.body()
-                    response!!.code() == 405 -> {
-                        Toast.makeText(HayaTechApplication.applicationContext(), "User doesn't exist", Toast.LENGTH_LONG)
-                            .show()
-                        HayaTechApplication.instance!!.logoutUser()
-                    }
-                    response!!.code() == 400 -> mPurchaseVendorResponse!!.value = PurchaseVendorResponse()
-                    else -> mPurchaseVendorResponse!!.value = PurchaseVendorResponse()
+                override fun onFailure(call: Call<VendorDetailResponse>?, t: Throwable?) {
+                    Log.v("retrofit", "call failed")
+                    Toast.makeText(
+                        HayaTechApplication.applicationContext(),
+                        "Server error",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
-            }
-        })
+
+                override fun onResponse(
+                    call: Call<VendorDetailResponse>?,
+                    response: Response<VendorDetailResponse>?
+                ) {
+                    when {
+                        response!!.body()!!.getmStatus() == 200 -> mPurchaseVendorResponse!!.value =
+                            response!!.body()
+                        response!!.code() == 405 -> {
+                            Toast.makeText(
+                                HayaTechApplication.applicationContext(),
+                                "User doesn't exist",
+                                Toast.LENGTH_LONG
+                            )
+                                .show()
+                            HayaTechApplication.instance!!.logoutUser()
+                        }
+                        response!!.code() == 400 -> mPurchaseVendorResponse!!.value =
+                            VendorDetailResponse()
+                        else -> mPurchaseVendorResponse!!.value = VendorDetailResponse()
+                    }
+                }
+
+            })
+        }
     }
 
 

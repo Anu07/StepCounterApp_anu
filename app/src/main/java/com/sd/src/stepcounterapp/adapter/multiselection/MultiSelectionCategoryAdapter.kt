@@ -58,8 +58,6 @@ class MultiSelectionCategoryAdapter(
     }
 
 
-
-
     @NonNull
     override fun onCreateViewHolder(@NonNull viewGroup: ViewGroup, i: Int): MultiViewHolder {
         val view = LayoutInflater.from(mContext).inflate(R.layout.recycler_view_item, viewGroup, false)
@@ -70,7 +68,7 @@ class MultiSelectionCategoryAdapter(
         return all!!.size
     }
 
-    inner class MultiViewHolder(@NonNull v: View ) : RecyclerView.ViewHolder(v) {
+    inner class MultiViewHolder(@NonNull v: View) : RecyclerView.ViewHolder(v) {
 
         var textView: TextView
         var imageView: ImageView
@@ -91,34 +89,39 @@ class MultiSelectionCategoryAdapter(
             textView.text = item.name.capitalize()
             Log.i("Photo url", "" + position)
             checkSelection(data)
-            Picasso.get().load(RetrofitClient.IMG_URL + "" + item.image).placeholder(R.drawable.placeholder).resize(200,200)
+            Picasso.get().load(RetrofitClient.IMG_URL + "" + item.image).placeholder(R.drawable.placeholder)
+                .resize(200, 200)
                 .into(imageView)
             itemView.setOnClickListener {
-                data.selectedItem=!data.selectedItem
+                data.selectedItem = !data.selectedItem
                 checkSelection(data)
-                mListener!!.onItemClick(item,position)
+                mListener!!.onItemClick(item, position)
             }
         }
 
         private fun checkSelection(
             dataItem: Data
         ) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (dataItem.selectedItem) {
+            if (dataItem.selectedItem) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     imageView.foreground = mContext.getDrawable(R.drawable.image_selected_overlay)
-                    imageView.setImageDrawable(mContext.getDrawable(R.drawable.image_selected_overlay))
                 } else {
-                    imageView.foreground = null
-                    Picasso.get().load(RetrofitClient.IMG_URL + "" + dataItem.image).placeholder(R.drawable.placeholder).resize(200,200)
-                        .into(imageView)
+                    frameLayout.foreground = mContext.getDrawable(R.drawable.image_selected_overlay)
+
                 }
-            }else{
-                if (dataItem.selectedItem) {
-                    imageView.setImageDrawable(mContext.getDrawable(R.drawable.image_selected_overlay))
+                Picasso.get().load(RetrofitClient.IMG_URL + "" + dataItem.image).placeholder(R.drawable.placeholder)
+                    .resize(200, 200)
+                    .into(imageView)
+            } else {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    imageView.foreground = mContext.getDrawable(R.drawable.image_black_overlay)
                 } else {
-                    Picasso.get().load(RetrofitClient.IMG_URL + "" +dataItem.image).placeholder(R.drawable.placeholder).resize(200,200)
-                        .into(imageView)
+                    frameLayout.foreground = mContext.getDrawable(R.drawable.image_black_overlay)
                 }
+                Picasso.get().load(RetrofitClient.IMG_URL + "" + dataItem.image).placeholder(R.drawable.placeholder)
+                    .resize(200, 200)
+                    .into(imageView)
+
             }
         }
     }

@@ -15,6 +15,7 @@ import com.sd.src.stepcounterapp.changeDateFormat
 import com.sd.src.stepcounterapp.getDaysDifference
 import com.sd.src.stepcounterapp.model.challenge.Data
 import com.sd.src.stepcounterapp.network.RetrofitClient
+import com.sd.src.stepcounterapp.utils.Utils.getCurrentDate
 import com.squareup.picasso.Picasso
 import java.text.SimpleDateFormat
 import java.util.*
@@ -31,17 +32,22 @@ class ChallengeAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         this.item = mValues[position]
         holder.textView.text = item.name.capitalize()
+        holder.textShort.visibility = View.GONE
         holder.textShort.text = item.shortDesc.capitalize()
-        var daysDuration:String? = getDaysDifference(getCurrentDate().toString(), changeDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", "dd/MM/yyyy", item.endDateTime)).toString()
-        if(daysDuration.equals("0")){
-            holder.txtDurDesc.text = "Duration: "+"Today"
-        }else{
-            holder.txtDurDesc.text = "Duration: $daysDuration"
+        var daysDuration: String? = getDaysDifference(
+            getCurrentDate().toString(),
+            changeDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", "dd/MM/yyyy", item.endDateTime)
+        ).toString()
+        if (daysDuration.equals("0")) {
+            holder.txtDurDesc.text = "Duration: " + "Today"
+        } else {
+            holder.txtDurDesc.text = "Duration: $daysDuration Days"
         }
         holder.imageView.setOnClickListener {
-            mListener!!.onItemClick(position,item)
+            mListener!!.onItemClick(position, item)
         }
-        Picasso.get().load(RetrofitClient.IMG_URL + "" + item.image).placeholder(R.drawable.placeholder)
+        Picasso.get().load(RetrofitClient.IMG_URL + "" + item.image)
+            .placeholder(R.drawable.placeholder)
             .into(holder.imageView)
 
     }
@@ -85,11 +91,15 @@ class ChallengeAdapter(
 
 
     interface ItemClickListener {
-        fun onItemClick(pos:Int, item: Data)
+        fun onItemClick(pos: Int, item: Data)
     }
-    fun getCurrentDate(): String? {
-        var formatter = SimpleDateFormat("dd/MM/yyyy")
-        var date = Date(System.currentTimeMillis())
-        return formatter.format(date)
+
+
+
+    fun swap(updatedList:ArrayList<Data>) {
+        if (mValues.isNotEmpty()) {
+            mValues.clear()
+        }
+        mValues = updatedList
     }
 }

@@ -10,27 +10,24 @@ public class BasicRequest {
 	@SerializedName("userId")
 	@Expose
 	private String userId;
-	
-	public BasicRequest(String userId, String page) {
+
+	public BasicRequest(String userId, int page) {
 		this.userId = userId;
 		this.page = page;
 	}
-	
-	public BasicRequest(String userId) {
-		this.userId = userId;
-	}
-	
-	public String getPage() {
+
+
+	public int getPage() {
 		return page;
 	}
-	
-	public void setPage(String page) {
+
+	public void setPage(int page) {
 		this.page = page;
 	}
-	
+
 	@SerializedName("page")
 	@Expose
-	private String page;
+	private int page;
 	
 	
 	public void setUserId(String userId) {

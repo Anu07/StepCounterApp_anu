@@ -47,6 +47,12 @@ class StopChallengeDialog(
         }else{
             txtChallengeStopDateDialog.text = "$daysDuration Days"
         }
+
+        if(mData.is_completed){
+            challengeMsgTxt.text = "Congratulations, your challenge has been completed."
+        }else{
+            challengeMsgTxt.text ="Do you want to stop the challenge? You will lose the progress."
+        }
         btnNo.setOnClickListener {
             dismiss()
         }

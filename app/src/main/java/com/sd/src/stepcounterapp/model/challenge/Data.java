@@ -71,13 +71,7 @@ public class Data {
     @Expose
     private String updatedAt;
 
-    public Boolean getCompleted() {
-        return isCompleted;
-    }
 
-    public void setCompleted(Boolean completed) {
-        isCompleted = completed;
-    }
 
     public String getChallengeType() {
         return challengeType;
@@ -87,7 +81,15 @@ public class Data {
         this.challengeType = challengeType;
     }
 
-    private Boolean isCompleted = false;
+    public Boolean getIs_completed() {
+        return is_completed;
+    }
+
+    public void setIs_completed(Boolean is_completed) {
+        this.is_completed = is_completed;
+    }
+
+    private Boolean is_completed = false;
 
 
     public String getEndDateTime() {

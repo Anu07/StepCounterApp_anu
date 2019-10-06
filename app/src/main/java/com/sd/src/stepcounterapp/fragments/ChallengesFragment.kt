@@ -16,25 +16,23 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
-import com.sd.src.stepcounterapp.R
+import com.sd.src.stepcounterapp.*
 import com.sd.src.stepcounterapp.activities.LandingActivity
 import com.sd.src.stepcounterapp.activities.LeaderboardActivity
 import com.sd.src.stepcounterapp.adapter.ChallengeAdapter
 import com.sd.src.stepcounterapp.adapter.ChallengeTrendingAdapter
 import com.sd.src.stepcounterapp.adapter.SlidingFeaturedChallengeImageAdapter
-import com.sd.src.stepcounterapp.changeDateFormat
-import com.sd.src.stepcounterapp.convertToLocal
 import com.sd.src.stepcounterapp.dialog.ChallengesDialog
 import com.sd.src.stepcounterapp.dialog.StopChallengeDialog
-import com.sd.src.stepcounterapp.getDaysDifference
 import com.sd.src.stepcounterapp.model.challenge.Challenge
 import com.sd.src.stepcounterapp.model.challenge.ChallengeResponse
 import com.sd.src.stepcounterapp.model.challenge.ChallengeTakenResponse.StartChallengeResponse
 import com.sd.src.stepcounterapp.model.challenge.Data
-import com.sd.src.stepcounterapp.model.challenge.Ongoing
 import com.sd.src.stepcounterapp.model.generic.BasicInfoResponse
 import com.sd.src.stepcounterapp.model.generic.BasicRequest
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
+import com.sd.src.stepcounterapp.utils.SpacesItemDecoration
+import com.sd.src.stepcounterapp.utils.Utils
 import com.sd.src.stepcounterapp.viewModels.ChallengeViewModel
 import kotlinx.android.synthetic.main.fragment_rewardschallenges.*
 import java.text.SimpleDateFormat
@@ -46,57 +44,94 @@ class ChallengesFragment : BaseFragment(), ChallengeAdapter.ItemClickListener,
     SlidingFeaturedChallengeImageAdapter.ItemSlideListener,
     ChallengeTrendingAdapter.ItemTrendClickListener {
     override fun onImageSlider(position: Int, img: Data) {
-        Challengedialog = ChallengesDialog(mContext, img, R.style.pullBottomfromTop, R.layout.dialog_challenges, false,
-            mActiveList.isNotEmpty(), object : ChallengesDialog.StartInterface {
+        Challengedialog = ChallengesDialog(mContext,
+            img,
+            R.style.pullBottomfromTop,
+            R.layout.dialog_challenges,
+            false,
+            mActiveList.isNotEmpty(),
+            object : ChallengesDialog.StartInterface {
                 override fun onStop(mData: Data) {
-                    mViewModel.stopchallenges(mData._id)
+                    if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
+
+                        mViewModel.stopchallenges(mData._id)
+                    }
                 }
 
                 override fun onStart(img: Data) {
-                    showPopupProgressSpinner(true)
-                    mViewModel.startChallenge(img)
+                    if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
+
+                        showPopupProgressSpinner(true)
+                        mViewModel.startChallenge(img)
+                    }
                 }
             })
-        Challengedialog!!.show()
+        Challengedialog.show()
     }
 
     override fun onTrendItemClick(pos: Int, item: Data) {
         Challengedialog =
-            ChallengesDialog(mContext, mChallengeCategory[pos], R.style.pullBottomfromTop, R.layout.dialog_challenges,
-                false, mActiveList.isNotEmpty(), object : ChallengesDialog.StartInterface {
+            ChallengesDialog(mContext,
+                mChallengeCategory[pos],
+                R.style.pullBottomfromTop,
+                R.layout.dialog_challenges,
+                false,
+                mActiveList.isNotEmpty(),
+                object : ChallengesDialog.StartInterface {
                     override fun onStop(mData: Data) {
-                        mViewModel.stopchallenges(mData._id)
+                        if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
+
+                            mViewModel.stopchallenges(mData._id)
+                        }
                     }
 
                     override fun onStart(data: Data) {
-                        showPopupProgressSpinner(true)
-                        mViewModel.startChallenge(data)
+                        if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
+
+                            showPopupProgressSpinner(true)
+                            mViewModel.startChallenge(data)
+                        }
                     }
                 })
-        Challengedialog!!.show()
+        Challengedialog.show()
 
     }
 
     override fun onItemClick(pos: Int, item: Data) {
 
         Challengedialog =
-            ChallengesDialog(mContext, mChallengeCategory[pos], R.style.pullBottomfromTop, R.layout.dialog_challenges,
-                false, mActiveList.isNotEmpty(), object : ChallengesDialog.StartInterface {
+            ChallengesDialog(mContext,
+                mChallengeCategory[pos],
+                R.style.pullBottomfromTop,
+                R.layout.dialog_challenges,
+                false,
+                mActiveList.isNotEmpty(),
+                object : ChallengesDialog.StartInterface {
                     override fun onStop(mData: Data) {
-                        mViewModel.stopchallenges(mData._id)
+                        if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
+
+                            mViewModel.stopchallenges(mData._id)
+                        }
                     }
 
                     override fun onStart(data: Data) {
                         if (checkChallengeValidity(data.startDateTime) >= 0) {
-                            showPopupProgressSpinner(true)
-                            mViewModel.startChallenge(data)
-                        }else{
-                            Toast.makeText(mContext, "This challenge has not started yet.", Toast.LENGTH_LONG).show()
+                            if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
+
+                                showPopupProgressSpinner(true)
+                                mViewModel.startChallenge(data)
+                            }
+                        } else {
+                            Toast.makeText(
+                                mContext,
+                                "This challenge has not started yet.",
+                                Toast.LENGTH_LONG
+                            ).show()
                         }
 
                     }
                 })
-        Challengedialog!!.show()
+        Challengedialog.show()
     }
 
     private fun checkChallengeValidity(startDate: String): Int {
@@ -104,14 +139,14 @@ class ChallengesFragment : BaseFragment(), ChallengeAdapter.ItemClickListener,
         var startDateformatted = changeDateFormat(
             "yyyy-MM-dd'T'HH:mm:ss.SSS",
             "yyyy-MM-dd", startDate
-        )+" "+convertToLocal(startDate)
+        ) + " " + convertToLocal(startDate)
         Log.i("Date", "formatted$startDateformatted")
         var format = SimpleDateFormat("yyyy-MM-dd hh:mm a")
         return format.format(getCurrentDate()).compareTo(startDateformatted)
     }
 
-     fun getCurrentDate(): Date {
-         return Date(System.currentTimeMillis())
+    fun getCurrentDate(): Date {
+        return Date(System.currentTimeMillis())
     }
 
     private fun sendRequestObject(data: Data): Challenge {
@@ -140,8 +175,8 @@ class ChallengesFragment : BaseFragment(), ChallengeAdapter.ItemClickListener,
     private var mFeaturedChallengeCategory: MutableList<Data> = mutableListOf()
     private var mTrendChallengeCategory: MutableList<Data> = mutableListOf()
     var mActiveList: MutableList<Data> = mutableListOf()
-    private lateinit var mTrendingChallengesAdapter: ChallengeTrendingAdapter
-    private lateinit var mChallengesAdapter: ChallengeAdapter
+    private var mTrendingChallengesAdapter: ChallengeTrendingAdapter? = null
+    private var mChallengesAdapter: ChallengeAdapter? = null
     private var mChallengeCategory: MutableList<Data> = mutableListOf()
     private var currentPage: Int = -1
     private var NUM_PAGES: Int = 0
@@ -159,7 +194,8 @@ class ChallengesFragment : BaseFragment(), ChallengeAdapter.ItemClickListener,
         @SuppressLint("StaticFieldLeak")
         lateinit var mContext: Context
         val INTENT_PARAM = "Challenge"
-        private val IMAGES = arrayOf(R.drawable.slider_img, R.drawable.slider_img, R.drawable.slider_img)
+        private val IMAGES =
+            arrayOf(R.drawable.slider_img, R.drawable.slider_img, R.drawable.slider_img)
 
         fun newInstance(context: Context): ChallengesFragment {
             instance = ChallengesFragment()
@@ -169,107 +205,10 @@ class ChallengesFragment : BaseFragment(), ChallengeAdapter.ItemClickListener,
     }
 
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        mViewModel = ViewModelProviders.of(activity!!).get(ChallengeViewModel::class.java)
-
-
-        showPopupProgressSpinner(true)
-        mViewModel.getchallenges(BasicRequest(SharedPreferencesManager.getUserId(mContext), ""))
-
-        mViewModel.getChallengeObject().observe(this,
-            Observer<ChallengeResponse> { mChallenge ->
-                if (mChallenge != null) {
-                    showPopupProgressSpinner(false)
-                    if (mChallenge.data != null) {
-                        mChallengeCategory = mChallenge.data
-                        setChallengeAdapter()
-                        mActiveList = mChallenge.ongoing
-                        if (mActiveList.isNotEmpty()) {
-                            showOngoingChallenge(mActiveList)
-                        } else {
-                            llStartChallenges.visibility = View.GONE
-                        }
-                    } else {
-                        setChallengesView()
-                    }
-
-                    if (mChallenge.featured != null && mChallenge.featured.size > 0) {
-                        mFeaturedChallengeCategory = mChallenge.featured
-                        setFeaturedChallengeSliderAdapter(mFeaturedChallengeCategory)
-                    }
-
-                    if (mChallenge.trending != null && mChallenge.trending.size > 0) {
-                        mTrendChallengeCategory = mChallenge.trending
-                        setTrendingChallengeAdapter()
-                    } else {
-                        setTrendingView()
-                    }
-                } else {
-                    txtNoChallenges.visibility = View.VISIBLE
-                    challengesList.visibility = View.GONE
-
-                    trendchallengesList.visibility = View.GONE
-                    txtNoTrending.visibility = View.VISIBLE
-                }
-            })
-
-        mViewModel.getStartChallengeObject().observe(this, Observer<StartChallengeResponse> { mData ->
-            try {
-                if (Challengedialog != null && Challengedialog!!.isShowing) {
-                    Challengedialog!!.dismiss()
-                }
-            } catch (e: Exception) {
-                Log.e("trace", e.message)
-            }
-            showPopupProgressSpinner(false)
-            if (mData != null && mData.status == 200) {
-                mViewModel.getchallenges(BasicRequest(SharedPreferencesManager.getUserId(mContext), ""))
-            } else if (mData.status == 400) {
-                Toast.makeText(mContext, "There is another challenge already started.", Toast.LENGTH_LONG).show()
-            }
-        })
-
-        mViewModel.getStopChallengeObject().observe(this, Observer<BasicInfoResponse> { mData ->
-            try {
-                if (stopChallengedialog != null && stopChallengedialog!!.isShowing) {
-                    stopChallengedialog!!.dismiss()
-                }
-            } catch (e: Exception) {
-                Log.e("trace", e.message)
-            }
-            try {
-                if (Challengedialog != null && Challengedialog!!.isShowing) {
-                    Challengedialog!!.dismiss()
-                }
-            } catch (e: Exception) {
-                Log.e("trace", e.message)
-            }
-
-
-            if (mData != null && mData.status == 200) {
-                Toast.makeText(mContext, "This challenge has been stopped.", Toast.LENGTH_LONG).show()
-                mViewModel.getchallenges(BasicRequest(SharedPreferencesManager.getUserId(mContext), ""))
-            }
-        })
-        stopchallengeBttn.setOnClickListener {
-            stopChallengedialog = StopChallengeDialog(mContext,
-                R.style.pullBottomfromTop,
-                R.layout.dialog_stop_challenges,
-                mActiveList[0],
-                object : StopChallengeDialog.StopInterface {
-                    override fun onStop(data: Data) {
-                        mViewModel.stopchallenges(mActiveList[0]._id)
-                    }
-                })
-            stopChallengedialog.show()
-        }
-
-        leaderboardView.setOnClickListener {
-            startActivity(Intent(mContext, LeaderboardActivity::class.java).putExtra(INTENT_PARAM, 1))
-        }
-
-        (mContext as LandingActivity).disableSwipe(true)
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        (mContext as LandingActivity).showDisconnection(false)
+        (mContext as LandingActivity).disableSwipe(false)
     }
 
     private fun showOngoingChallenge(mActiveList: MutableList<Data>) {
@@ -281,14 +220,21 @@ class ChallengesFragment : BaseFragment(), ChallengeAdapter.ItemClickListener,
             "dd MMM, yyyy",
             mActiveList[0].endDateTime
         ) + " | " + convertToLocal(mActiveList[0].endDateTime)
-        daysLeft.text = """${getDaysDifference(
-            SimpleDateFormat("dd/MM/yyyy").format(getCurrentDate()), changeDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", "dd/MM/yyyy", mActiveList[0].endDateTime)
-        )} days"""
 
-        if(mActiveList[0].completed){
+        var days = "${getDaysDifference(
+            SimpleDateFormat("dd/MM/yyyy").format(getCurrentDate()),
+            changeDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", "dd/MM/yyyy", mActiveList[0].endDateTime)
+        )}"
+        if (days == "0") {
+            daysLeft.text = "Today"
+        } else {
+            daysLeft.text = "$days Days"
+        }
+
+        if (mActiveList[0].is_completed) {
             progressTxt.text = "Completed"
-        }else{
-            progressTxt.text = "In Progress"
+        } else {
+            progressTxt.text = "In Progress: "
         }
 
         /* stopchallengeBttn.setOnClickListener {
@@ -299,13 +245,19 @@ class ChallengesFragment : BaseFragment(), ChallengeAdapter.ItemClickListener,
     private fun setFeaturedChallengeSliderAdapter(mFeaturedNewChallengeCategory: MutableList<Data>) {
 
         Log.i("new ", "list" + mFeaturedNewChallengeCategory.size)
-        rewardsViewPager.adapter = SlidingFeaturedChallengeImageAdapter(mContext, mFeaturedNewChallengeCategory, this)
+        rewardsViewPager.adapter =
+            SlidingFeaturedChallengeImageAdapter(mContext, mFeaturedNewChallengeCategory, this)
 
     }
 
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         (mContext as LandingActivity).disableSwipe(true)
+        mViewModel = ViewModelProviders.of(activity!!).get(ChallengeViewModel::class.java)
         return inflater.inflate(R.layout.fragment_rewardschallenges, container, false)
     }
 
@@ -313,9 +265,41 @@ class ChallengesFragment : BaseFragment(), ChallengeAdapter.ItemClickListener,
         super.onViewCreated(view, savedInstanceState)
         rewardsViewPager = view.findViewById(R.id.rewardsViewPager)
         leaderBttn.setOnClickListener {
-            startActivity(Intent(mContext, LeaderboardActivity::class.java).putExtra(INTENT_PARAM, 1))
+            startActivity(
+                Intent(mContext, LeaderboardActivity::class.java).putExtra(
+                    INTENT_PARAM,
+                    1
+                )
+            )
         }
-        ongoingchallengeName.setOnTouchListener { view, motionEvent ->
+
+        stopchallengeBttn.setOnClickListener {
+            stopChallengedialog = StopChallengeDialog(mContext,
+                R.style.pullBottomfromTop,
+                R.layout.dialog_stop_challenges,
+                mActiveList[0],
+                object : StopChallengeDialog.StopInterface {
+                    override fun onStop(data: Data) {
+                        if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
+
+                            mViewModel.stopchallenges(mActiveList[0]._id)
+                        }
+                    }
+                })
+            stopChallengedialog.show()
+        }
+
+        leaderboardView.setOnClickListener {
+            startActivity(
+                Intent(mContext, LeaderboardActivity::class.java).putExtra(
+                    INTENT_PARAM,
+                    1
+                )
+            )
+        }
+
+
+        ongoingchallengeName.setOnTouchListener { _, motionEvent ->
             if (motionEvent.action == MotionEvent.ACTION_DOWN) {
 //                if(motionEvent.x >= (ongoingchallengeName.right - ongoingchallengeName.compoundDrawables[2].bounds.width())) {
                 Challengedialog = ChallengesDialog(mContext,
@@ -325,7 +309,10 @@ class ChallengesFragment : BaseFragment(), ChallengeAdapter.ItemClickListener,
                     true,
                     false, object : ChallengesDialog.StartInterface {
                         override fun onStop(mData: Data) {
-                            mViewModel.stopchallenges(mData._id)
+                            if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
+
+                                mViewModel.stopchallenges(mData._id)
+                            }
                         }
 
                         override fun onStart(img: Data) {
@@ -340,21 +327,156 @@ class ChallengesFragment : BaseFragment(), ChallengeAdapter.ItemClickListener,
 
         }
         init()
+        viewModelSetUp()
+
 //        (mContext as LandingActivity).showDisconnection(false)
+    }
+
+    private fun viewModelSetUp() {
+
+
+        if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
+            showPopupProgressSpinner(true)
+            mViewModel.getchallenges(BasicRequest(SharedPreferencesManager.getUserId(mContext), 0))
+        }
+        (mContext as LandingActivity).disableSwipe(true)
+
+        mViewModel.getChallengeObject().observe(this,
+            Observer<ChallengeResponse> { mChallenge ->
+                if (mChallenge != null) {
+                    showPopupProgressSpinner(false)
+                    if (mChallenge.data != null) {
+                        mChallengeCategory = mChallenge.data
+//                        setChallengeAdapter()
+                        if (mChallengesAdapter != null) {
+                            setChallengeAdapter()
+                        } else {
+                            mChallengesAdapter!!.swap(mChallengeCategory as ArrayList<Data>)
+                        }
+                        mActiveList = mChallenge.ongoing
+                        if (mActiveList.isNotEmpty()) {
+                            showOngoingChallenge(mActiveList)
+                        } else {
+                            llStartChallenges.visibility = View.GONE
+                        }
+                    } else {
+                        setChallengesView()
+                    }
+
+                    if (mChallenge.featured != null && mChallenge.featured.size > 0) {
+                        pagerParent.visibility = View.VISIBLE
+                        mFeaturedChallengeCategory = mChallenge.featured
+                        setFeaturedChallengeSliderAdapter(mFeaturedChallengeCategory)
+                    } else {
+                        pagerParent.visibility = View.GONE
+                    }
+
+                    if (mChallenge.trending != null && mChallenge.trending.size > 0) {
+                        mTrendChallengeCategory = mChallenge.trending
+//                        setTrendingChallengeAdapter()
+                        if (mTrendingChallengesAdapter != null) {
+                            setTrendingChallengeAdapter()
+                        } else {
+                            mTrendingChallengesAdapter!!.swap(mChallengeCategory as ArrayList<Data>)
+                            NUM_PAGES = mChallengeCategory.size
+                        }
+                    } else {
+                        setTrendingView()
+                    }
+                } else {
+                    txtNoChallenges.visibility = View.VISIBLE
+                    challengesList.visibility = View.GONE
+
+                    trendchallengesList.visibility = View.GONE
+                    txtNoTrending.visibility = View.VISIBLE
+                }
+            })
+
+        mViewModel.getStartChallengeObject()
+            .observe(this, Observer<StartChallengeResponse> { mData ->
+                try {
+                    if (Challengedialog.isShowing) {
+                        Challengedialog.dismiss()
+                    }
+                } catch (e: Exception) {
+                    Log.e("trace", e.message)
+                }
+
+                showPopupProgressSpinner(false)
+                if (mData != null && mData.status == 200) {
+                    if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
+
+                        mViewModel.getchallenges(
+                            BasicRequest(
+                                SharedPreferencesManager.getUserId(
+                                    mContext
+                                ), 0
+                            )
+                        )
+                    }
+                } else if (mData.status == 400) {
+                    Toast.makeText(
+                        mContext,
+                        "There is another challenge already started.",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            })
+
+        mViewModel.getStopChallengeObject().observe(this, Observer<BasicInfoResponse> { mData ->
+            try {
+                if (stopChallengedialog.isShowing) {
+                    stopChallengedialog.dismiss()
+                }
+            } catch (e: Exception) {
+                Log.e("trace", e.message)
+            }
+            try {
+                if (Challengedialog.isShowing) {
+                    Challengedialog.dismiss()
+                }
+            } catch (e: Exception) {
+                Log.e("trace", e.message)
+            }
+
+
+            if (mData != null && mData.status == 200) {
+                Toast.makeText(mContext, "This challenge has been stopped.", Toast.LENGTH_LONG)
+                    .show()
+                if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
+
+                    mViewModel.getchallenges(
+                        BasicRequest(
+                            SharedPreferencesManager.getUserId(mContext),
+                            0
+                        )
+                    )
+                }
+            }
+        })
+
+
     }
 
 
     private fun init() {
+        setChallengeAdapter()
+        setTrendingChallengeAdapter()
         spring_dots_indicator.setViewPager(rewardsViewPager)
 
         for (i in 0 until IMAGES.size)
             ImagesArray!!.add(IMAGES[i])
 
-        rewardsViewPager.adapter = SlidingFeaturedChallengeImageAdapter(mContext, mFeaturedChallengeCategory, this)
+        rewardsViewPager.adapter =
+            SlidingFeaturedChallengeImageAdapter(mContext, mFeaturedChallengeCategory, this)
 
 
         NUM_PAGES = IMAGES.size
 
+    }
+
+
+    private fun autoStartViewPager() {
         // Auto start of viewpager
         val handler = Handler()
         val Update = Runnable {
@@ -393,7 +515,10 @@ class ChallengesFragment : BaseFragment(), ChallengeAdapter.ItemClickListener,
     private fun setTrendingChallengeAdapter() {
         var gridLayoutManager = GridLayoutManager(mContext, 2, RecyclerView.VERTICAL, false)
         trendchallengesList.layoutManager = gridLayoutManager
-        mTrendingChallengesAdapter = ChallengeTrendingAdapter(mContext, mTrendChallengeCategory, this)
+        mTrendingChallengesAdapter =
+            ChallengeTrendingAdapter(mContext, mTrendChallengeCategory, this)
+//        var spacingInPixels = resources.getDimensionPixelSize(R.dimen._10sdp)
+//        trendchallengesList.addItemDecoration(SpacesItemDecoration(spacingInPixels))
         trendchallengesList.adapter = mTrendingChallengesAdapter
         setTrendingView()
     }
@@ -407,5 +532,16 @@ class ChallengesFragment : BaseFragment(), ChallengeAdapter.ItemClickListener,
             txtNoTrending.visibility = View.VISIBLE
         }
     }
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        if (isVisibleToUser) {
+            autoStartViewPager()
+            (mContext as LandingActivity).showDisconnection(false)
+            (mContext as LandingActivity).disableSwipe(false)
+
+        }
+    }
+
 
 }

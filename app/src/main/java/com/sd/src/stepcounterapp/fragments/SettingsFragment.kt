@@ -15,7 +15,9 @@ import com.sd.src.stepcounterapp.HayaTechApplication
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.activities.LandingActivity
 import com.sd.src.stepcounterapp.activities.SyncDeviceActivity
+import com.sd.src.stepcounterapp.changeDateFormat
 import com.sd.src.stepcounterapp.dialog.NotificationDialog
+import com.sd.src.stepcounterapp.model.notification.BasicNotificationSettingsRequest
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager.GA_NOTIFY
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager.NC_NOTIFY
@@ -45,17 +47,26 @@ class SettingsFragment : BaseFragment() {
     }
 
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         var view = inflater.inflate(R.layout.fragment_settings, container, false)
-        mViewModel = ViewModelProviders.of(activity!!).get(SettingsViewModel::class.java)
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        tv_sync_date_time.text = "Last sync: " + SharedPreferencesManager.getString(HayaTechApplication.applicationContext(), SYNCDATE)!!.split("T")[0]
+        mViewModel = ViewModelProviders.of(activity!!).get(SettingsViewModel::class.java)
+
         btnChangeTracker.setOnClickListener {
-            startActivity(Intent(mContext, SyncDeviceActivity::class.java).putExtra("disconnect", true))
+            startActivity(
+                Intent(mContext, SyncDeviceActivity::class.java).putExtra(
+                    "disconnect",
+                    true
+                )
+            )
         }
         ll_change_password.setOnClickListener {
             (mContext as LandingActivity).onFragment(6)
@@ -71,21 +82,36 @@ class SettingsFragment : BaseFragment() {
             (mContext as LandingActivity).onFragment(11)
 
         }
+        tv_sync_date_time.text = "Last sync: " + changeDateFormat(
+            "yyyy-MM-dd'T'HH:mm:ss.SSS",
+            "dd MMM, yyyy",
+            SharedPreferencesManager.getString(HayaTechApplication.applicationContext(), SYNCDATE)
+        )!!.split("T")[0]
 
         mViewModel.getSettingsResponse().observe(this, Observer { mData ->
             try {
                 notificationDialog.dismiss()
             } catch (e: Exception) {
-                Log.e("error","popup")
+                Log.e("error", "popup")
             }
-            if(mData.status == 200){
-                     SharedPreferencesManager.setBoolean(mContext,mData.data.goalAchivedNotification,GA_NOTIFY)
-                    SharedPreferencesManager.setBoolean(mContext, mData.data.newSurveyNotification,NSA_NOTIFY)
-                    SharedPreferencesManager.setBoolean(mContext, mData.data.newChallengeNotification,
-                        NC_NOTIFY)
-                Toast.makeText(mContext,"Settings updated successfully", Toast.LENGTH_LONG).show()
-            }else{
-                Toast.makeText(mContext,"Some error occurred", Toast.LENGTH_LONG).show()
+            if (mData.status == 200) {
+                SharedPreferencesManager.setBoolean(
+                    mContext,
+                    mData.data.goalAchivedNotification,
+                    GA_NOTIFY
+                )
+                SharedPreferencesManager.setBoolean(
+                    mContext,
+                    mData.data.newSurveyNotification,
+                    NSA_NOTIFY
+                )
+                SharedPreferencesManager.setBoolean(
+                    mContext, mData.data.newChallengeNotification,
+                    NC_NOTIFY
+                )
+                Toast.makeText(mContext, "Settings updated successfully", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(mContext, "Some error occurred", Toast.LENGTH_LONG).show()
             }
         })
 
@@ -95,8 +121,10 @@ class SettingsFragment : BaseFragment() {
             notificationDialog = NotificationDialog(
                 mContext, R.style.pullBottomfromTop,
                 object : NotificationDialog.NotificationInterface {
-                    override fun onUpdateSettings(queryCat: String) {
-                        mViewModel.updateSettings()
+                    override fun onUpdateSettings(goal: Boolean,challenge:Boolean,survey:Boolean) {
+                        mViewModel.updateSettings(BasicNotificationSettingsRequest(SharedPreferencesManager.getUserId(
+                            HayaTechApplication.applicationContext()
+                        ),goal,challenge,survey))
                     }
 
                 })

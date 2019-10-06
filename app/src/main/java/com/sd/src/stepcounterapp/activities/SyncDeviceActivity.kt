@@ -104,7 +104,7 @@ class SyncDeviceActivity : BaseActivity<BaseViewModel>(),
         unlink.setOnClickListener {
 
             if(!MokoSupport.getInstance().isConnDevice(this@SyncDeviceActivity,SharedPreferencesManager.getString(this@SyncDeviceActivity,WEARABLEID))){
-                Log.e("disconnect","success")
+                Log.e("disconnect","already")
 //                Toast.makeText(this@SyncDeviceActivity, "Device disconnected successfully", Toast.LENGTH_LONG).show()
             }else{
                 if(MokoSupport.getInstance().isConnDevice(this@SyncDeviceActivity,deviceSynced)){

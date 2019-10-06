@@ -12,10 +12,14 @@ import androidx.annotation.RequiresApi
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.sd.src.stepcounterapp.R
+import com.sd.src.stepcounterapp.changeDateFormat
+import com.sd.src.stepcounterapp.getDaysDifference
 import com.sd.src.stepcounterapp.model.challenge.Data
 import com.sd.src.stepcounterapp.model.challenge.Trending
 import com.sd.src.stepcounterapp.network.RetrofitClient
+import com.sd.src.stepcounterapp.utils.Utils.getCurrentDate
 import com.squareup.picasso.Picasso
+import java.util.ArrayList
 
 
 class ChallengeTrendingAdapter(
@@ -30,6 +34,15 @@ class ChallengeTrendingAdapter(
         this.item = mValues[position]
         holder.textView.text = item.name.capitalize()
         holder.textShort.text = Html.fromHtml(item.description.capitalize())
+        var daysDuration: String? = getDaysDifference(
+            getCurrentDate().toString(),
+            changeDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", "dd/MM/yyyy", item.endDateTime)
+        ).toString()
+        if (daysDuration.equals("0")) {
+            holder.txtDuration.text = "Duration: " + "Today"
+        } else {
+            holder.txtDuration.text = "Duration: $daysDuration Days"
+        }
         Picasso.get().load(RetrofitClient.IMG_URL + "" + item.image).placeholder(R.drawable.placeholder)
             .into(holder.imageView)
         holder.imageView.setOnClickListener {
@@ -46,10 +59,12 @@ class ChallengeTrendingAdapter(
         var textShort: TextView
         var imageView: ImageView
         var cdMain: CardView
+        var txtDuration:TextView
 
         internal lateinit var item: Trending
 
         init {
+            txtDuration = v.findViewById<View>(R.id.txtDuration) as TextView
             textView = v.findViewById<View>(R.id.txtChallengeName) as TextView
             textShort = v.findViewById<View>(R.id.txtShortDesc) as TextView
             imageView = v.findViewById<View>(R.id.imgChallenge) as ImageView
@@ -70,7 +85,12 @@ class ChallengeTrendingAdapter(
 
         return mValues.size
     }
-
+    fun swap(updatedList: ArrayList<Data>) {
+        if (mValues.isNotEmpty()) {
+            mValues.clear()
+        }
+        mValues = updatedList
+    }
 
     interface ItemTrendClickListener {
         fun onTrendItemClick(pos:Int, item: Data)

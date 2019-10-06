@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
@@ -15,7 +16,7 @@ import com.sd.src.stepcounterapp.model.challenge.MyChallengeResponse
 import com.sd.src.stepcounterapp.network.RetrofitClient
 import com.squareup.picasso.Picasso
 
-class MyChallengeAdapter(mContext: Context?, mData: MyChallengeResponse) :
+class MyChallengeAdapter(mContext: Context?, mData: MyChallengeResponse, var listener: myChallengeItemClickListener) :
     RecyclerView.Adapter<MyChallengeAdapter.ViewHolder>() {
 
     var mContext: Context?
@@ -29,16 +30,17 @@ class MyChallengeAdapter(mContext: Context?, mData: MyChallengeResponse) :
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-       holder.textView.text = mData.data[position].challenge.name
-       holder.textShort.text = mData.data[position].challenge.shortDesc
-       /* holder.imageView.setOnClickListener {
-            mListener!!.onItemClick(position, item)
-        }*/
-        Picasso.get().load(RetrofitClient.IMG_URL + "" +  mData.data.get(position).challenge.image)
+        holder.textView.text = mData.data[position].challenge.name
+        holder.textShort.text = mData.data[position].challenge.shortDesc
+        /* holder.imageView.setOnClickListener {
+             mListener!!.onItemClick(position, item)
+         }*/
+        Picasso.get().load(RetrofitClient.IMG_URL + "" + mData.data.get(position).challenge.image)
             .into(holder.imageView)
-
+        holder.parentView.setOnClickListener {
+            listener.onItemClick(position)
+        }
     }
-
 
 
     inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
@@ -46,10 +48,11 @@ class MyChallengeAdapter(mContext: Context?, mData: MyChallengeResponse) :
         var textView: TextView
         var textShort: TextView
         var imageView: ImageView
-
+        var parentView: LinearLayout
         internal lateinit var item: Data
 
         init {
+            parentView = v.findViewById<View>(R.id.parentChallengeLayout) as LinearLayout
             textView = v.findViewById<View>(R.id.titleTxt) as TextView
             textShort = v.findViewById<View>(R.id.subtitleTxt) as TextView
             imageView = v.findViewById<View>(R.id.img_challenge) as ImageView
@@ -71,7 +74,7 @@ class MyChallengeAdapter(mContext: Context?, mData: MyChallengeResponse) :
     }
 
 
-   /* interface ItemClickListener {
-        fun onItemClick(pos: Int, item: Data)
-    }*/
+    interface myChallengeItemClickListener {
+        fun onItemClick(pos: Int)
+    }
 }

@@ -8,6 +8,8 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.sd.src.stepcounterapp.AppConstants
+import com.sd.src.stepcounterapp.AppConstants.INTENT_CHALLENGETKN
 import com.sd.src.stepcounterapp.HayaTechApplication
 import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.adapter.LeaderboardAdapter
@@ -15,6 +17,7 @@ import com.sd.src.stepcounterapp.fragments.ChallengesFragment.Companion.INTENT_P
 import com.sd.src.stepcounterapp.fragments.SurveysFragment
 import com.sd.src.stepcounterapp.model.leaderboard.Data
 import com.sd.src.stepcounterapp.model.leaderboard.LeaderBoardRequest
+import com.sd.src.stepcounterapp.model.leaderboard.LeaderBoardTknRequest
 import com.sd.src.stepcounterapp.network.RetrofitClient
 import com.sd.src.stepcounterapp.utils.ItemClickGlobalListner
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
@@ -66,6 +69,7 @@ class LeaderboardActivity : BaseActivity<LeaderboardViewModel>(), ItemClickGloba
         adapter = ArrayAdapter(this, R.layout.spinner_item, addEntriesToDropDown())
         leaderselection.adapter = adapter
         if (intent.hasExtra(INTENT_PARAM)) {
+            leaderFrame.visibility = View.VISIBLE
             ag_steps_msg.visibility = View.GONE
             leaderselection.setSelection(1)
             showPopupProgressSpinner(true)
@@ -75,7 +79,18 @@ class LeaderboardActivity : BaseActivity<LeaderboardViewModel>(), ItemClickGloba
                     SharedPreferencesManager.getUserId(HayaTechApplication.applicationContext())
                 )
             )
-        } else {
+        }else if(intent.hasExtra(INTENT_CHALLENGETKN)) {
+            leaderFrame.visibility = View.GONE
+            ag_steps_msg.visibility = View.GONE
+            leaderselection.setSelection(1)
+            showPopupProgressSpinner(true)
+            mViewModel!!.getLeaderboard(
+                LeaderBoardTknRequest(
+                    SharedPreferencesManager.getUserId(HayaTechApplication.applicationContext()),intent.getStringExtra(INTENT_CHALLENGETKN))
+            )
+        }
+        else {
+            leaderFrame.visibility = View.VISIBLE
             ag_steps_msg.visibility = View.VISIBLE
             leaderselection.setSelection(0)
             showPopupProgressSpinner(true)
@@ -90,28 +105,29 @@ class LeaderboardActivity : BaseActivity<LeaderboardViewModel>(), ItemClickGloba
         mViewModel!!.getLeaderboardResponse().observe(this, Observer { mData ->
             showPopupProgressSpinner(false)
             if (mData != null) {
-                if(leaderselection.selectedItemPosition == 1){
+                if (leaderselection.selectedItemPosition == 1) {
                     ag_steps_msg.visibility = View.GONE
-                }else{
+                } else {
                     ag_steps_msg.visibility = View.VISIBLE
                 }
                 if (mData.data != null && mData.data[0].name != null) {
-                    if(mData.data.size>3){
+                    if (mData.data.size > 3) {
                         rvleaderboard.visibility = View.VISIBLE
-                    }else{
+                    } else {
                         rvleaderboard.visibility = View.INVISIBLE
                     }
                     mainList = mData.data as ArrayList<Data>?
                     firstLayout.visibility = View.VISIBLE
-                    Picasso.get().load(RetrofitClient.IMG_URL + mData.data[0].image).error(R.drawable.nouser).placeholder(R.drawable.nouser)
+                    Picasso.get().load(RetrofitClient.IMG_URL + mData.data[0].image).error(R.drawable.nouser)
+                        .placeholder(R.drawable.nouser)
                         .into(firstImg)
                     firstName.text = mData.data[0].name
-                    firstSteps.text = mData.data[0].steps.toString()+" Steps"
+                    firstSteps.text = mData.data[0].steps.toString() + " Steps"
                     if (mData.data.size >= 2) {
                         if (mData.data.size >= 3) {
                             ThirdPosition.visibility = View.VISIBLE
                             thirdName.text = mData.data[2].name
-                            thirdSteps.text = mData.data[2].steps.toString()+" Steps"
+                            thirdSteps.text = mData.data[2].steps.toString() + " Steps"
                         } else {
                             ThirdPosition.visibility = View.VISIBLE
                             thirdName.text = "NA"
@@ -121,19 +137,19 @@ class LeaderboardActivity : BaseActivity<LeaderboardViewModel>(), ItemClickGloba
 
                         secondPosition.visibility = View.VISIBLE
                         secName.text = mData.data[1].name
-                        secSteps.text = mData.data[1].steps.toString()+" Steps"
+                        secSteps.text = mData.data[1].steps.toString() + " Steps"
                     }
 
                     if (mainList!!.size > 2) {
-                        if(mainList!!.size>4){
+                        if (mainList!!.size > 4) {
                             mChallengeDataList = ArrayList(mainList?.subList(3, mainList!!.size))
-                        }else if(mainList!!.size>3){
+                        } else if (mainList!!.size > 3) {
                             mChallengeDataList.add(mainList!![3])
                         }
                         mLeaderAdapter.swap(mChallengeDataList)
                     }
 
-                    if(mainList!!.size ==1){
+                    if (mainList!!.size == 1) {
                         secondPosition.visibility = View.VISIBLE
                         secName.text = "NA"
                         secSteps.text = "0 steps"
@@ -143,11 +159,12 @@ class LeaderboardActivity : BaseActivity<LeaderboardViewModel>(), ItemClickGloba
                     }
 
                 } else {
-                    Toast.makeText(this@LeaderboardActivity, "You have not taken any challenge.", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@LeaderboardActivity, "You have not taken any challenge.", Toast.LENGTH_LONG)
+                        .show()
                     mLeaderAdapter.swap(ArrayList())
                     firstImg.setImageResource(R.drawable.nouser)
-                    firstName.text ="NA"
-                    firstSteps.text ="0 steps"
+                    firstName.text = "NA"
+                    firstSteps.text = "0 steps"
                     secondPosition.visibility = View.INVISIBLE
                     ThirdPosition.visibility = View.INVISIBLE
                 }

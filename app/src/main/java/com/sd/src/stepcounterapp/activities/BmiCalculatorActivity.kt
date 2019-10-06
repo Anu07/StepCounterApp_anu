@@ -18,6 +18,7 @@ import com.sd.src.stepcounterapp.adapter.PickerAdapter
 import com.sd.src.stepcounterapp.dialog.BMIResultDialog
 import com.sd.src.stepcounterapp.interfaces.InterfacesCall
 import com.sd.src.stepcounterapp.model.BasicInfoRequestObject
+import com.sd.src.stepcounterapp.model.bmi.BMIObject
 import com.sd.src.stepcounterapp.model.login.Data
 import com.sd.src.stepcounterapp.model.login.LoginResponseJ
 import com.sd.src.stepcounterapp.utils.SharedPreferencesManager
@@ -33,6 +34,7 @@ import kotlinx.android.synthetic.main.activity_bmi_calc.maleBttn
 import kotlinx.android.synthetic.main.activity_bmi_calc.saveinfoBttn
 import travel.ithaka.android.horizontalpickerlib.PickerLayoutManager
 import java.text.DecimalFormat
+import kotlin.math.roundToInt
 
 
 class BmiCalculatorActivity : BaseActivity<SignInViewModel>(), View.OnClickListener {
@@ -88,6 +90,8 @@ class BmiCalculatorActivity : BaseActivity<SignInViewModel>(), View.OnClickListe
     var wts: Int = 0
     var hts: Float = 0f
     var flooredheight: Float = 0.0f
+    lateinit var resultin: String
+
     override val layoutId: Int
         get() = R.layout.activity_bmi_calc
     override val viewModel: SignInViewModel
@@ -162,20 +166,6 @@ class BmiCalculatorActivity : BaseActivity<SignInViewModel>(), View.OnClickListe
             .observe(this, Observer { mUser ->
                 if (mUser.status == 200) {
                     if (intent.hasExtra("inApp")) {
-                       /* var responseLogin = LoginResponseJ()
-                        var loginData = Data(
-                            mUser.data.firstName,
-                            mUser.data.lastName,
-                            mUser.data.image,
-                            mUser.data.dob,
-                            mUser.data._id,
-                            mUser.data.email,
-                            mUser.data.username,
-                            mUser.data.basicFlag,
-                            mUser.data.rewardFlag
-                        )
-                        responseLogin.data = loginData
-                        SharedPreferencesManager.saveUserObject(this@BmiCalculatorActivity,responseLogin)*/
                         finish()
                     } else {
                         var responseLogin = LoginResponseJ()
@@ -214,14 +204,78 @@ class BmiCalculatorActivity : BaseActivity<SignInViewModel>(), View.OnClickListe
                     isGenderClicked = true
                     selectGender(femaleBttn)
                 }
-               /* if(mSavedUser.heightType.equals("Feet")){
-                    changeHtBttnBg(fts_ht)
-                }else{
-                    changeHtBttnBg(cms_ht)
-                }*/
+
+                if(SharedPreferencesManager.hasKey(this@BmiCalculatorActivity,"BMI")){
+                   var bmi = SharedPreferencesManager.getBmiObject(this@BmiCalculatorActivity)
+
+
+                   if(bmi.weightType.equals("Kgs",true)){
+                       kgs_wt.performClick()
+                       showPreviousWeightValue(maxKgs,bmi.weight)
+                   }else{
+                       lbs_wt.performClick()
+                       showPreviousWeightValue(maxLbs,bmi.weight)
+                   }
+
+                   if(bmi.heightType.equals("Cms",true)){
+                       cms_ht.performClick()
+                       showPreviousHeightValue(maxCms,bmi.height)
+                   }else{
+                       fts_ht.performClick()
+                       showPreviousHeightValue(maxHtFt,bmi.height)
+                   }
+               }else{
+                    if (mSavedUser.gender.equals("Male", true)) {
+                        isGenderClicked = false
+                        selectGender(maleBttn)
+                    } else {
+                        isGenderClicked = true
+                        selectGender(femaleBttn)
+                    }
+                    if(mSavedUser.weightType.equals("Kgs",true)){
+                        kgs_wt.performClick()
+                        showPreviousWeightValue(maxKgs, mSavedUser.weight.roundToInt())
+                    }else{
+                        lbs_wt.performClick()
+                        showPreviousWeightValue(maxLbs,mSavedUser.weight.roundToInt())
+                    }
+
+                    if(mSavedUser.heightType.equals("Cms",true)){
+                        cms_ht.performClick()
+                        showPreviousHeightValue(maxCms,mSavedUser.height.roundToInt().toString())
+                    }else{
+                        fts_ht.performClick()
+                        showPreviousHeightValue(maxHtFt,mSavedUser.height.roundToInt().toString())
+                    }
+               }
+
             }
+        }
+
+    }
+
+    private fun showPreviousWeightValue(weightUnit: Int, weight: Int) {
+        getWeightData(weightUnit).forEachIndexed { index, s ->
+            if(s.toInt() == weight){
+                rv.smoothScrollToPosition(index+2)
+            }
+        }
+    }
 
 
+    private fun showPreviousHeightValue(heightUnit: Int, height: String) {
+        if(heightUnit ==280){
+            getHeightDataCms(heightUnit).forEachIndexed { index, s ->
+                if(s == height){
+                    rv_ht.smoothScrollToPosition(index+2)
+                }
+            }
+        }else{
+            getHeightData(heightUnit).forEachIndexed { index, s ->
+                if(s == height){
+                    rv_ht.smoothScrollToPosition(index+1)
+                }
+            }
         }
 
     }
@@ -301,7 +355,6 @@ class BmiCalculatorActivity : BaseActivity<SignInViewModel>(), View.OnClickListe
                 bundle.putString("Weigth", weight + w)
                 bundle.putString("heigth", height + h)
                 bundle.putFloat("bmi", calcBMI(weight.toInt(), height))
-
                 val dialog =
                     BMIResultDialog(mContext,
                         R.style.pullBottomfromTop,
@@ -310,20 +363,20 @@ class BmiCalculatorActivity : BaseActivity<SignInViewModel>(), View.OnClickListe
                         bundle,
                         "",
                         InterfacesCall.Callback {
-
+                            SharedPreferencesManager.saveBmiObject(this@BmiCalculatorActivity, BMIObject(height,h,weight.toInt(),w))
                             if (!intent.hasExtra("inApp")) {
                                 mViewModel!!.addBasicInfo(
                                     BasicInfoRequestObject(
                                         SharedPreferencesManager.getUserId(this@BmiCalculatorActivity)!!,
-                                        SharedPreferencesManager.getUpdatedUserObject(this@BmiCalculatorActivity).username,
-                                        SharedPreferencesManager.getUpdatedUserObject(this@BmiCalculatorActivity).firstName,
-                                        SharedPreferencesManager.getUpdatedUserObject(this@BmiCalculatorActivity).lastName,
-                                        SharedPreferencesManager.getUpdatedUserObject(this@BmiCalculatorActivity).dob,
-                                        SharedPreferencesManager.getUpdatedUserObject(this@BmiCalculatorActivity).gender,
-                                        roundOffFloat(SharedPreferencesManager.getUpdatedUserObject(this@BmiCalculatorActivity).weight.toFloat()),
-                                        SharedPreferencesManager.getUpdatedUserObject(this@BmiCalculatorActivity).weightType,
-                                        roundOffFloat(SharedPreferencesManager.getUpdatedUserObject(this@BmiCalculatorActivity).height.toFloat()),
-                                        SharedPreferencesManager.getUpdatedUserObject(this@BmiCalculatorActivity).heightType,          //TODO
+                                        intent.getStringExtra("username"),
+                                        intent.getStringExtra("firstname"),
+                                        intent.getStringExtra("lastname"),
+                                        intent.getStringExtra("dob"),
+                                        gender,
+                                        roundOffFloat( weight.toFloat()),
+                                        w,
+                                        roundOffFloat( flooredheight),
+                                        h,        //TODO
                                         calcBMI(weight.toInt(), height).toDouble(),
                                         true
                                     )
@@ -421,8 +474,12 @@ class BmiCalculatorActivity : BaseActivity<SignInViewModel>(), View.OnClickListe
     fun getHeightData(count: Int): List<String> {
         val data = ArrayList<String>()
         for (i in 1 until maxHtFt) {
-            for (j in 1 until 13) {
-                data.add("$i'$j\"")
+            for (j in 0 until 12) {
+                if(j==0){
+                    data.add("$i'")
+                }else{
+                    data.add("$i'$j\"")
+                }
             }
         }
         return data
@@ -455,8 +512,14 @@ class BmiCalculatorActivity : BaseActivity<SignInViewModel>(), View.OnClickListe
     private fun convertFeetToInch(feet: String): Float {
         var heightSplit = feet.split("'")
         var resultft = heightSplit[0].toInt() * 12
-        var resultin = heightSplit[1].replace("\"", "").toInt()
-        var result = resultft + resultin
+       if(heightSplit.size>1){
+           resultin = heightSplit[1].replace("\"", "")
+           if(resultin == ""){
+               resultin = "0"
+           }
+       }
+
+        var result = resultft + resultin.toInt()
         Log.i("Height", "calculated" + result.toFloat())
         return result.toFloat()
     }
@@ -489,6 +552,8 @@ class BmiCalculatorActivity : BaseActivity<SignInViewModel>(), View.OnClickListe
     override fun onBackPressed() {
         if (intent.hasExtra("inApp")) {
             super.onBackPressed()
+        }else{
+            finish()
         }
     }
 

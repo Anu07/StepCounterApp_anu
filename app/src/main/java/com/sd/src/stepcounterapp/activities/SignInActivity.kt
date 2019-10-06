@@ -19,10 +19,8 @@ import com.sd.src.stepcounterapp.viewModels.BaseViewModelFactory
 import com.sd.src.stepcounterapp.viewModels.SignInViewModel
 import com.wajahatkarim3.easyvalidation.core.view_ktx.nonEmpty
 import com.wajahatkarim3.easyvalidation.core.view_ktx.validEmail
-import kotlinx.android.synthetic.main.activity_forgot_password.*
 import kotlinx.android.synthetic.main.activity_signin.*
-import kotlinx.android.synthetic.main.activity_signin.emailTxt
-import kotlinx.android.synthetic.main.activity_signin.forgotTextView
+import java.util.*
 
 
 class SignInActivity : BaseActivity<SignInViewModel>() {
@@ -107,14 +105,15 @@ class SignInActivity : BaseActivity<SignInViewModel>() {
         signBttn.setOnClickListener {
             if (validate()) {
                 if (HayaTechApplication.hasNetwork()) {
-                    Log.d("FCMToken", "token "+ FirebaseInstanceId.getInstance().token)
                     showPopupProgressSpinner(true)
+                    var uVal:Int = parseTimeOffset().toInt()
                     mViewModel!!.setLoginData(
                         LoginRequestObject(
                             SharedPreferencesManager.getString(this@SignInActivity,FIREBASETOKEN)!!,
                             "Android",
-                            emailTxt.text.toString(),
-                            pwdTxt.text.toString()
+                            emailTxt.text.toString().toLowerCase(),
+                            pwdTxt.text.toString(),
+                            uVal
                         )
                     )
                 } else {
@@ -123,6 +122,22 @@ class SignInActivity : BaseActivity<SignInViewModel>() {
             }
         }
     }
+
+
+    fun parseTimeOffset(): String {
+
+        val tz = TimeZone.getDefault()
+        val cal = Calendar.getInstance(tz)
+        val offsetInMillis = tz.getOffset(cal.timeInMillis)
+
+        var offset =
+            String.format("%02d:%02d", Math.abs(offsetInMillis / 3600000), Math.abs(offsetInMillis / 60000 % 60))
+        var minutesOffset = ((offset.split(":")[0].toInt()*60) + offset.split(":")[1].toInt())
+        offset = (if (offsetInMillis >= 0) "+" else "-") + minutesOffset
+        return offset
+    }
+
+
 
     private fun validate(): Boolean {
         if (!emailTxt.nonEmpty() ) {

@@ -100,7 +100,7 @@ class TransactionHistoryFragment : BaseFragment() {
                 }
             })
         showPopupProgressSpinner(true)
-        mViewModel.getTransactionHistory(BasicRequest(SharedPreferencesManager.getUserId(mContext), ""))
+        mViewModel.getTransactionHistory(BasicRequest(SharedPreferencesManager.getUserId(mContext), 0))
 
     }
 

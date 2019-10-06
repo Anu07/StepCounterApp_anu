@@ -3,6 +3,7 @@ package com.sd.src.stepcounterapp.dialog
 import android.content.Context
 import android.os.Build
 import android.text.Html
+import android.text.method.ScrollingMovementMethod
 import android.view.Gravity
 import android.view.View
 import androidx.annotation.RequiresApi
@@ -39,6 +40,7 @@ class ChallengesDialog(
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreateStuff() {
         setData()
+        txtDetail.movementMethod = ScrollingMovementMethod();
         if (disableStart) {
             btnStart.isClickable = false
             btnStart.alpha = 0.4f
@@ -55,7 +57,7 @@ class ChallengesDialog(
             mListener.onStop(mData)
         }
 
-        if(mData.completed){
+        if(mData.is_completed){
             txtProgress.text = "Completed"
         }else{
             txtProgress.text = "In Progress"

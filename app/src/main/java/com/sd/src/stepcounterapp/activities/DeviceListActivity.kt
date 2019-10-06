@@ -55,6 +55,8 @@ class DeviceListActivity : Basefit(), AdapterView.OnItemClickListener, MokoScanD
     private var mDevice: BleDevice? = null
     private var deviceMap: HashMap<String, BleDevice>? = null
     var lastestSteps: ArrayList<DailyStep>? = null
+    var device: BleDevice = BleDevice()
+
     private val mDfuProgressListener = object : DfuProgressListenerAdapter() {
         override fun onDeviceConnecting(deviceAddress: String?) {
             LogModule.w("onDeviceConnecting...")
@@ -129,7 +131,7 @@ class DeviceListActivity : Basefit(), AdapterView.OnItemClickListener, MokoScanD
                     Toast.makeText(this@DeviceListActivity, "Connect success", Toast.LENGTH_SHORT).show()
                     SharedPreferencesManager.setString(this@DeviceListActivity,"1" ,VAR_WEARABLE)
                     getLastestSteps()
-                    updateDeviceTime()
+//                    updateDeviceTime()
                 }
                 if (MokoConstants.ACTION_CONN_STATUS_DISCONNECTED == intent.action) {
                     abortBroadcast()
@@ -151,6 +153,7 @@ class DeviceListActivity : Basefit(), AdapterView.OnItemClickListener, MokoScanD
                 }
                 if (MokoConstants.ACTION_CONN_STATUS_DISCONNECTED == action) {
                     abortBroadcast()
+                    mDialog!!.dismiss()
 //                    this@DeviceListActivity.finish()
                 }
                 if (MokoConstants.ACTION_ORDER_RESULT == action) {
@@ -161,17 +164,18 @@ class DeviceListActivity : Basefit(), AdapterView.OnItemClickListener, MokoScanD
                     if (lastestSteps == null || lastestSteps!!.isEmpty()) {
                         return
                     }
-                 /*   for (step in lastestSteps!!) {
+                    lastestSteps!!.forEachIndexed { index, dailyStep ->
+                        if(index == lastestSteps!!.lastIndex && dailyStep.date != "2019-01-01"){
+                            Log.i("steps",""+lastestSteps)
+                            SharedPreferencesManager.setString(this@DeviceListActivity, device.address, WEARABLEID)
+                            gotoDeviceconnctd()
+                        }else{
+                            if(dailyStep.date!="2019-01-01"){
+                                SharedPreferencesManager.saveSyncObject(this@DeviceListActivity, lastestSteps)
+                            }
+                        }
+                    }
 
-                        Toast.makeText(
-                            this@DeviceListActivity,
-                            "Total steps taken till now: " + lastestSteps!![lastestSteps!!.size - 1].count,
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }*/
-                    SharedPreferencesManager.saveSyncObject(this@DeviceListActivity, lastestSteps)
-                    Log.i("steps",""+lastestSteps)
-                    gotoDeviceconnctd()
                 }
                 if (MokoConstants.ACTION_ORDER_TIMEOUT == action) {
                     Toast.makeText(this@DeviceListActivity, "Timeout", Toast.LENGTH_SHORT).show()
@@ -191,8 +195,10 @@ class DeviceListActivity : Basefit(), AdapterView.OnItemClickListener, MokoScanD
 
     private fun gotoDeviceconnctd() {
         val intent = Intent(this@DeviceListActivity, DeviceConnctdActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+
         //                    val options = ActivityOptions.makeSceneTransitionAnimation(this@SignInActivity)
-        intent.putExtra("Steps", lastestSteps?.get(lastestSteps!!.size - 1)!!.count)
+        intent.putExtra("Steps", lastestSteps?.last()!!.count)
         intent.putExtra("device", mDevice)
         startActivity(intent)
         finish()
@@ -254,9 +260,8 @@ class DeviceListActivity : Basefit(), AdapterView.OnItemClickListener, MokoScanD
     override fun onItemClick(parent: AdapterView<*>, view: View, position: Int, id: Long) {
         mDialog!!.setMessage("Connect...")
         mDialog!!.show()
-        val device = parent.getItemAtPosition(position) as BleDevice
+        device = parent.getItemAtPosition(position) as BleDevice
         deviceWearableId = device.address
-        SharedPreferencesManager.setString(this@DeviceListActivity, device.address, WEARABLEID)
         mService!!.connectBluetoothDevice(device.address)
         mDevice = device
     }

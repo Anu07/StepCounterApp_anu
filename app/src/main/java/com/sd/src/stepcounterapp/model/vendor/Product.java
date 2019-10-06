@@ -1,79 +1,110 @@
 
 package com.sd.src.stepcounterapp.model.vendor;
 
+import com.google.gson.annotations.SerializedName;
+
 @SuppressWarnings("unused")
 public class Product {
 
-    private String _id;
-    private String description;
-    private String image;
-    private String name;
-    private String rewardId;
-    private String shortDesc;
-    private long token;
-    private String vendorId;
-
-    public String get_id() {
-        return _id;
-    }
-
-    public void set_id(String _id) {
-        this._id = _id;
-    }
+    @SerializedName("description")
+    private String mDescription;
+    @SerializedName("image")
+    private String mImage;
+    @SerializedName("invoiceNo")
+    private Object mInvoiceNo;
+    @SerializedName("name")
+    private String mName;
+    @SerializedName("quantity")
+    private Long mQuantity;
+    @SerializedName("rewardId")
+    private String mRewardId;
+    @SerializedName("shortDesc")
+    private String mShortDesc;
+    @SerializedName("token")
+    private Long mToken;
+    @SerializedName("vendorId")
+    private VendorId mVendorId;
+    @SerializedName("_id")
+    private String m_id;
 
     public String getDescription() {
-        return description;
+        return mDescription;
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        mDescription = description;
     }
 
     public String getImage() {
-        return image;
+        return mImage;
     }
 
     public void setImage(String image) {
-        this.image = image;
+        mImage = image;
+    }
+
+    public Object getInvoiceNo() {
+        return mInvoiceNo;
+    }
+
+    public void setInvoiceNo(Object invoiceNo) {
+        mInvoiceNo = invoiceNo;
     }
 
     public String getName() {
-        return name;
+        return mName;
     }
 
     public void setName(String name) {
-        this.name = name;
+        mName = name;
+    }
+
+    public Long getQuantity() {
+        return mQuantity;
+    }
+
+    public void setQuantity(Long quantity) {
+        mQuantity = quantity;
     }
 
     public String getRewardId() {
-        return rewardId;
+        return mRewardId;
     }
 
     public void setRewardId(String rewardId) {
-        this.rewardId = rewardId;
+        mRewardId = rewardId;
     }
 
     public String getShortDesc() {
-        return shortDesc;
+        return mShortDesc;
     }
 
     public void setShortDesc(String shortDesc) {
-        this.shortDesc = shortDesc;
+        mShortDesc = shortDesc;
     }
 
-    public long getToken() {
-        return token;
+    public Long getToken() {
+        return mToken;
     }
 
-    public void setToken(long token) {
-        this.token = token;
+    public void setToken(Long token) {
+        mToken = token;
     }
 
-    public String getVendorId() {
-        return vendorId;
+    public VendorId getVendorId() {
+        return mVendorId;
     }
 
-    public void setVendorId(String vendorId) {
-        this.vendorId = vendorId;
+    public void setVendorId(VendorId vendorId) {
+        mVendorId = vendorId;
     }
+
+    public String get_id() {
+        return m_id;
+    }
+
+    public void set_id(String _id) {
+        m_id = _id;
+    }
+
 }

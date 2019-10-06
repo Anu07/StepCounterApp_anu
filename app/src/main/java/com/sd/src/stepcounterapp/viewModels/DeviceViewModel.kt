@@ -11,6 +11,7 @@ import com.sd.src.stepcounterapp.model.generic.BasicInfoResponse
 import com.sd.src.stepcounterapp.model.syncDevice.FetchDeviceDataRequest
 import com.sd.src.stepcounterapp.model.syncDevice.SyncRequest
 import com.sd.src.stepcounterapp.network.RetrofitClient
+import com.sd.src.stepcounterapp.utils.Utils
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -37,48 +38,64 @@ class DeviceViewModel(application: Application) : AndroidViewModel(application) 
 
     fun syncDevice(request: SyncRequest) {
         if(!request.activity.isEmpty()){
-            call!!.syncWeableData(request).enqueue(object : Callback<BasicInfoResponse> {
+            if(Utils.retryInternet(HayaTechApplication.applicationContext())){
+                call!!.syncWeableData(request).enqueue(object : Callback<BasicInfoResponse> {
 
-                override fun onFailure(call: Call<BasicInfoResponse>?, t: Throwable?) {
-                    Log.v("retrofit", "call failed")
-                    Toast.makeText(HayaTechApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
-                }
-
-                override fun onResponse(call: Call<BasicInfoResponse>?, response: Response<BasicInfoResponse>?) {
-                    if (response!!.code() == 405) {
-                        Toast.makeText(HayaTechApplication.applicationContext(), "User doesn't exist", Toast.LENGTH_LONG)
-                            .show()
-                        HayaTechApplication.instance!!.logoutUser()
-                    } else if(response!!.code() == 200) {
-                        mResponse!!.value = response!!.body()
-                    }else {
-                        Log.i("Empty","activity array")
+                    override fun onFailure(call: Call<BasicInfoResponse>?, t: Throwable?) {
+                        Log.v("retrofit", "call failed")
+                        Toast.makeText(HayaTechApplication.applicationContext(), t!!.message, Toast.LENGTH_LONG).show()
+                        if(t.message!!.contains("timeout")){
+                            mResponse!!.value = BasicInfoResponse()
+                        }
                     }
-                }
-            })
+
+                    override fun onResponse(call: Call<BasicInfoResponse>?, response: Response<BasicInfoResponse>?) {
+                        if (response!!.code() == 405) {
+                            Toast.makeText(HayaTechApplication.applicationContext(), "User doesn't exist", Toast.LENGTH_LONG)
+                                .show()
+                            HayaTechApplication.instance!!.logoutUser()
+                        } else if(response!!.code() == 200) {
+                            mResponse!!.value = response!!.body()
+                        }else if(response!!.code() == 400) {
+                            mResponse!!.value = BasicInfoResponse()
+                            Log.i("Date","dateMismatch")
+                        }else {
+                            Log.i("Empty","activity array")
+                        }
+                    }
+                })
+            }
+
+
         }
 
     }
 
 
     fun fetchSyncData(request: FetchDeviceDataRequest) {
-        call!!.getSyncData(request).enqueue(object : Callback<DashboardResponse> {
-            override fun onFailure(call: Call<DashboardResponse>, t: Throwable) {
-                Log.v("retrofit", "call failed")
-                Toast.makeText(HayaTechApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
-            }
+        if(Utils.retryInternet(HayaTechApplication.applicationContext())){
+            call!!.getSyncData(request).enqueue(object : Callback<DashboardResponse> {
+                override fun onFailure(call: Call<DashboardResponse>, t: Throwable) {
+                    Log.v("retrofit", "call failed")
+                    Toast.makeText(HayaTechApplication.applicationContext(), "Server error", Toast.LENGTH_LONG).show()
+                    mResponse!!.value = BasicInfoResponse()
 
-            override fun onResponse(call: Call<DashboardResponse>, response: Response<DashboardResponse>) {
-                if (response!!.body()!!.status == 405) {
-                    Toast.makeText(HayaTechApplication.applicationContext(), "User doesn't exist", Toast.LENGTH_LONG)
-                        .show()
-                    mDashResponse!!.value =DashboardResponse()
-                } else if (response!!.body()!!.status == 200) {
-                    mDashResponse!!.value = response.body()
                 }
-            }
 
-        })
+                override fun onResponse(call: Call<DashboardResponse>, response: Response<DashboardResponse>) {
+                    if (response!!.body()!!.status == 405) {
+                        Toast.makeText(HayaTechApplication.applicationContext(), "User doesn't exist", Toast.LENGTH_LONG)
+                            .show()
+                        mDashResponse!!.value =DashboardResponse()
+                    } else if (response!!.body()!!.status == 200) {
+                        mDashResponse!!.value = response.body()
+                    }
+                }
+
+            })
+        }
+
+
     }
 
 }

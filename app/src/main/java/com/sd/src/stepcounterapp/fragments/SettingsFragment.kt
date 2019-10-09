@@ -136,7 +136,7 @@ class SettingsFragment : BaseFragment() {
     override fun onDetach() {
         super.onDetach()
         Log.i("test", "Detach")
-        (HayatechFragment.mContext as LandingActivity).hideBottomLayout(false)
+        (mContext as LandingActivity).hideBottomLayout(false)
     }
 
 }

@@ -69,14 +69,12 @@ class HayatechFragment : BaseFragment() {
             mContext = context
             return instance
         }
-
     }
 
     private var afterSync: Boolean = false
     var swipeListener: SwipeVisibiltyListener? = null
     var prevTokenEstd: Int? = 0
     private var tokenEstd: Int = 10
-    lateinit var updater: Runnable
     private var updating: Boolean = false
     var activityList: ArrayList<Activity>? = null
     private var mDataList: Data? = Data()
@@ -98,15 +96,22 @@ class HayatechFragment : BaseFragment() {
     }
 
 
+
+
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-        swipeListener = (mContext as LandingActivity)
+        try {
+            swipeListener = (context as LandingActivity)
 
-        if (mViewModel == null) {
-            mViewModel = ViewModelProviders.of(activity!!).get(DeviceViewModel::class.java)
+            if (mViewModel == null) {
+                mViewModel = ViewModelProviders.of(activity!!).get(DeviceViewModel::class.java)
+            }
+            Log.i("attach", "viewmodel")
+            (context as LandingActivity).disableSwipe(false)
+        } catch (e: Exception) {
+
+            Log.e("exception","message"+e.message)
         }
-        Log.i("attach", "viewmodel")
-        (mContext as LandingActivity).disableSwipe(false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -125,15 +130,15 @@ class HayatechFragment : BaseFragment() {
         if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
             mViewModel!!.fetchSyncData(
                 if (txtGraphFilter.text.toString().equals(WEEKLY, ignoreCase = true)) {
-                    FetchDeviceDataRequest(WEEKLY, SharedPreferencesManager.getUserId(mContext),Utils.parseTimeOffset())
+                    FetchDeviceDataRequest(WEEKLY, SharedPreferencesManager.getUserId(activity!!),Utils.parseTimeOffset())
                 } else {
-                    FetchDeviceDataRequest(MONTHLY, SharedPreferencesManager.getUserId(mContext),Utils.parseTimeOffset())
+                    FetchDeviceDataRequest(MONTHLY, SharedPreferencesManager.getUserId(activity!!),Utils.parseTimeOffset())
                 }
             )
         }
 
         mViewModel!!.getSyncResponse().observe(this,
-            Observer<BasicInfoResponse> { mResponse ->
+            Observer<BasicInfoResponse> {
                 Log.i("Sync", "Data synced successfully")
 //                afterSync = true
 //                callDashboard()
@@ -171,11 +176,11 @@ class HayatechFragment : BaseFragment() {
 
                 if (mDashResponse.data.lastUpdated != null) {
                     SharedPreferencesManager.setString(
-                        mContext,
+                        activity!!,
                         mDashResponse.data.lastUpdated,
                         SYNCDATE
                     )
-//                    SharedPreferencesManager.saveSyncObject(mContext,syncDataFromServer())
+//                    SharedPreferencesManager.saveSyncObject(activity!!,syncDataFromServer())
                 }
 
                 setBarChart("STEPS")
@@ -186,14 +191,14 @@ class HayatechFragment : BaseFragment() {
 
         if (Utils.retryInternet(HayaTechApplication.applicationContext())) {
 
-            if (SharedPreferencesManager.hasKey(mContext, SharedPreferencesManager.VAR_WEARABLE)) {
+            if (SharedPreferencesManager.hasKey(activity!!, SharedPreferencesManager.VAR_WEARABLE)) {
 
                 mViewModel!!.syncDevice(
                     SyncRequest(
                         getActivityData(),
-                        SharedPreferencesManager.getUserId(mContext),
-                        SharedPreferencesManager.getString(mContext, WEARABLEID),
-                        SharedPreferencesManager.getString(mContext, FIREBASETOKEN)
+                        SharedPreferencesManager.getUserId(activity!!),
+                        SharedPreferencesManager.getString(activity!!, WEARABLEID),
+                        SharedPreferencesManager.getString(activity!!, FIREBASETOKEN)
                     )
                 )
             }
@@ -205,7 +210,7 @@ class HayatechFragment : BaseFragment() {
 
         txtGraphFilter.setOnClickListener {
             val dialog =
-                OptionDialog(mContext, R.style.pullBottomfromTop, R.layout.dialog_options,
+                OptionDialog(activity!!, R.style.pullBottomfromTop, R.layout.dialog_options,
                     optionArray,
                     "SELECT FILTER",
                     InterfacesCall.Callback { pos ->
@@ -222,12 +227,12 @@ class HayatechFragment : BaseFragment() {
                                 ) {
                                     FetchDeviceDataRequest(
                                         WEEKLY,
-                                        SharedPreferencesManager.getUserId(mContext)
+                                        SharedPreferencesManager.getUserId(activity!!)
                                     ,Utils.parseTimeOffset())
                                 } else {
                                     FetchDeviceDataRequest(
                                         MONTHLY,
-                                        SharedPreferencesManager.getUserId(mContext),Utils.parseTimeOffset()
+                                        SharedPreferencesManager.getUserId(activity!!),Utils.parseTimeOffset()
                                     )
                                 }
                             )
@@ -239,15 +244,15 @@ class HayatechFragment : BaseFragment() {
         }
 
         steps_title.setOnClickListener {
-            steps_title.setTextColor(mContext.resources.getColor(R.color.colorBlack))
-            token_title.setTextColor(mContext.resources.getColor(R.color.gray_text))
-            distance.setTextColor(mContext.resources.getColor(R.color.gray_text))
+            steps_title.setTextColor(activity!!.resources.getColor(R.color.colorBlack))
+            token_title.setTextColor(activity!!.resources.getColor(R.color.gray_text))
+            distance.setTextColor(activity!!.resources.getColor(R.color.gray_text))
             setBarChart("STEPS")
 
         }
 
         leaderDash.setOnClickListener {
-            (mContext as LandingActivity).onFragment(5)
+            (activity!! as LandingActivity).onFragment(5)
         }
 
         spndTokens.setOnClickListener {

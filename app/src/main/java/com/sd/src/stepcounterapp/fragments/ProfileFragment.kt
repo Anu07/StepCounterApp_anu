@@ -150,11 +150,19 @@ class ProfileFragment : BaseFragment(), View.OnClickListener {
                 mobileEd.text.toString().toInt(),
                 weightTxt.text.toString().toFloat(),
                 SharedPreferencesManager.getUserId(mContext),
-                heightTxt.text.toString().toFloat(),
+                getHeightBMI(),
                 SharedPreferencesManager.getUpdatedUserObject(mContext).bmi
             )
         )
 
+    }
+
+    private fun getHeightBMI(): Float {
+        return if(heightTxt.text.toString().contains("'")){
+            convertFeetToCms().toFloat()
+        }else{
+            heightTxt.text.toString().toFloat()
+        }
     }
 
     private fun chooseImage() {

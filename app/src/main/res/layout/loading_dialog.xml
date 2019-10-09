@@ -12,7 +12,7 @@
             android:gravity="center_vertical|center"
             android:orientation="vertical">
 
-        <com.sdei.parentIn.utils.ProgressBarCircularIndeterminate
+        <com.sd.src.stepcounterapp.utils.ProgressBarCircularIndeterminate
                 android:id="@+id/progressBarCircularIndetermininate"
                 android:layout_width="50dp"
                 android:layout_height="50dp"

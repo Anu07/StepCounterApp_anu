@@ -87,10 +87,10 @@
                 <LinearLayout
                         android:id="@+id/ll_nav_header"
                         android:layout_width="match_parent"
-                        android:layout_gravity="center"
+                        android:layout_gravity="center|center_vertical"
                         android:orientation="vertical"
-                        android:gravity="center"
-                        android:layout_height="200dp">
+                        android:gravity="center|center_vertical"
+                        android:layout_height="180dp">
 
                     <FrameLayout
                             android:layout_width="wrap_content"
@@ -138,7 +138,7 @@
                       android:layout_marginLeft="@dimen/_10sdp"
                       android:layout_marginTop="@dimen/_10sdp"
                       android:divider="@null"
-                      android:layout_height="500dp">
+                      android:layout_height="380dp">
             </ListView>
 
 

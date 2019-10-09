@@ -14,10 +14,13 @@ import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.activities.LandingActivity
 import com.sd.src.stepcounterapp.model.privacy.PrivacyResponse
 import com.sd.src.stepcounterapp.network.RetrofitClient
-import kotlinx.android.synthetic.main.fragment_blank.*
+import kotlinx.android.synthetic.main.fragment_web.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import android.text.method.ScrollingMovementMethod
+
+
 
 class TnCFragment : BaseFragment() {
     companion object {
@@ -38,7 +41,7 @@ class TnCFragment : BaseFragment() {
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_blank, container, false)
+        return inflater.inflate(R.layout.fragment_web, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -56,11 +59,15 @@ class TnCFragment : BaseFragment() {
                 }
             }
         })
+
+        largeTxt.movementMethod = ScrollingMovementMethod()
+
     }
 
     override fun onDetach() {
         super.onDetach()
-        (HayatechFragment.mContext as LandingActivity).hideBottomLayout(false)
+        (mContext as LandingActivity).hideBottomLayout(true)
     }
+
 
 }

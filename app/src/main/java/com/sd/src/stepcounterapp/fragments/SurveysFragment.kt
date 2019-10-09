@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -73,8 +74,12 @@ class SurveysFragment : BaseFragment(), ItemClickGlobalListner {
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-        (mContext as LandingActivity).showDisconnection(false)
-        (mContext as LandingActivity).disableSwipe(false)
+        try {
+            (activity as LandingActivity).showDisconnection(false)
+            (activity as LandingActivity).disableSwipe(true)
+        } catch (e: Exception) {
+            Log.e("catching","exception on Attach survey")
+        }
     }
 
 

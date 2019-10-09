@@ -1,68 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="wrap_content" xmlns:tools="http://schemas.android.com/tools"
+        xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/cardslideMain"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content">
-    <FrameLayout android:layout_width="match_parent"
-                 android:layout_height="wrap_content">
+
+    <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom">
+
         <ImageView
                 android:id="@+id/image"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:scaleType="fitXY"
-                android:layout_gravity="center"/>
+                android:layout_height="match_parent"
+                android:layout_gravity="bottom"
+                android:minHeight="@dimen/_130sdp"
+                android:scaleType="fitXY" />
+
         <com.sd.src.stepcounterapp.utils.CustomTextView
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_20sdp"
+                android:background="@color/featured"
+                android:paddingLeft="@dimen/_2sdp"
+                android:paddingRight="@dimen/_2sdp"
                 android:text="FEATURED"
                 android:textColor="@color/white"
-                android:paddingRight="@dimen/_2sdp"
-                android:paddingLeft="@dimen/_2sdp"
-                android:layout_marginLeft="@dimen/_7sdp"
-                android:background="@color/featured"
                 android:textSize="@dimen/_8ssp"
-                app:appfont="montserrat_medium.ttf"
-                android:layout_height="wrap_content"/>
+                app:appfont="montserrat_medium.ttf" />
 
-        <LinearLayout android:orientation="vertical"
-                      android:layout_gravity="center"
-                      android:gravity="center"
-                      android:layout_width="match_parent" android:layout_height="wrap_content">
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical">
+
             <com.sd.src.stepcounterapp.utils.CustomTextView
                     android:id="@+id/challengesTitle"
                     android:layout_width="wrap_content"
-                    android:textColor="@color/white"
-                    android:paddingRight="@dimen/_2sdp"
-                    android:paddingLeft="@dimen/_2sdp"
-                    android:textSize="@dimen/_12ssp"
-                    tools:text="Sahi Sponsored Challenge"
-                    android:maxLength="15"
-                    android:ellipsize="end"
-                    android:padding="@dimen/_3sdp"
-                    android:singleLine="true"
+                    android:layout_height="wrap_content"
                     android:background="@color/colorBlack"
+                    android:ellipsize="end"
+                    android:maxLength="15"
+                    android:padding="@dimen/_3sdp"
+                    android:paddingLeft="@dimen/_2sdp"
+                    android:paddingRight="@dimen/_2sdp"
+                    android:singleLine="true"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_12ssp"
 
                     app:appfont="montserrat_semibold.ttf"
-                    android:layout_height="wrap_content"/>
+                    tools:text="Sahi Sponsored Challenge" />
 
             <com.sd.src.stepcounterapp.utils.CustomTextView
                     android:id="@+id/challengesSubTitle"
                     android:layout_width="wrap_content"
-                    android:textColor="@color/white"
-                    android:paddingRight="@dimen/_2sdp"
-                    android:paddingLeft="@dimen/_2sdp"
-                    android:textSize="@dimen/_8ssp"
-                    tools:text="Sahi Sponsored Challenge"
-                    android:maxLength="15"
-                    android:ellipsize="end"
-                    android:padding="@dimen/_3sdp"
-                    android:singleLine="true"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:ellipsize="end"
                     android:gravity="center"
+                    android:maxLength="15"
+                    android:padding="@dimen/_3sdp"
+                    android:paddingLeft="@dimen/_2sdp"
+                    android:paddingRight="@dimen/_2sdp"
+                    android:singleLine="true"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_8ssp"
                     app:appfont="montserrat_semibold.ttf"
-                    android:layout_height="wrap_content"/>
+                    tools:text="Sahi Sponsored Challenge" />
         </LinearLayout>
 
     </FrameLayout>

@@ -7,15 +7,18 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
     <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
-    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-feature android:name="android.hardware.camera"
+                  android:required="true" />
 
     <application
             android:name=".HayaTechApplication"
@@ -29,11 +32,6 @@
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning">
 
-        <receiver android:name="com.sd.src.stepcounterapp.utils.NetworkChangeReceiver" >
-            <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-            </intent-filter>
-        </receiver>
         <activity
                 android:name=".activities.SplashActivity"
                 android:exported="true"
@@ -43,6 +41,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+
         </activity>
         <activity android:name=".activities.LandingActivity"
                   android:windowSoftInputMode="stateHidden"
@@ -64,6 +63,7 @@
                 android:screenOrientation="portrait"/>
         <activity
                 android:name=".activities.DeviceConnctdActivity"
+                android:launchMode='singleTask'
                 android:screenOrientation="portrait"/>
         <activity
                 android:name=".activities.BasicInfoActivity"
@@ -127,6 +127,13 @@
         <service android:name=".service.DfuService"/>
         <meta-data android:name="com.google.firebase.messaging.default_notification_channel_id"
                    android:value="@string/default_notification_channel_id"/>
+        <receiver
+                android:name=".utils.NetworkChangeReceiver"
+                android:enabled="true">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

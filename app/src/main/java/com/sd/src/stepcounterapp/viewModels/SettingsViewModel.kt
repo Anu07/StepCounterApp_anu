@@ -45,18 +45,18 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
                     call: Call<NotificationResponse>?,
                     response: Response<NotificationResponse>?
                 ) {
-                    if (response!!.body()!!.status == 200) {
-                        mSettingsResponse!!.value = response!!.body()
-                    } else if (response!!.code() == 405) {
-                        Toast.makeText(
-                            HayaTechApplication.applicationContext(),
-                            "User doesn't exist",
-                            Toast.LENGTH_LONG
-                        )
-                            .show()
-                        HayaTechApplication.instance!!.logoutUser()
-                    } else {
-                        mSettingsResponse!!.value = NotificationResponse()
+                    when {
+                        response!!.code() == 405 -> {
+                            Toast.makeText(
+                                HayaTechApplication.applicationContext(),
+                                "No Records found",
+                                Toast.LENGTH_LONG
+                            )
+                                .show()
+                            mSettingsResponse!!.value = NotificationResponse()
+                        }
+                        response!!.body()!!.status == 200 -> mSettingsResponse!!.value = response!!.body()
+                        else -> mSettingsResponse!!.value = NotificationResponse()
                     }
                 }
             })

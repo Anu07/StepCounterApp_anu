@@ -46,11 +46,6 @@ class OpenContactUsFragment : BaseFragment() {
         return inflater.inflate(R.layout.open_contact_us_fragment, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(OpenContactUsViewModel::class.java)
-    }
-
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -74,6 +69,7 @@ class OpenContactUsFragment : BaseFragment() {
             //  showPopupProgressSpinner(true)
             if (mData.status == 200) {
                 Toast.makeText(activity, mData.message, Toast.LENGTH_LONG).show()
+                messageTxt.text.clear()
                 //fragmentManager!!.popBackStackImmediate()
             }
         })
@@ -82,7 +78,7 @@ class OpenContactUsFragment : BaseFragment() {
     override fun onDetach() {
         super.onDetach()
         Log.i("test","Detach")
-        (HayatechFragment.mContext as LandingActivity).hideBottomLayout(false)
+        (mContext as LandingActivity).hideBottomLayout(false)
     }
 
 }

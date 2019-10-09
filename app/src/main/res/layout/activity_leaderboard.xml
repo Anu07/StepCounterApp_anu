@@ -48,6 +48,8 @@
                                  android:layout_height="match_parent">
 
                         <FrameLayout android:layout_width="match_parent"
+                                     android:visibility="gone"
+                                     android:id="@+id/leaderFrame"
                                      android:layout_height="wrap_content">
                             <androidx.appcompat.widget.AppCompatSpinner android:layout_width="match_parent"
                                      android:id="@+id/leaderselection"

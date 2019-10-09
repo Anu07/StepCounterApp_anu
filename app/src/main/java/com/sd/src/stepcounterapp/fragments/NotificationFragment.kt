@@ -82,7 +82,7 @@ class NotificationFragment : BaseFragment(), NotificationsAdapter.NotifyItemClic
 
     override fun onDetach() {
         super.onDetach()
-        (HayatechFragment.mContext as LandingActivity).hideBottomLayout(false)
+        (mContext as LandingActivity).hideBottomLayout(false)
     }
 
 }

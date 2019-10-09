@@ -530,9 +530,10 @@ class MarketPlaceFragment : BaseFragment(), FilterDialog.MarketFilterInterface,
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         try {
-            (mContext as LandingActivity).showDisconnection(false)
-            (mContext as LandingActivity).disableSwipe(false)
+            (activity as LandingActivity).showDisconnection(false)
+            (activity as LandingActivity).disableSwipe(true)
         } catch (e: Exception) {
+            Log.e("catching","exception on Attach")
         }
     }
 

@@ -58,7 +58,7 @@
                 android:layout_below="@+id/layoutCode"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="15dp"
-                android:text="The Himalyan"/>
+                tools:text="The Himalyan"/>
 
         <TextView
                 android:id="@+id/txtvalue"
@@ -67,7 +67,7 @@
                 android:layout_below="@+id/txtTitle"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dp"
-                android:text="50% off wellness"/>
+                tools:text="50% off wellness"/>
 
         <TextView
                 android:layout_width="wrap_content"
@@ -128,7 +128,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginLeft="22dp"
             android:layout_marginRight="22dp"
-            android:text="Wellness Retreat Travel Bookings, Block 203, Road 443,Building 664, Flat 22"
+            tools:text="Wellness Retreat Travel Bookings, Block 203, Road 443,Building 664, Flat 22"
             android:gravity="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -144,8 +144,7 @@
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="22dp"
-            android:layout_marginRight="22dp"
-            app:layout_constraintTop_toBottomOf="@+id/textView1"/>
+            android:layout_marginRight="22dp"/>
 
 
     <View

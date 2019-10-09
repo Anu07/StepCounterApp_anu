@@ -60,7 +60,7 @@
                                 android:textAlignment="center"
                                 android:textColor="@color/colorBlack"
                                 android:textSize="@dimen/_20ssp"
-                                android:text="0"/>
+                                tools:text="0"/>
 
                         <com.sd.src.stepcounterapp.utils.CustomTextView
                                 android:layout_width="wrap_content"
@@ -189,7 +189,7 @@
                         android:textAlignment="center"
                         android:textColor="@color/blue_txt"
                         android:textSize="@dimen/_20ssp"
-                        android:text="0"
+                        tools:text="0"
                         app:layout_constraintTop_toBottomOf="@+id/customTextView5"
                         android:id="@+id/txtSteps"
                         app:layout_constraintStart_toStartOf="@+id/customTextView5"/>
@@ -201,7 +201,7 @@
                         android:textAlignment="center"
                         android:textColor="#8DC540"
                         android:textSize="@dimen/_20ssp"
-                        android:text="0"
+                        tools:text="0"
                         app:layout_constraintStart_toStartOf="@+id/customTextView6"
                         app:layout_constraintTop_toBottomOf="@+id/customTextView6"
                         android:id="@+id/txtTokens"/>
@@ -831,12 +831,13 @@
                         android:layout_width="match_parent"
                         android:padding="@dimen/_2sdp"
                         android:gravity="center"
-                        android:layout_margin="@dimen/_15sdp"
                         android:visibility="gone"
                         android:layout_centerInParent="true"
                         android:textSize="@dimen/_15ssp"
                         android:layout_marginLeft="@dimen/_2sdp"
                         android:layout_marginRight="@dimen/_2sdp"
+                        android:layout_marginBottom="@dimen/_20sdp"
+                        android:layout_marginTop= "@dimen/_10sdp"
                         app:appfont="montserrat_medium.ttf"
                         android:layout_height="wrap_content"/>
 

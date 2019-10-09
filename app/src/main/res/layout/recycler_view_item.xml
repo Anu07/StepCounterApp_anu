@@ -16,6 +16,7 @@
 
         <ImageView android:id="@+id/categoryImage"
                    android:scaleType="fitXY"
+                   android:src="@drawable/body_clouds_early"
                    android:layout_width="match_parent"
                    android:layout_height="match_parent"/>
         <com.sd.src.stepcounterapp.utils.CustomTextView

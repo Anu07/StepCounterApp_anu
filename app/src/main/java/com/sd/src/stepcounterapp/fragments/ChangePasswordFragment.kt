@@ -44,7 +44,7 @@ class ChangePasswordFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         txt_title.setImageResource(R.drawable.changepwdheader)
         img_back.setOnClickListener {
-            (HayatechFragment.mContext as LandingActivity).hideBottomLayout(true)
+            (mContext as LandingActivity).hideBottomLayout(true)
             fragmentManager!!.popBackStackImmediate()
         }
     }

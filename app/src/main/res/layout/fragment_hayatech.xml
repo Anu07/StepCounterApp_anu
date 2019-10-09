@@ -5,7 +5,7 @@
               android:layout_width="match_parent"
               android:background="@color/gray_backGround"
               android:layout_height="wrap_content"
-              android:layout_marginBottom="@dimen/_40sdp"
+              android:layout_marginBottom="@dimen/_45sdp"
               android:orientation="vertical">
 
     <androidx.core.widget.NestedScrollView
@@ -195,7 +195,7 @@
                             android:layout_height="wrap_content"
                             android:id="@+id/steps"
                             android:textStyle="bold"
-                            android:text="0"
+                            tools:text="0"
                             android:layout_gravity="center"
                             app:appfont="montserrat_semibold.ttf"
                             android:textSize="@dimen/_21ssp"
@@ -464,7 +464,8 @@
                         android:id="@+id/earnMoretokensTxt"
                         app:appfont="montserrat_semibold.ttf"
                         android:textAlignment="center"
-                        android:layout_margin="@dimen/_10sdp"
+                        android:layout_marginBottom="@dimen/_50sdp"
+                        android:layout_marginTop="@dimen/_10sdp"
                         android:textColor="@color/colorBlack"
                         android:layout_marginLeft="@dimen/_10sdp"
                         android:text="@string/earnMore"/>

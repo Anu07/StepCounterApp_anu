@@ -14,21 +14,21 @@ import com.sd.src.stepcounterapp.R
 import com.sd.src.stepcounterapp.activities.LandingActivity
 import com.sd.src.stepcounterapp.model.privacy.PrivacyResponse
 import com.sd.src.stepcounterapp.network.RetrofitClient
-import kotlinx.android.synthetic.main.fragment_blank.*
+import kotlinx.android.synthetic.main.fragment_web.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class BlankFragment : BaseFragment() {
+class WebFragment : BaseFragment() {
     companion object {
         @SuppressLint("StaticFieldLeak")
-        lateinit var instance: BlankFragment
+        lateinit var instance: WebFragment
 
         @SuppressLint("StaticFieldLeak")
         lateinit var mContext: Context
 
-        fun newInstance(context: Context): BlankFragment {
-            instance = BlankFragment()
+        fun newInstance(context: Context): WebFragment {
+            instance = WebFragment()
             mContext = context
             return instance
         }
@@ -38,7 +38,7 @@ class BlankFragment : BaseFragment() {
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_blank, container, false)
+        return inflater.inflate(R.layout.fragment_web, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -60,7 +60,7 @@ class BlankFragment : BaseFragment() {
 
     override fun onDetach() {
         super.onDetach()
-        (HayatechFragment.mContext as LandingActivity).hideBottomLayout(false)
+//        (mContext as LandingActivity).hideBottomLayout(false)
     }
 
 }

@@ -153,8 +153,13 @@ class WalletFragment : BaseFragment(), WalletWishListAdapter.PurchaseListener,
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-        (mContext as LandingActivity).showDisconnection(false)
-        (mContext as LandingActivity).disableSwipe(true)
+        try {
+            (activity as LandingActivity).showDisconnection(false)
+            (activity as LandingActivity).disableSwipe(true)
+        } catch (e: Exception) {
+
+            Log.e("message","message"+e.message)
+        }
     }
 
 

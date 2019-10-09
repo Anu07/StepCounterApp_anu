@@ -28,6 +28,7 @@
             android:textAlignment="center"
             android:textSize="@dimen/_12ssp"
             android:layout_width="match_parent"
+            android:scrollbars="vertical"
             android:layout_height="match_parent"
     />
 </LinearLayout>

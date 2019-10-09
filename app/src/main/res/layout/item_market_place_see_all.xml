@@ -40,6 +40,8 @@
                           android:orientation="horizontal"
                           android:layout_gravity="bottom"
                           android:weightSum="2"
+                          android:background="#60000000"
+                          android:paddingTop="@dimen/_3sdp"
                           android:layout_height="wrap_content">
                 <LinearLayout
                         android:orientation="vertical"

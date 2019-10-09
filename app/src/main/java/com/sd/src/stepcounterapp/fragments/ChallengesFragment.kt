@@ -207,8 +207,11 @@ class ChallengesFragment : BaseFragment(), ChallengeAdapter.ItemClickListener,
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-        (mContext as LandingActivity).showDisconnection(false)
-        (mContext as LandingActivity).disableSwipe(false)
+        try {
+            (activity as LandingActivity).showDisconnection(false)
+            (activity as LandingActivity).disableSwipe(false)
+        } catch (e: Exception) {
+        }
     }
 
     private fun showOngoingChallenge(mActiveList: MutableList<Data>) {

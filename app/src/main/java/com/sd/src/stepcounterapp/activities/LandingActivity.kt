@@ -59,7 +59,6 @@ import kotlinx.android.synthetic.main.bottom_toolbar.*
 import kotlinx.android.synthetic.main.titlebar.*
 import no.nordicsemi.android.dfu.DfuProgressListenerAdapter
 import no.nordicsemi.android.dfu.DfuServiceListenerHelper
-import java.lang.Integer.parseInt
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -99,16 +98,16 @@ class LandingActivity : BaseActivity<DeviceViewModel>(),
             5 -> startActivity(Intent(this@LandingActivity, LeaderboardActivity::class.java))
             6 -> openChangeFragment()
             4 -> loadFragment(position)
-            10 -> openBlankFragment()
+            10 -> openWebFragment()
             11 -> openTnCFragment()
         }
     }
 
-    private fun openBlankFragment() {
+    private fun openWebFragment() {
         swipeLayout.isEnabled = false
         hideBottomLayout(true)
         var fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.add(R.id.container, BlankFragment.newInstance(this@LandingActivity))
+        fragmentTransaction.replace(R.id.container, WebFragment.newInstance(this@LandingActivity))
         fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()
     }
@@ -117,7 +116,7 @@ class LandingActivity : BaseActivity<DeviceViewModel>(),
         swipeLayout.isEnabled = false
         hideBottomLayout(true)
         var fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.add(R.id.container, TnCFragment.newInstance(this@LandingActivity))
+        fragmentTransaction.replace(R.id.container, TnCFragment.newInstance(this@LandingActivity))
         fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()
     }
@@ -1052,7 +1051,7 @@ class LandingActivity : BaseActivity<DeviceViewModel>(),
         swipeLayout.isEnabled = false
         hideBottomLayout(true)
         var fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.add(R.id.container, ChangePasswordFragment.newInstance(this@LandingActivity))
+        fragmentTransaction.replace(R.id.container, ChangePasswordFragment.newInstance(this@LandingActivity))
         fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()
     }
@@ -1070,17 +1069,18 @@ class LandingActivity : BaseActivity<DeviceViewModel>(),
     }
 
     fun showDisconnection(b: Boolean): FrameLayout.LayoutParams {
-        var params = swipeLayout.layoutParams as FrameLayout.LayoutParams
-        if (b) {
-            notconnectedTxt.visibility = VISIBLE
-            swipeLayout.isEnabled = true
-            params.setMargins(10, 230, 10, 10)
-        } else {
-            notconnectedTxt.visibility = GONE
-            params.setMargins(0, 140, 0, 0)
-        }
-        swipeLayout.layoutParams = params
-        return params
+
+            var params = swipeLayout.layoutParams as FrameLayout.LayoutParams
+            if (b) {
+                notconnectedTxt.visibility = VISIBLE
+                swipeLayout.isEnabled = true
+                params.setMargins(10, 230, 10, 10)
+            } else {
+                notconnectedTxt.visibility = GONE
+                params.setMargins(0, 140, 0, 0)
+            }
+            swipeLayout.layoutParams = params
+            return params
     }
 
 

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="@dimen/_60sdp"
+            android:layout_height="@dimen/_60sdp"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/_18sdp"
+            android:src="@drawable/circle_bg"
+            android:id="@+id/notification_img"
+            android:layout_marginEnd="32dp"
+    />
+
+    <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginVertical="@dimen/_18sdp"
+            android:id="@+id/linearLayout"
+            android:layout_marginEnd="8dp"
+            android:layout_width="0dp">
+
+
+        <com.sd.src.stepcounterapp.utils.CustomTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:text="Testing Step Counter"
+                android:ellipsize="end"
+                android:id="@+id/datesurvey"
+                android:textColor="@color/colorBlack"
+                android:maxLines="1"
+                android:textSize="@dimen/_12ssp"
+                app:appEditfont="montserrat_regular.ttf"/>
+
+
+        <com.sd.src.stepcounterapp.utils.CustomTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Time"
+                android:textColor="@color/gray_text"
+                android:textSize="@dimen/_12ssp"
+                app:appEditfont="montserrat_regular.ttf"/>
+
+
+    </LinearLayout>
+
+    <com.sd.src.stepcounterapp.utils.CustomTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/start"
+            android:visibility="gone"
+            android:textColor="@color/white"
+            android:maxLines="1"
+            android:textSize="@dimen/_12ssp"
+            app:appEditfont="montserrat_regular.ttf"
+            android:layout_marginEnd="8dp"
+            android:id="@+id/customStartTextView"
+    />
+
+    <View android:layout_width="0dp"
+          android:layout_height="@dimen/_1sdp"
+          android:background="@color/gray_text"
+          android:layout_marginTop="16dp"
+          android:layout_marginBottom="8dp" app:layout_constraintEnd_toEndOf="parent"/>
+
+</LinearLayout>

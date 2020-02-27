@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white"
+    android:gravity="center_vertical"
+    android:orientation="vertical">
+
+    <LinearLayout
+            android:id="@+id/parentNotification"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:padding="@dimen/_5sdp">
+
+        <com.mikhaellopez.circularimageview.CircularImageView
+                android:id="@+id/noti_img"
+                android:layout_width="@dimen/_50sdp"
+                android:layout_height="@dimen/_50sdp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/nouser" />
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:padding="@dimen/_5sdp">
+
+            <com.sd.src.stepcounterapp.utils.CustomTextView
+                    android:id="@+id/notificationtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:text="Amazing!! you just turned 10 tokens.Amazing!! you just turned 10 tokens"
+                    android:textColor="@color/gray" />
+
+            <com.sd.src.stepcounterapp.utils.CustomTextView
+                    android:id="@+id/notificationdate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:text="Today, 08:40pm"
+                    android:textColor="@color/gray_text" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/_15sdp"
+            android:background="@color/gray_text" />
+</LinearLayout>

@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/_430sdp"
+    android:layout_gravity="bottom"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="@dimen/_5sdp">
+
+    <ScrollView android:id="@+id/parentScroll"
+        android:layout_width="match_parent"
+        android:layout_above="@+id/buttonsLayout"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.sd.src.stepcounterapp.utils.CustomTextView
+                android:id="@+id/txtName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/_18ssp"
+                app:appfont="montserrat_regular.ttf"
+                tools:text="Sahi Sponsored Challenge" />
+
+            <com.sd.src.stepcounterapp.utils.CustomTextView
+                android:id="@+id/txtDepartment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_2sdp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/_8ssp"
+                app:appfont="montserrat_regular.ttf"
+                tools:text="Sahi Sponsored Challenge" />
+
+            <com.sd.src.stepcounterapp.utils.CustomTextView
+                android:id="@+id/txtProgress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_2sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginBottom="@dimen/_5sdp"
+                android:text="In progress"
+                android:textColor="@color/green_txt"
+                android:textSize="@dimen/_10ssp"
+                app:appfont="montserrat_regular.ttf" />
+
+
+            <ImageView
+                android:id="@+id/challengeImg"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_160sdp" />
+
+            <com.sd.src.stepcounterapp.utils.CustomTextView
+                android:id="@+id/txtDetail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_15sdp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:gravity="center_vertical"
+                android:marqueeRepeatLimit="2"
+                android:maxLines="3"
+                android:paddingBottom="@dimen/_5sdp"
+                android:scrollbars="vertical"
+                android:scrollHorizontally="true"
+                android:textColor="@color/gray_text"
+                android:textSize="@dimen/_12ssp"
+                app:appfont="montserrat_regular.ttf"
+                tools:text="@string/dummy_txt" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_5sdp"
+                android:orientation="horizontal">
+
+                <com.sd.src.stepcounterapp.utils.CustomTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="Start Date"
+                    android:textColor="@color/gray_text"
+                    android:textSize="@dimen/_12ssp"
+                    app:appfont="montserrat_regular.ttf" />
+
+                <com.sd.src.stepcounterapp.utils.CustomTextView
+                    android:id="@+id/txtChallengeStartDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="June 22, 2019"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/_12ssp"
+                    app:appfont="montserrat_semibold.ttf" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_5sdp"
+                android:orientation="horizontal">
+
+                <com.sd.src.stepcounterapp.utils.CustomTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="End Date"
+                    android:textColor="@color/gray_text"
+                    android:textSize="@dimen/_12ssp"
+                    app:appfont="montserrat_regular.ttf" />
+
+                <com.sd.src.stepcounterapp.utils.CustomTextView
+                    android:id="@+id/txtEndDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="June 22, 2019"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/_12ssp"
+                    app:appfont="montserrat_semibold.ttf" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_5sdp"
+                android:orientation="horizontal">
+
+                <com.sd.src.stepcounterapp.utils.CustomTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="Challenge Reward: "
+                    android:textColor="@color/gray_text"
+                    android:textSize="@dimen/_12ssp"
+                    app:appfont="montserrat_regular.ttf" />
+
+                <com.sd.src.stepcounterapp.utils.CustomTextView
+                    android:id="@+id/rewardTokens"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="22"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/_12ssp"
+                    app:appfont="montserrat_semibold.ttf" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_5sdp"
+                android:orientation="horizontal">
+
+                <com.sd.src.stepcounterapp.utils.CustomTextView
+                    android:id="@+id/stepsTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="Target Steps: "
+                    android:textColor="@color/gray_text"
+                    android:textSize="@dimen/_12ssp"
+                    app:appfont="montserrat_regular.ttf" />
+
+                <com.sd.src.stepcounterapp.utils.CustomTextView
+                    android:id="@+id/txtSteps"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="22"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/_12ssp"
+                    app:appfont="montserrat_semibold.ttf" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/tarStepsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_5sdp"
+                android:orientation="horizontal">
+
+                <com.sd.src.stepcounterapp.utils.CustomTextView
+                    android:id="@+id/tarSteps"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="Target Steps: "
+                    android:textColor="@color/gray_text"
+                    android:textSize="@dimen/_12ssp"
+                    app:appfont="montserrat_regular.ttf" />
+
+                <com.sd.src.stepcounterapp.utils.CustomTextView
+                    android:id="@+id/txtTarSteps"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/_12ssp"
+                    app:appfont="montserrat_semibold.ttf"
+                    tools:text="25" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_5sdp"
+                android:orientation="horizontal">
+
+                <com.sd.src.stepcounterapp.utils.CustomTextView
+                    android:id="@+id/ttlprtcpnts"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="Total Participants: "
+                    android:textColor="@color/gray_text"
+                    android:textSize="@dimen/_12ssp"
+                    app:appfont="montserrat_regular.ttf" />
+
+                <com.sd.src.stepcounterapp.utils.CustomTextView
+                    android:id="@+id/txtParticipants"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="25"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/_12ssp"
+                    app:appfont="montserrat_semibold.ttf" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/buttonsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <com.sd.src.stepcounterapp.utils.CustomButton
+            android:id="@+id/btnStart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:background="@drawable/button_background"
+            android:padding="@dimen/_10sdp"
+            android:text="@string/start_challenge"
+            android:textColor="@color/white"
+            app:appButtonfont="montserrat_medium.ttf" />
+
+        <com.sd.src.stepcounterapp.utils.CustomButton
+            android:id="@+id/btnStop"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:background="@color/bttn_stop_color"
+            android:padding="@dimen/_10sdp"
+            android:text="@string/stop_challenge"
+            android:textColor="@color/white"
+            android:visibility="gone"
+            app:appButtonfont="montserrat_medium.ttf" />
+    </LinearLayout>
+
+</RelativeLayout>

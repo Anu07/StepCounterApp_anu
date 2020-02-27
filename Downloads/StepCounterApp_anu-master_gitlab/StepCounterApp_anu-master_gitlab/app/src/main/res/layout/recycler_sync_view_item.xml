@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:id="@+id/parent"
+        android:layout_margin="@dimen/_5sdp"
+        android:layout_height="wrap_content">
+    <ImageView android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+                android:src="@drawable/check"
+               android:id="@+id/checkMark"
+               android:visibility="gone"
+               android:layout_gravity="right|top"
+    />
+    <ImageView
+            android:id="@+id/categoryImage"
+            android:src="@drawable/placeholder"
+            android:layout_margin="@dimen/_2sdp"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+</FrameLayout>

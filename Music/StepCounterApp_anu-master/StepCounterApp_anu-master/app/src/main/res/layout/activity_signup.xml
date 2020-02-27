@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                       android:layout_width="match_parent"
+                                                       android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.AppCompatImageView android:layout_width="match_parent"
+                                                      android:id="@+id/appLogo"
+                                                      app:layout_constraintTop_toTopOf="parent"
+                                                      android:src="@drawable/logo_vector"
+                                                      android:layout_margin="@dimen/_30sdp"
+                                                      android:layout_height="wrap_content"/>
+
+        <com.sd.src.stepcounterapp.utils.CustomTextView android:id="@+id/headerText"
+                                                        android:layout_width="wrap_content"
+                                                        app:layout_constraintTop_toBottomOf="@+id/appLogo"
+                                                        style="@style/headerTextStyle"
+                                                        android:text="Sign Up"
+                                                        android:layout_height="wrap_content"
+                                                        app:layout_constraintStart_toStartOf="parent"/>
+
+
+        <com.google.android.material.textfield.TextInputLayout style="@style/textLayoutStyle"
+                                                               android:id="@+id/emailLayout"
+                                                               app:layout_constraintTop_toBottomOf="@+id/headerText"
+                                                               android:layout_width="0dp"
+                                                               app:layout_constraintEnd_toEndOf="parent"
+                                                               app:layout_constraintStart_toStartOf="parent"
+                                                               android:layout_marginStart="8dp"
+                                                               android:layout_marginEnd="8dp">
+
+            <com.google.android.material.textfield.TextInputEditText android:id="@+id/emailTxt"
+                                                                     android:hint="@string/hint_email"
+                                                                     android:layout_width="match_parent"
+                                                                     android:layout_height="wrap_content"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout style="@style/textLayoutStyle"
+                                                               android:id="@+id/mobileLayout"
+                                                               app:layout_constraintTop_toBottomOf="@+id/emailLayout"
+                                                               android:layout_width="match_parent"
+                                                               app:layout_constraintEnd_toEndOf="parent"
+                                                               app:layout_constraintStart_toStartOf="parent"
+                                                               android:layout_marginStart="8dp"
+                                                               android:layout_marginEnd="8dp">
+
+            <com.google.android.material.textfield.TextInputEditText android:id="@+id/mobileTxt"
+                                                                     android:hint="@string/hint_mobile"
+                                                                     android:layout_width="match_parent"
+                                                                     android:layout_height="wrap_content"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout style="@style/textLayoutStyle"
+                                                               android:id="@+id/pwdLayout"
+                                                               app:layout_constraintTop_toBottomOf="@+id/mobileLayout"
+                                                               app:layout_constraintStart_toStartOf="parent"
+                                                               android:layout_marginStart="8dp"
+                                                               android:layout_marginEnd="8dp"
+                                                               app:layout_constraintEnd_toEndOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText android:id="@+id/pwdTxt"
+                                                                     android:hint="@string/hint_pwd"
+                                                                     android:layout_width="match_parent"
+                                                                     android:layout_height="wrap_content"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+
+        <CheckBox android:layout_width="match_parent"
+                  android:id="@+id/privacyPolicyChck"
+                  android:autoLink="all"
+                  android:linksClickable="true"
+                  android:text="@string/tnc_privpolicy"
+                  style="@style/chckBoxStyle"
+                  android:gravity="top"
+                  android:buttonTint="@color/colorBlack"
+                  app:layout_constraintTop_toBottomOf="@+id/pwdLayout"
+                  android:layout_height="wrap_content" android:layout_marginStart="12dp"/>
+
+        <androidx.appcompat.widget.AppCompatButton android:layout_width="match_parent"
+                                                   android:id="@+id/signupBttn"
+                                                   android:text="@string/sign_up"
+                                                   app:layout_constraintTop_toBottomOf="@+id/privacyPolicyChck"
+                                                   style="@style/BttnStyle"
+                                                   android:layout_height="wrap_content"/>
+
+
+        <view android:layout_width="match_parent" android:layout_height="1dp"
+              app:layout_constraintBottom_toTopOf="@+id/textSignIn"
+              android:layout_margin="@dimen/_10sdp"
+              android:background="@color/gray" android:id="@+id/view"/>
+
+        <com.sd.src.stepcounterapp.utils.CustomTextView android:id="@+id/textSignIn"
+                                                        style="@style/textviewRegularStyle"
+                                                        android:text="@string/signInText"
+                                                        android:textColor="@color/gray"
+                                                        app:layout_constraintBottom_toBottomOf="parent"
+                                                        android:layout_marginBottom="@dimen/_10sdp"
+                                                        app:layout_constraintStart_toStartOf="parent"
+                                                        android:layout_marginStart="5dp"
+                                                        app:layout_constraintEnd_toEndOf="parent"
+                                                        android:layout_marginEnd="5dp"
+        />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

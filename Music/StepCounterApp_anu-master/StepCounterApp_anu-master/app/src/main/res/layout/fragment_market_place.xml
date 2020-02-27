@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scroll"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="?actionBarSize"
+    android:layout_marginBottom="?actionBarSize"
+    android:animateLayoutChanges="true"
+    android:background="@color/gray_backGround"
+    android:orientation="vertical">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/topLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_12sdp"
+                android:background="@color/white"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/searchView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:background="@drawable/full_round_border"
+                    android:drawableLeft="@drawable/search_icon"
+                    android:drawableRight="@drawable/ic_clear_black_24dp"
+                    android:drawablePadding="@dimen/_10sdp"
+                    android:hint="Search Marketplace"
+                    android:imeOptions="actionSearch"
+                    android:maxLength="80"
+                    android:padding="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:textColor="@color/gradientColorStart" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="?actionBarSize"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/_7sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginRight="@dimen/_7sdp"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginBottom="@dimen/_3sdp"
+                        android:layout_weight="1.4"
+                        android:orientation="horizontal"
+                        android:visibility="visible">
+
+                        <com.sd.src.stepcounterapp.utils.CustomTextView
+                            android:id="@+id/tokenTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_vertical"
+                            android:gravity="center_vertical"
+                            android:text="Total Earned Tokens: "
+                            android:textSize="@dimen/_12sdp"
+                            app:appfont="montserrat_regular.ttf" />
+
+                        <com.sd.src.stepcounterapp.utils.CustomTextView
+                            android:id="@+id/tokenVal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:gravity="center_vertical"
+                            android:maxLines="2"
+                            android:textColor="@color/blue_txt"
+                            android:textSize="@dimen/_12sdp"
+                            app:appfont="montserrat_semibold.ttf"
+                            tools:text="1568 TKNS" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginBottom="@dimen/_5sdp"
+                        android:background="@color/gray_text"
+                        android:visibility="gone" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="@dimen/_2sdp"
+                        android:layout_marginRight="@dimen/_2sdp"
+                        android:layout_marginBottom="@dimen/_3sdp"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <com.sd.src.stepcounterapp.utils.CustomTextView
+                            android:id="@+id/earn"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:text="Earn"
+                            android:textColor="@color/green_txt"
+                            android:textSize="@dimen/_17sdp"
+                            app:appfont="montserrat_semibold.ttf" />
+
+                        <com.sd.src.stepcounterapp.utils.CustomTextView
+                            android:id="@+id/tokenTitle_earn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Reward Tokens"
+                            android:textSize="@dimen/_10sdp"
+                            app:appfont="montserrat_regular.ttf" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginBottom="@dimen/_5sdp"
+                        android:background="@color/gray_text" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical|center"
+                        android:layout_marginRight="@dimen/_5sdp"
+                        android:layout_marginBottom="@dimen/_3sdp"
+                        android:layout_weight="0.6"
+                        android:gravity="center|bottom"
+                        android:orientation="horizontal">
+
+                        <FrameLayout
+                            android:layout_width="45dp"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:id="@+id/wishlist"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:background="@drawable/circle_bg"
+                                android:padding="@dimen/_7sdp"
+                                android:src="@drawable/featured" />
+
+                            <TextView
+                                android:id="@+id/cart_badge"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="right|end|top"
+                                android:layout_marginTop="1dp"
+                                android:layout_marginBottom="@dimen/_5sdp"
+                                android:background="@drawable/badge_bg"
+                                android:gravity="center"
+                                android:padding="3dp"
+                                android:text="0"
+                                android:textColor="@android:color/white"
+                                android:textSize="10sp" />
+                        </FrameLayout>
+
+                        <ImageView
+                            android:id="@+id/filter"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/circle_bg"
+                            android:padding="@dimen/_7sdp"
+                            android:src="@drawable/filters" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:layout_marginRight="@dimen/_5sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:background="@color/gray_text" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+
+                <com.sd.src.stepcounterapp.utils.CustomTextView
+                    android:id="@+id/txtPopularity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="?selectableItemBackground"
+                    android:gravity="center"
+                    android:padding="@dimen/_10sdp"
+                    android:text="BY POPULARITY"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/_14ssp"
+                    app:appfont="montserrat_semibold.ttf" />
+
+                <com.sd.src.stepcounterapp.utils.CustomTextView
+                    android:id="@+id/txtCategory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="?selectableItemBackground"
+                    android:gravity="center"
+                    android:padding="@dimen/_10sdp"
+                    android:text="BY CATEGORY"
+                    android:textAllCaps="true"
+                    android:textColor="@color/gray_text"
+                    android:textSize="@dimen/_14ssp"
+                    app:appfont="montserrat_semibold.ttf" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llCategory"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/gray_backGround"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <com.sd.src.stepcounterapp.utils.CustomTextView
+                    android:id="@+id/noRec"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:paddingStart="@dimen/_5sdp"
+                    android:paddingTop="@dimen/_10sdp"
+                    android:text="No records found"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/_12ssp"
+                    android:visibility="visible"
+                    app:appfont="montserrat_semibold.ttf" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvProduct"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:layout_marginBottom="?actionBarSize"
+                    android:visibility="gone"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+                <LinearLayout
+                    android:id="@+id/llSeeAll"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <com.sd.src.stepcounterapp.utils.CustomTextView
+                        android:id="@+id/txtCategoryName"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingStart="@dimen/_5sdp"
+                        android:paddingTop="@dimen/_10sdp"
+                        android:text="Diet"
+                        android:textAllCaps="true"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/_12ssp"
+                        android:visibility="visible"
+                        app:appfont="montserrat_semibold.ttf" />
+
+                    <com.sd.src.stepcounterapp.utils.CustomTextView
+                        android:id="@+id/txtSeeAll"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="@dimen/_10sdp"
+                        android:paddingEnd="@dimen/_10sdp"
+                        android:text="See less"
+                        android:textColor="@color/gray_text"
+                        android:textSize="@dimen/_12ssp"
+                        app:appfont="montserrat_semibold.ttf" />
+                </LinearLayout>
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvSeeAll"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/_15sdp"
+                    android:visibility="visible" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llPopularity"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:background="@color/gray_backGround"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <com.sd.src.stepcounterapp.utils.CustomTextView
+                    android:id="@+id/noRecP"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:paddingStart="@dimen/_5sdp"
+                    android:paddingTop="@dimen/_10sdp"
+                    android:text="No records found"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/_12ssp"
+                    android:visibility="gone"
+                    app:appfont="montserrat_semibold.ttf" />
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvPopularity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:layout_marginBottom="?actionBarSize" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </androidx.core.widget.NestedScrollView>
+
+
+</LinearLayout>

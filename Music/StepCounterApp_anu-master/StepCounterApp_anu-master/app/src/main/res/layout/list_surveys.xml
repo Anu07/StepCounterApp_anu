@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/gray_backGround"
+        android:clickable="true"
+        android:orientation="vertical">
+
+    <include layout="@layout/black_crosstitlebar" />
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/list_mysurveys"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    <com.sd.src.stepcounterapp.utils.CustomTextView
+            android:id="@+id/noSurveyDataTxt"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="No data available"
+            android:textSize="@dimen/_12sdp"
+            android:visibility="gone"
+            app:appfont="montserrat_regular.ttf" />
+</LinearLayout>

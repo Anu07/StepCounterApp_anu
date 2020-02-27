@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/_2sdp"
+    android:orientation="horizontal">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/appCompatImageView2"
+        android:layout_width="@dimen/_15sdp"
+        android:layout_height="@dimen/_15sdp"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/_18sdp"
+        android:layout_marginEnd="32dp"
+        android:src="@drawable/blue_circle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/linearLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toStartOf="@+id/customStartTextView"
+        app:layout_constraintStart_toEndOf="@+id/appCompatImageView2"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.sd.src.stepcounterapp.utils.CustomTextView
+            android:id="@+id/txtSurveysName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:capitalize="words"
+            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "
+            android:ellipsize="end"
+            android:inputType="textNoSuggestions"
+            android:maxLines="1"
+            android:textColor="@color/arrow_color"
+            android:textSize="@dimen/_12ssp"
+            app:appfont="montserrat_regular.ttf"
+            tools:text="Lifestyle Quiz" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:orientation="horizontal">
+
+            <com.sd.src.stepcounterapp.utils.CustomTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="Total Questions:"
+                android:textColor="@color/gray_text"
+                android:textSize="@dimen/_12ssp"
+                app:appfont="montserrat_regular.ttf" />
+
+            <com.sd.src.stepcounterapp.utils.CustomTextView
+                android:id="@+id/txtTotalQuestion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="15"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/_12ssp"
+                app:appfont="montserrat_semibold.ttf" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:orientation="horizontal">
+
+            <com.sd.src.stepcounterapp.utils.CustomTextView
+                android:id="@+id/tokenTxtMsg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="Tokens Earned: "
+                android:textColor="@color/gray_text"
+                android:textSize="@dimen/_12ssp"
+                app:appfont="montserrat_regular.ttf" />
+
+            <com.sd.src.stepcounterapp.utils.CustomTextView
+                android:id="@+id/txtEarningToken"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="10"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/_12ssp"
+                app:appfont="montserrat_semibold.ttf" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:orientation="horizontal">
+
+            <com.sd.src.stepcounterapp.utils.CustomTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="Expires on:"
+                android:textColor="@color/gray_text"
+                android:textSize="@dimen/_12ssp"
+                app:appfont="montserrat_regular.ttf" />
+
+            <com.sd.src.stepcounterapp.utils.CustomTextView
+                android:id="@+id/datesurvey"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="June 22, 2019"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/_12ssp"
+                app:appfont="montserrat_semibold.ttf" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <com.sd.src.stepcounterapp.utils.CustomTextView
+        android:id="@+id/customStartTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/blue_fill_circle"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:paddingStart="@dimen/_6sdp"
+        android:paddingTop="@dimen/_16sdp"
+        android:paddingEnd="@dimen/_6sdp"
+        android:paddingBottom="@dimen/_16sdp"
+        android:text="@string/start"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_12ssp"
+        app:appfont="montserrat_regular.ttf"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_1sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:background="@color/a8a8a8"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/linearLayout"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

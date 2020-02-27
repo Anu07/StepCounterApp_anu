@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/colorbg"
+              android:clickable="true"
+              android:orientation="vertical">
+
+    <include layout="@layout/backtitlebar"/>
+
+    <ScrollView android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fillViewport="true">
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:orientation="vertical">
+            <com.sd.src.stepcounterapp.utils.CustomTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_20ssp"
+                    android:layout_marginBottom="@dimen/_20ssp"
+                    android:gravity="center_horizontal"
+                    android:paddingHorizontal="8dp"
+                    android:text="@string/kindly_get_in_touch"
+                    android:textColor="@color/gray_text"
+                    android:textSize="@dimen/_12ssp"
+                    app:appEditfont="montserrat_regular.ttf"/>
+
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/_14ssp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginRight="@dimen/_14sdp"
+                    android:background="@color/white"
+                    android:orientation="vertical">
+
+
+                <com.sd.src.stepcounterapp.utils.CustomTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_20ssp"
+                        android:layout_marginBottom="@dimen/_20ssp"
+                        android:gravity="center_horizontal"
+                        android:paddingHorizontal="@dimen/_20ssp"
+                        android:text="@string/send_your_query"
+                        android:textColor="@color/gray"
+                        android:textSize="@dimen/_14sdp"
+                        android:textStyle="bold"
+                        app:appEditfont="montserrat_medium.ttf"/>
+
+
+                <com.sd.src.stepcounterapp.utils.CustomEditText
+                        android:id="@+id/messageTxt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/_25ssp"
+                        android:layout_marginBottom="@dimen/_20ssp"
+                        android:hint="Message"
+                        android:imeOptions="actionDone"
+                        android:inputType="text"
+                        app:appEditfont="montserrat_regular.ttf"/>
+
+
+                <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/send_contact_us"
+                        style="@style/BttnStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="send"
+                        android:textAllCaps="true"/>
+
+                <View android:layout_width="match_parent"
+                      android:layout_height="50dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

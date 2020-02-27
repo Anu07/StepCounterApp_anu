@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardslideMain"
+    app:cardCornerRadius="@dimen/_5sdp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_200sdp"
+            android:layout_gravity="center_vertical"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY" />
+
+        <com.sd.src.stepcounterapp.utils.CustomTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_2sdp"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:background="@color/featured"
+            android:paddingLeft="@dimen/_2sdp"
+            android:paddingRight="@dimen/_2sdp"
+            android:text="FEATURED"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_8ssp"
+            app:appfont="montserrat_medium.ttf" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|center_vertical"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <com.sd.src.stepcounterapp.utils.CustomTextView
+                android:id="@+id/challengesTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:background="#3B9841"
+                android:paddingLeft="@dimen/_10sdp"
+                android:paddingRight="@dimen/_10sdp"
+                android:maxLines="2"
+                android:padding="@dimen/_3sdp"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_13ssp"
+                app:appfont="montserrat_semibold.ttf"
+                tools:text="Sahi Sponsored Challenge" />
+
+            <com.sd.src.stepcounterapp.utils.CustomTextView
+                android:id="@+id/challengesSubTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxLength="100"
+                android:visibility="gone"
+                android:padding="@dimen/_3sdp"
+                android:paddingLeft="@dimen/_2sdp"
+                android:paddingRight="@dimen/_2sdp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_8ssp"
+                app:appfont="montserrat_semibold.ttf"
+                tools:text="Sahi Sponsored Challenge" />
+        </LinearLayout>
+
+    </FrameLayout>
+
+
+</LinearLayout>
+</androidx.cardview.widget.CardView>

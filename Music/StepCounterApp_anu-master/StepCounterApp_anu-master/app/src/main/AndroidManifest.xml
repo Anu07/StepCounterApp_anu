@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.sd.src.stepcounterapp">
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+
+    <application
+        android:name=".HayaTechApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/logo"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:roundIcon="@mipmap/ic_launcher_happy"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true"
+        tools:ignore="GoogleAppIndexingWarning">
+
+        <activity
+            android:name=".activities.SplashActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+        <activity
+            android:name=".activities.LandingActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden">
+            <intent-filter>
+                <action android:name="LandingActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activities.OnboardingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.MyProfileActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.AppBarOverlay" />
+        <!--                android:parentActivityName=".activities.LandingActivity"-->
+        <activity
+            android:name=".activities.ForgotPasswordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.DeviceConnctdActivity"
+            android:launchMode='singleTask'
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.DisclaimerActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.ElciesWebActivity"
+            android:launchMode='singleTask'
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.BasicInfoActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateVisible|adjustPan" />
+        <activity
+            android:name=".activities.BmiCalculatorActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.SyncDeviceActivity"
+            android:screenOrientation="portrait" />
+        <!--                android:launchMode="singleInstance"-->
+        <activity
+            android:name=".activities.RewardsCategorySelectionActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.SignInActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.CorporateInfoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.PurchasedDetails"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat" />
+        <activity
+            android:name=".activities.DeviceSynchronizingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.DeviceListActivity"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.GuideActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.LeaderboardActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.SurveyDetailActivity"
+            android:screenOrientation="portrait" />
+
+        <service android:name=".service.MokoService" />
+        <service
+            android:name=".firebase.MyFirebaseMessageService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".service.FitpoloNotificationCollectorService"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+        <service android:name=".service.FitpoloNotificationCollectorMonitorService" />
+        <service android:name=".service.DfuService" />
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/default_notification_channel_id" />
+        <receiver
+            android:name=".utils.NetworkChangeReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+    </application>
+
+</manifest>

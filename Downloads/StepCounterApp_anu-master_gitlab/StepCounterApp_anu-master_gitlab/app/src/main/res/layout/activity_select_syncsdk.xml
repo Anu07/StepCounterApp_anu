@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_gravity="center"
+            android:layout_height="match_parent">
+
+        <LinearLayout android:orientation="horizontal"
+                      android:layout_width="match_parent"
+                      android:weightSum="2"
+                      android:layout_marginStart="@dimen/_10sdp"
+                      android:layout_marginEnd="@dimen/_10sdp"
+                      android:layout_gravity="top"
+                      android:layout_marginLeft="@dimen/_10sdp"
+                      android:layout_marginRight="@dimen/_10sdp"
+                      android:layout_marginBottom="@dimen/_10sdp"
+                      android:layout_height="wrap_content">
+            <com.sd.src.stepcounterapp.utils.CustomTextView
+                    android:id="@+id/headerTextwelcome"
+                    android:layout_width="0dp"
+                    android:text="@string/welcome"
+                    android:layout_weight="1.7"
+                    app:appfont="montserrat_semibold.ttf"
+                    android:layout_height="match_parent"
+                    android:textSize="@dimen/_18ssp"
+                    android:textColor="@color/colorBlack"
+                    android:layout_marginTop="@dimen/_20sdp"/>
+
+            <com.sd.src.stepcounterapp.utils.CustomTextView
+                    android:layout_width="0dp"
+                    android:layout_weight="0.3"
+                    android:id="@+id/skipBttn"
+                    android:text="Skip"
+                    android:textSize="@dimen/_15sdp"
+                    android:textAllCaps="true"
+                    android:gravity="right|bottom"
+                    android:textColor="@color/gray_text"
+                    android:layout_height="match_parent"/>
+        </LinearLayout>
+
+        <com.sd.src.stepcounterapp.utils.CustomTextView
+                android:id="@+id/headerText2"
+                android:layout_width="match_parent"
+                android:text="@string/sync_ur_fitness"
+                app:appfont="montserrat_semibold.ttf"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/_25sdp"
+                android:layout_marginLeft="@dimen/_10sdp"
+                 android:layout_marginRight="@dimen/_10sdp"
+                android:textColor="@color/colorBlack"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+        <com.sd.src.stepcounterapp.utils.CustomTextView
+                android:id="@+id/headerTextttl"
+                android:layout_width="match_parent"
+                android:textSize="@dimen/_14sdp"
+                android:textColor="@color/gray_text"
+                android:layout_marginLeft="@dimen/_12sdp"
+                android:layout_marginRight="@dimen/_12sdp"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:layout_marginBottom="@dimen/_20sdp"
+                android:text="@string/sync_msg"
+                android:gravity="left"
+                app:appfont="montserrat_regular.ttf"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/syncsCategory"
+                    android:layout_width="match_parent"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:layout_height="300dp"/>
+
+            <com.sd.src.stepcounterapp.utils.CustomTextView
+                    android:layout_width="wrap_content"
+                    android:text="Unlink Wearable"
+                    android:id="@+id/unlink"
+                    android:textColor="@color/gray_text"
+                    android:layout_below="@+id/syncsCategory"
+                    android:textSize="@dimen/_15sdp"
+                    android:padding="@dimen/_5sdp"
+                    android:layout_centerInParent="true"
+                    android:visibility="gone"
+                    android:drawablePadding="@dimen/_5sdp"
+                    android:gravity="center"
+                    android:drawableLeft="@drawable/unlink"
+                    android:layout_height="?actionBarSize"/>
+            <com.sd.src.stepcounterapp.utils.CustomButton
+                    android:id="@+id/cntnBttn"
+                    android:text="Continue"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_14sdp"
+                    android:layout_marginBottom="@dimen/_15sdp"
+                    android:background="@drawable/button_background"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="12dp"/>
+
+            <LinearLayout android:orientation="horizontal"
+                          android:layout_width="match_parent"
+                          android:layout_marginBottom="@dimen/_15sdp"
+                          android:weightSum="2"
+                          android:gravity="center_vertical"
+                          android:layout_alignParentBottom="true"
+                          android:id="@+id/unlinkBttnsLay"
+                          android:visibility="gone"
+                          android:layout_height="wrap_content">
+                <com.sd.src.stepcounterapp.utils.CustomButton
+                        android:id="@+id/nBttn"
+                        android:text="No"
+                        android:textColor="@color/gray_text"
+                        android:textSize="@dimen/_14sdp"
+                        android:background="@drawable/full_border_bgray"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="@dimen/_10sdp"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:layout_height="wrap_content"/>
+
+                <com.sd.src.stepcounterapp.utils.CustomButton
+                        android:id="@+id/chgBttn"
+                        android:text="Change"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_14sdp"
+                        android:background="@drawable/button_background"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="@dimen/_10sdp"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:background="@color/colorbg"
+              android:layout_marginBottom="@dimen/_10sdp"
+              android:layout_height="match_parent">
+
+    <include layout="@layout/backtitlebar"/>
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:background="@color/white"
+            android:layout_height="wrap_content">
+        <com.sd.src.stepcounterapp.utils.CustomTextView
+                android:id="@+id/surveyName"
+                android:layout_width="match_parent"
+                android:textSize="@dimen/_18ssp"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:text="Name"
+                android:capitalize="words"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_5sdp"
+                android:textColor="@color/colorBlack"
+                app:appfont="montserrat_semibold.ttf"
+                android:layout_height="wrap_content"/>
+        <LinearLayout
+                android:id="@+id/totalQues"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <com.sd.src.stepcounterapp.utils.CustomTextView
+                    android:id="@+id/totalques"
+                    android:text="Total Questions: "
+                    android:textSize="@dimen/_12ssp"
+                    app:appfont="montserrat_medium.ttf"
+                    android:textColor="@color/gray_text"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            <com.sd.src.stepcounterapp.utils.CustomTextView
+                    android:id="@+id/quesCount"
+                    android:layout_width="wrap_content"
+                    android:textSize="@dimen/_12ssp"
+                    app:appfont="montserrat_medium.ttf"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:textColor="@color/colorBlack"
+                    android:layout_height="wrap_content"/>
+        </LinearLayout>
+        <LinearLayout
+                android:id="@+id/expireLay"
+                android:orientation="horizontal"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <com.sd.src.stepcounterapp.utils.CustomTextView
+                    android:id="@+id/expireTxt"
+                    android:text="Expires On: "
+                    android:textSize="@dimen/_12ssp"
+                    app:appfont="montserrat_medium.ttf"
+                    android:textColor="@color/gray_text"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            <com.sd.src.stepcounterapp.utils.CustomTextView
+                    android:id="@+id/expireDate"
+                    android:layout_width="wrap_content"
+                    android:textSize="@dimen/_12ssp"
+                    app:appfont="montserrat_medium.ttf"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:textColor="@color/colorBlack"
+                    android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal"
+                    android:background="@color/white"
+                    android:padding="@dimen/_5sdp"
+                    android:id="@+id/bottomButtonLayout"
+                    android:layout_alignParentBottom="true"
+                    android:layout_gravity="bottom"
+                    android:layout_height="wrap_content">
+
+
+                <com.sd.src.stepcounterapp.utils.CustomButton
+                        android:id="@+id/finishbutton"
+                        android:background="@drawable/button_background"
+                        android:layout_width="match_parent"
+                        android:textSize="@dimen/_15sdp"
+                        android:textColor="@color/white"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        app:appButtonfont="montserrat_medium.ttf"
+                        android:layout_height="wrap_content"
+                        android:text="FINISH"
+                />
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/quesList"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:background="@color/colorbg"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    android:layout_above="@+id/bottomButtonLayout"
+                    android:layout_height="match_parent"/>
+
+
+        </RelativeLayout>
+
+
+
+</LinearLayout>

@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:animateLayoutChanges="true"
+        android:layout_marginBottom="?actionBarSize"
+        android:layout_marginTop="?actionBarSize"
+        android:background="@color/gray_backGround"
+        android:id="@+id/scroll"
+        android:layout_height="match_parent">
+
+    <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <LinearLayout android:layout_width="match_parent"
+                      android:orientation="vertical"
+                      android:layout_height="match_parent">
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:orientation="vertical"
+                          android:layout_marginTop="@dimen/_12sdp"
+                          android:background="@color/white"
+                          android:id="@+id/topLayout"
+                          android:layout_height="wrap_content">
+
+                <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/full_round_border"
+                        android:layout_marginLeft="@dimen/_10sdp"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:hint="Search Marketplace"
+                        android:drawablePadding="@dimen/_10sdp"
+                        android:padding="@dimen/_10sdp"
+                        android:imeOptions="actionSearch"
+                        android:singleLine="true"
+                        android:maxLength="80"
+                        android:drawableRight="@drawable/ic_clear_black_24dp"
+                        android:textColor="@color/gradientColorStart"
+                        android:drawableLeft="@drawable/search_icon"
+                        android:id="@+id/searchView"/>
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:orientation="horizontal"
+                        android:layout_marginLeft="@dimen/_12sdp"
+                        android:layout_marginRight="@dimen/_12sdp"
+                        android:weightSum="3">
+
+                    <LinearLayout
+                            android:layout_width="0dp"
+                            android:orientation="vertical"
+                            android:layout_weight="1"
+                            android:layout_marginBottom="@dimen/_3sdp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_height="wrap_content">
+                        <com.sd.src.stepcounterapp.utils.CustomTextView
+                                android:layout_width="match_parent"
+                                tools:text="1568"
+                                android:id="@+id/tokenVal"
+                                android:textSize="@dimen/_17sdp"
+                                android:textColor="@color/blue_txt"
+                                app:appfont="montserrat_semibold.ttf"
+                                android:layout_height="wrap_content"/>
+                        <com.sd.src.stepcounterapp.utils.CustomTextView
+                                android:layout_width="match_parent"
+                                android:id="@+id/tokenTitle"
+                                android:text="Reward Tokens"
+                                app:appfont="montserrat_regular.ttf"
+                                android:textSize="@dimen/_10sdp"
+                                android:layout_height="wrap_content"/>
+                    </LinearLayout>
+                    <View android:layout_width="1dp"
+                          android:background="@color/gray_text"
+                          android:layout_marginTop="@dimen/_5sdp"
+                          android:layout_marginBottom="@dimen/_5sdp"
+                          android:layout_height="match_parent"/>
+                    <LinearLayout
+                            android:layout_width="0dp"
+                            android:orientation="vertical"
+                            android:layout_weight="1"
+                            android:layout_marginBottom="@dimen/_3sdp"
+                            android:layout_marginLeft="@dimen/_10sdp"
+                            android:layout_marginRight="@dimen/_10sdp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_height="wrap_content">
+                        <com.sd.src.stepcounterapp.utils.CustomTextView
+                                android:layout_width="match_parent"
+                                android:text="Earn"
+                                android:id="@+id/earn"
+                                android:textSize="@dimen/_17sdp"
+                                android:textColor="@color/green_txt"
+                                app:appfont="montserrat_semibold.ttf"
+                                android:gravity="center_vertical"
+                                android:layout_height="wrap_content"/>
+                        <com.sd.src.stepcounterapp.utils.CustomTextView
+                                android:layout_width="wrap_content"
+                                android:id="@+id/tokenTitle_earn"
+                                android:text="Reward Tokens"
+                                app:appfont="montserrat_regular.ttf"
+                                android:textSize="@dimen/_10sdp"
+                                android:layout_height="wrap_content"/>
+                    </LinearLayout>
+                    <View android:layout_width="1dp"
+                          android:background="@color/gray_text"
+                          android:layout_marginTop="@dimen/_5sdp"
+                          android:layout_marginBottom="@dimen/_5sdp"
+                          android:layout_height="match_parent"/>
+                    <LinearLayout
+                            android:layout_width="0dp"
+                            android:orientation="horizontal"
+                            android:layout_marginRight="@dimen/_5sdp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:layout_marginBottom="@dimen/_3sdp"
+                            android:layout_gravity="center_vertical|center"
+                            android:layout_height="wrap_content">
+                        <FrameLayout android:layout_width="45dp"
+                                     android:layout_marginRight="@dimen/_5sdp"
+                                     android:layout_height="wrap_content">
+
+                            <ImageView android:id="@+id/wishlist"
+                                       android:layout_width="40dp"
+                                       android:layout_height="40dp"
+                                       android:padding="@dimen/_7sdp"
+                                       android:background="@drawable/circle_bg"
+                                       android:src="@drawable/featured"/>
+
+                            <TextView
+                                    android:id="@+id/cart_badge"
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_gravity="right|end|top"
+                                    android:layout_marginBottom="@dimen/_5sdp"
+                                    android:layout_marginTop="1dp"
+                                    android:background="@drawable/badge_bg"
+                                    android:gravity="center"
+                                    android:padding="3dp"
+                                    android:textColor="@android:color/white"
+                                    android:text="0"
+                                    android:textSize="10sp"/>
+                        </FrameLayout>
+
+                        <ImageView android:id="@+id/filter"
+                                   android:layout_width="40dp"
+                                   android:layout_height="40dp"
+                                   android:padding="@dimen/_7sdp"
+                                   android:background="@drawable/circle_bg"
+                                   android:src="@drawable/filters"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+            <View android:layout_width="match_parent"
+                  android:background="@color/gray_text"
+                  android:layout_marginLeft="@dimen/_5sdp"
+                  android:layout_marginRight="@dimen/_5sdp"
+                  android:layout_marginBottom="@dimen/_10sdp"
+                  android:layout_height="1dp"/>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_height="wrap_content">
+
+                <com.sd.src.stepcounterapp.utils.CustomTextView
+                        android:id="@+id/txtCategory"
+                        android:layout_width="wrap_content"
+                        android:textAllCaps="true"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="BY CATEGORY"
+                        android:gravity="center"
+                        android:background="?selectableItemBackground"
+                        android:padding="@dimen/_10sdp"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/_14ssp"
+                        app:appfont="montserrat_semibold.ttf"/>
+
+
+                <com.sd.src.stepcounterapp.utils.CustomTextView
+                        android:id="@+id/txtPopularity"
+                        android:layout_width="wrap_content"
+                        android:textAllCaps="true"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:background="?selectableItemBackground"
+                        android:text="BY POPULARITY"
+                        android:padding="@dimen/_10sdp"
+                        android:gravity="center"
+                        android:textColor="@color/gray_text"
+                        android:textSize="@dimen/_14ssp"
+                        app:appfont="montserrat_semibold.ttf"/>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                    android:id="@+id/llCategory"
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:background="@color/gray_backGround"
+                    android:layout_height="match_parent">
+
+                <com.sd.src.stepcounterapp.utils.CustomTextView
+                        android:layout_width="match_parent"
+                        android:id="@+id/noRec"
+                        android:textAllCaps="true"
+                        android:visibility="gone"
+                        android:text="No records found"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:textColor="@color/colorBlack"
+                        android:paddingTop="@dimen/_10sdp"
+                        android:paddingStart="@dimen/_5sdp"
+                        android:textSize="@dimen/_12ssp"
+                        app:appfont="montserrat_semibold.ttf"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvProduct"
+                        android:layout_width="match_parent"
+                        android:layout_marginLeft="@dimen/_10sdp"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:visibility="visible"
+                        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                        android:layout_marginBottom="?actionBarSize"
+                        android:layout_height="match_parent"/>
+
+                <LinearLayout
+                        android:id="@+id/llSeeAll"
+                        android:layout_width="match_parent"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:layout_height="wrap_content">
+
+                    <com.sd.src.stepcounterapp.utils.CustomTextView
+                            android:layout_width="0dp"
+                            android:id="@+id/txtCategoryName"
+                            android:textAllCaps="true"
+                            android:layout_weight="1"
+                            android:visibility="visible"
+                            android:text="Diet"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colorBlack"
+                            android:paddingTop="@dimen/_10sdp"
+                            android:paddingStart="@dimen/_5sdp"
+                            android:textSize="@dimen/_12ssp"
+                            app:appfont="montserrat_semibold.ttf"/>
+
+                    <com.sd.src.stepcounterapp.utils.CustomTextView
+                            android:layout_width="wrap_content"
+                            android:id="@+id/txtSeeAll"
+                            android:layout_height="wrap_content"
+                            android:text="See less"
+                            android:textColor="@color/gray_text"
+                            android:paddingTop="@dimen/_10sdp"
+                            android:paddingEnd="@dimen/_10sdp"
+                            android:textSize="@dimen/_12ssp"
+                            app:appfont="montserrat_semibold.ttf"/>
+                </LinearLayout>
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvSeeAll"
+                        android:layout_width="match_parent"
+                        android:visibility="gone"
+                        android:layout_marginBottom="?actionBarSize"
+                        android:layout_height="match_parent"/>
+            </LinearLayout>
+
+            <LinearLayout
+                    android:id="@+id/llPopularity"
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    android:background="@color/gray_backGround"
+                    android:layout_height="match_parent">
+                <com.sd.src.stepcounterapp.utils.CustomTextView
+                        android:layout_width="match_parent"
+                        android:id="@+id/noRecP"
+                        android:textAllCaps="true"
+                        android:visibility="gone"
+                        android:text="No records found"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:textColor="@color/colorBlack"
+                        android:paddingTop="@dimen/_10sdp"
+                        android:paddingStart="@dimen/_5sdp"
+                        android:textSize="@dimen/_12ssp"
+                        app:appfont="montserrat_semibold.ttf"/>
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvPopularity"
+                        android:layout_width="match_parent"
+                        android:layout_marginBottom="?actionBarSize"
+                        android:layout_height="match_parent"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </androidx.core.widget.NestedScrollView>
+
+
+</LinearLayout>

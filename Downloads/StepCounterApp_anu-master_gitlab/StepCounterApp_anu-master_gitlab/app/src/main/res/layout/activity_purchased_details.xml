@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        tools:context=".activities.PurchasedDetails">
+
+    <LinearLayout
+            android:id="@+id/relativeLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_30sdp"
+            android:background="@drawable/bg_ticket"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+                android:id="@+id/layoutCode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="40dp"
+                android:orientation="horizontal">
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Code:"/>
+
+            <TextView
+                    android:id="@+id/txtCodValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="123456"/>
+
+        </LinearLayout>
+
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/gray_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layerType="software"
+                android:layout_marginTop="25dp"
+                android:layout_marginLeft="22dp"
+                android:layout_marginRight="22dp"/>
+
+        <TextView
+                android:id="@+id/txtTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/layoutCode"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="15dp"
+                tools:text="The Himalyan"/>
+
+        <TextView
+                android:id="@+id/txtvalue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtTitle"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                tools:text="50% off wellness"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtvalue"
+                 android:visibility="gone"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="15dp"
+                android:text="valid till july 2019"/>
+
+    </LinearLayout>
+
+
+    <com.sd.src.stepcounterapp.utils.CustomTextView
+            android:id="@+id/textView"
+            android:layout_width="0dp"
+            app:appfont="montserrat_regular.ttf"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:layout_marginRight="@dimen/_10sdp"
+            android:textSize="@dimen/_12ssp"
+            android:textAlignment="center"
+            android:justificationMode="inter_word"
+            android:text="Please present and scan this code at the Vendor's Location to Redeem your Reward"
+            android:gravity="center_horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/relativeLayout"/>
+
+    <View
+            android:id="@+id/viewDoted"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/gray_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="22dp"
+            android:layout_marginRight="22dp"
+            app:layout_constraintTop_toBottomOf="@+id/textView"/>
+
+    <TextView
+            android:id="@+id/txtVanderLoc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Vendor's Location:"
+            android:layout_marginTop="@dimen/_10sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/viewDoted"/>
+
+    <TextView
+            android:id="@+id/addressDetails"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="22dp"
+            android:layout_marginRight="22dp"
+            tools:text="Wellness Retreat Travel Bookings, Block 203, Road 443,Building 664, Flat 22"
+            android:gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtVanderLoc"/>
+
+
+    <View
+            android:id="@+id/viewDoted1"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/gray_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="22dp"
+            android:layout_marginRight="22dp"/>
+
+
+    <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_marginLeft="120dp"
+            android:layout_marginRight="120dp"
+            android:layout_marginBottom="16dp"
+            android:background="@color/gray_text"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+    <Button
+            android:id="@+id/btnSendQR"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:text="Send QR code to Email"
+            android:textAllCaps="false"
+            android:layout_marginBottom="20dp"
+            android:layout_marginRight="22dp"
+            android:visibility="gone"
+            android:layout_marginLeft="22dp"
+            app:layout_constraintBottom_toTopOf="@+id/btnGoToMarkPlace"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+    <Button
+            android:id="@+id/btnGoToMarkPlace"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:text="Go TO MARK PLACE"
+            android:textAllCaps="true"
+            android:layout_marginBottom="40dp"
+            android:layout_marginLeft="22dp"
+            android:layout_marginRight="22dp"
+            app:layout_constraintBottom_toTopOf="@+id/view"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

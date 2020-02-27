@@ -1,0 +1,202 @@
+<resources>
+    <string name="app_name">Hayatech App</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_tools">Tools</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_send">Send</string>
+    <string-array name="leaderSingleArray">
+        <item>General Leaderboard</item>
+    </string-array>
+    <string-array name="leaderArray">
+        <item>General Leaderboard</item>
+        <item>Challenge Leaderboard</item>
+    </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_mobile">Mobile Number</string>
+    <string name="hint_pwd">Password</string>
+    <string name="tnc_privpolicy">I agree to the <a href="http://www.google.com">Terms of Service</a> and <a href="http://www.google.com">Privacy Policy</a>.
+    </string>
+    <string name="deptarray" />
+    <string name="sign_up">RESET PASSWORD</string>
+    <string name="signInText">Already have an account? Sign In</string>
+    <string name="select_Deptt">Please select your department from the drop down</string>
+    <string name="gulf_telecom">Gulf Telecom</string>
+    <string name="bmi_calculator">BMI Calculator</string>
+    <string name="ear_tokens">Get Moving and Track your Progress!</string>
+    <string name="hint_email_usrname">Email</string>
+    <string name="sign_in">SIGN IN</string>
+    <string name="forgt_pwd">Forgot Password?</string>
+    <string name="registd_email">Please enter your registered email ID</string>
+    <string name="hint_usrname">Username</string>
+    <string name="hint_firstname">Firstname</string>
+    <string name="hint_lastname">Lastname</string>
+    <string name="hint_dob">Date of Birth</string>
+    <string name="save_continue"><![CDATA[Save & Continue]]></string>
+    <string name="transition_name">forgot</string>
+    <string name="basic_info">Basic Info</string>
+    <string name="email_error">Invalid email entered</string>
+    <string name="pwd_error">Password field can\'t be blank</string>
+    <string name="lbl_set_profile_photo">Set profile photo</string>
+    <string name="lbl_take_camera_picture">Camera</string>
+    <string name="lbl_choose_from_gallery">Choose from Gallery</string>
+    <string name="lst_name_error">Last name can\'t be left blank</string>
+    <string name="dob_error">Date of birth can\'t be left blank.</string>
+    <string name="first_name_error">First name can\'t be left blank.</string>
+    <string name="usn_error">Username can\'t be left blank.</string>
+    <string name="weight">Weight</string>
+    <string name="height">Height</string>
+    <string name="calc">Calculate</string>
+    <string name="msg">Normal BMI ranges between 19 to 25</string>
+    <string name="earn_rewards">Earn Rewards</string>
+    <string name="earn_rewards_msg">Select any of the categories that interest you!</string>
+    <string name="welcome">Welcome!</string>
+    <string name="sync_ur_fitness">Sync your fitness Wearable</string>
+    <string name="sync_msg">Please select your preferred fitness wearable</string>
+    <string-array name="departmentArray">
+        <item>Department 1</item>
+        <item>Department 2</item>
+        <item>Department 3</item>
+        <item>Department 4</item>
+    </string-array>
+
+    <string-array name="markArray">
+        <item>20</item>
+        <item>30</item>
+        <item>40</item>
+        <item>50</item>
+        <item>60</item>
+        <item>70</item>
+        <item>80</item>
+        <item>90</item>
+        <item>100</item>
+    </string-array>
+
+    <string-array name="periodArray">
+        <item>TODAY</item>
+        <!--  <item>Weekly</item>
+          <item>Mothly</item>-->
+    </string-array>
+    <string name="confirm">confirm</string>
+    <string name="cancel">cancel</string>
+
+    <string name="permission_storage_close_title">Storage permission is not available</string>
+    <string name="permission_storage_close_content">Please find it in cellphone setting- permission, and allow
+        FitpoloDemo use the storage permission
+    </string>
+    <string name="permission_open">OK</string>
+    <string name="permission_storage_need_title">Please turn on storage permissions</string>
+    <string name="permission_storage_need_content">Fitpolo needs to record the data log and bracelet firmware update
+        package , to feedback question and update firmware If this permission is not on, APP cannot be used normally.
+    </string>
+    <string name="location_need_title">Turn on GPS service</string>
+    <string name="location_need_content">After that, APP could search and connect with the wearable</string>
+    <string name="permission_location_close_title">GPS persission is not available</string>
+    <string name="permission_location_close_content">Please find it in cellphone setting- permission, and allow
+        FitpoloDemo use the GPS permission
+    </string>
+    <string name="permission_location_need_title">Turn on GPS permission</string>
+    <string name="permission_location_need_content">After that, APP could search and connect with the bracelet</string>
+    <string name="get_started">Get started</string>
+    <string name="synchronizing">Synchronizing</string>
+    <string name="few_mom_sync">It will take few moments to sync.</string>
+    <string name="sync_txt_msg">We are gathering the required information.</string>
+    <string name="title_activity_nav_sample">NavSample</string>
+    <string name="hayatech_ttl">hayatech</string>
+    <string name="device_cnnctd">Device Connected</string>
+    <string name="device_syncd">Device Synchronized</string>
+    <string name="msg_dash">You are only 5 Tokens away from an item on your wish list! Keep walking!</string>
+    <string name="totltokens">Total Earned Tokens</string>
+    <string name="leaderboard">LEADERBOARD</string>
+
+
+    <string name="start">START</string>
+    <string name="challenges">challenges</string>
+    <string name="marketplace">marketplace</string>
+    <string name="surveys">surveys</string>
+    <string name="wallet">wallet</string>
+    <string name="hayatech">hayatech</string>
+    <string name="start_challenge">START CHALLENGE</string>
+    <string name="do_you_want_to_stop_the_challenge_you_will_lose_the_progress">Do you want to stop the challenge? You
+        will lose the progress
+    </string>
+
+    <!-- Settings Fragment-->
+    <string name="notification_setting">Notification Settings</string>
+    <string name="privacy">Privacy Policy</string>
+    <string name="terms_of_service">Terms of Service</string>
+
+
+    <string name="redeem_now">Redeem Now</string>
+    <string name="earnMore">EARN MORE TOKENS</string>
+
+    <!-- My Profile -->
+    <string name="your_bmi">Your BMI is</string>
+    <string name="calculate_again">CALCULATE AGAIN</string>
+
+    <string name="edit_profile">Edit Profile</string>
+    <string name="my_challenges">My Challenges</string>
+    <string name="my_redeemed_rewards">My Redeemed Rewards</string>
+    <string name="my_surveys">My Surveys</string>
+    <string name="sync_now">Sync now</string>
+
+
+    <!--EDIT PROFILE-->
+    <string name="edit_fname">FIRST NAME</string>
+    <string name="edit_lname">LAST NAME</string>
+    <string name="edit_dob">DATE OF BIRTH</string>
+    <string name="edit_heigth">HEIGHT</string>
+    <string name="edit_weight">WEIGHT</string>
+    <string name="edit_email">EMAIL</string>
+    <string name="edit_cname">COMPANY NAME</string>
+    <string name="edit_dep">DEPARTMENT</string>
+    <string name="edit_gender">GENDER</string>
+    <string name="edit_phone">MOBILE NUMBER</string>
+    <string name="edit_save">SAVE PROFILE</string>
+    <string name="today_18_jun_2019">Today. 18 Jun 2019</string>
+    <string name="closing_tokens">Closing Tokens </string>
+    <string name="transaction_id">Transaction ID</string>
+
+    <!-- CONTACT US FRAGMENT-->
+    <string name="kindly_get_in_touch">Kindly get in touch with us for new business opportunities generate inquiries and more.</string>
+    <string name="send_your_query">Send your query to us and we\'ll try to get back to you within 24 hours. </string>
+    <string name="purchase_now">Purchase Now</string>
+    <string name="change_password">Change Password</string>
+    <string name="old_pass">Old Password</string>
+    <string name="new_pass">New Password</string>
+    <string name="confirm_pass">Confirm Password</string>
+    <string name="category">Category</string>
+    <string name="all">All</string>
+    <string name="points">Points</string>
+    <string name="available">Available</string>
+    <string name="device_is_not_connected">Device is not connected..</string>
+    <string name="new_challenge">New Challenge</string>
+    <string name="goal_achieved">Goal Achieved</string>
+    <string name="a_new_survey_available">A New Survey Available</string>
+    <string name="dummy_txt">
+        <![CDATA[Give yourself something to celebrate with us! A new Personal Best. Increase your average daily step distance by 1k for 1 month & choose any featured SAHI REWARD for FREE.]]></string>
+    <string name="stop_challenge">Stop Challenge</string>
+    <string name="email_empty">Email field can\'t be left empty</string>
+
+    <string name="disclaimer"></string>
+    <string name="default_notification_channel_id">hayatech_channel_id</string>
+    <string name="notification">Notification</string>
+    <string name="retry">Retry</string>
+    <string name="info">Info</string>
+    <string name="today_s_distance">Today\'s Distance</string>
+    <string name="today_s_steps">Today\'s Steps</string>
+    <string name="pp_error"><![CDATA[Please accept Terms of Service & Privacy Policy.]]></string>
+    <string name="wearable_setting">Wearable Display Setting</string>
+    <string name="wearable_setting_msg">Lock/Unlock steps screen on your wearable</string>
+    <string name="unathorized_msg">This device is not authorized on your account. To request authorization \n Please contact your admin.</string>
+</resources>

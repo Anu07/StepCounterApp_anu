@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        app:cardCornerRadius="@dimen/_5ssp"
+        android:id="@+id/parentWishLayout"
+        android:layout_margin="@dimen/_5sdp"
+        android:elevation="@dimen/_10ssp"
+        android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+
+        <ImageView
+                android:id="@+id/imgProduct"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_200sdp"
+                android:scaleType="centerCrop"
+                tools:src="@drawable/body_clouds_early"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+        <LinearLayout android:layout_width="match_parent"
+                      android:orientation="vertical"
+                      android:layout_marginLeft="@dimen/_10sdp"
+                      app:layout_constraintBottom_toBottomOf="parent"
+                      app:layout_constraintLeft_toLeftOf="parent"
+                      app:layout_constraintStart_toStartOf="parent"
+                      app:layout_constraintTop_toBottomOf="@+id/imgProduct"
+                      android:layout_height="wrap_content">
+            <com.sd.src.stepcounterapp.utils.CustomTextView
+                    android:id="@+id/txtProductName"
+                    android:layout_width="wrap_content"
+                    android:textAllCaps="true"
+                    android:layout_height="wrap_content"
+                    tools:text="The Himalayan"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:textColor="@color/arrow_color"
+                    android:textSize="@dimen/_12ssp"
+                    app:appfont="montserrat_semibold.ttf"
+                    />
+
+            <com.sd.src.stepcounterapp.utils.CustomTextView
+                    android:id="@+id/txtShortDesc"
+                    android:layout_width="wrap_content"
+                    android:textAllCaps="true"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    tools:text="50% Off Wellness Ret..."
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/_10ssp"
+                    android:padding="@dimen/_3sdp"
+                    app:appfont="montserrat_semibold.ttf"
+                    android:layout_marginBottom="@dimen/_5sdp"
+
+            />
+
+            <com.sd.src.stepcounterapp.utils.CustomTextView
+                    android:id="@+id/txtToken"
+                    android:layout_width="wrap_content"
+                    android:textAllCaps="true"
+                    android:layout_height="wrap_content"
+                    tools:text="3000 TKS"
+                    android:paddingBottom="@dimen/_5sdp"
+                    android:ellipsize="end"
+                    android:textColor="@color/gray_text"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    android:maxLines="1"
+                    android:textSize="@dimen/_8ssp"
+                    app:appfont="montserrat_semibold.ttf"
+                    android:layout_marginBottom="@dimen/_5sdp"
+            />
+
+        </LinearLayout>
+
+        <ImageView
+                android:id="@+id/imgDeleteWish"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_delete"
+                android:padding="@dimen/_4sdp"
+                android:background="@drawable/white_fill_circle"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="18dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.76"/>
+
+        <com.sd.src.stepcounterapp.utils.CustomTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/purchase_now"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:paddingStart="@dimen/_15sdp"
+                android:paddingEnd="@dimen/_15sdp"
+                android:paddingTop="@dimen/_8sdp"
+                android:id="@+id/purchaseBttn"
+                android:paddingBottom="@dimen/_8sdp"
+                android:background="@drawable/transparent_black_stroke"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/_10ssp"
+                app:appfont="montserrat_semibold.ttf"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginStart="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="16dp"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginBottom="@dimen/_15sdp"
+                app:layout_constraintBottom_toBottomOf="@+id/imgProduct"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

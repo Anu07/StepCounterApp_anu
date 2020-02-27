@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="vertical"
+        android:layout_width="160dp"
+        android:id="@+id/cdMain"
+        app:cardCornerRadius="@dimen/_10ssp"
+        android:layout_margin="@dimen/_5sdp"
+        android:layout_height="wrap_content">
+    <FrameLayout android:layout_width="match_parent"
+                 android:layout_gravity="center"
+                 android:layout_height="wrap_content">
+        <LinearLayout android:orientation="vertical"
+                      android:id="@+id/coverImg"
+                      android:layout_width="match_parent"
+                      android:layout_height="150dp">
+            <ImageView
+                    android:id="@+id/imgChallenge"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_constraintLeft_toLeftOf="@id/coverImg"
+                    app:layout_constraintRight_toRightOf="@id/coverImg"
+                    app:layout_constraintTop_toTopOf="@id/coverImg"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"
+                    android:cropToPadding="true"
+                    android:scaleType="fitXY"
+                    android:layout_gravity="fill_vertical"
+                    app:layout_constraintBottom_toBottomOf="@id/coverImg"
+                    android:src="@drawable/placeholder"
+                    app:layout_constraintStart_toStartOf="@id/coverImg"
+                    app:layout_constraintEnd_toEndOf="@id/coverImg"
+            />
+
+
+        </LinearLayout>
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_gravity="bottom"
+                android:background="#60000000"
+                android:layout_height="wrap_content">
+            <com.sd.src.stepcounterapp.utils.CustomTextView
+                    android:id="@+id/txtChallengeName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:gravity="center_horizontal"
+                    android:maxLines="1"
+                    tools:text = "test"
+                    android:paddingLeft="@dimen/_3sdp"
+                    android:paddingRight="@dimen/_3sdp"
+                    android:textColor="@color/white"
+                    android:inputType="textCapWords"
+                    android:capitalize="words"
+                    android:textSize="@dimen/_12ssp"
+                    app:appfont="montserrat_semibold.ttf"/>
+
+            <com.sd.src.stepcounterapp.utils.CustomTextView
+                    android:id="@+id/txtShortDesc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:gravity="center_horizontal"
+                    android:maxLength="15"
+                    android:layout_marginRight="@dimen/_3sdp"
+                    android:layout_marginLeft="@dimen/_3sdp"
+                    android:singleLine="true"
+                    android:paddingLeft="@dimen/_3sdp"
+                    android:paddingRight="@dimen/_3sdp"
+                    android:textColor="@color/white"
+                    android:inputType="textCapWords"
+                    android:textSize="@dimen/_12ssp"
+                    app:appfont="montserrat_regular.ttf"/>
+            <com.sd.src.stepcounterapp.utils.CustomTextView
+                    android:id="@+id/txtDuration"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:gravity="center_horizontal"
+                    android:layout_marginRight="@dimen/_3sdp"
+                    android:layout_marginLeft="@dimen/_3sdp"
+                    android:singleLine="true"
+                    android:paddingLeft="@dimen/_3sdp"
+                    android:paddingRight="@dimen/_3sdp"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:textColor="@color/white"
+                    android:inputType="textCapWords"
+                    android:textSize="@dimen/_12ssp"
+                    app:appfont="montserrat_regular.ttf"/>
+        </LinearLayout>
+
+    </FrameLayout>
+
+
+</androidx.cardview.widget.CardView>
